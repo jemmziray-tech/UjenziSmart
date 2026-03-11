@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Material Expert Marketplace</title>
+    
+    <!-- Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Custom Fonts & Utilities -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        /* Safe area padding for mobile devices */
+        .pb-safe {
+            padding-bottom: env(safe-area-inset-bottom, 20px);
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 pb-24">
+
+    <!-- Global Toast Message (Hidden by default) -->
+    <div id="toast" class="fixed top-20 left-1/2 transform -translate-x-1/2 z-[200] bg-gray-800 text-white px-4 py-2 rounded-full text-sm shadow-lg transition-opacity duration-300 opacity-0 pointer-events-none">
+        Item added to cart!
+    </div>
+
+    <!-- Header Section -->
+    <header class="bg-gradient-to-r from-green-500 to-emerald-600 pt-10 pb-20 px-4 rounded-b-[2.5rem] shadow-lg relative">
+        <div class="flex justify-between items-center mb-6 text-white max-w-7xl mx-auto">
+            <div>
+                <h1 class="text-2xl font-bold tracking-tight">Habari, Jem! 👋</h1>
+                <p class="text-green-100 text-sm mt-1">What do you need today?</p>
+            </div>
+            <button class="p-2 bg-white/20 rounded-full backdrop-blur-sm hover:bg-white/30 transition">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-white"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+            </button>
+        </div>
+        
+        <!-- Search Bar -->
+        <div class="relative z-50 max-w-7xl mx-auto">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gray-400"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+            </div>
+            <input type="text" class="block w-full pl-10 pr-3 py-3 border border-transparent rounded-xl leading-5 bg-white text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-green-500 sm:text-sm shadow-md" placeholder="Search for services or materials...">
+        </div>
+    </header>
+
+    <!-- Main Quick Actions -->
+    <div class="px-4 -mt-10 relative z-10 max-w-7xl mx-auto">
+        <div class="grid grid-cols-2 gap-4">
+            <button class="bg-white p-4 rounded-2xl shadow-md flex flex-col items-center justify-center gap-3 hover:shadow-lg transition-shadow border border-gray-100 active:scale-95 transform transition-transform">
+                <div class="w-14 h-14 bg-green-100 rounded-full flex items-center justify-center text-green-600">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></svg>
+                </div>
+                <span class="font-semibold text-gray-800 text-center leading-tight">Material Expert<br><span class="text-xs text-gray-500 font-normal">Ask anything</span></span>
+            </button>
+            <button class="bg-white p-4 rounded-2xl shadow-md flex flex-col items-center justify-center gap-3 hover:shadow-lg transition-shadow border border-gray-100 active:scale-95 transform transition-transform">
+                <div class="w-14 h-14 bg-emerald-100 rounded-full flex items-center justify-center text-emerald-600">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
+                </div>
+                <span class="font-semibold text-gray-800 text-center leading-tight">Order<br><span class="text-xs text-gray-500 font-normal">Materials</span></span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Product Categories Grid -->
+    <div class="mt-8 px-4 max-w-7xl mx-auto">
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-lg font-bold text-gray-900">Product Categories</h2>
+            <button class="text-sm text-green-600 font-medium hover:underline">See All</button>
+        </div>
+        
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            <!-- Category 1 -->
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden flex flex-col hover:shadow-md transition-shadow">
+                <div class="h-28 sm:h-36 bg-gray-200 relative">
+                    <img src="https://picsum.photos/seed/cement-rebar/400/300" alt="Foundation & Structural" class="w-full h-full object-cover" referrerpolicy="no-referrer">
+                </div>
+                <div class="p-3 sm:p-4 flex flex-col flex-grow">
+                    <h3 class="font-bold text-gray-900 mb-2 text-sm sm:text-base leading-tight">Foundation & Structural</h3>
+                    <ul class="text-xs sm:text-sm text-gray-600 mb-4 space-y-1.5 flex-grow">
+                        <li class="flex items-start gap-1.5"><div class="w-1.5 h-1.5 rounded-full bg-green-500 mt-1.5 shrink-0"></div><span class="line-clamp-2 leading-tight">Cement (32.5R/42.5N)</span></li>
+                        <li class="flex items-start gap-1.5"><div class="w-1.5 h-1.5 rounded-full bg-green-500 mt-1.5 shrink-0"></div><span class="line-clamp-2 leading-tight">Steel Reinforcement</span></li>
+                        <li class="flex items-start gap-1.5"><div class="w-1.5 h-1.5 rounded-full bg-green-500 mt-1.5 shrink-0"></div><span class="line-clamp-2 leading-tight">Masonry Blocks</span></li>
+                    </ul>
+                    <button class="w-full py-2 bg-green-50 text-green-700 font-semibold rounded-xl text-xs sm:text-sm hover:bg-green-100 transition-colors mt-auto active:scale-95 transform">Explore</button>
+                </div>
+            </div>
+
+            <!-- Category 2 -->
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden flex flex-col hover:shadow-md transition-shadow">
+                <div class="h-28 sm:h-36 bg-gray-200 relative">
+                    <img src="https://picsum.photos/seed/roofing-tiles/400/300" alt="Roofing Materials" class="w-full h-full object-cover" referrerpolicy="no-referrer">
+                </div>
+                <div class="p-3 sm:p-4 flex flex-col flex-grow">
+                    <h3 class="font-bold text-gray-900 mb-2 text-sm sm:text-base leading-tight">Roofing Materials</h3>
+                    <ul class="text-xs sm:text-sm text-gray-600 mb-4 space-y-1.5 flex-grow">
+                        <li class="flex items-start gap-1.5"><div class="w-1.5 h-1.5 rounded-full bg-green-500 mt-1.5 shrink-0"></div><span class="line-clamp-2 leading-tight">Roofing Sheets (Mabati)</span></li>
+                        <li class="flex items-start gap-1.5"><div class="w-1.5 h-1.5 rounded-full bg-green-500 mt-1.5 shrink-0"></div><span class="line-clamp-2 leading-tight">Treated Timber Trusses</span></li>
+                        <li class="flex items-start gap-1.5"><div class="w-1.5 h-1.5 rounded-full bg-green-500 mt-1.5 shrink-0"></div><span class="line-clamp-2 leading-tight">Gutter Systems</span></li>
+                    </ul>
+                    <button class="w-full py-2 bg-green-50 text-green-700 font-semibold rounded-xl text-xs sm:text-sm hover:bg-green-100 transition-colors mt-auto active:scale-95 transform">Explore</button>
+                </div>
+            </div>
+
+            <!-- Category 3 -->
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden flex flex-col hover:shadow-md transition-shadow">
+                <div class="h-28 sm:h-36 bg-gray-200 relative">
+                    <img src="https://picsum.photos/seed/plumbing-pipes/400/300" alt="Plumbing & Water" class="w-full h-full object-cover" referrerpolicy="no-referrer">
+                </div>
+                <div class="p-3 sm:p-4 flex flex-col flex-grow">
+                    <h3 class="font-bold text-gray-900 mb-2 text-sm sm:text-base leading-tight">Plumbing & Water</h3>
+                    <ul class="text-xs sm:text-sm text-gray-600 mb-4 space-y-1.5 flex-grow">
+                        <li class="flex items-start gap-1.5"><div class="w-1.5 h-1.5 rounded-full bg-green-500 mt-1.5 shrink-0"></div><span class="line-clamp-2 leading-tight">PPR/PVC Pipes & Fittings</span></li>
+                        <li class="flex items-start gap-1.5"><div class="w-1.5 h-1.5 rounded-full bg-green-500 mt-1.5 shrink-0"></div><span class="line-clamp-2 leading-tight">Water Tanks & Pumps</span></li>
+                        <li class="flex items-start gap-1.5"><div class="w-1.5 h-1.5 rounded-full bg-green-500 mt-1.5 shrink-0"></div><span class="line-clamp-2 leading-tight">Bathroom Fixtures</span></li>
+                    </ul>
+                    <button class="w-full py-2 bg-green-50 text-green-700 font-semibold rounded-xl text-xs sm:text-sm hover:bg-green-100 transition-colors mt-auto active:scale-95 transform">Explore</button>
+                </div>
+            </div>
+
+            <!-- Category 4 -->
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden flex flex-col hover:shadow-md transition-shadow">
+                <div class="h-28 sm:h-36 bg-gray-200 relative">
+                    <img src="https://picsum.photos/seed/electrical-wiring/400/300" alt="Electrical & Lighting" class="w-full h-full object-cover" referrerpolicy="no-referrer">
+                </div>
+                <div class="p-3 sm:p-4 flex flex-col flex-grow">
+                    <h3 class="font-bold text-gray-900 mb-2 text-sm sm:text-base leading-tight">Electrical & Lighting</h3>
+                    <ul class="text-xs sm:text-sm text-gray-600 mb-4 space-y-1.5 flex-grow">
+                        <li class="flex items-start gap-1.5"><div class="w-1.5 h-1.5 rounded-full bg-green-500 mt-1.5 shrink-0"></div><span class="line-clamp-2 leading-tight">Copper Cables</span></li>
+                        <li class="flex items-start gap-1.5"><div class="w-1.5 h-1.5 rounded-full bg-green-500 mt-1.5 shrink-0"></div><span class="line-clamp-2 leading-tight">Sockets & Switches</span></li>
+                        <li class="flex items-start gap-1.5"><div class="w-1.5 h-1.5 rounded-full bg-green-500 mt-1.5 shrink-0"></div><span class="line-clamp-2 leading-tight">LED Floodlights</span></li>
+                    </ul>
+                    <button class="w-full py-2 bg-green-50 text-green-700 font-semibold rounded-xl text-xs sm:text-sm hover:bg-green-100 transition-colors mt-auto active:scale-95 transform">Explore</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Featured Materials -->
+    <div class="mt-8 px-4 pb-20 max-w-7xl mx-auto">
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-lg font-bold text-gray-900">Featured Materials</h2>
+            <button class="text-sm text-green-600 font-medium hover:underline">See All</button>
+        </div>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <!-- Material 1 -->
+            <div class="bg-white rounded-2xl p-3 shadow-sm border border-gray-100 flex flex-col hover:shadow-md transition-all">
+                <div class="aspect-square rounded-xl overflow-hidden mb-3 bg-gray-100 relative">
+                    <img src="https://picsum.photos/seed/SimbaCement50kg/200/200" alt="Simba Cement 50kg" class="w-full h-full object-cover" referrerpolicy="no-referrer">
+                </div>
+                <h3 class="text-sm font-medium text-gray-800 line-clamp-2 mb-1 flex-grow">Simba Cement 50kg</h3>
+                <div class="flex justify-between items-center mt-1">
+                    <p class="text-green-600 font-bold text-sm">TZS 18,500</p>
+                    <button class="add-to-cart-btn p-1.5 rounded-lg transition-colors flex items-center justify-center bg-gray-100 text-gray-600 hover:bg-green-50 hover:text-green-600" data-name="Simba Cement 50kg" title="Add to Cart">
+                        <svg class="icon-plus w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+                        <svg class="icon-check w-4 h-4 hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Material 2 -->
+            <div class="bg-white rounded-2xl p-3 shadow-sm border border-gray-100 flex flex-col hover:shadow-md transition-all">
+                <div class="aspect-square rounded-xl overflow-hidden mb-3 bg-gray-100 relative">
+                    <img src="https://picsum.photos/seed/IronSheet30G/200/200" alt="Iron Sheet 30G" class="w-full h-full object-cover" referrerpolicy="no-referrer">
+                </div>
+                <h3 class="text-sm font-medium text-gray-800 line-clamp-2 mb-1 flex-grow">Iron Sheet 30G</h3>
+                <div class="flex justify-between items-center mt-1">
+                    <p class="text-green-600 font-bold text-sm">TZS 22,000</p>
+                    <button class="add-to-cart-btn p-1.5 rounded-lg transition-colors flex items-center justify-center bg-gray-100 text-gray-600 hover:bg-green-50 hover:text-green-600" data-name="Iron Sheet 30G" title="Add to Cart">
+                        <svg class="icon-plus w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+                        <svg class="icon-check w-4 h-4 hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Material 3 -->
+            <div class="bg-white rounded-2xl p-3 shadow-sm border border-gray-100 flex flex-col hover:shadow-md transition-all">
+                <div class="aspect-square rounded-xl overflow-hidden mb-3 bg-gray-100 relative">
+                    <img src="https://picsum.photos/seed/PVCPipe3/4/200/200" alt="PVC Pipe 3/4&quot;" class="w-full h-full object-cover" referrerpolicy="no-referrer">
+                </div>
+                <h3 class="text-sm font-medium text-gray-800 line-clamp-2 mb-1 flex-grow">PVC Pipe 3/4"</h3>
+                <div class="flex justify-between items-center mt-1">
+                    <p class="text-green-600 font-bold text-sm">TZS 4,500</p>
+                    <button class="add-to-cart-btn p-1.5 rounded-lg transition-colors flex items-center justify-center bg-gray-100 text-gray-600 hover:bg-green-50 hover:text-green-600" data-name="PVC Pipe 3/4&quot;" title="Add to Cart">
+                        <svg class="icon-plus w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+                        <svg class="icon-check w-4 h-4 hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Material 4 -->
+            <div class="bg-white rounded-2xl p-3 shadow-sm border border-gray-100 flex flex-col hover:shadow-md transition-all">
+                <div class="aspect-square rounded-xl overflow-hidden mb-3 bg-gray-100 relative">
+                    <img src="https://picsum.photos/seed/Nails3inch(1kg)/200/200" alt="Nails 3 inch (1kg)" class="w-full h-full object-cover" referrerpolicy="no-referrer">
+                </div>
+                <h3 class="text-sm font-medium text-gray-800 line-clamp-2 mb-1 flex-grow">Nails 3 inch (1kg)</h3>
+                <div class="flex justify-between items-center mt-1">
+                    <p class="text-green-600 font-bold text-sm">TZS 3,500</p>
+                    <button class="add-to-cart-btn p-1.5 rounded-lg transition-colors flex items-center justify-center bg-gray-100 text-gray-600 hover:bg-green-50 hover:text-green-600" data-name="Nails 3 inch (1kg)" title="Add to Cart">
+                        <svg class="icon-plus w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+                        <svg class="icon-check w-4 h-4 hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sticky Bottom Navigation -->
+    <nav class="fixed bottom-0 w-full bg-white border-t border-gray-200 px-6 py-3 flex justify-between items-center z-50 pb-safe">
+        <div class="max-w-md mx-auto w-full flex justify-between items-center">
+            
+            <!-- 1. Home (Active) -->
+            <button class="flex flex-col items-center gap-1">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-green-600">
+                    <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                    <polyline points="9 22 9 12 15 12 15 22"/>
+                </svg>
+                <span class="text-[10px] font-medium text-green-600">Home</span>
+            </button>
+            
+            <!-- 2. Trending -->
+            <button class="flex flex-col items-center gap-1">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gray-400">
+                    <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/>
+                    <polyline points="16 7 22 7 22 13"/>
+                </svg>
+                <span class="text-[10px] font-medium text-gray-500">Trending</span>
+            </button>
+            
+            <!-- 3. Cart -->
+            <button class="flex flex-col items-center gap-1">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gray-400">
+                    <circle cx="8" cy="21" r="1"/>
+                    <circle cx="19" cy="21" r="1"/>
+                    <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/>
+                </svg>
+                <span class="text-[10px] font-medium text-gray-500">Cart</span>
+            </button>
+            
+            <!-- 4. Profile -->
+            <button class="flex flex-col items-center gap-1">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gray-400">
+                    <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/>
+                    <circle cx="12" cy="7" r="4"/>
+                </svg>
+                <span class="text-[10px] font-medium text-gray-500">Profile</span>
+            </button>
+
+        </div>
+    </nav>
+
+    <!-- JavaScript for Add to Cart Interactivity -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const addToCartBtns = document.querySelectorAll('.add-to-cart-btn');
+            const toast = document.getElementById('toast');
+            let toastTimeout;
+
+            addToCartBtns.forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const productName = btn.getAttribute('data-name');
+                    
+                    // 1. Change button colors to green
+                    btn.classList.remove('bg-gray-100', 'text-gray-600', 'hover:bg-green-50', 'hover:text-green-600');
+                    btn.classList.add('bg-green-500', 'text-white');
+                    
+                    // 2. Swap the Plus icon for the Check icon
+                    const iconPlus = btn.querySelector('.icon-plus');
+                    const iconCheck = btn.querySelector('.icon-check');
+                    if(iconPlus) iconPlus.classList.add('hidden');
+                    if(iconCheck) iconCheck.classList.remove('hidden');
+
+                    // 3. Show the Toast Notification
+                    toast.textContent = `Added ${productName} to cart!`;
+                    toast.classList.remove('opacity-0', 'pointer-events-none');
+                    toast.classList.add('opacity-100');
+
+                    // 4. Reset the button after 2 seconds
+                    setTimeout(() => {
+                        btn.classList.add('bg-gray-100', 'text-gray-600', 'hover:bg-green-50', 'hover:text-green-600');
+                        btn.classList.remove('bg-green-500', 'text-white');
+                        if(iconPlus) iconPlus.classList.remove('hidden');
+                        if(iconCheck) iconCheck.classList.add('hidden');
+                    }, 2000);
+
+                    // 5. Hide the Toast after 3 seconds
+                    clearTimeout(toastTimeout);
+                    toastTimeout = setTimeout(() => {
+                        toast.classList.remove('opacity-100');
+                        toast.classList.add('opacity-0', 'pointer-events-none');
+                    }, 3000);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
