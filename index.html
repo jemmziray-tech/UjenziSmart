@@ -34,10 +34,9 @@
             <p class="text-gray-600 dark:text-gray-400 mb-8" id="auth-subtitle">Sign in to manage your construction.</p>
 
             <form id="auth-form" class="flex flex-col gap-4">
-                <input type="text" id="auth-name" placeholder="Full Name (for new accounts)" class="hidden w-full bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3 focus:ring-2 focus:ring-green-500 text-gray-900 dark:text-white outline-none">
-                <input type="email" id="auth-email" required placeholder="Email Address" class="w-full bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3 focus:ring-2 focus:ring-green-500 text-gray-900 dark:text-white outline-none">
-                <input type="password" id="auth-password" required placeholder="Password" class="w-full bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3 focus:ring-2 focus:ring-green-500 text-gray-900 dark:text-white outline-none">
-
+                <input type="text" id="auth-name" placeholder="Full Name" class="hidden w-full bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3 focus:ring-2 focus:ring-green-500 outline-none">
+                <input type="email" id="auth-email" required placeholder="Email Address" class="w-full bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3 focus:ring-2 focus:ring-green-500 outline-none">
+                <input type="password" id="auth-password" required placeholder="Password" class="w-full bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3 focus:ring-2 focus:ring-green-500 outline-none">
                 <button type="submit" id="auth-submit-btn" class="w-full py-3 bg-green-500 text-white rounded-xl font-bold hover:bg-green-600 transition-colors mt-2 shadow-md">Sign In</button>
             </form>
 
@@ -46,7 +45,7 @@
                 <span class="bg-white dark:bg-gray-800 px-3 text-xs text-gray-400 relative z-10">OR</span>
             </div>
             
-            <button type="button" id="google-signin-btn" class="w-full py-3 bg-white dark:bg-gray-700 text-gray-700 dark:text-white border border-gray-200 dark:border-gray-600 rounded-xl font-bold hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors shadow-sm flex items-center justify-center gap-3">
+            <button type="button" id="google-signin-btn" class="w-full py-3 bg-white dark:bg-gray-700 text-gray-700 dark:text-white border border-gray-200 dark:border-gray-600 rounded-xl font-bold hover:bg-gray-50 transition-colors shadow-sm flex items-center justify-center gap-3">
                 <svg viewBox="0 0 24 24" width="20" height="20" xmlns="http://www.w3.org/2000/svg">
                     <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
                     <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
@@ -70,67 +69,73 @@
                 <h1 id="smart-greeting" class="text-2xl font-bold tracking-tight">Loading... 👋</h1>
                 <p class="text-green-100 text-sm mt-1">What do you need today?</p>
             </div>
-            
             <button id="theme-toggle" class="p-2 bg-white/20 rounded-full backdrop-blur-sm hover:bg-white/30 transition">
-                <svg id="theme-toggle-light-icon" class="hidden w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
-                <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+                <svg id="theme-toggle-light-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"></path></svg>
+                <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
             </button>
         </div>
     </header>
 
     <div id="skeleton-loader" class="px-4 -mt-10 max-w-7xl mx-auto animate-pulse pb-20">
-        <div class="h-32 bg-gray-200 dark:bg-gray-800 rounded-2xl shadow-md mb-8"></div>
+        <div class="h-32 bg-gray-200 dark:bg-gray-800 rounded-2xl shadow-md"></div>
     </div>
 
     <div id="app-content" class="hidden animate-fade-in">
         <div class="px-4 -mt-10 relative z-10 max-w-7xl mx-auto">
-            <button id="material-expert-btn" class="w-full bg-white dark:bg-gray-800 p-4 rounded-2xl shadow-md flex items-center gap-4 hover:shadow-lg transition-all border border-gray-100 dark:border-gray-700">
-                <div class="w-14 h-14 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center text-green-600 dark:text-green-400">🤖</div>
+            <button id="material-expert-btn" class="w-full bg-white dark:bg-gray-800 p-4 rounded-2xl shadow-md flex items-center gap-4 hover:shadow-lg border border-gray-100 dark:border-gray-700">
+                <div class="w-14 h-14 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center text-green-600 dark:text-green-400 text-2xl">🤖</div>
                 <div class="text-left"><span class="font-bold text-gray-800 dark:text-gray-100">Material Expert AI</span><br><span class="text-sm text-gray-500">Ask construction questions</span></div>
             </button>
-        </div>
-    </div> 
 
-    <div id="profile-view" class="hidden px-4 max-w-7xl mx-auto pt-6 pb-24 animate-fade-in">
-        <div class="flex items-center gap-4 mb-8">
-            <div id="profile-initial" class="w-16 h-16 bg-gradient-to-tr from-green-500 to-emerald-400 rounded-full flex items-center justify-center text-white text-2xl font-bold shadow-lg border-2 border-white dark:border-gray-800">U</div>
-            <div>
-                <h2 id="profile-name" class="text-2xl font-bold text-gray-900 dark:text-white leading-tight">User</h2>
-                <p id="profile-email" class="text-sm text-gray-500 dark:text-gray-400 font-medium">user@email.com</p>
+            <div class="mt-8">
+                <div class="flex justify-between items-center mb-4 px-1">
+                    <h3 class="text-lg font-bold text-gray-800 dark:text-gray-100">My Material List</h3>
+                    <button onclick="clearAllMaterials()" class="text-xs text-red-500 font-bold hover:underline">Clear All</button>
+                </div>
+                <div id="material-list" class="flex flex-col gap-3">
+                    <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl border-2 border-dashed border-gray-200 dark:border-gray-700 text-center text-gray-400">
+                        <p class="text-sm">No materials saved yet.<br>Ask the AI and click "Save"!</p>
+                    </div>
+                </div>
             </div>
-        </div>
-        <div class="bg-white dark:bg-gray-800 rounded-3xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
-            <button id="logout-btn" class="w-full flex items-center justify-between p-4 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors text-red-500">
-                <div class="flex items-center gap-3"><span class="text-xl">🚪</span><span class="font-bold">Logout</span></div>
-            </button>
         </div>
     </div>
 
+    <div id="profile-view" class="hidden px-4 max-w-7xl mx-auto pt-6 animate-fade-in">
+        <div class="flex items-center gap-4 mb-8">
+            <div id="profile-initial" class="w-16 h-16 bg-gradient-to-tr from-green-500 to-emerald-400 rounded-full flex items-center justify-center text-white text-2xl font-bold border-2 border-white dark:border-gray-800 shadow-md">U</div>
+            <div>
+                <h2 id="profile-name" class="text-2xl font-bold text-gray-900 dark:text-white">User</h2>
+                <p id="profile-email" class="text-sm text-gray-500 dark:text-gray-400">user@email.com</p>
+            </div>
+        </div>
+        <button id="logout-btn" class="w-full flex items-center justify-between p-4 bg-white dark:bg-gray-800 rounded-2xl shadow-sm text-red-500 font-bold border border-gray-100 dark:border-gray-700">
+            <div class="flex items-center gap-3"><span>🚪</span> Logout</div>
+        </button>
+    </div>
+
     <div id="chat-modal" class="fixed inset-0 z-[100] hidden bg-black/60 backdrop-blur-sm flex items-end sm:items-center justify-center transition-opacity">
-        <div class="bg-white dark:bg-gray-900 w-full sm:max-w-md h-[85vh] sm:h-[600px] rounded-t-3xl sm:rounded-3xl shadow-2xl flex flex-col overflow-hidden transform transition-transform translate-y-full" id="chat-container">
+        <div class="bg-white dark:bg-gray-900 w-full sm:max-w-md h-[85vh] sm:h-[600px] rounded-t-3xl sm:rounded-3xl shadow-2xl flex flex-col overflow-hidden transition-transform translate-y-full" id="chat-container">
             <div class="bg-gradient-to-r from-green-500 to-emerald-600 p-4 flex justify-between items-center text-white">
                 <h3 class="font-bold">Material Expert AI</h3>
                 <button id="close-chat" class="p-2">✕</button>
             </div>
             <div id="chat-box" class="flex-grow p-4 overflow-y-auto flex flex-col gap-3 bg-gray-50 dark:bg-gray-800"></div>
-            <div class="p-3 bg-white dark:bg-gray-900 border-t border-gray-100 dark:border-gray-800 flex gap-2">
+            <div class="p-3 bg-white dark:bg-gray-900 border-t flex gap-2">
                 <input type="text" id="chat-input" class="flex-grow bg-gray-100 dark:bg-gray-800 rounded-full px-4 py-3 outline-none" placeholder="Ask a question...">
                 <button id="send-btn" class="w-11 h-11 bg-green-500 rounded-full text-white">→</button>
             </div>
         </div>
     </div>
 
-    <nav class="fixed bottom-0 w-full bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 px-6 py-3 flex justify-around items-center z-50 pb-safe transition-colors duration-300">
+    <nav class="fixed bottom-0 w-full bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 px-6 py-3 flex justify-around items-center z-50 pb-safe">
         <button id="nav-home-btn" class="flex flex-col items-center gap-1 text-green-600 font-medium text-[10px]">🏠 Home</button>
         <button id="nav-profile-btn" class="flex flex-col items-center gap-1 text-gray-500 font-medium text-[10px]">👤 Profile</button>
     </nav>
 
     <script>
-        // 1. Check Auth & UI Logic
-        const authScreen = document.getElementById('auth-screen');
-        const authForm = document.getElementById('auth-form');
-        const authToggleBtn = document.getElementById('auth-toggle-btn');
-        const authError = document.getElementById('auth-error');
+        const RENDER_URL = 'https://ujenzismart-backend.onrender.com';
+        const authScreen = document.getElementById('auth-screen'), authForm = document.getElementById('auth-form'), authToggleBtn = document.getElementById('auth-toggle-btn'), authError = document.getElementById('auth-error');
         let isSignUp = false;
 
         function checkAuth() {
@@ -138,149 +143,134 @@
             if (savedUser) {
                 const user = JSON.parse(savedUser);
                 authScreen.classList.add('hidden');
-                
-                const firstName = user.name ? user.name.split(' ')[0] : 'Builder';
-                const hour = new Date().getHours();
-                let timeGreeting = hour < 12 ? "Good Morning" : (hour < 17 ? "Good Afternoon" : "Good Evening");
-                
-                document.getElementById('smart-greeting').innerHTML = `${timeGreeting}, ${firstName}! 👋`;
-                document.getElementById('profile-name').textContent = user.name || 'User';
-                document.getElementById('profile-email').textContent = user.email || '';
-                document.getElementById('profile-initial').textContent = firstName.charAt(0).toUpperCase();
-
+                document.getElementById('smart-greeting').textContent = `Habari, ${user.name.split(' ')[0]}! 👋`;
+                document.getElementById('profile-name').textContent = user.name;
+                document.getElementById('profile-email').textContent = user.email;
+                document.getElementById('profile-initial').textContent = user.name.charAt(0).toUpperCase();
                 document.getElementById('skeleton-loader').classList.add('hidden');
                 document.getElementById('app-content').classList.remove('hidden');
+                renderMaterials();
             }
         }
         checkAuth();
 
-        // 2. Email/Password Toggle & Submit
         authToggleBtn.addEventListener('click', () => {
             isSignUp = !isSignUp;
             document.getElementById('auth-name').classList.toggle('hidden', !isSignUp);
-            document.getElementById('auth-name').required = isSignUp;
             document.getElementById('auth-submit-btn').textContent = isSignUp ? 'Create Account' : 'Sign In';
-            document.getElementById('auth-toggle-text').textContent = isSignUp ? 'Already have an account?' : "Don't have an account?";
             authToggleBtn.textContent = isSignUp ? 'Sign In' : 'Sign Up';
         });
 
         authForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = document.getElementById('auth-submit-btn');
-            btn.textContent = 'Please wait...';
+            btn.textContent = 'Wait...';
             btn.disabled = true;
-
-            const endpoint = isSignUp ? '/api/signup' : '/api/signin';
-            const payload = {
-                email: document.getElementById('auth-email').value,
-                password: document.getElementById('auth-password').value
-            };
-            if(isSignUp) payload.name = document.getElementById('auth-name').value;
-
             try {
-                const response = await fetch(`http://localhost:3000${endpoint}`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
-                const data = await response.json();
-                if (!response.ok) throw new Error(data.error || 'Authentication failed');
-
+                const ep = isSignUp ? '/api/signup' : '/api/signin';
+                const payload = { email: document.getElementById('auth-email').value, password: document.getElementById('auth-password').value };
+                if(isSignUp) payload.name = document.getElementById('auth-name').value;
+                const res = await fetch(`${RENDER_URL}${ep}`, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(payload) });
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.error);
                 localStorage.setItem('ujenzi_user', JSON.stringify(data.user));
-                authScreen.classList.add('opacity-0');
-                setTimeout(() => checkAuth(), 300);
+                location.reload();
             } catch (err) {
                 authError.textContent = err.message;
                 authError.classList.remove('hidden');
-            } finally {
-                btn.textContent = isSignUp ? 'Create Account' : 'Sign In';
-                btn.disabled = false;
-            }
+            } finally { btn.disabled = false; btn.textContent = isSignUp ? 'Create Account' : 'Sign In'; }
         });
 
-        // 3. Navigation & Logout
-        document.getElementById('logout-btn').addEventListener('click', () => {
-            localStorage.removeItem('ujenzi_user');
-            location.reload();
-        });
+        // NAVIGATION
+        document.getElementById('logout-btn').onclick = () => { localStorage.removeItem('ujenzi_user'); location.reload(); };
+        const switchView = (v) => {
+            document.getElementById('app-content').classList.toggle('hidden', v !== 'home');
+            document.getElementById('profile-view').classList.toggle('hidden', v !== 'profile');
+            document.querySelector('header').classList.toggle('hidden', v !== 'home');
+        };
+        document.getElementById('nav-home-btn').onclick = () => switchView('home');
+        document.getElementById('nav-profile-btn').onclick = () => switchView('profile');
 
-        const views = { home: document.getElementById('app-content'), profile: document.getElementById('profile-view') };
-        function switchView(viewName) {
-            Object.values(views).forEach(v => v.classList.add('hidden'));
-            views[viewName].classList.remove('hidden');
-            document.querySelector('header').classList.toggle('hidden', viewName !== 'home');
-        }
-        document.getElementById('nav-home-btn').addEventListener('click', () => switchView('home'));
-        document.getElementById('nav-profile-btn').addEventListener('click', () => switchView('profile'));
-
-        // 4. AI Chat Bot
+        // AI CHAT & MATERIAL SAVING
         const chatModal = document.getElementById('chat-modal'), chatContainer = document.getElementById('chat-container'), chatBox = document.getElementById('chat-box'), chatInput = document.getElementById('chat-input');
-        document.getElementById('material-expert-btn').addEventListener('click', () => { chatModal.classList.remove('hidden'); setTimeout(() => chatContainer.classList.remove('translate-y-full'), 10); });
-        document.getElementById('close-chat').addEventListener('click', () => { chatContainer.classList.add('translate-y-full'); setTimeout(() => chatModal.classList.add('hidden'), 300); });
-        
+        document.getElementById('material-expert-btn').onclick = () => { chatModal.classList.remove('hidden'); setTimeout(() => chatContainer.classList.remove('translate-y-full'), 10); };
+        document.getElementById('close-chat').onclick = () => { chatContainer.classList.add('translate-y-full'); setTimeout(() => chatModal.classList.add('hidden'), 300); };
+
         async function sendMessage() {
-            const userText = chatInput.value.trim();
-            if (!userText) return;
-            chatBox.innerHTML += `<div class="p-3 bg-gray-800 text-white rounded-2xl ml-auto mb-2 w-max max-w-[80%]">${userText}</div>`;
+            const txt = chatInput.value.trim();
+            if(!txt) return;
+            chatBox.innerHTML += `<div class="p-3 bg-gray-800 text-white rounded-2xl ml-auto mb-2 max-w-[80%]">${txt}</div>`;
             chatInput.value = '';
             try {
-                const res = await fetch('http://localhost:3000/api/chat', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ message: userText }) });
+                const res = await fetch(`${RENDER_URL}/api/chat`, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ message: txt }) });
                 const data = await res.json();
-                chatBox.innerHTML += `<div class="p-3 bg-white text-gray-800 border rounded-2xl mr-auto mb-2 w-max max-w-[80%]">${data.reply || 'Error'}</div>`;
-            } catch(e) {
-                chatBox.innerHTML += `<div class="p-3 bg-red-100 text-red-800 rounded-2xl mr-auto mb-2">Connection error.</div>`;
-            }
+                const reply = data.reply || "Sorry, I am offline.";
+                chatBox.innerHTML += `
+                    <div class="flex flex-col gap-1 mr-auto mb-2 max-w-[80%]">
+                        <div class="p-3 bg-white text-gray-800 border rounded-2xl shadow-sm text-sm">${reply}</div>
+                        <button onclick="saveMaterial('${reply.substring(0, 45).replace(/'/g, "\\'")}...')" class="text-[10px] text-green-600 font-bold ml-2 text-left">+ Save Material</button>
+                    </div>`;
+            } catch(e) { chatBox.innerHTML += `<div class="p-3 bg-red-100 text-red-800 rounded-2xl mr-auto mb-2">Check internet.</div>`; }
             chatBox.scrollTop = chatBox.scrollHeight;
         }
-        document.getElementById('send-btn').addEventListener('click', sendMessage);
+        document.getElementById('send-btn').onclick = sendMessage;
+
+        // MATERIAL LIST LOGIC
+        function saveMaterial(text) {
+            let list = JSON.parse(localStorage.getItem('ujenzi_materials') || '[]');
+            list.push({ id: Date.now(), text: text });
+            localStorage.setItem('ujenzi_materials', JSON.stringify(list));
+            renderMaterials();
+        }
+
+        function renderMaterials() {
+            const container = document.getElementById('material-list');
+            const list = JSON.parse(localStorage.getItem('ujenzi_materials') || '[]');
+            if(list.length === 0) return;
+            container.innerHTML = list.map(item => `
+                <div class="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 flex justify-between items-center animate-fade-in">
+                    <span class="text-gray-700 dark:text-gray-200 text-xs font-medium">${item.text}</span>
+                    <button onclick="deleteMaterial(${item.id})" class="text-red-400 p-2">✕</button>
+                </div>
+            `).join('');
+        }
+
+        function deleteMaterial(id) {
+            let list = JSON.parse(localStorage.getItem('ujenzi_materials') || '[]');
+            list = list.filter(i => i.id !== id);
+            localStorage.setItem('ujenzi_materials', JSON.stringify(list));
+            location.reload();
+        }
         
-        // Dark mode toggle
-        document.getElementById('theme-toggle').addEventListener('click', () => {
+        function clearAllMaterials() { if(confirm("Clear your list?")) { localStorage.removeItem('ujenzi_materials'); location.reload(); } }
+
+        document.getElementById('theme-toggle').onclick = () => {
             document.documentElement.classList.toggle('dark');
             localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
-        });
+        };
     </script>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
         import { getAuth, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
-
-        // Your exact Firebase Config Keys
         const firebaseConfig = {
             apiKey: "AIzaSyCX2C1TXRb20nGtxEaYXGUo2KEH7gbZCY0",
             authDomain: "ujenzismart-878af.firebaseapp.com",
             projectId: "ujenzismart-878af",
             storageBucket: "ujenzismart-878af.firebasestorage.app",
             messagingSenderId: "626807014511",
-            appId: "1:626807014511:web:844e137d32048d6460399a",
-            measurementId: "G-V8C9KKGKFY"
+            appId: "1:626807014511:web:844e137d32048d6460399a"
         };
-
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const provider = new GoogleAuthProvider();
-
-        document.getElementById('google-signin-btn').addEventListener('click', async () => {
+        document.getElementById('google-signin-btn').onclick = async () => {
             try {
-                // Open the Google pop-up
-                const result = await signInWithPopup(auth, provider);
-                const user = result.user;
-                
-                // Save the user data locally
-                const userData = {
-                    name: user.displayName,
-                    email: user.email
-                };
-                localStorage.setItem('ujenzi_user', JSON.stringify(userData));
-                
-                // Refresh to show logged-in state!
+                const res = await signInWithPopup(auth, provider);
+                localStorage.setItem('ujenzi_user', JSON.stringify({ name: res.user.displayName, email: res.user.email }));
                 location.reload();
-            } catch (error) {
-                const authError = document.getElementById('auth-error');
-                authError.textContent = "Google Sign-In Error: " + error.message;
-                authError.classList.remove('hidden');
-            }
-        });
+            } catch (e) { alert("Google Sign-In Failed"); }
+        };
     </script>
 </body>
 </html>
