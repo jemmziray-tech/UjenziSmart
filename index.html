@@ -3,198 +3,242 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UjenziSmart - Home of Materials</title>
+    <title>UjenziSmart - Market Leader</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = { darkMode: 'class' }
-        if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-            document.documentElement.classList.add('dark');
+        function applyTheme() {
+            if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
         }
+        applyTheme();
     </script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-        body { font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
-        .active-nav { color: #16a34a !important; transform: scale(1.1); transition: all 0.2s; }
-        .view-content { animation: fadeIn 0.3s ease-out; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap');
+        body { font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; scroll-behavior: smooth; }
+        .view-content { animation: slideUpFade 0.5s cubic-bezier(0.2, 0.8, 0.2, 1); }
+        @keyframes slideUpFade { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        .stagger-item { animation: staggerIn 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) both; }
+        @keyframes staggerIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
+        .click-press { transition: transform 0.1s ease; }
+        .click-press:active { transform: scale(0.92); }
+        .glass { backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+        .gradient-pulse { background: linear-gradient(-45deg, #059669, #10b981, #34d399, #059669); background-size: 400% 400%; animation: gradientMove 10s ease infinite; }
+        @keyframes gradientMove { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+        .skeleton { background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%); background-size: 200% 100%; animation: skeleton-loading 1.5s infinite; }
+        .dark .skeleton { background: linear-gradient(90deg, #1f2937 25%, #374151 50%, #1f2937 75%); }
+        @keyframes skeleton-loading { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
     </style>
 </head>
 <body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 pb-24 transition-colors duration-300">
 
     <div id="auth-screen" class="fixed inset-0 z-[200] bg-gray-50 dark:bg-gray-900 flex flex-col justify-center px-6 transition-opacity duration-300">
-        <div class="max-w-md mx-auto w-full bg-white dark:bg-gray-800 p-8 rounded-3xl shadow-xl border dark:border-gray-700 text-center">
-            <h1 class="text-3xl font-bold text-green-600 mb-2">UjenziSmart</h1>
-            <p class="text-gray-600 dark:text-gray-400 mb-8">Building Tanzania, Together.</p>
+        <div class="max-w-md mx-auto w-full bg-white dark:bg-gray-800 p-8 rounded-[2.5rem] shadow-2xl border dark:border-gray-700 text-center">
+            <h1 class="text-4xl font-black text-green-600 mb-2 tracking-tighter">UjenziSmart</h1>
+            <p class="text-gray-500 mb-8 text-sm">Tanzania's #1 Construction Hub.</p>
             <form id="auth-form" class="flex flex-col gap-4 text-left">
-                <input type="email" id="auth-email" required placeholder="Email Address" class="w-full bg-gray-50 dark:bg-gray-900 border rounded-xl px-4 py-3 outline-none">
-                <input type="password" id="auth-password" required placeholder="Password" class="w-full bg-gray-50 dark:bg-gray-900 border rounded-xl px-4 py-3 outline-none">
-                <button type="submit" class="w-full py-3 bg-green-500 text-white rounded-xl font-bold shadow-md">Sign In</button>
+                <input type="email" id="auth-email" required placeholder="Email Address" class="w-full bg-gray-50 dark:bg-gray-900 border dark:border-gray-700 rounded-2xl px-5 py-4 outline-none">
+                <input type="password" id="auth-password" required placeholder="Password" class="w-full bg-gray-50 dark:bg-gray-900 border dark:border-gray-700 rounded-2xl px-5 py-4 outline-none">
+                <button type="submit" class="w-full py-4 bg-green-500 text-white rounded-2xl font-bold shadow-lg click-press">Sign In</button>
             </form>
-            <div class="relative flex items-center justify-center my-6">
-                <div class="border-t w-full absolute border-gray-200 dark:border-gray-700"></div>
-                <span class="bg-white dark:bg-gray-800 px-3 text-xs text-gray-400 relative z-10">OR</span>
-            </div>
-            <button type="button" id="google-signin-btn" class="w-full py-3 bg-white dark:bg-gray-700 text-gray-700 dark:text-white border dark:border-gray-600 rounded-xl font-bold flex items-center justify-center gap-3">
-                <svg viewBox="0 0 24 24" width="20" height="20"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
-                Sign in with Google
+            <button type="button" id="google-signin-btn" class="w-full py-4 mt-6 bg-white dark:bg-gray-700 text-gray-700 dark:text-white border dark:border-gray-600 rounded-2xl font-bold flex items-center justify-center gap-3 click-press">
+                <svg viewBox="0 0 24 24" width="18" height="18"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg> Google Login
             </button>
         </div>
     </div>
 
-    <header id="main-header" class="bg-gradient-to-r from-green-600 to-emerald-700 pt-10 pb-20 px-4 rounded-b-[2.5rem] shadow-lg relative">
-        <div class="flex justify-between items-center mb-6 text-white max-w-7xl mx-auto">
+    <header id="main-header" class="gradient-pulse pt-12 pb-24 px-6 rounded-b-[3rem] shadow-2xl relative">
+        <div class="flex justify-between items-center text-white max-w-7xl mx-auto">
             <div>
-                <h1 id="smart-greeting" class="text-2xl font-bold tracking-tight">Habari! 👋</h1>
-                <p id="welcome-subtitle" class="text-green-100 text-sm mt-1">Ready to build today?</p>
+                <h1 id="smart-greeting" class="text-3xl font-black tracking-tighter mb-1">Habari! 👋</h1>
+                <p id="welcome-subtitle" class="text-green-50 text-xs font-medium opacity-90">What can we build today?</p>
             </div>
-            <button id="theme-toggle" class="p-2 bg-white/20 rounded-full">🌓</button>
+            <button id="theme-toggle" class="w-12 h-12 bg-white/20 rounded-full glass flex items-center justify-center active:scale-90 transition-all">
+                <span id="theme-icon" class="text-xl">🌙</span>
+            </button>
         </div>
     </header>
 
-    <div class="px-4 -mt-10 relative z-10 max-w-7xl mx-auto pb-20">
+    <div class="px-6 -mt-12 relative z-10 max-w-7xl mx-auto pb-24">
         
-        <div id="home-tools" class="grid grid-cols-2 gap-4 mb-8">
-            <button onclick="openCalculator()" class="bg-white dark:bg-gray-800 p-4 rounded-2xl shadow-md flex flex-col items-center gap-2 border dark:border-gray-700">
-                <span class="text-2xl">📐</span><span class="font-bold text-xs">Calculator</span>
+        <div id="home-tools" class="grid grid-cols-2 gap-4 mb-10">
+            <button onclick="openCalculator()" class="bg-white dark:bg-gray-800 p-6 rounded-[2rem] shadow-xl flex flex-col items-center gap-3 border dark:border-gray-700 click-press">
+                <div class="w-12 h-12 bg-amber-100 rounded-2xl flex items-center justify-center text-2xl">📐</div>
+                <span class="font-black text-[10px] uppercase tracking-widest text-gray-400">Calculator</span>
             </button>
-            <button id="material-expert-btn" class="bg-white dark:bg-gray-800 p-4 rounded-2xl shadow-md flex flex-col items-center gap-2 border dark:border-gray-700">
-                <span class="text-2xl">🤖</span><span class="font-bold text-xs">AI Expert</span>
+            <button id="material-expert-btn" class="bg-white dark:bg-gray-800 p-6 rounded-[2rem] shadow-xl flex flex-col items-center gap-3 border dark:border-gray-700 click-press">
+                <div class="w-12 h-12 bg-blue-100 rounded-2xl flex items-center justify-center text-2xl">🤖</div>
+                <span class="font-black text-[10px] uppercase tracking-widest text-gray-400">AI Expert</span>
             </button>
         </div>
 
-        <div id="view-home" class="view-content flex flex-col gap-8">
-            <section>
-                <h2 class="text-xl font-bold mb-4 text-gray-800 dark:text-white px-1">Product Categories</h2>
-                <div class="grid grid-cols-2 gap-4">
-                    <div onclick="openProduct('Foundation & Structural', 'Heavy materials like cement, rebars, and aggregates.', 0, 'https://images.unsplash.com/photo-1590060417941-2f34888463f1?auto=format&fit=crop&w=300')" class="bg-white dark:bg-gray-800 rounded-2xl p-4 shadow-sm border dark:border-gray-700 flex flex-col items-center">
-                        <span class="text-3xl mb-2">🏗️</span><p class="font-bold text-[10px] text-center">Foundation & Structural</p>
-                    </div>
-                    <div onclick="openProduct('Roofing Materials', 'Iron sheets, nails, and timber.', 0, 'https://images.unsplash.com/photo-1635424710928-0544e8512eae?auto=format&fit=crop&w=300')" class="bg-white dark:bg-gray-800 rounded-2xl p-4 shadow-sm border dark:border-gray-700 flex flex-col items-center">
-                        <span class="text-3xl mb-2">🏠</span><p class="font-bold text-[10px] text-center">Roofing Materials</p>
-                    </div>
-                    <div onclick="openProduct('Plumbing & Water', 'Pipes, tanks, and fittings.', 0, 'https://images.unsplash.com/photo-1581244277943-fe4a9c777189?auto=format&fit=crop&w=300')" class="bg-white dark:bg-gray-800 rounded-2xl p-4 shadow-sm border dark:border-gray-700 flex flex-col items-center">
-                        <span class="text-3xl mb-2">🚰</span><p class="font-bold text-[10px] text-center">Plumbing & Water</p>
-                    </div>
-                    <div onclick="openProduct('Electrical & Lighting', 'Cables, switches, and lighting.', 0, 'https://images.unsplash.com/photo-1550009158-9ebf69173e03?auto=format&fit=crop&w=300')" class="bg-white dark:bg-gray-800 rounded-2xl p-4 shadow-sm border dark:border-gray-700 flex flex-col items-center">
-                        <span class="text-3xl mb-2">💡</span><p class="font-bold text-[10px] text-center">Electrical & Lighting</p>
-                    </div>
-                    <div onclick="openProduct('Finishing & Painting', 'Tiles, paint, and flooring.', 0, 'https://images.unsplash.com/photo-1589939705384-5185138a047a?auto=format&fit=crop&w=300')" class="bg-white dark:bg-gray-800 rounded-2xl p-4 shadow-sm border dark:border-gray-700 flex flex-col items-center">
-                        <span class="text-3xl mb-2">🎨</span><p class="font-bold text-[10px] text-center">Finishing & Painting</p>
-                    </div>
-                    <div onclick="openProduct('Tools & Hardware', 'Hardware tools and general supplies.', 0, 'https://images.unsplash.com/photo-1530124560677-bdaea02c9a9d?auto=format&fit=crop&w=300')" class="bg-white dark:bg-gray-800 rounded-2xl p-4 shadow-sm border dark:border-gray-700 flex flex-col items-center">
-                        <span class="text-3xl mb-2">🛠️</span><p class="font-bold text-[10px] text-center">Tools & Hardware</p>
+        <div id="view-home" class="view-content flex flex-col gap-10"></div>
+        
+        <div id="view-trending" class="view-content hidden space-y-6">
+            <div class="flex justify-between items-end mb-2">
+                <h2 class="text-3xl font-black tracking-tighter">Market Watch</h2>
+                <span class="text-[10px] font-black text-green-500 uppercase tracking-widest mb-1">Live Updates</span>
+            </div>
+            
+            <div onclick="openProduct('Simba Cement 50kg', 'Market leader in strength and reliability.', 18500, 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=600')" class="bg-white dark:bg-gray-800 rounded-[2.5rem] overflow-hidden shadow-xl border dark:border-gray-700 stagger-item click-press">
+                <div class="relative h-48">
+                    <img src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=600" class="w-full h-full object-cover">
+                    <div class="absolute top-4 left-4 bg-green-500 text-white text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-widest shadow-lg">#1 Best Value</div>
+                    <div class="absolute bottom-4 right-4 bg-white/90 glass text-gray-900 text-[10px] font-black px-3 py-1 rounded-full flex items-center gap-1 shadow-lg">
+                        <span class="text-green-600">▼</span> 2% this week
                     </div>
                 </div>
-            </section>
-
-            <section>
-                <h2 class="text-xl font-bold mb-4 text-gray-800 dark:text-white px-1">Featured Materials</h2>
-                <div class="grid grid-cols-2 gap-4">
-                    <div onclick="openProduct('Simba Cement', 'Strong 50kg bags.', 18500, 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=300')" class="bg-white dark:bg-gray-800 rounded-2xl p-3 border dark:border-gray-700">
-                        <img src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=300" class="w-full h-24 object-cover rounded-xl mb-2">
-                        <p class="font-bold text-xs">Simba Cement</p>
-                        <p class="text-green-600 font-bold text-[10px]">TZS 18,500</p>
+                <div class="p-6">
+                    <div class="flex justify-between items-start mb-2">
+                        <h3 class="font-black text-lg">Simba Cement 50kg</h3>
+                        <p class="text-green-600 font-black">TZS 18,500</p>
                     </div>
-                    <div onclick="openProduct('Iron Sheet', '30G Premium quality.', 22000, 'https://images.unsplash.com/photo-1516156008625-3a9d6067fab5?auto=format&fit=crop&w=300')" class="bg-white dark:bg-gray-800 rounded-2xl p-3 border dark:border-gray-700">
-                        <img src="https://images.unsplash.com/photo-1516156008625-3a9d6067fab5?auto=format&fit=crop&w=300" class="w-full h-24 object-cover rounded-xl mb-2">
-                        <p class="font-bold text-xs">Iron Sheet</p>
-                        <p class="text-green-600 font-bold text-[10px]">TZS 22,000</p>
+                    <p class="text-xs text-gray-400 leading-relaxed mb-4">High demand across Dar Es Salaam residential sites. Price currently stabilizing.</p>
+                    <button class="w-full py-3 bg-gray-50 dark:bg-gray-700 rounded-xl text-[10px] font-black uppercase tracking-widest text-green-600">View Market Analysis</button>
+                </div>
+            </div>
+
+            <div onclick="openProduct('Deformed Bar 12mm', 'High tensile strength reinforcement steel.', 24000, 'https://images.unsplash.com/photo-1516156008625-3a9d6067fab5?w=600')" class="bg-white dark:bg-gray-800 rounded-[2.5rem] overflow-hidden shadow-xl border dark:border-gray-700 stagger-item click-press" style="animation-delay: 0.1s">
+                <div class="relative h-48">
+                    <img src="https://images.unsplash.com/photo-1516156008625-3a9d6067fab5?w=600" class="w-full h-full object-cover">
+                    <div class="absolute top-4 left-4 bg-blue-500 text-white text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-widest shadow-lg">Essential</div>
+                    <div class="absolute bottom-4 right-4 bg-white/90 glass text-gray-900 text-[10px] font-black px-3 py-1 rounded-full flex items-center gap-1 shadow-lg">
+                        <span class="text-red-500">▲</span> 1.5% this week
                     </div>
                 </div>
-            </section>
-        </div>
-
-        <div id="view-trending" class="view-content hidden">
-            <h2 class="text-2xl font-bold mb-6">Trending 📈</h2>
-            <div class="bg-white dark:bg-gray-800 p-5 rounded-2xl border dark:border-gray-700">
-                <p class="font-bold text-green-600">#1 Gypsum Powder</p>
-                <p class="text-xs text-gray-400">High demand in Dar residential areas.</p>
+                <div class="p-6">
+                    <div class="flex justify-between items-start mb-2">
+                        <h3 class="font-black text-lg">Rebars 12mm (Grade 500)</h3>
+                        <p class="text-green-600 font-black">TZS 24,000</p>
+                    </div>
+                    <p class="text-xs text-gray-400 leading-relaxed mb-4">Rising steel costs globally impacting local availability. Buy now to lock price.</p>
+                    <button class="w-full py-3 bg-gray-50 dark:bg-gray-700 rounded-xl text-[10px] font-black uppercase tracking-widest text-green-600">View Market Analysis</button>
+                </div>
             </div>
         </div>
 
         <div id="view-cart" class="view-content hidden">
-            <h2 class="text-2xl font-bold mb-6">My Cart 🛒</h2>
+            <h2 class="text-3xl font-black tracking-tighter mb-8 text-center">My Basket</h2>
             <div id="cart-items-container" class="flex flex-col gap-4"></div>
-            <div id="cart-footer" class="hidden mt-8 border-t dark:border-gray-700 pt-6">
-                <div class="flex justify-between text-xl font-bold mb-6">
-                    <span>Total:</span><span id="cart-total-price">TZS 0</span>
+            <div id="cart-footer" class="hidden mt-10 border-t dark:border-gray-700 pt-8">
+                <div class="flex justify-between text-2xl font-black mb-8 px-2">
+                    <span>Total</span><span id="cart-total-price" class="text-green-600">TZS 0</span>
                 </div>
-                
-                <button onclick="checkoutWhatsApp()" class="w-full py-4 bg-[#25D366] text-white rounded-2xl font-bold flex items-center justify-center gap-2 shadow-lg mb-6">
-                    <span>Order via WhatsApp</span>
-                </button>
+                <button onclick="checkoutWhatsApp()" class="w-full py-5 bg-[#25D366] text-white rounded-[2.5rem] font-black shadow-xl click-press uppercase text-xs tracking-widest">Order via WhatsApp</button>
+                <div class="flex justify-center items-center gap-6 mt-8 opacity-30 grayscale scale-75">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c2/M-Pesa_logo.svg/512px-M-Pesa_logo.svg.png" class="h-6">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/a/a2/Tigo_logo.svg" class="h-6">
+                </div>
+            </div>
+        </div>
 
-                <div class="text-center">
-                    <p class="text-[10px] text-gray-400 uppercase font-bold tracking-widest mb-3">Pay securely with</p>
-                    <div class="flex justify-center items-center gap-4 opacity-70 grayscale hover:grayscale-0 transition-all">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c2/M-Pesa_logo.svg/512px-M-Pesa_logo.svg.png" class="h-4" alt="M-Pesa">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/a/a2/Tigo_logo.svg" class="h-4" alt="TigoPesa">
-                        <img src="https://logos-world.net/wp-content/uploads/2020/12/Airtel-Logo.png" class="h-4" alt="Airtel">
+        <div id="view-profile" class="view-content hidden">
+            <div class="flex flex-col items-center mb-8">
+                <div id="p-initial-box" class="w-20 h-20 bg-gradient-to-tr from-green-500 to-emerald-400 rounded-full flex items-center justify-center text-white text-3xl font-black shadow-xl mb-4 border-4 border-white dark:border-gray-800">
+                    <span id="p-initial">U</span>
+                </div>
+                <h2 id="p-name" class="text-2xl font-black text-gray-800 dark:text-white">User</h2>
+                <p id="p-email" class="text-xs text-gray-400 italic">user@email.com</p>
+            </div>
+
+            <div class="bg-gradient-to-br from-gray-900 to-gray-800 text-white p-6 rounded-[2.5rem] shadow-2xl mb-8 relative overflow-hidden">
+                <div class="relative z-10">
+                    <p class="text-[10px] uppercase font-black tracking-widest opacity-60 mb-1">Total Project Spend</p>
+                    <h3 id="total-project-cost" class="text-3xl font-black mb-4">TZS 0</h3>
+                    <div class="w-full bg-white/10 h-2 rounded-full overflow-hidden">
+                        <div id="cost-progress" class="bg-green-500 h-full transition-all duration-1000" style="width: 5%"></div>
                     </div>
                 </div>
+                <div class="absolute -right-4 -bottom-4 text-white/5 text-8xl font-black italic">COST</div>
+            </div>
+
+            <div class="space-y-4">
+                <div class="bg-white dark:bg-gray-800 rounded-[2.5rem] p-1 shadow-sm border dark:border-gray-700">
+                    <button onclick="switchTheme()" class="w-full flex items-center gap-4 p-5 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-3xl transition click-press">
+                        <span class="p-2 bg-amber-50 dark:bg-amber-900/30 rounded-xl">🌓</span>
+                        <span class="font-bold text-sm flex-grow text-left">Theme Mode</span>
+                    </button>
+                </div>
+                <button onclick="localStorage.removeItem('ujenzi_user'); location.reload();" class="w-full p-6 bg-red-50 dark:bg-red-900/10 text-red-500 rounded-[2.5rem] font-black text-xs uppercase tracking-widest click-press">Logout</button>
             </div>
         </div>
     </div>
 
-    <div id="product-modal" class="fixed inset-0 z-[150] hidden bg-black/60 backdrop-blur-sm flex items-end justify-center p-4">
-        <div class="bg-white dark:bg-gray-900 w-full max-w-md rounded-3xl overflow-hidden shadow-2xl">
-            <img id="modal-img" src="" class="w-full h-56 object-cover">
-            <div class="p-6">
-                <h3 id="modal-title" class="text-2xl font-bold mb-1"></h3>
-                <p id="modal-desc" class="text-gray-500 text-sm mb-6"></p>
-                <div class="flex justify-between items-center mb-6">
+    <div id="product-modal" class="fixed inset-0 z-[150] hidden bg-black/40 glass flex items-end justify-center p-4">
+        <div class="bg-white dark:bg-gray-900 w-full max-w-md rounded-[3rem] overflow-hidden shadow-2xl animate-slide-up">
+            <img id="modal-img" src="" class="w-full h-64 object-cover">
+            <div class="p-8">
+                <h3 id="modal-title" class="text-2xl font-black mb-1"></h3>
+                <p id="modal-desc" class="text-gray-400 text-xs mb-8"></p>
+                <div class="flex justify-between items-center mb-8">
                     <span id="modal-price" class="text-2xl font-black text-green-600"></span>
-                    <input type="number" id="modal-qty" value="1" min="1" class="w-16 bg-gray-100 dark:bg-gray-800 p-2 rounded-lg text-center font-bold">
+                    <input type="number" id="modal-qty" value="1" min="1" class="w-20 bg-gray-100 dark:bg-gray-800 p-3 rounded-2xl text-center font-black">
                 </div>
-                <div class="flex gap-3">
-                    <button onclick="closeProduct()" class="flex-1 py-4 bg-gray-100 dark:bg-gray-800 rounded-2xl font-bold">Back</button>
-                    <button id="add-to-cart-btn" class="flex-[2] py-4 bg-green-500 text-white rounded-2xl font-bold">Add to Cart</button>
+                <div class="flex gap-4">
+                    <button onclick="closeProduct()" class="flex-1 py-5 bg-gray-100 dark:bg-gray-800 rounded-[2rem] font-black text-[10px] uppercase">Back</button>
+                    <button id="add-to-cart-btn" class="flex-[2] py-5 bg-green-500 text-white rounded-[2rem] font-black text-[10px] uppercase shadow-lg click-press">Add to Basket</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <div id="calc-modal" class="fixed inset-0 z-[150] hidden bg-black/60 flex items-center justify-center p-4">
-        <div class="bg-white dark:bg-gray-900 w-full max-w-sm rounded-3xl p-6 shadow-2xl">
-            <h3 class="text-xl font-bold mb-4">Wall Estimate 🧱</h3>
-            <input type="number" id="calc-length" placeholder="Length (m)" class="w-full bg-gray-100 dark:bg-gray-800 p-3 rounded-xl mb-3 outline-none border">
-            <input type="number" id="calc-height" placeholder="Height (m)" class="w-full bg-gray-100 dark:bg-gray-800 p-3 rounded-xl mb-4 outline-none border">
-            <button onclick="runCalculation()" class="w-full py-4 bg-green-500 text-white rounded-2xl font-bold">Calculate</button>
-            <div id="calc-results" class="hidden mt-4 p-3 bg-green-50 rounded-xl text-xs text-green-700"></div>
-            <button onclick="closeCalculator()" class="w-full text-[10px] text-gray-400 mt-4 text-center">Close Window</button>
+    <div id="calc-modal" class="fixed inset-0 z-[150] hidden bg-black/40 glass flex items-center justify-center p-6">
+        <div class="bg-white dark:bg-gray-900 w-full max-w-sm rounded-[3rem] p-8 shadow-2xl text-center">
+            <h3 class="text-2xl font-black mb-6">Wall Calculator</h3>
+            <input type="number" id="calc-length" placeholder="Length (m)" class="w-full bg-gray-100 dark:bg-gray-800 p-5 rounded-2xl mb-3 outline-none">
+            <input type="number" id="calc-height" placeholder="Height (m)" class="w-full bg-gray-100 dark:bg-gray-800 p-5 rounded-2xl mb-6 outline-none">
+            <button onclick="runCalculation()" class="w-full py-5 bg-green-500 text-white rounded-[2rem] font-black click-press shadow-lg">Calculate</button>
+            <div id="calc-results" class="hidden mt-6 p-4 bg-green-50 rounded-2xl text-xs font-bold text-green-700"></div>
+            <button onclick="closeCalculator()" class="mt-6 text-[10px] font-black text-gray-400">Close</button>
         </div>
     </div>
 
-    <div id="chat-modal" class="fixed inset-0 z-[150] hidden bg-black/60 flex items-end justify-center">
-        <div class="bg-white dark:bg-gray-900 w-full max-w-md h-[75vh] rounded-t-3xl flex flex-col overflow-hidden" id="chat-container">
-            <div class="bg-green-600 p-4 flex justify-between items-center text-white"><span class="font-bold">Expert AI</span><button id="close-chat">✕</button></div>
-            <div id="chat-box" class="flex-grow p-4 overflow-y-auto bg-gray-50 flex flex-col gap-3"></div>
-            <div class="p-3 flex gap-2 border-t bg-white">
-                <input type="text" id="chat-input" class="flex-grow bg-gray-100 rounded-full px-4 py-2 text-sm outline-none" placeholder="Ask AI...">
-                <button id="send-btn" class="bg-green-500 text-white px-5 rounded-full">→</button>
+    <div id="chat-modal" class="fixed inset-0 z-[150] hidden bg-black/40 glass flex items-end justify-center">
+        <div class="bg-white dark:bg-gray-900 w-full max-w-md h-[80vh] rounded-t-[3rem] flex flex-col overflow-hidden shadow-2xl" id="chat-container">
+            <div class="bg-green-600 p-6 flex justify-between items-center text-white">
+                <span class="font-black uppercase tracking-widest text-[10px]">AI Expert</span><button id="close-chat" class="text-xl">✕</button>
+            </div>
+            <div id="chat-box" class="flex-grow p-6 overflow-y-auto bg-gray-50 dark:bg-gray-800 flex flex-col gap-4"></div>
+            <div class="p-4 flex gap-3 border-t bg-white dark:bg-gray-900">
+                <input type="text" id="chat-input" class="flex-grow bg-gray-100 rounded-full px-6 py-4 text-sm outline-none" placeholder="Ask construction questions...">
+                <button id="send-btn" class="w-14 h-14 bg-green-500 text-white rounded-full font-bold shadow-lg flex items-center justify-center">→</button>
             </div>
         </div>
     </div>
 
-    <nav class="fixed bottom-0 w-full bg-white dark:bg-gray-900 border-t px-6 py-3 flex justify-around items-center z-50">
-        <button onclick="switchView('home')" id="nav-home" class="nav-btn active-nav flex flex-col items-center gap-1 text-gray-400 text-[10px] font-bold">🏠<span>Home</span></button>
-        <button onclick="switchView('trending')" id="nav-trending" class="nav-btn flex flex-col items-center gap-1 text-gray-400 text-[10px] font-bold">📈<span>Trending</span></button>
-        <button onclick="switchView('cart')" id="nav-cart" class="nav-btn flex flex-col items-center gap-1 text-gray-400 text-[10px] font-bold relative">🛒<span>Cart</span><span id="cart-badge" class="hidden absolute -top-1 right-0 bg-red-500 text-white text-[8px] px-1 rounded-full">0</span></button>
-        <button onclick="localStorage.removeItem('ujenzi_user'); location.reload();" class="flex flex-col items-center gap-1 text-gray-400 text-[10px] font-bold">👤<span>Logout</span></button>
+    <nav class="fixed bottom-0 w-full bg-white/90 dark:bg-gray-900/90 glass border-t dark:border-gray-800 px-8 py-4 flex justify-around items-center z-50">
+        <button onclick="switchView('home')" id="nav-home" class="nav-btn active-nav flex flex-col items-center gap-1 text-gray-400 text-[10px] font-black uppercase transition-all"><span>🏠</span><span>Home</span></button>
+        <button onclick="switchView('trending')" id="nav-trending" class="nav-btn flex flex-col items-center gap-1 text-gray-400 text-[10px] font-black uppercase transition-all"><span>📈</span><span>Watch</span></button>
+        <button onclick="switchView('cart')" id="nav-cart" class="nav-btn flex flex-col items-center gap-1 text-gray-400 text-[10px] font-black uppercase transition-all relative"><span>🛒</span><span>Cart</span><span id="cart-badge" class="hidden absolute -top-1 -right-2 bg-green-500 text-white text-[8px] px-1.5 rounded-full ring-2">0</span></button>
+        <button onclick="switchView('profile')" id="nav-profile" class="nav-btn flex flex-col items-center gap-1 text-gray-400 text-[10px] font-black uppercase transition-all"><span>👤</span><span>Profile</span></button>
     </nav>
 
     <script>
         const RENDER_URL = 'https://ujenzismart-backend.onrender.com';
         let cart = [];
 
+        const productDatabase = {
+            'Foundation & Structural': [{ name: 'Simba Cement 50kg', price: 18500, desc: 'High strength cement.', img: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=600' }, { name: 'Deformed Bar 12mm', price: 24000, desc: 'Standard steel rebar.', img: 'https://images.unsplash.com/photo-1516156008625-3a9d6067fab5?w=600' }],
+            'Roofing Materials': [{ name: 'Iron Sheet 30G', price: 22000, desc: 'Corrugated anti-corrosive.', img: 'https://images.unsplash.com/photo-1635424710928-0544e8512eae?w=600' }],
+            'Plumbing & Water': [{ name: 'Water Tank 1000L', price: 215000, desc: 'HDPE durable storage.', img: 'https://images.unsplash.com/photo-1542332213-31f87348057f?w=600' }],
+            'Electrical & Lighting': [{ name: 'Switch Socket', price: 8500, desc: 'Premium dual socket.', img: 'https://images.unsplash.com/photo-1558444455-89b4f9104f69?w=600' }],
+            'Finishing & Painting': [{ name: 'Silk Paint 20L', price: 145000, desc: 'Washable interior silk.', img: 'https://images.unsplash.com/photo-1562591970-254bc62245c0?w=600' }],
+            'Tools & Hardware': [{ name: 'Wheelbarrow', price: 110000, desc: 'Steel tray heavy duty.', img: 'https://images.unsplash.com/photo-1530124560677-bdaea02c9a9d?w=600' }]
+        };
+
         function switchView(viewName) {
             document.querySelectorAll('.view-content').forEach(v => v.classList.add('hidden'));
             document.getElementById(`view-${viewName}`).classList.remove('hidden');
             document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active-nav'));
             document.getElementById(`nav-${viewName}`).classList.add('active-nav');
-            document.getElementById('main-header').classList.toggle('hidden', viewName !== 'home');
+            document.getElementById('main-header').classList.toggle('hidden', (viewName === 'cart'));
             document.getElementById('home-tools').classList.toggle('hidden', viewName !== 'home');
+            if(viewName === 'home') renderHome();
             if(viewName === 'cart') renderCart();
+            if(viewName === 'profile') updateTrackerUI();
         }
 
         function checkAuth() {
@@ -202,70 +246,77 @@
             if (user) {
                 document.getElementById('auth-screen').classList.add('hidden');
                 const firstName = user.name.split(' ')[0];
-                const hour = new Date().getHours();
-                let greet = "Good Evening";
-                if(hour < 12) greet = "Good Morning";
-                else if(hour < 17) greet = "Good Afternoon";
-                document.getElementById('smart-greeting').textContent = `Habari, ${firstName}! 👋`;
-                document.getElementById('welcome-subtitle').textContent = `${greet}, welcome to UjenziSmart.`;
+                const h = new Date().getHours();
+                let g = h < 12 ? "Asubuhi njema" : (h < 17 ? "Mchana mwema" : "Jioni njema");
+                document.getElementById('smart-greeting').textContent = `${firstName}, 👋`;
+                document.getElementById('welcome-subtitle').textContent = `${g}, what are we building today?`;
+                document.getElementById('p-name').textContent = user.name;
+                document.getElementById('p-email').textContent = user.email;
+                document.getElementById('p-initial').textContent = firstName[0].toUpperCase();
+                renderHome();
             }
         }
-        checkAuth();
 
-        document.getElementById('auth-form').onsubmit = async (e) => {
-            e.preventDefault();
-            const payload = { email: document.getElementById('auth-email').value, password: document.getElementById('auth-password').value };
-            try {
-                const res = await fetch(`${RENDER_URL}/api/signin`, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(payload) });
-                const data = await res.json();
-                if(!res.ok) throw new Error(data.error);
-                localStorage.setItem('ujenzi_user', JSON.stringify(data.user));
-                location.reload();
-            } catch(e) { alert(e.message); }
-        };
+        function switchTheme() {
+            document.documentElement.classList.toggle('dark');
+            const isDark = document.documentElement.classList.contains('dark');
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+            document.getElementById('theme-icon').textContent = isDark ? '☀️' : '🌙';
+        }
+        document.getElementById('theme-toggle').onclick = switchTheme;
 
-        function openProduct(title, desc, price, img) {
-            document.getElementById('modal-img').src = img;
-            document.getElementById('modal-title').textContent = title;
-            document.getElementById('modal-desc').textContent = desc;
-            document.getElementById('modal-price').textContent = price > 0 ? `TZS ${price.toLocaleString()}` : "Price on Request";
+        function updateTrackerUI() {
+            const spend = parseInt(localStorage.getItem('ujenzi_total_spend') || '0');
+            document.getElementById('total-project-cost').textContent = `TZS ${spend.toLocaleString()}`;
+            const progress = Math.min((spend / 5000000) * 100, 100);
+            document.getElementById('cost-progress').style.width = `${Math.max(progress, 5)}%`;
+        }
+
+        function renderHome() {
+            const home = document.getElementById('view-home');
+            home.innerHTML = `<h2 class="text-2xl font-black tracking-tighter">Categories</h2><div class="grid grid-cols-2 gap-5">${Object.keys(productDatabase).map((cat, i) => `<div onclick="openCategory('${cat}')" class="stagger-item bg-white dark:bg-gray-800 p-8 rounded-[2.5rem] shadow-xl border dark:border-gray-700 flex flex-col items-center click-press" style="animation-delay: ${i*0.05}s"><span class="text-4xl mb-4">${getIcon(cat)}</span><p class="font-black text-[9px] text-center uppercase tracking-widest leading-relaxed">${cat}</p></div>`).join('')}</div>`;
+        }
+
+        function getIcon(c) { const icons = { 'Foundation & Structural': '🏗️', 'Roofing Materials': '🏠', 'Plumbing & Water': '🚰', 'Electrical & Lighting': '💡', 'Finishing & Painting': '🎨', 'Tools & Hardware': '🛠️' }; return icons[c] || '📦'; }
+
+        function openCategory(catName) {
+            const products = productDatabase[catName];
+            const home = document.getElementById('view-home');
+            document.getElementById('home-tools').classList.add('hidden');
+            home.innerHTML = `<div class="flex items-center gap-4 mb-8" onclick="renderHome()"><span class="w-10 h-10 bg-white dark:bg-gray-800 rounded-full flex items-center justify-center shadow-lg text-green-600 font-bold">←</span><h2 class="text-2xl font-black tracking-tighter">${catName}</h2></div><div class="grid grid-cols-2 gap-4">${products.map((p, i) => `<div onclick="openProduct('${p.name}', '${p.desc}', ${p.price}, '${p.img}')" class="stagger-item bg-white dark:bg-gray-800 p-3 rounded-[2rem] border dark:border-gray-700 shadow-xl" style="animation-delay: ${i*0.05}s"><img src="${p.img}" class="w-full h-28 object-cover rounded-2xl mb-3"><p class="font-black text-[10px] h-8 overflow-hidden uppercase px-1 leading-tight">${p.name}</p><p class="text-green-600 font-black text-[10px] mt-2 px-1">TZS ${p.price.toLocaleString()}</p></div>`).join('')}</div>`;
+            window.scrollTo(0, 0);
+        }
+
+        function openProduct(t, d, p, i) {
+            document.getElementById('modal-img').src = i;
+            document.getElementById('modal-title').textContent = t;
+            document.getElementById('modal-desc').textContent = d;
+            document.getElementById('modal-price').textContent = `TZS ${p.toLocaleString()}`;
             document.getElementById('product-modal').classList.remove('hidden');
             document.getElementById('add-to-cart-btn').onclick = () => {
-                const qty = parseInt(document.getElementById('modal-qty').value);
-                cart.push({ title, price, qty });
-                updateCartBadge();
-                closeProduct();
+                cart.push({ title: t, price: p, qty: parseInt(document.getElementById('modal-qty').value) });
+                updateBadge(); closeProduct();
             };
         }
         function closeProduct() { document.getElementById('product-modal').classList.add('hidden'); }
-        function updateCartBadge() {
-            const b = document.getElementById('cart-badge');
-            b.textContent = cart.length; b.classList.toggle('hidden', cart.length === 0);
-        }
+        function updateBadge() { const b = document.getElementById('cart-badge'); b.textContent = cart.length; b.classList.toggle('hidden', cart.length === 0); }
         function renderCart() {
-            const container = document.getElementById('cart-items-container');
-            if(cart.length === 0) {
-                container.innerHTML = '<p class="text-center text-gray-400 py-10 text-sm">Your cart is empty.</p>';
-                document.getElementById('cart-footer').classList.add('hidden');
-                return;
-            }
-            let total = 0;
-            container.innerHTML = cart.map((item, idx) => {
-                total += item.price * item.qty;
-                return `<div class="bg-white dark:bg-gray-800 p-4 rounded-xl flex justify-between shadow-sm border dark:border-gray-700"><div><p class="font-bold text-xs text-green-600">${item.title}</p><p class="text-[10px] text-gray-400">Qty: ${item.qty} x TZS ${item.price.toLocaleString()}</p></div><button onclick="cart.splice(${idx},1);renderCart();updateCartBadge();" class="text-red-500">✕</button></div>`;
-            }).join('');
-            document.getElementById('cart-total-price').textContent = `TZS ${total.toLocaleString()}`;
+            const c = document.getElementById('cart-items-container');
+            if(cart.length === 0) { c.innerHTML = '<p class="text-center text-gray-400 py-16 font-medium">Cart is empty.</p>'; document.getElementById('cart-footer').classList.add('hidden'); return; }
+            let t = 0; c.innerHTML = cart.map((i, idx) => { t += i.price * i.qty; return `<div class="bg-white dark:bg-gray-800 p-5 rounded-[2rem] flex justify-between items-center shadow-lg border dark:border-gray-700"><div><p class="font-black text-xs uppercase">${i.title}</p><p class="text-[10px] text-gray-400 font-bold mt-1">${i.qty} units × TZS ${i.price.toLocaleString()}</p></div><button onclick="cart.splice(${idx},1);renderCart();updateBadge();" class="text-red-500 font-bold text-lg">✕</button></div>`; }).join('');
+            document.getElementById('cart-total-price').textContent = `TZS ${t.toLocaleString()}`;
             document.getElementById('cart-footer').classList.remove('hidden');
         }
 
         function checkoutWhatsApp() {
-            const user = JSON.parse(localStorage.getItem('ujenzi_user'));
-            let msg = `Hello UjenziSmart! My name is ${user.name}.\nI want to order:\n\n`;
-            let total = 0;
-            cart.forEach(i => { msg += `- ${i.title} (Qty: ${i.qty})\n`; total += i.price * i.qty; });
-            msg += `\nTotal: TZS ${total.toLocaleString()}\nPlease confirm my order!`;
-            // ENTER YOUR PHONE NUMBER BELOW (255...)
-            window.open(`https://wa.me/255743924467?text=${encodeURIComponent(msg)}`, '_blank');
+            const u = JSON.parse(localStorage.getItem('ujenzi_user'));
+            let currentOrderTotal = 0;
+            let m = `Habari UjenziSmart! I am ${u.name}.\nI want to order materials:\n\n`;
+            cart.forEach(i => { m += `- ${i.title} (x${i.qty})\n`; currentOrderTotal += i.price * i.qty; });
+            m += `\nTotal: TZS ${currentOrderTotal.toLocaleString()}\nPlease confirm!`;
+            const oldSpend = parseInt(localStorage.getItem('ujenzi_total_spend') || '0');
+            localStorage.setItem('ujenzi_total_spend', oldSpend + currentOrderTotal);
+            window.open(`https://wa.me/255743924467?text=${encodeURIComponent(m)}`, '_blank');
         }
 
         function openCalculator() { document.getElementById('calc-modal').classList.remove('hidden'); }
@@ -274,26 +325,32 @@
             const L = document.getElementById('calc-length').value, H = document.getElementById('calc-height').value;
             if(!L || !H) return;
             const res = document.getElementById('calc-results');
-            res.innerHTML = `Area: ${L*H}m. Approx <b>${Math.ceil((L*H)*12.5)}</b> blocks needed.`;
+            res.innerHTML = `Estimate: <b>${Math.ceil((L*H)*12.5)}</b> blocks needed.`;
             res.classList.remove('hidden');
         }
 
-        const chatModal = document.getElementById('chat-modal'), chatContainer = document.getElementById('chat-container'), chatBox = document.getElementById('chat-box'), chatInput = document.getElementById('chat-input');
-        document.getElementById('material-expert-btn').onclick = () => { chatModal.classList.remove('hidden'); setTimeout(() => chatContainer.classList.remove('translate-y-full'), 10); };
-        document.getElementById('close-chat').onclick = () => { chatContainer.classList.add('translate-y-full'); setTimeout(() => chatModal.classList.add('hidden'), 300); };
+        const chatModal = document.getElementById('chat-modal'), chatBox = document.getElementById('chat-box'), chatInput = document.getElementById('chat-input');
+        document.getElementById('material-expert-btn').onclick = () => { chatModal.classList.remove('hidden'); };
+        document.getElementById('close-chat').onclick = () => { chatModal.classList.add('hidden'); };
         
         async function sendMessage() {
             const txt = chatInput.value.trim(); if(!txt) return;
-            chatBox.innerHTML += `<div class="p-3 bg-gray-800 text-white rounded-2xl ml-auto mb-2 max-w-[80%] text-sm">${txt}</div>`;
+            chatBox.innerHTML += `<div class="p-4 bg-gray-800 text-white rounded-[2rem] rounded-tr-none ml-auto mb-2 text-xs font-medium shadow-md">${txt}</div>`;
             chatInput.value = '';
+            const loaderId = 'ai-loader-' + Date.now();
+            chatBox.innerHTML += `<div id="${loaderId}" class="mr-auto mb-2 w-[60%] flex flex-col gap-2"><div class="h-10 w-full skeleton rounded-[2rem] rounded-tl-none"></div></div>`;
+            chatBox.scrollTop = chatBox.scrollHeight;
             try {
                 const res = await fetch(`${RENDER_URL}/api/chat`, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ message: txt }) });
-                const data = await res.json();
-                chatBox.innerHTML += `<div class="p-3 bg-white dark:bg-gray-700 border dark:border-gray-600 rounded-2xl mr-auto mb-2 text-sm shadow-sm">${data.reply || "Error."}</div>`;
-            } catch(e) { chatBox.innerHTML += `<div class="text-center text-red-500 text-[10px]">Cloud Offline.</div>`; }
+                const d = await res.json();
+                document.getElementById(loaderId).remove();
+                chatBox.innerHTML += `<div class="p-4 bg-white dark:bg-gray-700 border rounded-[2rem] rounded-tl-none mr-auto mb-2 text-xs font-medium shadow-sm">${d.reply || "Error."}</div>`;
+            } catch(e) { document.getElementById(loaderId).remove(); }
             chatBox.scrollTop = chatBox.scrollHeight;
         }
         document.getElementById('send-btn').onclick = sendMessage;
+
+        checkAuth();
     </script>
 
     <script type="module">
@@ -308,7 +365,18 @@
                 const res = await signInWithPopup(auth, provider);
                 localStorage.setItem('ujenzi_user', JSON.stringify({ name: res.user.displayName, email: res.user.email }));
                 location.reload();
-            } catch (e) { alert("Login failed."); }
+            } catch (e) { alert("Failed."); }
+        };
+        document.getElementById('auth-form').onsubmit = async (e) => {
+            e.preventDefault();
+            const payload = { email: document.getElementById('auth-email').value, password: document.getElementById('auth-password').value };
+            try {
+                const res = await fetch(`${RENDER_URL}/api/signin`, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(payload) });
+                const data = await res.json();
+                if(!res.ok) throw new Error(data.error);
+                localStorage.setItem('ujenzi_user', JSON.stringify(data.user));
+                location.reload();
+            } catch(e) { alert(e.message); }
         };
     </script>
 </body>
