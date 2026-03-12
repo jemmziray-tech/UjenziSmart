@@ -78,9 +78,8 @@
                 <p id="welcome-subtitle" class="text-green-50 text-xs font-medium opacity-90">Welcome back to UjenziSmart.</p>
             </div>
             
-            <button onclick="switchTheme()" class="w-12 h-12 bg-white/20 rounded-full glass flex items-center justify-center transition-all active:scale-90 click-press shadow-sm relative overflow-hidden">
-                <svg id="icon-sun" class="w-6 h-6 text-yellow-300 absolute transition-all duration-500 transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
-                <svg id="icon-moon" class="w-5 h-5 text-white absolute transition-all duration-500 transform" fill="currentColor" viewBox="0 0 24 24"><path d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg>
+            <button id="theme-toggle" class="w-12 h-12 bg-white/20 rounded-full glass flex items-center justify-center transition-all active:scale-90 click-press shadow-sm relative overflow-hidden">
+                <div id="theme-icon" class="w-[24px] h-[24px] rounded-full border-2 border-white/60 transition-transform duration-500 shadow-inner" style="background: linear-gradient(135deg, #4c1d95 50%, #fcd34d 50%);"></div>
             </button>
         </div>
     </header>
@@ -141,36 +140,6 @@
                             <div class="w-2 bg-green-500 rounded-t-sm h-[70%] bar-grow" style="animation-delay: 0.4s"></div>
                         </div>
                     </div>
-                    <p class="text-xs text-gray-500 dark:text-gray-400 leading-relaxed font-medium">Supply is stabilizing in Dar Es Salaam. Excellent time to buy in bulk.</p>
-                </div>
-            </div>
-
-            <div onclick="openProduct('Deformed Bar 12mm', 'TBS approved Grade 500 steel.', 24000, 10, 'https://images.unsplash.com/photo-1536882240095-0379873feb4e?w=600', 4.8, 156, 'Accurate length.')" class="bg-white dark:bg-gray-800 rounded-[2.5rem] overflow-hidden shadow-xl border dark:border-gray-700 stagger-item click-press group" style="animation-delay: 0.1s">
-                <div class="relative h-48 overflow-hidden">
-                    <img src="https://images.unsplash.com/photo-1536882240095-0379873feb4e?w=600" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
-                    <div class="absolute bottom-4 left-4 text-white">
-                        <span class="bg-red-500 text-white text-[9px] font-black px-2 py-1 rounded-md uppercase tracking-widest mb-2 inline-block shadow-lg">High Demand</span>
-                        <h3 class="font-black text-xl leading-tight">Y12 Steel Rebars</h3>
-                    </div>
-                    <div class="absolute top-4 right-4 bg-white/90 glass text-gray-900 text-[10px] font-black px-3 py-1 rounded-full flex items-center gap-1 shadow-lg">
-                        <span class="text-red-500">▲</span> +3% this week
-                    </div>
-                </div>
-                <div class="p-5">
-                    <div class="flex justify-between items-end mb-4">
-                        <div>
-                            <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-1">Current Market Price</p>
-                            <p class="text-green-600 font-black text-xl">TZS 24,000</p>
-                        </div>
-                        <div class="flex items-end gap-1 h-8">
-                            <div class="w-2 bg-gray-200 dark:bg-gray-700 rounded-t-sm h-[50%] bar-grow" style="animation-delay: 0.2s"></div>
-                            <div class="w-2 bg-gray-200 dark:bg-gray-700 rounded-t-sm h-[70%] bar-grow" style="animation-delay: 0.3s"></div>
-                            <div class="w-2 bg-gray-200 dark:bg-gray-700 rounded-t-sm h-[85%] bar-grow" style="animation-delay: 0.4s"></div>
-                            <div class="w-2 bg-red-500 rounded-t-sm h-[100%] bar-grow" style="animation-delay: 0.5s"></div>
-                        </div>
-                    </div>
-                    <p class="text-xs text-gray-500 dark:text-gray-400 leading-relaxed font-medium">Global steel prices are pushing local costs up. Lock in prices today.</p>
                 </div>
             </div>
         </div>
@@ -185,18 +154,19 @@
                     <h3 class="font-black text-sm mb-1">Smart Delivery Estimator</h3>
                     <p class="text-[10px] text-gray-400 mb-4 font-bold">Select Dar Es Salaam Zone</p>
                     <select id="delivery-zone" onchange="calculateDelivery()" class="w-full bg-gray-50 dark:bg-gray-900 border dark:border-gray-700 rounded-xl px-4 py-3 outline-none font-bold text-xs mb-4">
-                        <option value="0">Self Pickup (TZS 0)</option>
+                        <option value="0">Self Pickup (Store Collection)</option>
                         <option value="1">Tegeta / Boko / Bunju</option>
                         <option value="1.2">Mbezi / Kimara</option>
                         <option value="1.5">Kigamboni (Includes Toll)</option>
                         <option value="0.8">Kinondoni / Posta</option>
                     </select>
-                    <div id="delivery-result-box" class="hidden bg-blue-50 dark:bg-blue-900/20 p-4 rounded-xl border border-blue-100 dark:border-blue-800">
+                    
+                    <div id="delivery-result-box" class="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-xl border border-blue-100 dark:border-blue-800 transition-all">
                         <div class="flex items-center gap-3">
-                            <span id="vehicle-icon" class="text-2xl">🚚</span>
+                            <span id="vehicle-icon" class="text-2xl">🏪</span>
                             <div>
-                                <p class="text-[10px] font-black uppercase tracking-widest text-blue-800 dark:text-blue-300" id="vehicle-name">Assigned Vehicle</p>
-                                <p class="text-sm font-black text-blue-900 dark:text-white" id="transport-cost-display">TZS 0</p>
+                                <p class="text-[10px] font-black uppercase tracking-widest text-blue-800 dark:text-blue-300">Transport Method</p>
+                                <p class="text-sm font-black text-blue-900 dark:text-white" id="vehicle-name">Store Pickup</p>
                             </div>
                         </div>
                     </div>
@@ -206,18 +176,7 @@
                     <div class="flex justify-between text-xs font-bold text-gray-500 mb-2 px-2"><span>Subtotal</span><span id="cart-subtotal">TZS 0</span></div>
                     <div class="flex justify-between text-xs font-bold text-blue-500 mb-4 px-2"><span>Transport</span><span id="cart-transport">TZS 0</span></div>
                     <div class="flex justify-between text-2xl font-black mb-8 px-2"><span>Total</span><span id="cart-total-price" class="text-green-600">TZS 0</span></div>
-                    
-                    <button onclick="checkoutWhatsApp()" class="w-full py-5 bg-[#25D366] text-white rounded-[2.5rem] font-black shadow-xl click-press uppercase text-xs tracking-widest mb-6">Order via WhatsApp</button>
-                    
-                    <div class="relative bg-gray-50 dark:bg-gray-800 rounded-[2rem] p-5 border border-dashed border-gray-300 dark:border-gray-600 text-center opacity-80">
-                        <div class="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-amber-400 text-amber-900 text-[9px] font-black px-3 py-1 rounded-full uppercase tracking-widest shadow-sm">Coming Soon</div>
-                        <p class="text-xs font-bold text-gray-500 dark:text-gray-400 mb-3 mt-2">Online Mobile Money Payments</p>
-                        <div class="flex justify-center items-center gap-4 grayscale opacity-60">
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c2/M-Pesa_logo.svg/512px-M-Pesa_logo.svg.png" class="h-5">
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/a/a2/Tigo_logo.svg" class="h-5">
-                            <img src="https://logos-world.net/wp-content/uploads/2020/12/Airtel-Logo.png" class="h-4">
-                        </div>
-                    </div>
+                    <button onclick="checkoutWhatsApp()" class="w-full py-5 bg-[#25D366] text-white rounded-[2.5rem] font-black shadow-xl click-press uppercase text-xs tracking-widest flex items-center justify-center gap-2">Order via WhatsApp</button>
                 </div>
             </div>
         </div>
@@ -246,34 +205,33 @@
             </div>
 
             <h3 class="font-black text-lg mb-4 px-2">My Project Phases</h3>
-            <div class="grid grid-cols-2 gap-4 mb-8 stagger-item" style="animation-delay: 0.1s">
-                <div class="bg-white dark:bg-gray-800 p-4 rounded-3xl border dark:border-gray-700 shadow-sm click-press" onclick="renderWishlistPhase('Foundation')">
-                    <div class="text-3xl mb-2">📁</div>
-                    <p class="font-bold text-xs text-gray-800 dark:text-white">Phase 1</p>
-                    <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Foundation</p>
-                    <p class="text-[10px] text-green-500 font-bold mt-2" id="count-foundation">0 Items</p>
+            
+            <div class="grid grid-cols-3 gap-3 mb-8 stagger-item" style="animation-delay: 0.1s">
+                <div class="bg-white dark:bg-gray-800 p-4 rounded-[1.5rem] border dark:border-gray-700 shadow-sm click-press flex flex-col items-center text-center" onclick="renderWishlistPhase('Foundation')">
+                    <div class="text-2xl mb-1">🏗️</div>
+                    <p class="font-black text-[10px] text-gray-800 dark:text-white">Phase 1</p>
+                    <p class="text-[8px] text-gray-400 font-bold uppercase tracking-widest">Foundation</p>
+                    <p class="text-[9px] text-green-500 font-black mt-2" id="count-foundation">0 Items</p>
                 </div>
-                <div class="bg-white dark:bg-gray-800 p-4 rounded-3xl border dark:border-gray-700 shadow-sm click-press" onclick="renderWishlistPhase('Roofing')">
-                    <div class="text-3xl mb-2">📁</div>
-                    <p class="font-bold text-xs text-gray-800 dark:text-white">Phase 2</p>
-                    <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Roofing</p>
-                    <p class="text-[10px] text-green-500 font-bold mt-2" id="count-roofing">0 Items</p>
+                <div class="bg-white dark:bg-gray-800 p-4 rounded-[1.5rem] border dark:border-gray-700 shadow-sm click-press flex flex-col items-center text-center" onclick="renderWishlistPhase('Roofing')">
+                    <div class="text-2xl mb-1">🏠</div>
+                    <p class="font-black text-[10px] text-gray-800 dark:text-white">Phase 2</p>
+                    <p class="text-[8px] text-gray-400 font-bold uppercase tracking-widest">Roofing</p>
+                    <p class="text-[9px] text-green-500 font-black mt-2" id="count-roofing">0 Items</p>
+                </div>
+                <div class="bg-white dark:bg-gray-800 p-4 rounded-[1.5rem] border dark:border-gray-700 shadow-sm click-press flex flex-col items-center text-center" onclick="renderWishlistPhase('Finishing')">
+                    <div class="text-2xl mb-1">🎨</div>
+                    <p class="font-black text-[10px] text-gray-800 dark:text-white">Phase 3</p>
+                    <p class="text-[8px] text-gray-400 font-bold uppercase tracking-widest">Finishing</p>
+                    <p class="text-[9px] text-green-500 font-black mt-2" id="count-finishing">0 Items</p>
                 </div>
             </div>
             
             <div id="wishlist-render-area" class="mb-8 hidden"></div>
 
             <div class="space-y-4 stagger-item" style="animation-delay: 0.2s">
-                <div class="bg-white dark:bg-gray-800 rounded-[2.5rem] p-1 border dark:border-gray-700 shadow-sm">
-                    <button onclick="alert('Online payment service will be available soon.')" class="w-full flex items-center gap-4 p-5 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-[2rem] transition click-press">
-                        <span class="text-xl">💳</span>
-                        <span class="font-bold text-sm flex-grow text-left">Payment Methods</span>
-                        <span class="text-[9px] bg-amber-100 text-amber-700 px-2 py-1 rounded-md font-bold uppercase tracking-widest">Soon</span>
-                    </button>
-                    <button onclick="localStorage.removeItem('ujenzi_user'); location.reload();" class="w-full flex items-center gap-4 p-5 hover:bg-red-50 dark:hover:bg-red-900/10 transition click-press border-t dark:border-gray-700">
-                        <span class="text-xl">🚪</span>
-                        <span class="font-bold text-sm flex-grow text-left text-red-500">Logout from Account</span>
-                    </button>
+                <div class="bg-white dark:bg-gray-800 rounded-[2.5rem] p-1 border dark:border-gray-700">
+                    <button onclick="localStorage.removeItem('ujenzi_user'); location.reload();" class="w-full p-6 bg-red-50 dark:bg-red-900/10 text-red-500 rounded-[2.5rem] font-black text-xs uppercase tracking-widest click-press">Logout from Account</button>
                 </div>
             </div>
         </div>
@@ -360,7 +318,7 @@
         <div class="bg-white dark:bg-gray-900 w-full max-w-md h-[85vh] rounded-t-[3rem] flex flex-col overflow-hidden shadow-2xl animate-slide-up" id="chat-container">
             <div class="bg-green-600 p-6 flex justify-between items-center text-white">
                 <div class="flex items-center gap-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 text-white"><path fill-rule="evenodd" d="M9 4.5a.75.75 0 0 1 .721.544l.813 2.846a3.75 3.75 0 0 0 2.576 2.576l2.846.813a.75.75 0 0 1 0 1.442l-2.846.813a3.75 3.75 0 0 0-2.576 2.576l-.813 2.846a.75.75 0 0 1-1.442 0l-.813-2.846a3.75 3.75 0 0 0-2.576-2.576l-2.846-.813a.75.75 0 0 1 0-1.442l2.846-.813A3.75 3.75 0 0 0 7.466 7.89l.813-2.846A.75.75 0 0 1 9 4.5ZM18 1.5a.75.75 0 0 1 .728.568l.258 1.036c.236.94.97 1.674 1.91 1.906l1.036.258a.75.75 0 0 1 0 1.45l-1.037.259a3.003 3.003 0 0 0-1.91 1.906l-.258 1.036a.75.75 0 0 1-1.455 0l-.258-1.036a3.003 3.003 0 0 0-1.91-1.906l-1.036-.259a.75.75 0 0 1 0-1.45l1.036-.258a3.003 3.003 0 0 0 1.91-1.906l.258-1.036A.75.75 0 0 1 18 1.5ZM16.5 15a.75.75 0 0 1 .712.513l.394 1.183c.15.447.5.799.948.948l1.183.395a.75.75 0 0 1 0 1.422l-1.183.395c-.447.15-.799.5-.948.948l-.395 1.183a.75.75 0 0 1-1.422 0l-.395-1.183a1.5 1.5 0 0 0-.948-.948l-1.183-.395a.75.75 0 0 1 0-1.422l1.183-.395c.447-.15.799-.5.948-.948l.395-1.183A.75.75 0 0 1 16.5 15Z" clip-rule="evenodd" /></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 text-white"><path fill-rule="evenodd" d="M9 4.5a.75.75 0 0 1 .721.544l.813 2.846a3.75 3.75 0 0 0 2.576 2.576l2.846.813a.75.75 0 0 1 0 1.442l-2.846.813a3.75 3.75 0 0 0-2.576 2.576l-.813 2.846a.75.75 0 0 1-1.442 0l-.813-2.846a3.75 3.75 0 0 0-2.576-2.576l-2.846-.813a.75.75 0 0 1 0-1.442l2.846-.813A3.75 3.75 0 0 0 7.466 7.89l.813-2.846A.75.75 0 0 1 9 4.5ZM18 1.5a.75.75 0 0 1 .728.568l.258 1.036c.236.94.97 1.674 1.91 1.906l1.036.258a.75.75 0 0 1 0 1.45l-1.037.259a3.003 3.003 0 0 0-1.91 1.906l-.258 1.036a.75.75 0 0 1-1.455 0l-.258-1.036a3.003 3.003 0 0 0-1.91-1.906l-1.036-.259a.75.75 0 0 1 0-1.45l1.036-.258a3.003 3.003 0 0 0 1.91-1.906l.258-1.036A.75.75 0 0 1 18 1.5ZM16.5 15a.75.75 0 0 1 .712.513l.394 1.183c.15.447.5.799.948.948l1.183.395a.75.75 0 0 1 0 1.422l-1.183.395c-.447.15-.799.5-.948.948l-.395 1.183a.75.75 0 0 1-1.422 0l-.395-1.183a1.5 1.5 0 0 0-.948-.948l-1.183-.395a.75.75 0 0 1 0-1.422l1.183-.395c.447-.15.799-.5.948-.948l.395-1.183A.75.75 0 0 1 16.5 15Z" clip-rule="evenodd" /></svg>
                     <span class="font-black uppercase tracking-widest text-[10px]">Material Expert AI</span>
                 </div>
                 <button id="close-chat" class="text-xl w-8 h-8 flex items-center justify-center bg-black/20 rounded-full">✕</button>
@@ -374,7 +332,7 @@
     </div>
 
     <button id="material-expert-btn" class="fixed bottom-24 right-6 z-[100] w-16 h-16 gradient-pulse rounded-full flex flex-col items-center justify-center shadow-2xl click-press animate-stagger-in border-4 border-white dark:border-gray-800 stagger-item" style="animation-delay: 0.5s">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-7 h-7 text-white mb-0.5"><path fill-rule="evenodd" d="M9 4.5a.75.75 0 0 1 .721.544l.813 2.846a3.75 3.75 0 0 0 2.576 2.576l2.846.813a.75.75 0 0 1 0 1.442l-2.846.813a3.75 3.75 0 0 0-2.576 2.576l-.813 2.846a.75.75 0 0 1-1.442 0l-.813-2.846a3.75 3.75 0 0 0-2.576-2.576l-2.846-.813a.75.75 0 0 1 0-1.442l2.846-.813A3.75 3.75 0 0 0 7.466 7.89l.813-2.846A.75.75 0 0 1 9 4.5ZM18 1.5a.75.75 0 0 1 .728.568l.258 1.036c.236.94.97 1.674 1.91 1.906l1.036.258a.75.75 0 0 1 0 1.45l-1.037.259a3.003 3.003 0 0 0-1.91 1.906l-.258 1.036a.75.75 0 0 1-1.455 0l-.258-1.036a3.003 3.003 0 0 0-1.91-1.906l-1.036-.259a.75.75 0 0 1 0-1.45l1.036-.258a3.003 3.003 0 0 0 1.91-1.906l.258-1.036A.75.75 0 0 1 18 1.5ZM16.5 15a.75.75 0 0 1 .712.513l.394 1.183c.15.447.5.799.948.948l1.183.395a.75.75 0 0 1 0 1.422l-1.183.395c-.447.15-.799.5-.948.948l-.395 1.183a.75.75 0 0 1-1.422 0l-.395-1.183a1.5 1.5 0 0 0-.948-.948l-1.183-.395a.75.75 0 0 1 0-1.422l1.183-.395c.447-.15.799-.5.948-.948l.395-1.183A.75.75 0 0 1 16.5 15Z" clip-rule="evenodd" /></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 text-white mb-0.5"><path fill-rule="evenodd" d="M9 4.5a.75.75 0 0 1 .721.544l.813 2.846a3.75 3.75 0 0 0 2.576 2.576l2.846.813a.75.75 0 0 1 0 1.442l-2.846.813a3.75 3.75 0 0 0-2.576 2.576l-.813 2.846a.75.75 0 0 1-1.442 0l-.813-2.846a3.75 3.75 0 0 0-2.576-2.576l-2.846-.813a.75.75 0 0 1 0-1.442l2.846-.813A3.75 3.75 0 0 0 7.466 7.89l.813-2.846A.75.75 0 0 1 9 4.5ZM18 1.5a.75.75 0 0 1 .728.568l.258 1.036c.236.94.97 1.674 1.91 1.906l1.036.258a.75.75 0 0 1 0 1.45l-1.037.259a3.003 3.003 0 0 0-1.91 1.906l-.258 1.036a.75.75 0 0 1-1.455 0l-.258-1.036a3.003 3.003 0 0 0-1.91-1.906l-1.036-.259a.75.75 0 0 1 0-1.45l1.036-.258a3.003 3.003 0 0 0 1.91-1.906l.258-1.036A.75.75 0 0 1 18 1.5ZM16.5 15a.75.75 0 0 1 .712.513l.394 1.183c.15.447.5.799.948.948l1.183.395a.75.75 0 0 1 0 1.422l-1.183.395c-.447.15-.799.5-.948.948l-.395 1.183a.75.75 0 0 1-1.422 0l-.395-1.183a1.5 1.5 0 0 0-.948-.948l-1.183-.395a.75.75 0 0 1 0-1.422l1.183-.395c.447-.15.799-.5.948-.948l.395-1.183A.75.75 0 0 1 16.5 15Z" clip-rule="evenodd" /></svg>
         <span class="font-black text-[6px] uppercase tracking-widest text-white mt-0.5">Expert</span>
     </button>
 
@@ -443,14 +401,19 @@
             if(viewName === 'profile') { updateTrackerUI(); updateWishlistCounts(); }
         }
 
-        // --- GREETING LOGIC ---
+        // PERFECTED SMART GREETING LOGIC
         function checkAuth() {
             const user = JSON.parse(localStorage.getItem('ujenzi_user'));
             if (user) {
                 document.getElementById('auth-screen').classList.add('hidden');
+                
                 const firstName = user.name.split(' ')[0];
                 const h = new Date().getHours();
-                let g = "Good Evening"; if(h < 12) g = "Good Morning"; else if(h < 17) g = "Good Afternoon";
+                
+                let g = "Good Evening";
+                if(h < 12) g = "Good Morning";
+                else if(h < 17) g = "Good Afternoon";
+                
                 document.getElementById('smart-greeting').textContent = `${g}, ${firstName}! 👋`;
                 document.getElementById('p-name').textContent = user.name;
                 document.getElementById('p-email').textContent = user.email;
@@ -459,18 +422,11 @@
             }
         }
 
-        // --- FLAWLESS THEME ANIMATION LOGIC ---
+        // FLAWLESS THEME ANIMATION LOGIC
         function updateThemeIcon() {
             const isDark = document.documentElement.classList.contains('dark');
-            const sun = document.getElementById('icon-sun');
-            const moon = document.getElementById('icon-moon');
-            if (isDark) {
-                sun.style.opacity = '0'; sun.style.transform = 'rotate(-90deg) scale(0.5)';
-                moon.style.opacity = '1'; moon.style.transform = 'rotate(0deg) scale(1)';
-            } else {
-                moon.style.opacity = '0'; moon.style.transform = 'rotate(90deg) scale(0.5)';
-                sun.style.opacity = '1'; sun.style.transform = 'rotate(0deg) scale(1)';
-            }
+            const icon = document.getElementById('theme-icon');
+            if(icon) { icon.style.transform = isDark ? 'rotate(180deg)' : 'rotate(0deg)'; }
         }
         
         function switchTheme() {
@@ -480,7 +436,7 @@
         }
         document.addEventListener("DOMContentLoaded", updateThemeIcon);
 
-        // --- VIP GAMIFICATION ---
+        // VIP GAMIFICATION
         let isGoldVIP = false;
         function updateTrackerUI() {
             const spend = parseInt(localStorage.getItem('ujenzi_total_spend') || '0');
@@ -508,7 +464,7 @@
             }
         }
 
-        // --- SMART SEARCH ---
+        // SMART SEARCH
         function handleSearch() {
             const query = document.getElementById('search-input').value.toLowerCase();
             const container = document.getElementById('dynamic-home-content');
@@ -623,22 +579,29 @@
         function calculateDelivery() {
             const zoneMultiplier = parseFloat(document.getElementById('delivery-zone').value);
             const resBox = document.getElementById('delivery-result-box');
-            if(zoneMultiplier === 0 || cart.length === 0) { transportCost = 0; resBox.classList.add('hidden'); updateCartTotals(); return; }
+            
+            if (cart.length === 0) {
+                resBox.classList.add('hidden');
+                updateCartTotals();
+                return;
+            }
 
             let totalWeight = 0; cart.forEach(item => { totalWeight += (item.wt * item.qty); });
-            let baseRate = 0; let vName = ""; let vIcon = "";
+            let baseRate = 0; let vName = "Store Pickup"; let vIcon = "🏪";
 
-            if(totalWeight <= 50) { baseRate = 10000; vName = "Bodaboda (Courier)"; vIcon = "🏍️"; }
-            else if(totalWeight <= 400) { baseRate = 25000; vName = "Bajaji / Guta"; vIcon = "🛺"; }
-            else if(totalWeight <= 2500) { baseRate = 60000; vName = "Canter (Light Truck)"; vIcon = "🚚"; }
-            else { baseRate = 150000; vName = "Fuso (Heavy Duty)"; vIcon = "🚛"; }
+            if (zoneMultiplier > 0) {
+                if(totalWeight <= 50) { baseRate = 10000; vName = "Bodaboda (Courier)"; vIcon = "🏍️"; }
+                else if(totalWeight <= 400) { baseRate = 25000; vName = "Bajaji / Guta"; vIcon = "🛺"; }
+                else if(totalWeight <= 2500) { baseRate = 60000; vName = "Canter (Light Truck)"; vIcon = "🚚"; }
+                else { baseRate = 150000; vName = "Fuso (Heavy Duty)"; vIcon = "🚛"; }
+            }
 
             transportCost = baseRate * zoneMultiplier;
-            if(isGoldVIP) { transportCost = transportCost * 0.5; vName += " (VIP 50% Off)"; }
+            if(isGoldVIP && transportCost > 0) { transportCost = transportCost * 0.5; vName += " (VIP 50% Off)"; }
 
             document.getElementById('vehicle-icon').textContent = vIcon;
             document.getElementById('vehicle-name').textContent = vName;
-            document.getElementById('transport-cost-display').textContent = `TZS ${transportCost.toLocaleString()}`;
+            document.getElementById('transport-cost-display').textContent = zoneMultiplier === 0 ? 'Free' : `TZS ${transportCost.toLocaleString()}`;
             resBox.classList.remove('hidden');
             updateCartTotals();
         }
@@ -670,17 +633,20 @@
             let sub = 0; let m = `Habari UjenziSmart! I am ${u.name}.\nI want to order:\n\n`;
             cart.forEach(i => { m += `- ${i.title} (x${i.qty})\n`; sub += i.price * i.qty; });
             const zoneText = document.getElementById('delivery-zone').options[document.getElementById('delivery-zone').selectedIndex].text;
+            const transMethod = document.getElementById('vehicle-name').textContent;
+            
             m += `\nSubtotal: TZS ${sub.toLocaleString()}`;
             m += `\nDelivery Zone: ${zoneText}`;
+            m += `\nTransport Method: ${transMethod}`;
             m += `\nTransport Est: TZS ${transportCost.toLocaleString()}`;
-            m += `\n*TOTAL: TZS ${(sub + transportCost).toLocaleString()}*\n\nPlease confirm!`;
+            m += `\n*TOTAL: TZS ${(sub + transportCost).toLocaleString()}*\n\nPlease confirm my order.`;
             
             const oldSpend = parseInt(localStorage.getItem('ujenzi_total_spend') || '0');
             localStorage.setItem('ujenzi_total_spend', oldSpend + sub); 
             window.open(`https://wa.me/${WHATSAPP_NUM}?text=${encodeURIComponent(m)}`, '_blank');
         }
 
-        // --- SMART WISHLIST ---
+        // --- FIXED 3-PHASE WISHLIST ---
         function saveToPhase() {
             if(!currentModalProduct) return;
             const phase = document.getElementById('phase-selector').value;
@@ -689,19 +655,21 @@
             localStorage.setItem('ujenzi_wishlist', JSON.stringify(list));
             alert(`Saved to Phase: ${phase}`);
             closeProduct();
+            if(document.getElementById('view-profile').classList.contains('hidden') === false) updateWishlistCounts();
         }
 
         function updateWishlistCounts() {
             const list = JSON.parse(localStorage.getItem('ujenzi_wishlist') || '[]');
             document.getElementById('count-foundation').textContent = `${list.filter(x => x.phase === 'Foundation').length} Items`;
             document.getElementById('count-roofing').textContent = `${list.filter(x => x.phase === 'Roofing').length} Items`;
+            document.getElementById('count-finishing').textContent = `${list.filter(x => x.phase === 'Finishing').length} Items`;
         }
 
         function renderWishlistPhase(phase) {
             const list = JSON.parse(localStorage.getItem('ujenzi_wishlist') || '[]');
             const items = list.filter(x => x.phase === phase);
             const container = document.getElementById('wishlist-render-area');
-            if(items.length === 0) { container.innerHTML = `<p class="text-xs text-gray-400 italic mb-6">No items saved in this phase yet.</p>`; container.classList.remove('hidden'); return; }
+            if(items.length === 0) { container.innerHTML = `<p class="text-xs text-gray-400 italic mb-6 text-center">No items saved in this phase yet.</p>`; container.classList.remove('hidden'); return; }
             container.innerHTML = `<div class="mb-4 flex items-center justify-between"><h4 class="font-bold text-sm uppercase tracking-widest text-green-600">${phase} Items</h4><button onclick="document.getElementById('wishlist-render-area').classList.add('hidden')" class="text-xs text-gray-400 font-bold click-press">Close</button></div><div class="grid grid-cols-2 gap-4 mb-6">${items.map(p => `<div class="bg-white dark:bg-gray-800 p-3 rounded-2xl shadow-sm border dark:border-gray-700 animate-slide-up"><img src="${p.img}" class="w-full h-20 object-cover rounded-xl mb-2"><p class="text-[9px] font-bold h-6 overflow-hidden">${p.name}</p><p class="text-green-600 font-black text-[10px]">TZS ${p.price.toLocaleString()}</p></div>`).join('')}</div>`;
             container.classList.remove('hidden');
         }
@@ -752,7 +720,6 @@
 
         checkAuth();
     </script>
-
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
         import { getAuth, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
