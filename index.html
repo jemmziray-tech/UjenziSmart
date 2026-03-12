@@ -24,11 +24,11 @@
     <div id="auth-screen" class="fixed inset-0 z-[200] bg-gray-50 dark:bg-gray-900 flex flex-col justify-center px-6 transition-opacity duration-300">
         <div class="max-w-md mx-auto w-full bg-white dark:bg-gray-800 p-8 rounded-3xl shadow-xl border dark:border-gray-700">
             <h1 class="text-3xl font-bold text-green-600 mb-2 text-center">UjenziSmart</h1>
-            <p class="text-gray-600 dark:text-gray-400 mb-8 text-center">Your construction partner.</p>
+            <p class="text-gray-600 dark:text-gray-400 mb-8 text-center">Sign in to manage your construction.</p>
             <form id="auth-form" class="flex flex-col gap-4">
-                <input type="email" id="auth-email" required placeholder="Email" class="w-full bg-gray-50 dark:bg-gray-900 border rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-green-500">
-                <input type="password" id="auth-password" required placeholder="Password" class="w-full bg-gray-50 dark:bg-gray-900 border rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-green-500">
-                <button type="submit" class="w-full py-3 bg-green-500 text-white rounded-xl font-bold shadow-md">Sign In</button>
+                <input type="email" id="auth-email" required placeholder="Email Address" class="w-full bg-gray-50 dark:bg-gray-900 border rounded-xl px-4 py-3 outline-none">
+                <input type="password" id="auth-password" required placeholder="Password" class="w-full bg-gray-50 dark:bg-gray-900 border rounded-xl px-4 py-3 outline-none">
+                <button type="submit" class="w-full py-3 bg-green-500 text-white rounded-xl font-bold">Sign In</button>
             </form>
             <div class="relative flex items-center justify-center my-6">
                 <div class="border-t w-full absolute border-gray-200 dark:border-gray-700"></div>
@@ -51,41 +51,57 @@
         </div>
     </header>
 
-    <div class="px-4 -mt-10 relative z-10 max-w-7xl mx-auto pb-20">
+    <div id="app-content" class="hidden px-4 -mt-10 relative z-10 max-w-7xl mx-auto flex flex-col gap-6 pb-20">
         
-        <div id="view-home" class="view-content flex flex-col gap-6">
-            <div class="grid grid-cols-2 gap-4">
-                <button onclick="openCalculator()" class="bg-white dark:bg-gray-800 p-4 rounded-2xl shadow-md flex flex-col items-center gap-2 border dark:border-gray-700">
-                    <span class="text-2xl">📐</span><span class="font-bold text-xs">Calculator</span>
-                </button>
-                <button id="material-expert-btn" class="bg-white dark:bg-gray-800 p-4 rounded-2xl shadow-md flex flex-col items-center gap-2 border dark:border-gray-700">
-                    <span class="text-2xl">🤖</span><span class="font-bold text-xs">AI Expert</span>
-                </button>
-            </div>
+        <div class="grid grid-cols-2 gap-4">
+            <button onclick="openCalculator()" class="bg-white dark:bg-gray-800 p-4 rounded-2xl shadow-md flex flex-col items-center gap-2 border dark:border-gray-700">
+                <span class="text-2xl">📐</span><span class="font-bold text-xs">Calculator</span>
+            </button>
+            <button id="material-expert-btn" class="bg-white dark:bg-gray-800 p-4 rounded-2xl shadow-md flex flex-col items-center gap-2 border dark:border-gray-700">
+                <span class="text-2xl">🤖</span><span class="font-bold text-xs">AI Expert</span>
+            </button>
+        </div>
 
+        <div id="view-home" class="view-content flex flex-col gap-8">
             <section>
-                <h2 class="text-xl font-bold mb-4 text-gray-800 dark:text-white">Product Categories</h2>
+                <h2 class="text-xl font-bold mb-4 text-gray-800 dark:text-white px-1">Product Categories</h2>
                 <div class="grid grid-cols-2 gap-4">
-                    <div onclick="openProduct('Foundation', 'Items for stable building base.', 0, 'https://images.unsplash.com/photo-1590060417941-2f34888463f1?auto=format&fit=crop&w=300')" class="bg-white dark:bg-gray-800 rounded-2xl p-3 shadow-sm border dark:border-gray-700">
+                    <div onclick="openProduct('Foundation & Structural', 'Heavy materials like cement, rebars, and aggregates.', 0, 'https://images.unsplash.com/photo-1590060417941-2f34888463f1?auto=format&fit=crop&w=300')" class="bg-white dark:bg-gray-800 rounded-2xl p-3 shadow-sm border dark:border-gray-700">
                         <img src="https://images.unsplash.com/photo-1590060417941-2f34888463f1?auto=format&fit=crop&w=300" class="w-full h-24 object-cover rounded-xl mb-2">
-                        <p class="font-bold text-sm">Foundation</p>
+                        <p class="font-bold text-[11px]">Foundation & Structural</p>
                     </div>
-                    <div onclick="openProduct('Roofing', 'Durable roofing materials.', 0, 'https://images.unsplash.com/photo-1635424710928-0544e8512eae?auto=format&fit=crop&w=300')" class="bg-white dark:bg-gray-800 rounded-2xl p-3 shadow-sm border dark:border-gray-700">
+                    <div onclick="openProduct('Roofing Materials', 'Iron sheets, roofing nails, and timber.', 0, 'https://images.unsplash.com/photo-1635424710928-0544e8512eae?auto=format&fit=crop&w=300')" class="bg-white dark:bg-gray-800 rounded-2xl p-3 shadow-sm border dark:border-gray-700">
                         <img src="https://images.unsplash.com/photo-1635424710928-0544e8512eae?auto=format&fit=crop&w=300" class="w-full h-24 object-cover rounded-xl mb-2">
-                        <p class="font-bold text-sm">Roofing</p>
+                        <p class="font-bold text-[11px]">Roofing Materials</p>
+                    </div>
+                    <div onclick="openProduct('Plumbing & Water', 'Pipes, tanks, and water solutions.', 0, 'https://images.unsplash.com/photo-1581244277943-fe4a9c777189?auto=format&fit=crop&w=300')" class="bg-white dark:bg-gray-800 rounded-2xl p-3 shadow-sm border dark:border-gray-700">
+                        <div class="w-full h-24 bg-gray-100 dark:bg-gray-700 rounded-xl mb-2 flex items-center justify-center text-3xl">🚰</div>
+                        <p class="font-bold text-[11px]">Plumbing & Water</p>
+                    </div>
+                    <div onclick="openProduct('Electrical & Lighting', 'Cables, switches, and lighting.', 0, 'https://images.unsplash.com/photo-1550009158-9ebf69173e03?auto=format&fit=crop&w=300')" class="bg-white dark:bg-gray-800 rounded-2xl p-3 shadow-sm border dark:border-gray-700">
+                        <div class="w-full h-24 bg-gray-100 dark:bg-gray-700 rounded-xl mb-2 flex items-center justify-center text-3xl">💡</div>
+                        <p class="font-bold text-[11px]">Electrical & Lighting</p>
+                    </div>
+                    <div onclick="openProduct('Finishing & Painting', 'Tiles, paint, and flooring.', 0, 'https://images.unsplash.com/photo-1589939705384-5185138a047a?auto=format&fit=crop&w=300')" class="bg-white dark:bg-gray-800 rounded-2xl p-3 shadow-sm border dark:border-gray-700">
+                        <div class="w-full h-24 bg-gray-100 dark:bg-gray-700 rounded-xl mb-2 flex items-center justify-center text-3xl">🎨</div>
+                        <p class="font-bold text-[11px]">Finishing & Painting</p>
+                    </div>
+                    <div onclick="openProduct('Tools & Hardware', 'Construction tools and general hardware.', 0, 'https://images.unsplash.com/photo-1530124560677-bdaea02c9a9d?auto=format&fit=crop&w=300')" class="bg-white dark:bg-gray-800 rounded-2xl p-3 shadow-sm border dark:border-gray-700">
+                        <div class="w-full h-24 bg-gray-100 dark:bg-gray-700 rounded-xl mb-2 flex items-center justify-center text-3xl">🛠️</div>
+                        <p class="font-bold text-[11px]">Tools & Hardware</p>
                     </div>
                 </div>
             </section>
 
             <section>
-                <h2 class="text-xl font-bold mb-4 text-gray-800 dark:text-white">Featured Materials</h2>
+                <h2 class="text-xl font-bold mb-4 text-gray-800 dark:text-white px-1">Featured Materials</h2>
                 <div class="grid grid-cols-2 gap-4">
-                    <div onclick="openProduct('Simba Cement', 'Premium 50kg bags.', 18500, 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=300')" class="bg-white dark:bg-gray-800 rounded-2xl p-3 shadow-sm border dark:border-gray-700">
+                    <div onclick="openProduct('Simba Cement', 'Strong 50kg bags.', 18500, 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=300')" class="bg-white dark:bg-gray-800 rounded-2xl p-3 shadow-sm border dark:border-gray-700">
                         <img src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=300" class="w-full h-32 object-cover rounded-xl mb-2">
                         <p class="font-bold text-sm">Simba Cement</p>
                         <p class="text-green-600 font-bold text-xs">TZS 18,500</p>
                     </div>
-                    <div onclick="openProduct('Iron Sheet', '30G Durable sheets.', 22000, 'https://images.unsplash.com/photo-1516156008625-3a9d6067fab5?auto=format&fit=crop&w=300')" class="bg-white dark:bg-gray-800 rounded-2xl p-3 shadow-sm border dark:border-gray-700">
+                    <div onclick="openProduct('Iron Sheet', '30G Durable.', 22000, 'https://images.unsplash.com/photo-1516156008625-3a9d6067fab5?auto=format&fit=crop&w=300')" class="bg-white dark:bg-gray-800 rounded-2xl p-3 shadow-sm border dark:border-gray-700">
                         <img src="https://images.unsplash.com/photo-1516156008625-3a9d6067fab5?auto=format&fit=crop&w=300" class="w-full h-32 object-cover rounded-xl mb-2">
                         <p class="font-bold text-sm">Iron Sheet</p>
                         <p class="text-green-600 font-bold text-xs">TZS 22,000</p>
@@ -94,7 +110,7 @@
             </section>
 
             <section class="mb-10">
-                <h2 class="text-xl font-bold mb-4 text-gray-800 dark:text-white">AI Saved List</h2>
+                <h2 class="text-xl font-bold mb-4 text-gray-800 dark:text-white px-1">AI Saved List</h2>
                 <div id="material-list" class="flex flex-col gap-3">
                     <p class="text-center text-gray-400 text-xs py-6 border-2 border-dashed rounded-2xl">Items you save from AI appear here.</p>
                 </div>
@@ -105,12 +121,8 @@
             <h2 class="text-2xl font-bold mb-6">Trending 📈</h2>
             <div class="space-y-4">
                 <div class="bg-white dark:bg-gray-800 p-5 rounded-2xl border dark:border-gray-700">
-                    <p class="font-bold text-green-600">#1 Gypsum Powder</p>
+                    <p class="font-bold text-green-600">#1 Gypsum Board</p>
                     <p class="text-xs text-gray-400">High demand in Dar residential areas.</p>
-                </div>
-                <div class="bg-white dark:bg-gray-800 p-5 rounded-2xl border dark:border-gray-700">
-                    <p class="font-bold text-green-600">#2 Y12 Rebars</p>
-                    <p class="text-xs text-gray-400">Popular for new multi-story foundations.</p>
                 </div>
             </div>
         </div>
@@ -125,11 +137,10 @@
                 <button onclick="alert('Order received!')" class="w-full py-4 bg-green-500 text-white rounded-2xl font-bold">Checkout</button>
             </div>
         </div>
-
     </div>
 
     <div id="product-modal" class="fixed inset-0 z-[150] hidden bg-black/60 backdrop-blur-sm flex items-end sm:items-center justify-center p-4">
-        <div class="bg-white dark:bg-gray-900 w-full max-w-md rounded-3xl overflow-hidden shadow-2xl">
+        <div class="bg-white dark:bg-gray-900 w-full max-w-md rounded-3xl overflow-hidden shadow-2xl animate-slide-up">
             <img id="modal-img" src="" class="w-full h-56 object-cover">
             <div class="p-6">
                 <h3 id="modal-title" class="text-2xl font-bold mb-1"></h3>
@@ -190,14 +201,26 @@
             if(viewName === 'cart') renderCart();
         }
 
+        // --- THE FIXED GREETING LOGIC ---
         function checkAuth() {
             const user = JSON.parse(localStorage.getItem('ujenzi_user'));
             if (user) {
                 document.getElementById('auth-screen').classList.add('hidden');
                 document.getElementById('app-content').classList.remove('hidden');
+                
+                // 1. Get Name
+                const firstName = user.name.split(' ')[0];
+                
+                // 2. Get Time
                 const hour = new Date().getHours();
-                let greet = hour < 12 ? "Good Morning" : (hour < 17 ? "Good Afternoon" : "Good Evening");
-                document.getElementById('smart-greeting').textContent = `${greet}, ${user.name.split(' ')[0]}! 👋`;
+                let greet = "Good Evening";
+                if(hour < 12) greet = "Good Morning";
+                else if(hour < 17) greet = "Good Afternoon";
+                
+                // 3. Update Text
+                document.getElementById('smart-greeting').textContent = `Habari, ${firstName}! 👋`;
+                document.getElementById('welcome-subtitle').textContent = `${greet}, welcome back to UjenziSmart.`;
+                
                 renderMaterials();
             }
         }
@@ -219,7 +242,7 @@
             document.getElementById('modal-img').src = img;
             document.getElementById('modal-title').textContent = title;
             document.getElementById('modal-desc').textContent = desc;
-            document.getElementById('modal-price').textContent = price > 0 ? `TZS ${price.toLocaleString()}` : "Inquire Price";
+            document.getElementById('modal-price').textContent = price > 0 ? `TZS ${price.toLocaleString()}` : "Price on Request";
             document.getElementById('product-modal').classList.remove('hidden');
             document.getElementById('add-to-cart-btn').onclick = () => {
                 const qty = parseInt(document.getElementById('modal-qty').value);
@@ -271,7 +294,7 @@
                 const res = await fetch(`${RENDER_URL}/api/chat`, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ message: txt }) });
                 const data = await res.json();
                 const r = data.reply || "Error.";
-                chatBox.innerHTML += `<div class="flex flex-col gap-1 mr-auto mb-2 max-w-[80%]"><div class="p-3 bg-white dark:bg-gray-700 border rounded-2xl shadow-sm text-sm">${r}</div><button onclick="saveMaterial('${r.substring(0,30).replace(/'/g,"\\'")}...')" class="text-[9px] text-green-600 font-bold ml-2">+ Save</button></div>`;
+                chatBox.innerHTML += `<div class="flex flex-col gap-1 mr-auto mb-2 max-w-[80%]"><div class="p-3 bg-white dark:bg-gray-700 border rounded-2xl shadow-sm text-sm">${r}</div><button onclick="saveMaterial('${r.substring(0,30).replace(/'/g,"\\'")}...')" class="text-[9px] text-green-600 font-bold ml-2 text-left">+ Save Material</button></div>`;
             } catch(e) { chatBox.innerHTML += `<div class="text-center text-red-500 text-xs">Offline.</div>`; }
             chatBox.scrollTop = chatBox.scrollHeight;
         }
