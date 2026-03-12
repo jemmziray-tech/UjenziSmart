@@ -22,7 +22,6 @@
         .pb-safe { padding-bottom: env(safe-area-inset-bottom, 20px); }
         .hide-scrollbar::-webkit-scrollbar { display: none; }
         .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-        
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         .animate-fade-in { animation: fadeIn 0.3s ease-out forwards; }
     </style>
@@ -42,15 +41,27 @@
                 <button type="submit" id="auth-submit-btn" class="w-full py-3 bg-green-500 text-white rounded-xl font-bold hover:bg-green-600 transition-colors mt-2 shadow-md">Sign In</button>
             </form>
 
+            <div class="relative flex items-center justify-center mt-6 mb-4">
+                <div class="border-t border-gray-200 dark:border-gray-700 w-full absolute"></div>
+                <span class="bg-white dark:bg-gray-800 px-3 text-xs text-gray-400 relative z-10">OR</span>
+            </div>
+            
+            <button type="button" id="google-signin-btn" class="w-full py-3 bg-white dark:bg-gray-700 text-gray-700 dark:text-white border border-gray-200 dark:border-gray-600 rounded-xl font-bold hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors shadow-sm flex items-center justify-center gap-3">
+                <svg viewBox="0 0 24 24" width="20" height="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+                    <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                    <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+                    <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+                </svg>
+                Sign in with Google
+            </button>
+
             <p class="text-center mt-6 text-sm text-gray-600 dark:text-gray-400">
                 <span id="auth-toggle-text">Don't have an account?</span>
                 <button id="auth-toggle-btn" class="text-green-600 dark:text-green-400 font-bold ml-1 hover:underline">Sign Up</button>
             </p>
             <p id="auth-error" class="text-red-500 bg-red-50 dark:bg-red-900/20 p-3 rounded-lg text-center text-sm mt-4 hidden"></p>
         </div>
-    </div>
-    <div id="toast" class="fixed top-20 left-1/2 transform -translate-x-1/2 z-[200] bg-gray-800 dark:bg-gray-100 text-white dark:text-gray-900 px-4 py-2 rounded-full text-sm shadow-lg transition-opacity duration-300 opacity-0 pointer-events-none">
-        Item added to cart!
     </div>
 
     <header class="bg-gradient-to-r from-green-500 to-emerald-600 dark:from-green-700 dark:to-emerald-900 pt-10 pb-20 px-4 rounded-b-[2.5rem] shadow-lg relative transition-colors duration-300">
@@ -65,115 +76,27 @@
                 <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
             </button>
         </div>
-        
-        <div class="relative z-50 max-w-7xl mx-auto flex gap-2">
-            <div class="relative flex-grow">
-                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gray-400"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-                </div>
-                <input type="text" id="main-search-input" class="block w-full pl-10 pr-3 py-3 border border-transparent rounded-xl leading-5 bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500 sm:text-sm shadow-md transition-colors duration-300" placeholder="Search for materials...">
-            </div>
-            <button id="voice-search-btn" class="w-12 h-12 bg-white dark:bg-gray-800 rounded-xl shadow-md flex items-center justify-center text-green-500 hover:bg-green-50 dark:hover:bg-gray-700 transition-colors shrink-0">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" x2="12" y1="19" y2="22"/></svg>
-            </button>
-        </div>
     </header>
 
     <div id="skeleton-loader" class="px-4 -mt-10 max-w-7xl mx-auto animate-pulse pb-20">
-        <div class="grid grid-cols-2 gap-4 relative z-10 mb-8">
-            <div class="bg-gray-200 dark:bg-gray-800 h-32 rounded-2xl shadow-md"></div>
-            <div class="bg-gray-200 dark:bg-gray-800 h-32 rounded-2xl shadow-md"></div>
-        </div>
-        <div class="h-6 bg-gray-200 dark:bg-gray-800 rounded w-1/3 mb-4"></div>
-        <div class="grid grid-cols-2 gap-4 mb-8">
-            <div class="bg-gray-200 dark:bg-gray-800 h-48 rounded-2xl"></div>
-            <div class="bg-gray-200 dark:bg-gray-800 h-48 rounded-2xl"></div>
-        </div>
+        <div class="h-32 bg-gray-200 dark:bg-gray-800 rounded-2xl shadow-md mb-8"></div>
     </div>
 
     <div id="app-content" class="hidden animate-fade-in">
-        
         <div class="px-4 -mt-10 relative z-10 max-w-7xl mx-auto">
-            <div class="grid grid-cols-2 gap-4">
-                <button id="material-expert-btn" class="bg-white dark:bg-gray-800 p-4 rounded-2xl shadow-md flex flex-col items-center justify-center gap-3 hover:shadow-lg transition-all border border-gray-100 dark:border-gray-700 active:scale-95 transform">
-                    <div class="w-14 h-14 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center text-green-600 dark:text-green-400">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></svg>
-                    </div>
-                    <span class="font-semibold text-gray-800 dark:text-gray-100 text-center leading-tight">Material Expert<br><span class="text-xs text-gray-500 dark:text-gray-400 font-normal">Ask anything</span></span>
-                </button>
-                
-                <button id="estimator-btn" class="bg-white dark:bg-gray-800 p-4 rounded-2xl shadow-md flex flex-col items-center justify-center gap-3 hover:shadow-lg transition-all border border-gray-100 dark:border-gray-700 active:scale-95 transform">
-                    <div class="w-14 h-14 bg-emerald-100 dark:bg-emerald-900/30 rounded-full flex items-center justify-center text-emerald-600 dark:text-emerald-400">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3h18v18H3z"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
-                    </div>
-                    <span class="font-semibold text-gray-800 dark:text-gray-100 text-center leading-tight">Slab Estimator<br><span class="text-xs text-gray-500 dark:text-gray-400 font-normal">Calculate usage</span></span>
-                </button>
-            </div>
-        </div>
-
-        <div class="mt-8 px-4 max-w-7xl mx-auto">
-            <h2 class="text-lg font-bold text-gray-900 dark:text-white mb-4">Product Categories</h2>
-            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden flex flex-col">
-                    <div class="h-28 sm:h-36 bg-gray-200 dark:bg-gray-700 relative"><img src="https://picsum.photos/seed/cement/400/300" class="w-full h-full object-cover"></div>
-                    <div class="p-3 sm:p-4 flex flex-col flex-grow">
-                        <h3 class="font-bold text-gray-900 dark:text-white mb-2 text-sm">Foundation</h3>
-                        <button class="w-full py-2 bg-green-50 dark:bg-green-900/20 text-green-700 rounded-xl text-xs mt-auto">Explore</button>
-                    </div>
-                </div>
-                <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden flex flex-col">
-                    <div class="h-28 sm:h-36 bg-gray-200 dark:bg-gray-700 relative"><img src="https://picsum.photos/seed/roof/400/300" class="w-full h-full object-cover"></div>
-                    <div class="p-3 sm:p-4 flex flex-col flex-grow">
-                        <h3 class="font-bold text-gray-900 dark:text-white mb-2 text-sm">Roofing</h3>
-                        <button class="w-full py-2 bg-green-50 dark:bg-green-900/20 text-green-700 rounded-xl text-xs mt-auto">Explore</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="mt-8 pl-4 pb-20 max-w-7xl mx-auto overflow-hidden">
-            <h2 class="text-lg font-bold text-gray-900 dark:text-white mb-4 pr-4">Featured Materials</h2>
-            <div class="flex overflow-x-auto snap-x snap-mandatory gap-4 pb-4 pr-4 hide-scrollbar">
-                <div class="min-w-[160px] snap-start bg-white dark:bg-gray-800 rounded-2xl p-3 shadow-sm border border-gray-100 dark:border-gray-700 flex flex-col">
-                    <div class="aspect-square rounded-xl overflow-hidden mb-3 bg-gray-100 dark:bg-gray-700"><img src="https://picsum.photos/seed/Simba/200/200" class="w-full h-full object-cover"></div>
-                    <h3 class="text-sm font-medium text-gray-800 dark:text-gray-200 flex-grow">Simba Cement 50kg</h3>
-                    <div class="flex justify-between items-center mt-1">
-                        <p class="text-green-600 dark:text-green-400 font-bold text-sm">TZS 18,500</p>
-                        <button class="add-to-cart-btn p-1.5 rounded-lg bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 active:scale-90" data-name="Simba Cement 50kg" data-price="18500">
-                            <svg class="icon-plus w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
-                        </button>
-                    </div>
-                </div>
-
-                <div class="min-w-[160px] snap-start bg-white dark:bg-gray-800 rounded-2xl p-3 shadow-sm border border-gray-100 dark:border-gray-700 flex flex-col">
-                    <div class="aspect-square rounded-xl overflow-hidden mb-3 bg-gray-100 dark:bg-gray-700"><img src="https://picsum.photos/seed/Iron/200/200" class="w-full h-full object-cover"></div>
-                    <h3 class="text-sm font-medium text-gray-800 dark:text-gray-200 flex-grow">Iron Sheet 30G</h3>
-                    <div class="flex justify-between items-center mt-1">
-                        <p class="text-green-600 dark:text-green-400 font-bold text-sm">TZS 22,000</p>
-                        <button class="add-to-cart-btn p-1.5 rounded-lg bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 active:scale-90" data-name="Iron Sheet 30G" data-price="22000">
-                            <svg class="icon-plus w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
-                        </button>
-                    </div>
-                </div>
-            </div>
+            <button id="material-expert-btn" class="w-full bg-white dark:bg-gray-800 p-4 rounded-2xl shadow-md flex items-center gap-4 hover:shadow-lg transition-all border border-gray-100 dark:border-gray-700">
+                <div class="w-14 h-14 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center text-green-600 dark:text-green-400">🤖</div>
+                <div class="text-left"><span class="font-bold text-gray-800 dark:text-gray-100">Material Expert AI</span><br><span class="text-sm text-gray-500">Ask construction questions</span></div>
+            </button>
         </div>
     </div> 
-
-    <div id="trending-view" class="hidden px-4 max-w-7xl mx-auto pt-6 pb-24 animate-fade-in">
-        <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-6">Market Insights 📈</h2>
-        <div class="bg-gradient-to-br from-blue-600 to-indigo-800 rounded-3xl p-6 text-white shadow-lg mb-8 relative overflow-hidden">
-            <div class="absolute top-0 right-0 w-32 h-32 bg-white opacity-10 rounded-full -mr-10 -mt-10 blur-2xl"></div>
-            <p class="text-blue-100 text-sm font-medium mb-1">Highest Demand This Week</p>
-            <h3 class="text-2xl font-bold mb-4">Corrugated Iron Sheets</h3>
-        </div>
-    </div>
 
     <div id="profile-view" class="hidden px-4 max-w-7xl mx-auto pt-6 pb-24 animate-fade-in">
         <div class="flex items-center gap-4 mb-8">
             <div id="profile-initial" class="w-16 h-16 bg-gradient-to-tr from-green-500 to-emerald-400 rounded-full flex items-center justify-center text-white text-2xl font-bold shadow-lg border-2 border-white dark:border-gray-800">U</div>
             <div>
                 <h2 id="profile-name" class="text-2xl font-bold text-gray-900 dark:text-white leading-tight">User</h2>
-                <p id="profile-email" class="text-sm text-gray-500 dark:text-gray-400 font-medium">user@ujenzismart.com</p>
+                <p id="profile-email" class="text-sm text-gray-500 dark:text-gray-400 font-medium">user@email.com</p>
             </div>
         </div>
         <div class="bg-white dark:bg-gray-800 rounded-3xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
@@ -186,57 +109,36 @@
     <div id="chat-modal" class="fixed inset-0 z-[100] hidden bg-black/60 backdrop-blur-sm flex items-end sm:items-center justify-center transition-opacity">
         <div class="bg-white dark:bg-gray-900 w-full sm:max-w-md h-[85vh] sm:h-[600px] rounded-t-3xl sm:rounded-3xl shadow-2xl flex flex-col overflow-hidden transform transition-transform translate-y-full" id="chat-container">
             <div class="bg-gradient-to-r from-green-500 to-emerald-600 p-4 flex justify-between items-center text-white">
-                <div class="flex items-center gap-2">
-                    <div class="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">🤖</div>
-                    <div>
-                        <h3 class="font-bold text-sm">Material Expert AI</h3>
-                        <p class="text-[10px] text-green-100">Online and ready to help</p>
-                    </div>
-                </div>
-                <button id="close-chat" class="p-2 hover:bg-white/20 rounded-full transition"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
+                <h3 class="font-bold">Material Expert AI</h3>
+                <button id="close-chat" class="p-2">✕</button>
             </div>
             <div id="chat-box" class="flex-grow p-4 overflow-y-auto flex flex-col gap-3 bg-gray-50 dark:bg-gray-800"></div>
-            <div class="p-3 bg-white dark:bg-gray-900 border-t border-gray-100 dark:border-gray-800 flex gap-2 items-center pb-safe">
-                <input type="text" id="chat-input" class="flex-grow bg-gray-100 dark:bg-gray-800 rounded-full px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 text-gray-900 dark:text-white" placeholder="Ask about materials...">
-                <button id="send-btn" class="w-11 h-11 bg-green-500 rounded-full flex items-center justify-center text-white hover:bg-green-600 transition shrink-0"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg></button>
+            <div class="p-3 bg-white dark:bg-gray-900 border-t border-gray-100 dark:border-gray-800 flex gap-2">
+                <input type="text" id="chat-input" class="flex-grow bg-gray-100 dark:bg-gray-800 rounded-full px-4 py-3 outline-none" placeholder="Ask a question...">
+                <button id="send-btn" class="w-11 h-11 bg-green-500 rounded-full text-white">→</button>
             </div>
         </div>
     </div>
 
-    <nav class="fixed bottom-0 w-full bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 px-6 py-3 flex justify-between items-center z-50 pb-safe transition-colors duration-300">
-        <div class="max-w-md mx-auto w-full flex justify-between items-center">
-            <button id="nav-home-btn" class="flex flex-col items-center gap-1">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-green-600 dark:text-green-500"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-                <span class="text-[10px] font-medium text-green-600 dark:text-green-500">Home</span>
-            </button>
-            <button id="nav-trending-btn" class="flex flex-col items-center gap-1">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-gray-400 dark:text-gray-500"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
-                <span class="text-[10px] font-medium text-gray-500">Trending</span>
-            </button>
-            <button id="nav-profile-btn" class="flex flex-col items-center gap-1">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-gray-400 dark:text-gray-500"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-                <span class="text-[10px] font-medium text-gray-500">Profile</span>
-            </button>
-        </div>
+    <nav class="fixed bottom-0 w-full bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 px-6 py-3 flex justify-around items-center z-50 pb-safe transition-colors duration-300">
+        <button id="nav-home-btn" class="flex flex-col items-center gap-1 text-green-600 font-medium text-[10px]">🏠 Home</button>
+        <button id="nav-profile-btn" class="flex flex-col items-center gap-1 text-gray-500 font-medium text-[10px]">👤 Profile</button>
     </nav>
 
     <script>
-        // --- 1. NEW AUTHENTICATION LOGIC ---
+        // 1. Check Auth & UI Logic
         const authScreen = document.getElementById('auth-screen');
         const authForm = document.getElementById('auth-form');
         const authToggleBtn = document.getElementById('auth-toggle-btn');
         const authError = document.getElementById('auth-error');
-        
         let isSignUp = false;
 
-        // Check if user is already logged in
         function checkAuth() {
             const savedUser = localStorage.getItem('ujenzi_user');
             if (savedUser) {
                 const user = JSON.parse(savedUser);
-                authScreen.classList.add('hidden'); // Hide login screen
+                authScreen.classList.add('hidden');
                 
-                // Update dynamic profile info
                 const firstName = user.name ? user.name.split(' ')[0] : 'Builder';
                 const hour = new Date().getHours();
                 let timeGreeting = hour < 12 ? "Good Morning" : (hour < 17 ? "Good Afternoon" : "Good Evening");
@@ -246,33 +148,27 @@
                 document.getElementById('profile-email').textContent = user.email || '';
                 document.getElementById('profile-initial').textContent = firstName.charAt(0).toUpperCase();
 
-                // Show the main app
                 document.getElementById('skeleton-loader').classList.add('hidden');
                 document.getElementById('app-content').classList.remove('hidden');
             }
         }
-        checkAuth(); // Run immediately on load
+        checkAuth();
 
-        // Toggle between Sign In and Sign Up
+        // 2. Email/Password Toggle & Submit
         authToggleBtn.addEventListener('click', () => {
             isSignUp = !isSignUp;
             document.getElementById('auth-name').classList.toggle('hidden', !isSignUp);
             document.getElementById('auth-name').required = isSignUp;
-            
             document.getElementById('auth-submit-btn').textContent = isSignUp ? 'Create Account' : 'Sign In';
             document.getElementById('auth-toggle-text').textContent = isSignUp ? 'Already have an account?' : "Don't have an account?";
             authToggleBtn.textContent = isSignUp ? 'Sign In' : 'Sign Up';
-            document.getElementById('auth-subtitle').textContent = isSignUp ? 'Create an account to start building.' : 'Sign in to manage your construction.';
-            authError.classList.add('hidden');
         });
 
-        // Submit to Node.js / Firebase Backend
         authForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = document.getElementById('auth-submit-btn');
             btn.textContent = 'Please wait...';
             btn.disabled = true;
-            authError.classList.add('hidden');
 
             const endpoint = isSignUp ? '/api/signup' : '/api/signin';
             const payload = {
@@ -282,26 +178,17 @@
             if(isSignUp) payload.name = document.getElementById('auth-name').value;
 
             try {
-                // This calls the server we just built!
                 const response = await fetch(`http://localhost:3000${endpoint}`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(payload)
                 });
-
                 const data = await response.json();
-
                 if (!response.ok) throw new Error(data.error || 'Authentication failed');
 
-                // Success! Save user to browser memory
                 localStorage.setItem('ujenzi_user', JSON.stringify(data.user));
-                
-                // Fancy fade out transition
                 authScreen.classList.add('opacity-0');
-                setTimeout(() => {
-                    checkAuth(); // Refresh the UI with the new user's name
-                }, 300);
-
+                setTimeout(() => checkAuth(), 300);
             } catch (err) {
                 authError.textContent = err.message;
                 authError.classList.remove('hidden');
@@ -311,134 +198,89 @@
             }
         });
 
-        // Logout logic
+        // 3. Navigation & Logout
         document.getElementById('logout-btn').addEventListener('click', () => {
             localStorage.removeItem('ujenzi_user');
-            location.reload(); // Refresh page to show login screen
+            location.reload();
         });
 
-
-        // --- 2. EXISTING UI, THEME, & CHAT LOGIC ---
-        const themeToggleBtn = document.getElementById('theme-toggle');
-        const darkIcon = document.getElementById('theme-toggle-dark-icon');
-        const lightIcon = document.getElementById('theme-toggle-light-icon');
-
-        function updateIcons() {
-            if (document.documentElement.classList.contains('dark')) {
-                darkIcon.classList.add('hidden'); lightIcon.classList.remove('hidden');
-            } else {
-                lightIcon.classList.add('hidden'); darkIcon.classList.remove('hidden');
-            }
+        const views = { home: document.getElementById('app-content'), profile: document.getElementById('profile-view') };
+        function switchView(viewName) {
+            Object.values(views).forEach(v => v.classList.add('hidden'));
+            views[viewName].classList.remove('hidden');
+            document.querySelector('header').classList.toggle('hidden', viewName !== 'home');
         }
-        updateIcons();
+        document.getElementById('nav-home-btn').addEventListener('click', () => switchView('home'));
+        document.getElementById('nav-profile-btn').addEventListener('click', () => switchView('profile'));
 
-        themeToggleBtn.addEventListener('click', function() {
-            document.documentElement.classList.toggle('dark');
-            localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
-            updateIcons();
-        });
-
-        // Chat Logic
-        const chatModal = document.getElementById('chat-modal');
-        const chatContainer = document.getElementById('chat-container');
-        const chatBox = document.getElementById('chat-box');
-        const chatInput = document.getElementById('chat-input');
+        // 4. AI Chat Bot
+        const chatModal = document.getElementById('chat-modal'), chatContainer = document.getElementById('chat-container'), chatBox = document.getElementById('chat-box'), chatInput = document.getElementById('chat-input');
+        document.getElementById('material-expert-btn').addEventListener('click', () => { chatModal.classList.remove('hidden'); setTimeout(() => chatContainer.classList.remove('translate-y-full'), 10); });
+        document.getElementById('close-chat').addEventListener('click', () => { chatContainer.classList.add('translate-y-full'); setTimeout(() => chatModal.classList.add('hidden'), 300); });
         
-        document.getElementById('material-expert-btn').addEventListener('click', () => {
-            chatModal.classList.remove('hidden');
-            setTimeout(() => chatContainer.classList.remove('translate-y-full'), 10);
-        });
-        document.getElementById('close-chat').addEventListener('click', () => {
-            chatContainer.classList.add('translate-y-full');
-            setTimeout(() => chatModal.classList.add('hidden'), 300);
-        });
-
-        function appendMessage(text, isUser) {
-            const msgDiv = document.createElement('div');
-            msgDiv.className = `flex items-start gap-2 w-full ${isUser ? 'flex-row-reverse' : ''}`;
-            msgDiv.innerHTML = `
-                <div class="w-6 h-6 rounded-full flex items-center justify-center shrink-0 text-xs ${isUser ? 'bg-gray-800 text-white' : 'bg-green-100 text-xl'}">${isUser ? '👤' : '🤖'}</div>
-                <div class="p-3 rounded-2xl shadow-sm text-sm border ${isUser ? 'bg-gray-800 text-white rounded-tr-none' : 'bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-100 rounded-tl-none'}">${text}</div>
-            `;
-            chatBox.appendChild(msgDiv);
-            chatBox.scrollTop = chatBox.scrollHeight;
-        }
-
         async function sendMessage() {
             const userText = chatInput.value.trim();
             if (!userText) return;
-            
-            appendMessage(userText, true);
+            chatBox.innerHTML += `<div class="p-3 bg-gray-800 text-white rounded-2xl ml-auto mb-2 w-max max-w-[80%]">${userText}</div>`;
             chatInput.value = '';
-
-            const loadingId = "loading-" + Date.now();
-            const loadingDiv = document.createElement('div');
-            loadingDiv.id = loadingId;
-            loadingDiv.className = "text-xs text-gray-400 italic ml-8";
-            loadingDiv.textContent = "AI is typing...";
-            chatBox.appendChild(loadingDiv);
-            chatBox.scrollTop = chatBox.scrollHeight;
-
             try {
-                // Calls your live AI Backend!
-                const response = await fetch('http://localhost:3000/api/chat', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ message: userText })
-                });
-                
-                const data = await response.json();
-                document.getElementById(loadingId).remove();
-                appendMessage(data.reply || "Error: No response from server.", false);
-            } catch (error) {
-                document.getElementById(loadingId).remove();
-                appendMessage("Cannot connect to the server. Make sure your Node.js backend is running!", false);
+                const res = await fetch('http://localhost:3000/api/chat', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ message: userText }) });
+                const data = await res.json();
+                chatBox.innerHTML += `<div class="p-3 bg-white text-gray-800 border rounded-2xl mr-auto mb-2 w-max max-w-[80%]">${data.reply || 'Error'}</div>`;
+            } catch(e) {
+                chatBox.innerHTML += `<div class="p-3 bg-red-100 text-red-800 rounded-2xl mr-auto mb-2">Connection error.</div>`;
             }
+            chatBox.scrollTop = chatBox.scrollHeight;
         }
-
         document.getElementById('send-btn').addEventListener('click', sendMessage);
-        chatInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') sendMessage(); });
-
-        // Navigation Logic
-        const views = {
-            home: document.getElementById('app-content'),
-            trending: document.getElementById('trending-view'),
-            profile: document.getElementById('profile-view')
-        };
-        const header = document.querySelector('header');
         
-        function switchView(viewName, activeBtn) {
-            Object.values(views).forEach(v => v.classList.add('hidden'));
-            views[viewName].classList.remove('hidden');
-            header.classList.toggle('hidden', viewName !== 'home');
-            
-            // Reset icons
-            document.querySelectorAll('nav button').forEach(btn => {
-                const svg = btn.querySelector('svg');
-                const span = btn.querySelector('span');
-                if(svg) {
-                    svg.classList.replace('text-green-600', 'text-gray-400');
-                    svg.classList.replace('dark:text-green-500', 'dark:text-gray-500');
-                }
-                if(span) {
-                    span.classList.replace('text-green-600', 'text-gray-500');
-                    span.classList.replace('dark:text-green-500', 'text-gray-500');
-                }
-            });
-            
-            // Set active icon
-            const svg = activeBtn.querySelector('svg');
-            const span = activeBtn.querySelector('span');
-            svg.classList.replace('text-gray-400', 'text-green-600');
-            svg.classList.replace('dark:text-gray-500', 'dark:text-green-500');
-            span.classList.replace('text-gray-500', 'text-green-600');
-            span.classList.replace('text-gray-500', 'dark:text-green-500');
-            window.scrollTo(0,0);
-        }
+        // Dark mode toggle
+        document.getElementById('theme-toggle').addEventListener('click', () => {
+            document.documentElement.classList.toggle('dark');
+            localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+        });
+    </script>
 
-        document.getElementById('nav-home-btn').addEventListener('click', function() { switchView('home', this); });
-        document.getElementById('nav-trending-btn').addEventListener('click', function() { switchView('trending', this); });
-        document.getElementById('nav-profile-btn').addEventListener('click', function() { switchView('profile', this); });
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+        import { getAuth, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+
+        // Your exact Firebase Config Keys
+        const firebaseConfig = {
+            apiKey: "AIzaSyCX2C1TXRb20nGtxEaYXGUo2KEH7gbZCY0",
+            authDomain: "ujenzismart-878af.firebaseapp.com",
+            projectId: "ujenzismart-878af",
+            storageBucket: "ujenzismart-878af.firebasestorage.app",
+            messagingSenderId: "626807014511",
+            appId: "1:626807014511:web:844e137d32048d6460399a",
+            measurementId: "G-V8C9KKGKFY"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const provider = new GoogleAuthProvider();
+
+        document.getElementById('google-signin-btn').addEventListener('click', async () => {
+            try {
+                // Open the Google pop-up
+                const result = await signInWithPopup(auth, provider);
+                const user = result.user;
+                
+                // Save the user data locally
+                const userData = {
+                    name: user.displayName,
+                    email: user.email
+                };
+                localStorage.setItem('ujenzi_user', JSON.stringify(userData));
+                
+                // Refresh to show logged-in state!
+                location.reload();
+            } catch (error) {
+                const authError = document.getElementById('auth-error');
+                authError.textContent = "Google Sign-In Error: " + error.message;
+                authError.classList.remove('hidden');
+            }
+        });
     </script>
 </body>
 </html>
