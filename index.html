@@ -3,301 +3,440 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Material Expert Marketplace</title>
+    <title>UjenziSmart - Material Expert</title>
     
-    <!-- Tailwind CSS via CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- Custom Fonts & Utilities -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+        }
+        // Check local storage for dark mode preference immediately to prevent flash
+        if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+    </script>
+    
+    <script type="importmap">
+      {
+        "imports": {
+          "@google/generative-ai": "https://esm.run/@google/generative-ai"
+        }
+      }
+    </script>
+    
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
         
-        body {
-            font-family: 'Inter', sans-serif;
-        }
+        body { font-family: 'Inter', sans-serif; }
         
         /* Safe area padding for mobile devices */
-        .pb-safe {
-            padding-bottom: env(safe-area-inset-bottom, 20px);
-        }
+        .pb-safe { padding-bottom: env(safe-area-inset-bottom, 20px); }
+
+        /* Hide Scrollbar for Horizontal Carousel but keep functionality */
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
 </head>
-<body class="bg-gray-50 text-gray-800 pb-24">
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 pb-24 transition-colors duration-300">
 
-    <!-- Global Toast Message (Hidden by default) -->
-    <div id="toast" class="fixed top-20 left-1/2 transform -translate-x-1/2 z-[200] bg-gray-800 text-white px-4 py-2 rounded-full text-sm shadow-lg transition-opacity duration-300 opacity-0 pointer-events-none">
+    <div id="toast" class="fixed top-20 left-1/2 transform -translate-x-1/2 z-[200] bg-gray-800 dark:bg-gray-100 text-white dark:text-gray-900 px-4 py-2 rounded-full text-sm shadow-lg transition-opacity duration-300 opacity-0 pointer-events-none">
         Item added to cart!
     </div>
 
-    <!-- Header Section -->
-    <header class="bg-gradient-to-r from-green-500 to-emerald-600 pt-10 pb-20 px-4 rounded-b-[2.5rem] shadow-lg relative">
+    <header class="bg-gradient-to-r from-green-500 to-emerald-600 dark:from-green-700 dark:to-emerald-900 pt-10 pb-20 px-4 rounded-b-[2.5rem] shadow-lg relative transition-colors duration-300">
         <div class="flex justify-between items-center mb-6 text-white max-w-7xl mx-auto">
             <div>
-                <h1 class="text-2xl font-bold tracking-tight">Habari, Jem! 👋</h1>
+                <h1 id="smart-greeting" class="text-2xl font-bold tracking-tight">Habari, Chesco! 👋</h1>
                 <p class="text-green-100 text-sm mt-1">What do you need today?</p>
             </div>
-            <button class="p-2 bg-white/20 rounded-full backdrop-blur-sm hover:bg-white/30 transition">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-white"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+            
+            <button id="theme-toggle" class="p-2 bg-white/20 rounded-full backdrop-blur-sm hover:bg-white/30 transition">
+                <svg id="theme-toggle-light-icon" class="hidden w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
+                <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
             </button>
         </div>
         
-        <!-- Search Bar -->
-        <div class="relative z-50 max-w-7xl mx-auto">
-            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gray-400"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        <div class="relative z-50 max-w-7xl mx-auto flex gap-2">
+            <div class="relative flex-grow">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gray-400"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                </div>
+                <input type="text" id="main-search-input" class="block w-full pl-10 pr-3 py-3 border border-transparent rounded-xl leading-5 bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500 sm:text-sm shadow-md transition-colors duration-300" placeholder="Search for materials...">
             </div>
-            <input type="text" class="block w-full pl-10 pr-3 py-3 border border-transparent rounded-xl leading-5 bg-white text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-green-500 sm:text-sm shadow-md" placeholder="Search for services or materials...">
+            <button id="voice-search-btn" class="w-12 h-12 bg-white dark:bg-gray-800 rounded-xl shadow-md flex items-center justify-center text-green-500 hover:bg-green-50 dark:hover:bg-gray-700 transition-colors shrink-0">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" x2="12" y1="19" y2="22"/></svg>
+            </button>
         </div>
     </header>
 
-    <!-- Main Quick Actions -->
-    <div class="px-4 -mt-10 relative z-10 max-w-7xl mx-auto">
-        <div class="grid grid-cols-2 gap-4">
-            <button class="bg-white p-4 rounded-2xl shadow-md flex flex-col items-center justify-center gap-3 hover:shadow-lg transition-shadow border border-gray-100 active:scale-95 transform transition-transform">
-                <div class="w-14 h-14 bg-green-100 rounded-full flex items-center justify-center text-green-600">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></svg>
-                </div>
-                <span class="font-semibold text-gray-800 text-center leading-tight">Material Expert<br><span class="text-xs text-gray-500 font-normal">Ask anything</span></span>
-            </button>
-            <button class="bg-white p-4 rounded-2xl shadow-md flex flex-col items-center justify-center gap-3 hover:shadow-lg transition-shadow border border-gray-100 active:scale-95 transform transition-transform">
-                <div class="w-14 h-14 bg-emerald-100 rounded-full flex items-center justify-center text-emerald-600">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
-                </div>
-                <span class="font-semibold text-gray-800 text-center leading-tight">Order<br><span class="text-xs text-gray-500 font-normal">Materials</span></span>
-            </button>
+    <div id="skeleton-loader" class="px-4 -mt-10 max-w-7xl mx-auto animate-pulse pb-20">
+        <div class="grid grid-cols-2 gap-4 relative z-10 mb-8">
+            <div class="bg-gray-200 dark:bg-gray-800 h-32 rounded-2xl shadow-md"></div>
+            <div class="bg-gray-200 dark:bg-gray-800 h-32 rounded-2xl shadow-md"></div>
+        </div>
+        <div class="h-6 bg-gray-200 dark:bg-gray-800 rounded w-1/3 mb-4"></div>
+        <div class="grid grid-cols-2 gap-4 mb-8">
+            <div class="bg-gray-200 dark:bg-gray-800 h-48 rounded-2xl"></div>
+            <div class="bg-gray-200 dark:bg-gray-800 h-48 rounded-2xl"></div>
+            <div class="bg-gray-200 dark:bg-gray-800 h-48 rounded-2xl"></div>
+            <div class="bg-gray-200 dark:bg-gray-800 h-48 rounded-2xl"></div>
         </div>
     </div>
 
-    <!-- Product Categories Grid -->
-    <div class="mt-8 px-4 max-w-7xl mx-auto">
-        <div class="flex justify-between items-center mb-4">
-            <h2 class="text-lg font-bold text-gray-900">Product Categories</h2>
-            <button class="text-sm text-green-600 font-medium hover:underline">See All</button>
+    <div id="app-content" class="hidden">
+        <div class="px-4 -mt-10 relative z-10 max-w-7xl mx-auto">
+            <div class="grid grid-cols-2 gap-4">
+                <button id="material-expert-btn" class="bg-white dark:bg-gray-800 p-4 rounded-2xl shadow-md flex flex-col items-center justify-center gap-3 hover:shadow-lg transition-all border border-gray-100 dark:border-gray-700 active:scale-95 transform">
+                    <div class="w-14 h-14 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center text-green-600 dark:text-green-400">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></svg>
+                    </div>
+                    <span class="font-semibold text-gray-800 dark:text-gray-100 text-center leading-tight">Material Expert<br><span class="text-xs text-gray-500 dark:text-gray-400 font-normal">Ask anything</span></span>
+                </button>
+                <button class="bg-white dark:bg-gray-800 p-4 rounded-2xl shadow-md flex flex-col items-center justify-center gap-3 hover:shadow-lg transition-all border border-gray-100 dark:border-gray-700 active:scale-95 transform">
+                    <div class="w-14 h-14 bg-emerald-100 dark:bg-emerald-900/30 rounded-full flex items-center justify-center text-emerald-600 dark:text-emerald-400">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
+                    </div>
+                    <span class="font-semibold text-gray-800 dark:text-gray-100 text-center leading-tight">Order<br><span class="text-xs text-gray-500 dark:text-gray-400 font-normal">Materials</span></span>
+                </button>
+            </div>
         </div>
-        
-        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            <!-- Category 1 -->
-            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden flex flex-col hover:shadow-md transition-shadow">
-                <div class="h-28 sm:h-36 bg-gray-200 relative">
-                    <img src="https://picsum.photos/seed/cement-rebar/400/300" alt="Foundation & Structural" class="w-full h-full object-cover" referrerpolicy="no-referrer">
-                </div>
-                <div class="p-3 sm:p-4 flex flex-col flex-grow">
-                    <h3 class="font-bold text-gray-900 mb-2 text-sm sm:text-base leading-tight">Foundation & Structural</h3>
-                    <ul class="text-xs sm:text-sm text-gray-600 mb-4 space-y-1.5 flex-grow">
-                        <li class="flex items-start gap-1.5"><div class="w-1.5 h-1.5 rounded-full bg-green-500 mt-1.5 shrink-0"></div><span class="line-clamp-2 leading-tight">Cement (32.5R/42.5N)</span></li>
-                        <li class="flex items-start gap-1.5"><div class="w-1.5 h-1.5 rounded-full bg-green-500 mt-1.5 shrink-0"></div><span class="line-clamp-2 leading-tight">Steel Reinforcement</span></li>
-                        <li class="flex items-start gap-1.5"><div class="w-1.5 h-1.5 rounded-full bg-green-500 mt-1.5 shrink-0"></div><span class="line-clamp-2 leading-tight">Masonry Blocks</span></li>
-                    </ul>
-                    <button class="w-full py-2 bg-green-50 text-green-700 font-semibold rounded-xl text-xs sm:text-sm hover:bg-green-100 transition-colors mt-auto active:scale-95 transform">Explore</button>
-                </div>
-            </div>
 
-            <!-- Category 2 -->
-            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden flex flex-col hover:shadow-md transition-shadow">
-                <div class="h-28 sm:h-36 bg-gray-200 relative">
-                    <img src="https://picsum.photos/seed/roofing-tiles/400/300" alt="Roofing Materials" class="w-full h-full object-cover" referrerpolicy="no-referrer">
-                </div>
-                <div class="p-3 sm:p-4 flex flex-col flex-grow">
-                    <h3 class="font-bold text-gray-900 mb-2 text-sm sm:text-base leading-tight">Roofing Materials</h3>
-                    <ul class="text-xs sm:text-sm text-gray-600 mb-4 space-y-1.5 flex-grow">
-                        <li class="flex items-start gap-1.5"><div class="w-1.5 h-1.5 rounded-full bg-green-500 mt-1.5 shrink-0"></div><span class="line-clamp-2 leading-tight">Roofing Sheets (Mabati)</span></li>
-                        <li class="flex items-start gap-1.5"><div class="w-1.5 h-1.5 rounded-full bg-green-500 mt-1.5 shrink-0"></div><span class="line-clamp-2 leading-tight">Treated Timber Trusses</span></li>
-                        <li class="flex items-start gap-1.5"><div class="w-1.5 h-1.5 rounded-full bg-green-500 mt-1.5 shrink-0"></div><span class="line-clamp-2 leading-tight">Gutter Systems</span></li>
-                    </ul>
-                    <button class="w-full py-2 bg-green-50 text-green-700 font-semibold rounded-xl text-xs sm:text-sm hover:bg-green-100 transition-colors mt-auto active:scale-95 transform">Explore</button>
-                </div>
+        <div class="mt-8 px-4 max-w-7xl mx-auto">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-lg font-bold text-gray-900 dark:text-white">Product Categories</h2>
+                <button class="text-sm text-green-600 dark:text-green-400 font-medium hover:underline">See All</button>
             </div>
+            
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden flex flex-col hover:shadow-md transition-all">
+                    <div class="h-28 sm:h-36 bg-gray-200 dark:bg-gray-700 relative">
+                        <img src="https://picsum.photos/seed/cement/400/300" alt="Foundation" class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-3 sm:p-4 flex flex-col flex-grow">
+                        <h3 class="font-bold text-gray-900 dark:text-white mb-2 text-sm sm:text-base leading-tight">Foundation & Structural</h3>
+                        <ul class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mb-4 space-y-1.5 flex-grow">
+                            <li class="flex items-start gap-1.5"><div class="w-1.5 h-1.5 rounded-full bg-green-500 mt-1.5 shrink-0"></div><span class="line-clamp-2">Cement (32.5R/42.5N)</span></li>
+                            <li class="flex items-start gap-1.5"><div class="w-1.5 h-1.5 rounded-full bg-green-500 mt-1.5 shrink-0"></div><span class="line-clamp-2">Steel Reinforcement</span></li>
+                        </ul>
+                        <button class="w-full py-2 bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-400 font-semibold rounded-xl text-xs sm:text-sm hover:bg-green-100 dark:hover:bg-green-900/40 transition-colors mt-auto active:scale-95 transform">Explore</button>
+                    </div>
+                </div>
 
-            <!-- Category 3 -->
-            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden flex flex-col hover:shadow-md transition-shadow">
-                <div class="h-28 sm:h-36 bg-gray-200 relative">
-                    <img src="https://picsum.photos/seed/plumbing-pipes/400/300" alt="Plumbing & Water" class="w-full h-full object-cover" referrerpolicy="no-referrer">
-                </div>
-                <div class="p-3 sm:p-4 flex flex-col flex-grow">
-                    <h3 class="font-bold text-gray-900 mb-2 text-sm sm:text-base leading-tight">Plumbing & Water</h3>
-                    <ul class="text-xs sm:text-sm text-gray-600 mb-4 space-y-1.5 flex-grow">
-                        <li class="flex items-start gap-1.5"><div class="w-1.5 h-1.5 rounded-full bg-green-500 mt-1.5 shrink-0"></div><span class="line-clamp-2 leading-tight">PPR/PVC Pipes & Fittings</span></li>
-                        <li class="flex items-start gap-1.5"><div class="w-1.5 h-1.5 rounded-full bg-green-500 mt-1.5 shrink-0"></div><span class="line-clamp-2 leading-tight">Water Tanks & Pumps</span></li>
-                        <li class="flex items-start gap-1.5"><div class="w-1.5 h-1.5 rounded-full bg-green-500 mt-1.5 shrink-0"></div><span class="line-clamp-2 leading-tight">Bathroom Fixtures</span></li>
-                    </ul>
-                    <button class="w-full py-2 bg-green-50 text-green-700 font-semibold rounded-xl text-xs sm:text-sm hover:bg-green-100 transition-colors mt-auto active:scale-95 transform">Explore</button>
-                </div>
-            </div>
-
-            <!-- Category 4 -->
-            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden flex flex-col hover:shadow-md transition-shadow">
-                <div class="h-28 sm:h-36 bg-gray-200 relative">
-                    <img src="https://picsum.photos/seed/electrical-wiring/400/300" alt="Electrical & Lighting" class="w-full h-full object-cover" referrerpolicy="no-referrer">
-                </div>
-                <div class="p-3 sm:p-4 flex flex-col flex-grow">
-                    <h3 class="font-bold text-gray-900 mb-2 text-sm sm:text-base leading-tight">Electrical & Lighting</h3>
-                    <ul class="text-xs sm:text-sm text-gray-600 mb-4 space-y-1.5 flex-grow">
-                        <li class="flex items-start gap-1.5"><div class="w-1.5 h-1.5 rounded-full bg-green-500 mt-1.5 shrink-0"></div><span class="line-clamp-2 leading-tight">Copper Cables</span></li>
-                        <li class="flex items-start gap-1.5"><div class="w-1.5 h-1.5 rounded-full bg-green-500 mt-1.5 shrink-0"></div><span class="line-clamp-2 leading-tight">Sockets & Switches</span></li>
-                        <li class="flex items-start gap-1.5"><div class="w-1.5 h-1.5 rounded-full bg-green-500 mt-1.5 shrink-0"></div><span class="line-clamp-2 leading-tight">LED Floodlights</span></li>
-                    </ul>
-                    <button class="w-full py-2 bg-green-50 text-green-700 font-semibold rounded-xl text-xs sm:text-sm hover:bg-green-100 transition-colors mt-auto active:scale-95 transform">Explore</button>
+                <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden flex flex-col hover:shadow-md transition-all">
+                    <div class="h-28 sm:h-36 bg-gray-200 dark:bg-gray-700 relative">
+                        <img src="https://picsum.photos/seed/roof/400/300" alt="Roofing" class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-3 sm:p-4 flex flex-col flex-grow">
+                        <h3 class="font-bold text-gray-900 dark:text-white mb-2 text-sm sm:text-base leading-tight">Roofing Materials</h3>
+                        <ul class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mb-4 space-y-1.5 flex-grow">
+                            <li class="flex items-start gap-1.5"><div class="w-1.5 h-1.5 rounded-full bg-green-500 mt-1.5 shrink-0"></div><span class="line-clamp-2">Roofing Sheets (Mabati)</span></li>
+                            <li class="flex items-start gap-1.5"><div class="w-1.5 h-1.5 rounded-full bg-green-500 mt-1.5 shrink-0"></div><span class="line-clamp-2">Treated Timber</span></li>
+                        </ul>
+                        <button class="w-full py-2 bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-400 font-semibold rounded-xl text-xs sm:text-sm hover:bg-green-100 dark:hover:bg-green-900/40 transition-colors mt-auto active:scale-95 transform">Explore</button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- Featured Materials -->
-    <div class="mt-8 px-4 pb-20 max-w-7xl mx-auto">
-        <div class="flex justify-between items-center mb-4">
-            <h2 class="text-lg font-bold text-gray-900">Featured Materials</h2>
-            <button class="text-sm text-green-600 font-medium hover:underline">See All</button>
+        <div class="mt-8 pl-4 pb-20 max-w-7xl mx-auto overflow-hidden">
+            <div class="flex justify-between items-center mb-4 pr-4">
+                <h2 class="text-lg font-bold text-gray-900 dark:text-white">Featured Materials</h2>
+                <button class="text-sm text-green-600 dark:text-green-400 font-medium hover:underline">Swipe for more &rarr;</button>
+            </div>
+            
+            <div class="flex overflow-x-auto snap-x snap-mandatory gap-4 pb-4 pr-4 hide-scrollbar">
+                
+                <div class="min-w-[160px] snap-start bg-white dark:bg-gray-800 rounded-2xl p-3 shadow-sm border border-gray-100 dark:border-gray-700 flex flex-col shrink-0">
+                    <div class="aspect-square rounded-xl overflow-hidden mb-3 bg-gray-100 dark:bg-gray-700 relative">
+                        <img src="https://picsum.photos/seed/Simba/200/200" alt="Simba Cement" class="w-full h-full object-cover">
+                    </div>
+                    <h3 class="text-sm font-medium text-gray-800 dark:text-gray-200 line-clamp-2 mb-1 flex-grow">Simba Cement 50kg</h3>
+                    <div class="flex justify-between items-center mt-1">
+                        <p class="text-green-600 dark:text-green-400 font-bold text-sm">TZS 18,500</p>
+                        <button class="add-to-cart-btn p-1.5 rounded-lg transition-colors flex items-center justify-center bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 active:scale-90 transform" data-name="Simba Cement">
+                            <svg class="icon-plus w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+                            <svg class="icon-check w-4 h-4 hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="min-w-[160px] snap-start bg-white dark:bg-gray-800 rounded-2xl p-3 shadow-sm border border-gray-100 dark:border-gray-700 flex flex-col shrink-0">
+                    <div class="aspect-square rounded-xl overflow-hidden mb-3 bg-gray-100 dark:bg-gray-700 relative">
+                        <img src="https://picsum.photos/seed/Iron/200/200" alt="Iron Sheet" class="w-full h-full object-cover">
+                    </div>
+                    <h3 class="text-sm font-medium text-gray-800 dark:text-gray-200 line-clamp-2 mb-1 flex-grow">Iron Sheet 30G</h3>
+                    <div class="flex justify-between items-center mt-1">
+                        <p class="text-green-600 dark:text-green-400 font-bold text-sm">TZS 22,000</p>
+                        <button class="add-to-cart-btn p-1.5 rounded-lg transition-colors flex items-center justify-center bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 active:scale-90 transform" data-name="Iron Sheet">
+                            <svg class="icon-plus w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+                            <svg class="icon-check w-4 h-4 hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="min-w-[160px] snap-start bg-white dark:bg-gray-800 rounded-2xl p-3 shadow-sm border border-gray-100 dark:border-gray-700 flex flex-col shrink-0">
+                    <div class="aspect-square rounded-xl overflow-hidden mb-3 bg-gray-100 dark:bg-gray-700 relative">
+                        <img src="https://picsum.photos/seed/PVC/200/200" alt="PVC Pipe" class="w-full h-full object-cover">
+                    </div>
+                    <h3 class="text-sm font-medium text-gray-800 dark:text-gray-200 line-clamp-2 mb-1 flex-grow">PVC Pipe 3/4"</h3>
+                    <div class="flex justify-between items-center mt-1">
+                        <p class="text-green-600 dark:text-green-400 font-bold text-sm">TZS 4,500</p>
+                        <button class="add-to-cart-btn p-1.5 rounded-lg transition-colors flex items-center justify-center bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 active:scale-90 transform" data-name="PVC Pipe">
+                            <svg class="icon-plus w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+                            <svg class="icon-check w-4 h-4 hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
         </div>
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <!-- Material 1 -->
-            <div class="bg-white rounded-2xl p-3 shadow-sm border border-gray-100 flex flex-col hover:shadow-md transition-all">
-                <div class="aspect-square rounded-xl overflow-hidden mb-3 bg-gray-100 relative">
-                    <img src="https://picsum.photos/seed/SimbaCement50kg/200/200" alt="Simba Cement 50kg" class="w-full h-full object-cover" referrerpolicy="no-referrer">
+    </div> <div id="chat-modal" class="fixed inset-0 z-[100] hidden bg-black/60 backdrop-blur-sm flex items-end sm:items-center justify-center transition-opacity">
+        <div class="bg-white dark:bg-gray-900 w-full sm:max-w-md h-[85vh] sm:h-[600px] rounded-t-3xl sm:rounded-3xl shadow-2xl flex flex-col overflow-hidden transform transition-transform translate-y-full" id="chat-container">
+            <div class="bg-gradient-to-r from-green-500 to-emerald-600 dark:from-green-700 dark:to-emerald-900 p-4 flex justify-between items-center text-white">
+                <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">🤖</div>
+                    <div>
+                        <h3 class="font-bold text-sm">Material Expert AI</h3>
+                        <p class="text-[10px] text-green-100">Online and ready to help</p>
+                    </div>
                 </div>
-                <h3 class="text-sm font-medium text-gray-800 line-clamp-2 mb-1 flex-grow">Simba Cement 50kg</h3>
-                <div class="flex justify-between items-center mt-1">
-                    <p class="text-green-600 font-bold text-sm">TZS 18,500</p>
-                    <button class="add-to-cart-btn p-1.5 rounded-lg transition-colors flex items-center justify-center bg-gray-100 text-gray-600 hover:bg-green-50 hover:text-green-600" data-name="Simba Cement 50kg" title="Add to Cart">
-                        <svg class="icon-plus w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
-                        <svg class="icon-check w-4 h-4 hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                    </button>
+                <button id="close-chat" class="p-2 hover:bg-white/20 rounded-full transition">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+                </button>
+            </div>
+            <div id="chat-box" class="flex-grow p-4 overflow-y-auto flex flex-col gap-3 bg-gray-50 dark:bg-gray-800">
+                <div class="flex items-start gap-2 w-full">
+                    <div class="w-6 h-6 rounded-full bg-green-100 dark:bg-green-900 flex items-center justify-center shrink-0 text-xs">🤖</div>
+                    <div class="bg-white dark:bg-gray-700 p-3 rounded-2xl rounded-tl-none shadow-sm text-sm text-gray-800 dark:text-gray-100 border border-gray-100 dark:border-gray-600">
+                        Habari! I am the UjenziSmart AI. Do you need help estimating materials?
+                    </div>
                 </div>
             </div>
-            
-            <!-- Material 2 -->
-            <div class="bg-white rounded-2xl p-3 shadow-sm border border-gray-100 flex flex-col hover:shadow-md transition-all">
-                <div class="aspect-square rounded-xl overflow-hidden mb-3 bg-gray-100 relative">
-                    <img src="https://picsum.photos/seed/IronSheet30G/200/200" alt="Iron Sheet 30G" class="w-full h-full object-cover" referrerpolicy="no-referrer">
-                </div>
-                <h3 class="text-sm font-medium text-gray-800 line-clamp-2 mb-1 flex-grow">Iron Sheet 30G</h3>
-                <div class="flex justify-between items-center mt-1">
-                    <p class="text-green-600 font-bold text-sm">TZS 22,000</p>
-                    <button class="add-to-cart-btn p-1.5 rounded-lg transition-colors flex items-center justify-center bg-gray-100 text-gray-600 hover:bg-green-50 hover:text-green-600" data-name="Iron Sheet 30G" title="Add to Cart">
-                        <svg class="icon-plus w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
-                        <svg class="icon-check w-4 h-4 hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                    </button>
-                </div>
-            </div>
-            
-            <!-- Material 3 -->
-            <div class="bg-white rounded-2xl p-3 shadow-sm border border-gray-100 flex flex-col hover:shadow-md transition-all">
-                <div class="aspect-square rounded-xl overflow-hidden mb-3 bg-gray-100 relative">
-                    <img src="https://picsum.photos/seed/PVCPipe3/4/200/200" alt="PVC Pipe 3/4&quot;" class="w-full h-full object-cover" referrerpolicy="no-referrer">
-                </div>
-                <h3 class="text-sm font-medium text-gray-800 line-clamp-2 mb-1 flex-grow">PVC Pipe 3/4"</h3>
-                <div class="flex justify-between items-center mt-1">
-                    <p class="text-green-600 font-bold text-sm">TZS 4,500</p>
-                    <button class="add-to-cart-btn p-1.5 rounded-lg transition-colors flex items-center justify-center bg-gray-100 text-gray-600 hover:bg-green-50 hover:text-green-600" data-name="PVC Pipe 3/4&quot;" title="Add to Cart">
-                        <svg class="icon-plus w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
-                        <svg class="icon-check w-4 h-4 hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                    </button>
-                </div>
-            </div>
-            
-            <!-- Material 4 -->
-            <div class="bg-white rounded-2xl p-3 shadow-sm border border-gray-100 flex flex-col hover:shadow-md transition-all">
-                <div class="aspect-square rounded-xl overflow-hidden mb-3 bg-gray-100 relative">
-                    <img src="https://picsum.photos/seed/Nails3inch(1kg)/200/200" alt="Nails 3 inch (1kg)" class="w-full h-full object-cover" referrerpolicy="no-referrer">
-                </div>
-                <h3 class="text-sm font-medium text-gray-800 line-clamp-2 mb-1 flex-grow">Nails 3 inch (1kg)</h3>
-                <div class="flex justify-between items-center mt-1">
-                    <p class="text-green-600 font-bold text-sm">TZS 3,500</p>
-                    <button class="add-to-cart-btn p-1.5 rounded-lg transition-colors flex items-center justify-center bg-gray-100 text-gray-600 hover:bg-green-50 hover:text-green-600" data-name="Nails 3 inch (1kg)" title="Add to Cart">
-                        <svg class="icon-plus w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
-                        <svg class="icon-check w-4 h-4 hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                    </button>
-                </div>
+            <div class="p-3 bg-white dark:bg-gray-900 border-t border-gray-100 dark:border-gray-800 flex gap-2 items-center pb-safe">
+                <input type="text" id="chat-input" class="flex-grow bg-gray-100 dark:bg-gray-800 border-none rounded-full px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 text-gray-900 dark:text-white" placeholder="Ask about materials...">
+                <button id="send-btn" class="w-11 h-11 bg-green-500 rounded-full flex items-center justify-center text-white hover:bg-green-600 transition shrink-0">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
+                </button>
             </div>
         </div>
     </div>
 
-    <!-- Sticky Bottom Navigation -->
-    <nav class="fixed bottom-0 w-full bg-white border-t border-gray-200 px-6 py-3 flex justify-between items-center z-50 pb-safe">
+    <nav class="fixed bottom-0 w-full bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 px-6 py-3 flex justify-between items-center z-50 pb-safe transition-colors duration-300">
         <div class="max-w-md mx-auto w-full flex justify-between items-center">
-            
-            <!-- 1. Home (Active) -->
             <button class="flex flex-col items-center gap-1">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-green-600">
-                    <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
-                    <polyline points="9 22 9 12 15 12 15 22"/>
-                </svg>
-                <span class="text-[10px] font-medium text-green-600">Home</span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-green-600 dark:text-green-500"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                <span class="text-[10px] font-medium text-green-600 dark:text-green-500">Home</span>
             </button>
-            
-            <!-- 2. Trending -->
             <button class="flex flex-col items-center gap-1">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gray-400">
-                    <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/>
-                    <polyline points="16 7 22 7 22 13"/>
-                </svg>
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-gray-400 dark:text-gray-500"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
                 <span class="text-[10px] font-medium text-gray-500">Trending</span>
             </button>
-            
-            <!-- 3. Cart -->
-            <button class="flex flex-col items-center gap-1">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gray-400">
-                    <circle cx="8" cy="21" r="1"/>
-                    <circle cx="19" cy="21" r="1"/>
-                    <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/>
-                </svg>
+            <button class="flex flex-col items-center gap-1 relative">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-gray-400 dark:text-gray-500"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
                 <span class="text-[10px] font-medium text-gray-500">Cart</span>
+                <span class="absolute -top-1 right-2 flex h-2.5 w-2.5"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span><span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-500"></span></span>
             </button>
-            
-            <!-- 4. Profile -->
             <button class="flex flex-col items-center gap-1">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gray-400">
-                    <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/>
-                    <circle cx="12" cy="7" r="4"/>
-                </svg>
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-gray-400 dark:text-gray-500"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
                 <span class="text-[10px] font-medium text-gray-500">Profile</span>
             </button>
-
         </div>
     </nav>
 
-    <!-- JavaScript for Add to Cart Interactivity -->
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const addToCartBtns = document.querySelectorAll('.add-to-cart-btn');
-            const toast = document.getElementById('toast');
-            let toastTimeout;
+    <script type="module">
+        import { GoogleGenerativeAI } from "@google/generative-ai";
 
-            addToCartBtns.forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    const productName = btn.getAttribute('data-name');
-                    
-                    // 1. Change button colors to green
-                    btn.classList.remove('bg-gray-100', 'text-gray-600', 'hover:bg-green-50', 'hover:text-green-600');
-                    btn.classList.add('bg-green-500', 'text-white');
-                    
-                    // 2. Swap the Plus icon for the Check icon
-                    const iconPlus = btn.querySelector('.icon-plus');
-                    const iconCheck = btn.querySelector('.icon-check');
-                    if(iconPlus) iconPlus.classList.add('hidden');
-                    if(iconCheck) iconCheck.classList.remove('hidden');
+        // ⚠️ PASTE YOUR API KEY HERE:
+        const API_KEY = "AIzaSyCA79yt_gsaS1Sg9yr1eeu96i-zBWCOhkc"; 
+        const genAI = new GoogleGenerativeAI(API_KEY);
+        const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash-lite" }); 
 
-                    // 3. Show the Toast Notification
-                    toast.textContent = `Added ${productName} to cart!`;
-                    toast.classList.remove('opacity-0', 'pointer-events-none');
-                    toast.classList.add('opacity-100');
+        // --- 1. SKELETON LOADER LOGIC ---
+        // Simulates a 1.5 second network load, then reveals the UI
+        setTimeout(() => {
+            document.getElementById('skeleton-loader').classList.add('hidden');
+            document.getElementById('app-content').classList.remove('hidden');
+        }, 1500);
 
-                    // 4. Reset the button after 2 seconds
-                    setTimeout(() => {
-                        btn.classList.add('bg-gray-100', 'text-gray-600', 'hover:bg-green-50', 'hover:text-green-600');
-                        btn.classList.remove('bg-green-500', 'text-white');
-                        if(iconPlus) iconPlus.classList.remove('hidden');
-                        if(iconCheck) iconCheck.classList.add('hidden');
-                    }, 2000);
+        // --- 2. DARK MODE LOGIC ---
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        const darkIcon = document.getElementById('theme-toggle-dark-icon');
+        const lightIcon = document.getElementById('theme-toggle-light-icon');
 
-                    // 5. Hide the Toast after 3 seconds
-                    clearTimeout(toastTimeout);
-                    toastTimeout = setTimeout(() => {
-                        toast.classList.remove('opacity-100');
-                        toast.classList.add('opacity-0', 'pointer-events-none');
-                    }, 3000);
-                });
+        function updateIcons() {
+            if (document.documentElement.classList.contains('dark')) {
+                darkIcon.classList.add('hidden');
+                lightIcon.classList.remove('hidden');
+            } else {
+                lightIcon.classList.add('hidden');
+                darkIcon.classList.remove('hidden');
+            }
+        }
+        updateIcons();
+
+        themeToggleBtn.addEventListener('click', function() {
+            document.documentElement.classList.toggle('dark');
+            if (document.documentElement.classList.contains('dark')) {
+                localStorage.setItem('theme', 'dark');
+            } else {
+                localStorage.setItem('theme', 'light');
+            }
+            updateIcons();
+        });
+
+        // --- 3. SMART TIME-BASED GREETING ---
+        const hour = new Date().getHours();
+        let greeting = "Habari";
+        if (hour < 12) greeting = "Good Morning";
+        else if (hour < 18) greeting = "Good Afternoon";
+        else greeting = "Good Evening";
+        // Keeping "John" per your current setup!
+        document.getElementById('smart-greeting').innerHTML = `${greeting}, John! 👋`;
+
+        // --- 4. HAPTIC FEEDBACK & CART LOGIC ---
+        const addToCartBtns = document.querySelectorAll('.add-to-cart-btn');
+        const toast = document.getElementById('toast');
+        let toastTimeout;
+
+        addToCartBtns.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                
+                // Vibrate the phone for 50ms if the browser supports it!
+                if (navigator.vibrate) navigator.vibrate(50);
+
+                const productName = btn.getAttribute('data-name');
+                btn.classList.add('bg-green-500', 'text-white', 'border-green-500');
+                
+                const iconPlus = btn.querySelector('.icon-plus');
+                const iconCheck = btn.querySelector('.icon-check');
+                if(iconPlus) iconPlus.classList.add('hidden');
+                if(iconCheck) iconCheck.classList.remove('hidden');
+
+                toast.textContent = `Added ${productName} to cart!`;
+                toast.classList.remove('opacity-0', 'pointer-events-none');
+                toast.classList.add('opacity-100');
+
+                setTimeout(() => {
+                    btn.classList.remove('bg-green-500', 'text-white', 'border-green-500');
+                    if(iconPlus) iconPlus.classList.remove('hidden');
+                    if(iconCheck) iconCheck.classList.add('hidden');
+                }, 2000);
+
+                clearTimeout(toastTimeout);
+                toastTimeout = setTimeout(() => {
+                    toast.classList.remove('opacity-100');
+                    toast.classList.add('opacity-0', 'pointer-events-none');
+                }, 3000);
             });
+        });
+
+        // --- 5. VOICE SEARCH LOGIC ---
+        const voiceBtn = document.getElementById('voice-search-btn');
+        const searchInput = document.getElementById('main-search-input');
+        
+        // Check if browser supports speech recognition
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        if (SpeechRecognition) {
+            const recognition = new SpeechRecognition();
+            recognition.continuous = false;
+            // You can set this to 'sw-TZ' if you want it to listen for Swahili!
+            recognition.lang = 'en-US'; 
+
+            recognition.onstart = function() {
+                // Make mic button pulse red when listening
+                voiceBtn.classList.add('animate-pulse', 'text-red-500', 'bg-red-50', 'dark:bg-red-900/30');
+                voiceBtn.classList.remove('text-green-500');
+                searchInput.placeholder = "Listening...";
+                if (navigator.vibrate) navigator.vibrate(100);
+            };
+
+            recognition.onresult = function(event) {
+                const transcript = event.results[0][0].transcript;
+                searchInput.value = transcript;
+            };
+
+            recognition.onend = function() {
+                // Reset styling
+                voiceBtn.classList.remove('animate-pulse', 'text-red-500', 'bg-red-50', 'dark:bg-red-900/30');
+                voiceBtn.classList.add('text-green-500');
+                searchInput.placeholder = "Search for materials...";
+            };
+
+            voiceBtn.addEventListener('click', () => {
+                recognition.start();
+            });
+        } else {
+            // Hide mic button if browser doesn't support it (like some older iOS versions)
+            voiceBtn.style.display = 'none';
+        }
+
+        // --- 6. AI CHATBOT LOGIC (Unchanged) ---
+        const chatModal = document.getElementById('chat-modal');
+        const chatContainer = document.getElementById('chat-container');
+        const closeChatBtn = document.getElementById('close-chat');
+        const chatBox = document.getElementById('chat-box');
+        const chatInput = document.getElementById('chat-input');
+        const sendBtn = document.getElementById('send-btn');
+        const materialExpertBtn = document.getElementById('material-expert-btn');
+
+        materialExpertBtn.addEventListener('click', () => {
+            chatModal.classList.remove('hidden');
+            setTimeout(() => chatContainer.classList.remove('translate-y-full'), 10);
+        });
+
+        closeChatBtn.addEventListener('click', () => {
+            chatContainer.classList.add('translate-y-full');
+            setTimeout(() => chatModal.classList.add('hidden'), 300);
+        });
+
+        function appendMessage(text, isUser) {
+            const msgDiv = document.createElement('div');
+            msgDiv.className = `flex items-start gap-2 w-full ${isUser ? 'flex-row-reverse' : ''}`;
+            const iconDiv = document.createElement('div');
+            iconDiv.className = `w-6 h-6 rounded-full flex items-center justify-center shrink-0 text-xs ${isUser ? 'bg-gray-800 text-white' : 'bg-green-100 dark:bg-green-900'}`;
+            iconDiv.textContent = isUser ? '👤' : '🤖';
+            const bubbleDiv = document.createElement('div');
+            bubbleDiv.className = `p-3 rounded-2xl shadow-sm text-sm border ${isUser ? 'bg-gray-800 text-white rounded-tr-none border-gray-800' : 'bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-100 rounded-tl-none border-gray-100 dark:border-gray-600'}`;
+            bubbleDiv.textContent = text;
+            msgDiv.appendChild(iconDiv);
+            msgDiv.appendChild(bubbleDiv);
+            chatBox.appendChild(msgDiv);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        async function sendMessage() {
+            const userText = chatInput.value.trim();
+            if (!userText) return;
+            appendMessage(userText, true);
+            chatInput.value = '';
+
+            const loadingId = "loading-" + Date.now();
+            const loadingDiv = document.createElement('div');
+            loadingDiv.id = loadingId;
+            loadingDiv.className = "text-xs text-gray-400 dark:text-gray-500 italic ml-8";
+            loadingDiv.textContent = "AI is typing...";
+            chatBox.appendChild(loadingDiv);
+            chatBox.scrollTop = chatBox.scrollHeight;
+
+            try {
+                const prompt = "You are a professional Tanzanian construction expert assistant for the app UjenziSmart. Keep answers brief, friendly, and practical. User says: " + userText;
+                const result = await model.generateContent(prompt);
+                const aiResponse = result.response.text();
+                document.getElementById(loadingId).remove();
+                appendMessage(aiResponse, false);
+            } catch (error) {
+                document.getElementById(loadingId).remove();
+                appendMessage("Connection error. Check API key!", false);
+            }
+        }
+
+        sendBtn.addEventListener('click', sendMessage);
+        chatInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') sendMessage();
         });
     </script>
 </body>
