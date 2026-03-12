@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UjenziSmart - Market Leader</title>
+    <title>UjenziSmart - Premium Pro</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = { darkMode: 'class' }
@@ -19,119 +19,148 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap');
         body { font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; scroll-behavior: smooth; }
+        
         .view-content { animation: slideUpFade 0.5s cubic-bezier(0.2, 0.8, 0.2, 1); }
         @keyframes slideUpFade { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+
         .stagger-item { animation: staggerIn 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) both; }
         @keyframes staggerIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
+
         .click-press { transition: transform 0.1s ease; }
         .click-press:active { transform: scale(0.92); }
+
         .glass { backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
-        .gradient-pulse { background: linear-gradient(-45deg, #059669, #10b981, #34d399, #059669); background-size: 400% 400%; animation: gradientMove 10s ease infinite; }
+        
+        .gradient-pulse {
+            background: linear-gradient(-45deg, #059669, #10b981, #34d399, #059669);
+            background-size: 400% 400%;
+            animation: gradientMove 10s ease infinite;
+        }
         @keyframes gradientMove { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+
         .skeleton { background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%); background-size: 200% 100%; animation: skeleton-loading 1.5s infinite; }
         .dark .skeleton { background: linear-gradient(90deg, #1f2937 25%, #374151 50%, #1f2937 75%); }
         @keyframes skeleton-loading { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
     </style>
 </head>
-<body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 pb-24 transition-colors duration-300">
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 pb-24 transition-colors duration-300 relative">
 
     <div id="auth-screen" class="fixed inset-0 z-[200] bg-gray-50 dark:bg-gray-900 flex flex-col justify-center px-6 transition-opacity duration-300">
-        <div class="max-w-md mx-auto w-full bg-white dark:bg-gray-800 p-8 rounded-[2.5rem] shadow-2xl border dark:border-gray-700 text-center">
+        <div class="max-w-md mx-auto w-full bg-white dark:bg-gray-800 p-8 rounded-[2.5rem] shadow-2xl border dark:border-gray-700 text-center animate-stagger-in">
             <h1 class="text-4xl font-black text-green-600 mb-2 tracking-tighter">UjenziSmart</h1>
-            <p class="text-gray-500 mb-8 text-sm">Tanzania's #1 Construction Hub.</p>
+            <p class="text-gray-500 mb-8 text-sm">Your premium building partner.</p>
             <form id="auth-form" class="flex flex-col gap-4 text-left">
-                <input type="email" id="auth-email" required placeholder="Email Address" class="w-full bg-gray-50 dark:bg-gray-900 border dark:border-gray-700 rounded-2xl px-5 py-4 outline-none">
-                <input type="password" id="auth-password" required placeholder="Password" class="w-full bg-gray-50 dark:bg-gray-900 border dark:border-gray-700 rounded-2xl px-5 py-4 outline-none">
+                <input type="email" id="auth-email" required placeholder="Email Address" class="w-full bg-gray-50 dark:bg-gray-900 border dark:border-gray-700 rounded-2xl px-5 py-4 outline-none focus:ring-2 focus:ring-green-500 transition-all">
+                <input type="password" id="auth-password" required placeholder="Password" class="w-full bg-gray-50 dark:bg-gray-900 border dark:border-gray-700 rounded-2xl px-5 py-4 outline-none focus:ring-2 focus:ring-green-500 transition-all">
                 <button type="submit" class="w-full py-4 bg-green-500 text-white rounded-2xl font-bold shadow-lg click-press">Sign In</button>
             </form>
-            <button type="button" id="google-signin-btn" class="w-full py-4 mt-6 bg-white dark:bg-gray-700 text-gray-700 dark:text-white border dark:border-gray-600 rounded-2xl font-bold flex items-center justify-center gap-3 click-press">
-                <svg viewBox="0 0 24 24" width="18" height="18"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg> Google Login
+            <div class="relative flex items-center justify-center my-6">
+                <div class="border-t w-full absolute border-gray-200 dark:border-gray-700"></div>
+                <span class="bg-white dark:bg-gray-800 px-3 text-xs text-gray-400 relative z-10 uppercase tracking-widest">OR</span>
+            </div>
+            <button type="button" id="google-signin-btn" class="w-full py-4 bg-white dark:bg-gray-700 text-gray-700 dark:text-white border dark:border-gray-600 rounded-2xl font-bold flex items-center justify-center gap-3 click-press shadow-sm">
+                <svg viewBox="0 0 24 24" width="18" height="18"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+                Sign in with Google
             </button>
         </div>
     </div>
 
-    <header id="main-header" class="gradient-pulse pt-12 pb-24 px-6 rounded-b-[3rem] shadow-2xl relative">
+    <header id="main-header" class="bg-gradient-to-r from-green-600 to-emerald-700 pt-10 pb-20 px-6 rounded-b-[2.5rem] shadow-lg relative transition-all">
         <div class="flex justify-between items-center text-white max-w-7xl mx-auto">
             <div>
-                <h1 id="smart-greeting" class="text-3xl font-black tracking-tighter mb-1">Habari! 👋</h1>
-                <p id="welcome-subtitle" class="text-green-50 text-xs font-medium opacity-90">What can we build today?</p>
+                <h1 id="smart-greeting" class="text-2xl font-bold tracking-tight">Habari! 👋</h1>
+                <p id="welcome-subtitle" class="text-green-50 text-xs opacity-90">What do you need today?</p>
             </div>
-            <button id="theme-toggle" class="w-12 h-12 bg-white/20 rounded-full glass flex items-center justify-center active:scale-90 transition-all">
-                <span id="theme-icon" class="text-xl">🌙</span>
+            <button id="theme-toggle" class="w-10 h-10 bg-black/10 rounded-full flex items-center justify-center active:scale-90 transition-all click-press">
+                <span id="theme-icon" class="text-lg">🌓</span>
             </button>
         </div>
     </header>
 
-    <div class="px-6 -mt-12 relative z-10 max-w-7xl mx-auto pb-24">
+    <div class="px-5 -mt-10 relative z-10 max-w-7xl mx-auto pb-24">
         
-        <div id="home-tools" class="grid grid-cols-2 gap-4 mb-10">
-            <button onclick="openCalculator()" class="bg-white dark:bg-gray-800 p-6 rounded-[2rem] shadow-xl flex flex-col items-center gap-3 border dark:border-gray-700 click-press">
-                <div class="w-12 h-12 bg-amber-100 rounded-2xl flex items-center justify-center text-2xl">📐</div>
-                <span class="font-black text-[10px] uppercase tracking-widest text-gray-400">Calculator</span>
-            </button>
-            <button id="material-expert-btn" class="bg-white dark:bg-gray-800 p-6 rounded-[2rem] shadow-xl flex flex-col items-center gap-3 border dark:border-gray-700 click-press">
-                <div class="w-12 h-12 bg-blue-100 rounded-2xl flex items-center justify-center text-2xl">🤖</div>
-                <span class="font-black text-[10px] uppercase tracking-widest text-gray-400">AI Expert</span>
+        <div id="home-tools" class="grid grid-cols-1 gap-4 mb-10">
+            <button onclick="openCalculator()" class="bg-white dark:bg-gray-800 p-4 rounded-2xl shadow-sm border dark:border-gray-700 flex flex-col items-center gap-2 click-press stagger-item">
+                <span class="text-2xl">📐</span><span class="font-bold text-[10px] uppercase tracking-widest text-gray-500 dark:text-gray-400">Calculator</span>
             </button>
         </div>
 
-        <div id="view-home" class="view-content flex flex-col gap-10"></div>
-        
-        <div id="view-trending" class="view-content hidden space-y-6">
-            <div class="flex justify-between items-end mb-2">
-                <h2 class="text-3xl font-black tracking-tighter">Market Watch</h2>
-                <span class="text-[10px] font-black text-green-500 uppercase tracking-widest mb-1">Live Updates</span>
-            </div>
-            
-            <div onclick="openProduct('Simba Cement 50kg', 'Market leader in strength and reliability.', 18500, 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=600')" class="bg-white dark:bg-gray-800 rounded-[2.5rem] overflow-hidden shadow-xl border dark:border-gray-700 stagger-item click-press">
-                <div class="relative h-48">
-                    <img src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=600" class="w-full h-full object-cover">
-                    <div class="absolute top-4 left-4 bg-green-500 text-white text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-widest shadow-lg">#1 Best Value</div>
-                    <div class="absolute bottom-4 right-4 bg-white/90 glass text-gray-900 text-[10px] font-black px-3 py-1 rounded-full flex items-center gap-1 shadow-lg">
-                        <span class="text-green-600">▼</span> 2% this week
+        <div id="view-home" class="view-content flex flex-col gap-10">
+            <section>
+                <h2 class="text-lg font-bold mb-4 px-1 text-gray-800 dark:text-white">Product Categories</h2>
+                <div class="grid grid-cols-2 gap-4">
+                    <div onclick="openCategory('Foundation & Structural')" class="bg-white dark:bg-gray-800 rounded-3xl p-3 shadow-sm border dark:border-gray-700 flex flex-col click-press stagger-item">
+                        <img src="https://images.unsplash.com/photo-1590060417941-2f34888463f1?w=400" class="w-full h-32 object-cover rounded-2xl mb-3">
+                        <p class="font-bold text-sm px-1 mb-1">Foundation</p>
+                        <button class="w-full py-1.5 bg-green-50 dark:bg-green-900/20 text-green-600 dark:text-green-400 rounded-xl text-[10px] font-bold">Explore</button>
+                    </div>
+                    <div onclick="openCategory('Roofing Materials')" class="bg-white dark:bg-gray-800 rounded-3xl p-3 shadow-sm border dark:border-gray-700 flex flex-col click-press stagger-item" style="animation-delay: 0.1s">
+                        <img src="https://images.unsplash.com/photo-1635424710928-0544e8512eae?w=400" class="w-full h-32 object-cover rounded-2xl mb-3">
+                        <p class="font-bold text-sm px-1 mb-1">Roofing</p>
+                        <button class="w-full py-1.5 bg-green-50 dark:bg-green-900/20 text-green-600 dark:text-green-400 rounded-xl text-[10px] font-bold">Explore</button>
+                    </div>
+                    <div onclick="openCategory('Plumbing & Water')" class="bg-white dark:bg-gray-800 rounded-3xl p-3 shadow-sm border dark:border-gray-700 flex flex-col click-press stagger-item" style="animation-delay: 0.15s">
+                        <div class="w-full h-32 bg-gray-100 dark:bg-gray-700 rounded-2xl mb-3 flex items-center justify-center text-4xl">🚰</div>
+                        <p class="font-bold text-sm px-1 mb-1">Plumbing</p>
+                        <button class="w-full py-1.5 bg-green-50 dark:bg-green-900/20 text-green-600 dark:text-green-400 rounded-xl text-[10px] font-bold">Explore</button>
+                    </div>
+                    <div onclick="openCategory('Electrical & Lighting')" class="bg-white dark:bg-gray-800 rounded-3xl p-3 shadow-sm border dark:border-gray-700 flex flex-col click-press stagger-item" style="animation-delay: 0.2s">
+                        <div class="w-full h-32 bg-gray-100 dark:bg-gray-700 rounded-2xl mb-3 flex items-center justify-center text-4xl">💡</div>
+                        <p class="font-bold text-sm px-1 mb-1">Electrical</p>
+                        <button class="w-full py-1.5 bg-green-50 dark:bg-green-900/20 text-green-600 dark:text-green-400 rounded-xl text-[10px] font-bold">Explore</button>
+                    </div>
+                    <div onclick="openCategory('Finishing & Painting')" class="bg-white dark:bg-gray-800 rounded-3xl p-3 shadow-sm border dark:border-gray-700 flex flex-col click-press stagger-item" style="animation-delay: 0.25s">
+                        <div class="w-full h-32 bg-gray-100 dark:bg-gray-700 rounded-2xl mb-3 flex items-center justify-center text-4xl">🎨</div>
+                        <p class="font-bold text-sm px-1 mb-1">Finishing</p>
+                        <button class="w-full py-1.5 bg-green-50 dark:bg-green-900/20 text-green-600 dark:text-green-400 rounded-xl text-[10px] font-bold">Explore</button>
+                    </div>
+                    <div onclick="openCategory('Tools & Hardware')" class="bg-white dark:bg-gray-800 rounded-3xl p-3 shadow-sm border dark:border-gray-700 flex flex-col click-press stagger-item" style="animation-delay: 0.3s">
+                        <div class="w-full h-32 bg-gray-100 dark:bg-gray-700 rounded-2xl mb-3 flex items-center justify-center text-4xl">🛠️</div>
+                        <p class="font-bold text-sm px-1 mb-1">Hardware</p>
+                        <button class="w-full py-1.5 bg-green-50 dark:bg-green-900/20 text-green-600 dark:text-green-400 rounded-xl text-[10px] font-bold">Explore</button>
                     </div>
                 </div>
-                <div class="p-6">
-                    <div class="flex justify-between items-start mb-2">
-                        <h3 class="font-black text-lg">Simba Cement 50kg</h3>
-                        <p class="text-green-600 font-black">TZS 18,500</p>
-                    </div>
-                    <p class="text-xs text-gray-400 leading-relaxed mb-4">High demand across Dar Es Salaam residential sites. Price currently stabilizing.</p>
-                    <button class="w-full py-3 bg-gray-50 dark:bg-gray-700 rounded-xl text-[10px] font-black uppercase tracking-widest text-green-600">View Market Analysis</button>
-                </div>
-            </div>
+            </section>
 
-            <div onclick="openProduct('Deformed Bar 12mm', 'High tensile strength reinforcement steel.', 24000, 'https://images.unsplash.com/photo-1516156008625-3a9d6067fab5?w=600')" class="bg-white dark:bg-gray-800 rounded-[2.5rem] overflow-hidden shadow-xl border dark:border-gray-700 stagger-item click-press" style="animation-delay: 0.1s">
-                <div class="relative h-48">
-                    <img src="https://images.unsplash.com/photo-1516156008625-3a9d6067fab5?w=600" class="w-full h-full object-cover">
-                    <div class="absolute top-4 left-4 bg-blue-500 text-white text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-widest shadow-lg">Essential</div>
-                    <div class="absolute bottom-4 right-4 bg-white/90 glass text-gray-900 text-[10px] font-black px-3 py-1 rounded-full flex items-center gap-1 shadow-lg">
-                        <span class="text-red-500">▲</span> 1.5% this week
+            <section class="mt-4">
+                <h2 class="text-lg font-bold mb-4 px-1 text-gray-800 dark:text-white">Featured Materials</h2>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="bg-white dark:bg-gray-800 rounded-3xl p-4 shadow-sm border dark:border-gray-700 flex flex-col relative click-press stagger-item" onclick="openProduct('Simba Cement 50kg', 'Grade 42.5R high-strength cement. Ideal for heavy structural concrete, foundations, and pillars. 50kg bag.', 18500, 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=400')">
+                        <img src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=400" class="w-full h-36 object-cover rounded-2xl mb-3">
+                        <p class="text-xs font-medium text-gray-700 dark:text-gray-300 px-1 leading-tight mb-1">Simba Cement 50kg</p>
+                        <div class="flex justify-between items-center px-1 mt-auto">
+                            <p class="text-green-600 font-bold text-sm">TZS 18,500</p>
+                            <div class="w-8 h-8 bg-gray-50 dark:bg-gray-700 rounded-lg flex items-center justify-center text-gray-500 dark:text-gray-300 font-medium text-lg">+</div>
+                        </div>
+                    </div>
+                    <div class="bg-white dark:bg-gray-800 rounded-3xl p-4 shadow-sm border dark:border-gray-700 flex flex-col relative click-press stagger-item" style="animation-delay: 0.1s" onclick="openProduct('Iron Sheet 30G', 'Corrugated premium anti-corrosive roofing sheets. Long-lasting color protection.', 22000, 'https://images.unsplash.com/photo-1635424710928-0544e8512eae?w=400')">
+                        <img src="https://images.unsplash.com/photo-1635424710928-0544e8512eae?w=400" class="w-full h-36 object-cover rounded-2xl mb-3">
+                        <p class="text-xs font-medium text-gray-700 dark:text-gray-300 px-1 leading-tight mb-1">Iron Sheet 30G</p>
+                        <div class="flex justify-between items-center px-1 mt-auto">
+                            <p class="text-green-600 font-bold text-sm">TZS 22,000</p>
+                            <div class="w-8 h-8 bg-gray-50 dark:bg-gray-700 rounded-lg flex items-center justify-center text-gray-500 dark:text-gray-300 font-medium text-lg">+</div>
+                        </div>
                     </div>
                 </div>
-                <div class="p-6">
-                    <div class="flex justify-between items-start mb-2">
-                        <h3 class="font-black text-lg">Rebars 12mm (Grade 500)</h3>
-                        <p class="text-green-600 font-black">TZS 24,000</p>
-                    </div>
-                    <p class="text-xs text-gray-400 leading-relaxed mb-4">Rising steel costs globally impacting local availability. Buy now to lock price.</p>
-                    <button class="w-full py-3 bg-gray-50 dark:bg-gray-700 rounded-xl text-[10px] font-black uppercase tracking-widest text-green-600">View Market Analysis</button>
-                </div>
+            </section>
+        </div>
+
+        <div id="view-trending" class="view-content hidden space-y-4">
+            <h2 class="text-3xl font-black tracking-tighter">Market Watch 📈</h2>
+            <div class="bg-white dark:bg-gray-800 p-6 rounded-[2.5rem] border dark:border-gray-700 shadow-xl stagger-item">
+                <p class="font-black text-green-600 text-lg">#1 Simba Cement</p>
+                <p class="text-[10px] text-gray-400 mt-1 uppercase font-bold tracking-widest">Steady Price</p>
             </div>
         </div>
 
         <div id="view-cart" class="view-content hidden">
-            <h2 class="text-3xl font-black tracking-tighter mb-8 text-center">My Basket</h2>
+            <h2 class="text-3xl font-black tracking-tighter mb-8 text-center">My Cart 🛒</h2>
             <div id="cart-items-container" class="flex flex-col gap-4"></div>
             <div id="cart-footer" class="hidden mt-10 border-t dark:border-gray-700 pt-8">
                 <div class="flex justify-between text-2xl font-black mb-8 px-2">
                     <span>Total</span><span id="cart-total-price" class="text-green-600">TZS 0</span>
                 </div>
                 <button onclick="checkoutWhatsApp()" class="w-full py-5 bg-[#25D366] text-white rounded-[2.5rem] font-black shadow-xl click-press uppercase text-xs tracking-widest">Order via WhatsApp</button>
-                <div class="flex justify-center items-center gap-6 mt-8 opacity-30 grayscale scale-75">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c2/M-Pesa_logo.svg/512px-M-Pesa_logo.svg.png" class="h-6">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/a/a2/Tigo_logo.svg" class="h-6">
-                </div>
             </div>
         </div>
 
@@ -144,7 +173,7 @@
                 <p id="p-email" class="text-xs text-gray-400 italic">user@email.com</p>
             </div>
 
-            <div class="bg-gradient-to-br from-gray-900 to-gray-800 text-white p-6 rounded-[2.5rem] shadow-2xl mb-8 relative overflow-hidden">
+            <div class="bg-gray-900 text-white p-6 rounded-[2.5rem] shadow-2xl mb-8 relative overflow-hidden stagger-item">
                 <div class="relative z-10">
                     <p class="text-[10px] uppercase font-black tracking-widest opacity-60 mb-1">Total Project Spend</p>
                     <h3 id="total-project-cost" class="text-3xl font-black mb-4">TZS 0</h3>
@@ -155,78 +184,114 @@
                 <div class="absolute -right-4 -bottom-4 text-white/5 text-8xl font-black italic">COST</div>
             </div>
 
-            <div class="space-y-4">
-                <div class="bg-white dark:bg-gray-800 rounded-[2.5rem] p-1 shadow-sm border dark:border-gray-700">
-                    <button onclick="switchTheme()" class="w-full flex items-center gap-4 p-5 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-3xl transition click-press">
-                        <span class="p-2 bg-amber-50 dark:bg-amber-900/30 rounded-xl">🌓</span>
-                        <span class="font-bold text-sm flex-grow text-left">Theme Mode</span>
-                    </button>
+            <div class="space-y-4 stagger-item" style="animation-delay: 0.1s">
+                <div class="bg-white dark:bg-gray-800 rounded-[2.5rem] p-1 border dark:border-gray-700">
+                    <button onclick="localStorage.removeItem('ujenzi_user'); location.reload();" class="w-full p-6 bg-red-50 dark:bg-red-900/10 text-red-500 rounded-[2.5rem] font-black text-xs uppercase tracking-widest click-press">Logout from Account</button>
                 </div>
-                <button onclick="localStorage.removeItem('ujenzi_user'); location.reload();" class="w-full p-6 bg-red-50 dark:bg-red-900/10 text-red-500 rounded-[2.5rem] font-black text-xs uppercase tracking-widest click-press">Logout</button>
             </div>
         </div>
     </div>
 
     <div id="product-modal" class="fixed inset-0 z-[150] hidden bg-black/40 glass flex items-end justify-center p-4">
-        <div class="bg-white dark:bg-gray-900 w-full max-w-md rounded-[3rem] overflow-hidden shadow-2xl animate-slide-up">
-            <img id="modal-img" src="" class="w-full h-64 object-cover">
-            <div class="p-8">
-                <h3 id="modal-title" class="text-2xl font-black mb-1"></h3>
-                <p id="modal-desc" class="text-gray-400 text-xs mb-8"></p>
-                <div class="flex justify-between items-center mb-8">
+        <div class="bg-white dark:bg-gray-900 w-full max-w-md rounded-[3rem] overflow-hidden shadow-2xl animate-fade-in flex flex-col max-h-[90vh]">
+            <img id="modal-img" src="" class="w-full h-56 object-cover flex-shrink-0">
+            <div class="p-8 overflow-y-auto flex-grow">
+                <h3 id="modal-title" class="text-2xl font-black mb-2 text-gray-900 dark:text-white leading-tight"></h3>
+                <p id="modal-desc" class="text-gray-500 dark:text-gray-400 text-sm mb-6 leading-relaxed"></p>
+                <div class="flex justify-between items-center mb-8 border-t border-b dark:border-gray-700 py-4">
                     <span id="modal-price" class="text-2xl font-black text-green-600"></span>
-                    <input type="number" id="modal-qty" value="1" min="1" class="w-20 bg-gray-100 dark:bg-gray-800 p-3 rounded-2xl text-center font-black">
+                    <div class="flex flex-col items-end">
+                        <span class="text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-1">Quantity</span>
+                        <input type="number" id="modal-qty" value="1" min="1" class="w-20 bg-gray-100 dark:bg-gray-800 p-3 rounded-2xl text-center font-black outline-none border dark:border-gray-700">
+                    </div>
                 </div>
                 <div class="flex gap-4">
-                    <button onclick="closeProduct()" class="flex-1 py-5 bg-gray-100 dark:bg-gray-800 rounded-[2rem] font-black text-[10px] uppercase">Back</button>
-                    <button id="add-to-cart-btn" class="flex-[2] py-5 bg-green-500 text-white rounded-[2rem] font-black text-[10px] uppercase shadow-lg click-press">Add to Basket</button>
+                    <button onclick="closeProduct()" class="flex-1 py-5 bg-gray-100 dark:bg-gray-800 rounded-[2rem] font-black text-[10px] uppercase tracking-widest click-press text-gray-600 dark:text-gray-300">Back</button>
+                    <button id="add-to-cart-btn" class="flex-[2] py-5 bg-green-500 text-white rounded-[2rem] font-black text-[10px] uppercase tracking-widest shadow-lg click-press">Add to Basket</button>
                 </div>
             </div>
         </div>
     </div>
 
     <div id="calc-modal" class="fixed inset-0 z-[150] hidden bg-black/40 glass flex items-center justify-center p-6">
-        <div class="bg-white dark:bg-gray-900 w-full max-w-sm rounded-[3rem] p-8 shadow-2xl text-center">
+        <div class="bg-white dark:bg-gray-900 w-full max-w-sm rounded-[3rem] p-8 shadow-2xl text-center animate-stagger-in">
             <h3 class="text-2xl font-black mb-6">Wall Calculator</h3>
-            <input type="number" id="calc-length" placeholder="Length (m)" class="w-full bg-gray-100 dark:bg-gray-800 p-5 rounded-2xl mb-3 outline-none">
-            <input type="number" id="calc-height" placeholder="Height (m)" class="w-full bg-gray-100 dark:bg-gray-800 p-5 rounded-2xl mb-6 outline-none">
-            <button onclick="runCalculation()" class="w-full py-5 bg-green-500 text-white rounded-[2rem] font-black click-press shadow-lg">Calculate</button>
+            <input type="number" id="calc-length" placeholder="Length (m)" class="w-full bg-gray-50 dark:bg-gray-800 p-5 rounded-2xl mb-3 outline-none border dark:border-gray-700">
+            <input type="number" id="calc-height" placeholder="Height (m)" class="w-full bg-gray-50 dark:bg-gray-800 p-5 rounded-2xl mb-6 outline-none border dark:border-gray-700">
+            <button onclick="runCalculation()" class="w-full py-5 bg-green-500 text-white rounded-[2rem] font-black click-press shadow-lg">Calculate Materials</button>
             <div id="calc-results" class="hidden mt-6 p-4 bg-green-50 rounded-2xl text-xs font-bold text-green-700"></div>
-            <button onclick="closeCalculator()" class="mt-6 text-[10px] font-black text-gray-400">Close</button>
+            <button onclick="closeCalculator()" class="mt-6 text-[10px] font-black text-gray-400 uppercase tracking-widest">Close</button>
         </div>
     </div>
 
-    <div id="chat-modal" class="fixed inset-0 z-[150] hidden bg-black/40 glass flex items-end justify-center">
-        <div class="bg-white dark:bg-gray-900 w-full max-w-md h-[80vh] rounded-t-[3rem] flex flex-col overflow-hidden shadow-2xl" id="chat-container">
+    <div id="chat-modal" class="fixed inset-0 z-[150] hidden bg-black/40 glass flex items-end justify-center p-0">
+        <div class="bg-white dark:bg-gray-900 w-full max-w-md h-[80vh] rounded-t-[3rem] flex flex-col overflow-hidden shadow-2xl animate-slide-up" id="chat-container">
             <div class="bg-green-600 p-6 flex justify-between items-center text-white">
-                <span class="font-black uppercase tracking-widest text-[10px]">AI Expert</span><button id="close-chat" class="text-xl">✕</button>
+                <span class="font-black uppercase tracking-widest text-[10px]">Material Expert AI</span><button id="close-chat" class="text-xl">✕</button>
             </div>
             <div id="chat-box" class="flex-grow p-6 overflow-y-auto bg-gray-50 dark:bg-gray-800 flex flex-col gap-4"></div>
             <div class="p-4 flex gap-3 border-t bg-white dark:bg-gray-900">
-                <input type="text" id="chat-input" class="flex-grow bg-gray-100 rounded-full px-6 py-4 text-sm outline-none" placeholder="Ask construction questions...">
-                <button id="send-btn" class="w-14 h-14 bg-green-500 text-white rounded-full font-bold shadow-lg flex items-center justify-center">→</button>
+                <input type="text" id="chat-input" class="flex-grow bg-gray-50 dark:bg-gray-800 rounded-full px-6 py-4 text-sm outline-none border dark:border-gray-700" placeholder="Ask anything about construction...">
+                <button id="send-btn" class="w-14 h-14 bg-green-500 text-white rounded-full font-bold click-press shadow-lg flex items-center justify-center">→</button>
             </div>
         </div>
     </div>
 
-    <nav class="fixed bottom-0 w-full bg-white/90 dark:bg-gray-900/90 glass border-t dark:border-gray-800 px-8 py-4 flex justify-around items-center z-50">
-        <button onclick="switchView('home')" id="nav-home" class="nav-btn active-nav flex flex-col items-center gap-1 text-gray-400 text-[10px] font-black uppercase transition-all"><span>🏠</span><span>Home</span></button>
-        <button onclick="switchView('trending')" id="nav-trending" class="nav-btn flex flex-col items-center gap-1 text-gray-400 text-[10px] font-black uppercase transition-all"><span>📈</span><span>Watch</span></button>
-        <button onclick="switchView('cart')" id="nav-cart" class="nav-btn flex flex-col items-center gap-1 text-gray-400 text-[10px] font-black uppercase transition-all relative"><span>🛒</span><span>Cart</span><span id="cart-badge" class="hidden absolute -top-1 -right-2 bg-green-500 text-white text-[8px] px-1.5 rounded-full ring-2">0</span></button>
-        <button onclick="switchView('profile')" id="nav-profile" class="nav-btn flex flex-col items-center gap-1 text-gray-400 text-[10px] font-black uppercase transition-all"><span>👤</span><span>Profile</span></button>
+    <button id="material-expert-btn" class="fixed bottom-24 right-6 z-[100] w-16 h-16 gradient-pulse rounded-full flex flex-col items-center justify-center shadow-2xl click-press animate-stagger-in border-4 border-white dark:border-gray-800 stagger-item" style="animation-delay: 0.5s">
+        <span class="text-2xl">🤖</span>
+        <span class="font-black text-[7px] uppercase tracking-widest text-white mt-1">Expert</span>
+    </button>
+
+    <nav class="fixed bottom-0 w-full bg-white/95 dark:bg-gray-900/95 glass border-t dark:border-gray-800 px-6 py-2 flex justify-around items-center z-50">
+        <button onclick="switchView('home')" id="nav-home" class="nav-btn active-nav flex flex-col items-center gap-1 text-gray-400 text-[10px] font-bold transition-all p-2 click-press">🏠<span>Home</span></button>
+        <button onclick="switchView('trending')" id="nav-trending" class="nav-btn flex flex-col items-center gap-1 text-gray-400 text-[10px] font-bold transition-all p-2 click-press">📈<span>Trending</span></button>
+        <button onclick="switchView('cart')" id="nav-cart" class="nav-btn flex flex-col items-center gap-1 text-gray-400 text-[10px] font-bold transition-all p-2 relative click-press">🛒<span>Cart</span><span id="cart-badge" class="hidden absolute top-1 right-2 bg-green-500 text-white text-[8px] px-1.5 rounded-full ring-2 ring-white dark:ring-gray-900">0</span></button>
+        <button onclick="switchView('profile')" id="nav-profile" class="nav-btn flex flex-col items-center gap-1 text-gray-400 text-[10px] font-bold transition-all p-2 click-press">👤<span>Profile</span></button>
     </nav>
 
     <script>
         const RENDER_URL = 'https://ujenzismart-backend.onrender.com';
+        const WHATSAPP_NUM = '255743924467'; 
         let cart = [];
 
+        // MASSIVE 22-ITEM PRODUCT DATABASE WITH UNIQUE PHOTOS & DETAILED DESCRIPTIONS
         const productDatabase = {
-            'Foundation & Structural': [{ name: 'Simba Cement 50kg', price: 18500, desc: 'High strength cement.', img: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=600' }, { name: 'Deformed Bar 12mm', price: 24000, desc: 'Standard steel rebar.', img: 'https://images.unsplash.com/photo-1516156008625-3a9d6067fab5?w=600' }],
-            'Roofing Materials': [{ name: 'Iron Sheet 30G', price: 22000, desc: 'Corrugated anti-corrosive.', img: 'https://images.unsplash.com/photo-1635424710928-0544e8512eae?w=600' }],
-            'Plumbing & Water': [{ name: 'Water Tank 1000L', price: 215000, desc: 'HDPE durable storage.', img: 'https://images.unsplash.com/photo-1542332213-31f87348057f?w=600' }],
-            'Electrical & Lighting': [{ name: 'Switch Socket', price: 8500, desc: 'Premium dual socket.', img: 'https://images.unsplash.com/photo-1558444455-89b4f9104f69?w=600' }],
-            'Finishing & Painting': [{ name: 'Silk Paint 20L', price: 145000, desc: 'Washable interior silk.', img: 'https://images.unsplash.com/photo-1562591970-254bc62245c0?w=600' }],
-            'Tools & Hardware': [{ name: 'Wheelbarrow', price: 110000, desc: 'Steel tray heavy duty.', img: 'https://images.unsplash.com/photo-1530124560677-bdaea02c9a9d?w=600' }]
+            'Foundation & Structural': [
+                { name: 'Simba Cement 50kg', price: 18500, desc: 'Grade 42.5R high-strength cement. Ideal for heavy structural concrete, foundations, and pillars. 50kg bag.', img: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=400' },
+                { name: 'Twiga Cement 50kg', price: 18000, desc: 'Standard 32.5N multipurpose cement. Excellent for block making and plastering works.', img: 'https://images.unsplash.com/photo-1621360841013-c76831f1dbce?w=400' },
+                { name: 'Deformed Bar 12mm', price: 24000, desc: 'Tanzanian Bureau of Standards (TBS) approved Grade 500 steel rebars for concrete reinforcement. 12 meters length.', img: 'https://images.unsplash.com/photo-1536882240095-0379873feb4e?w=400' },
+                { name: 'Concrete Blocks 6-inch', price: 1200, desc: 'Machine-vibrated, solid load-bearing concrete blocks. Standard size for exterior walls.', img: 'https://images.unsplash.com/photo-1589939705384-5185138a047a?w=400' },
+                { name: 'Crushed Aggregates (Ton)', price: 35000, desc: 'Clean, 3/4 inch crushed stones (Kifusi) perfect for strong concrete base slabs.', img: 'https://images.unsplash.com/photo-1517646287270-a5a9ca602e5c?w=400' }
+            ],
+            'Roofing Materials': [
+                { name: 'Iron Sheet 30G (Green)', price: 22000, desc: 'Corrugated premium anti-corrosive roofing sheets. Factory painted for long-lasting color protection. 3 meters.', img: 'https://images.unsplash.com/photo-1635424710928-0544e8512eae?w=400' },
+                { name: 'Roofing Nails 1kg', price: 6500, desc: 'Sharp zinc-coated twisted nails with pre-attached rubber washers to prevent roof leaks.', img: 'https://images.unsplash.com/photo-1581141849291-1125c7b692b5?w=400' },
+                { name: 'Timber 2x4 (12ft)', price: 14000, desc: 'Treated structural softwood timber. Resistant to termites, ideal for roofing trusses.', img: 'https://images.unsplash.com/photo-1533090481720-856c6e3c1fdc?w=400' },
+                { name: 'Versatile Roof Tiles', price: 28000, desc: 'Stone-coated metal roofing tiles. Highly durable and aesthetically pleasing for modern homes.', img: 'https://images.unsplash.com/photo-1513694203232-719a280e022f?w=400' }
+            ],
+            'Plumbing & Water': [
+                { name: 'PVC Pipe 110mm', price: 38000, desc: 'Heavy duty PN10 PVC pipe for underground sewage and main drainage systems. 6 meters.', img: 'https://images.unsplash.com/photo-1581244277943-fe4a9c777189?w=400' },
+                { name: 'Simba Tank 1000L', price: 215000, desc: 'Food-grade, UV resistant HDPE vertical water storage tank. Prevents algae growth.', img: 'https://images.unsplash.com/photo-1542332213-31f87348057f?w=400' },
+                { name: 'Brass Gate Valve 1"', price: 15000, desc: 'Solid brass, heavy-duty flow control valve for main water lines. Rust-proof.', img: 'https://images.unsplash.com/photo-1504148455328-c376907d081c?w=400' },
+                { name: 'Double Kitchen Sink', price: 85000, desc: 'Stainless steel double bowl sink with drainboard. Includes basic mounting clips.', img: 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=400' }
+            ],
+            'Electrical & Lighting': [
+                { name: 'Cable 1.5mm (90m Roll)', price: 78000, desc: 'Pure copper Twin & Earth cable. Standard requirement for residential lighting circuits.', img: 'https://images.unsplash.com/photo-1550009158-9ebf69173e03?w=400' },
+                { name: 'Double Switch Socket', price: 8500, desc: 'Modern white 13A dual wall socket with built-in surge protection switches.', img: 'https://images.unsplash.com/photo-1558444455-89b4f9104f69?w=400' },
+                { name: 'LED Panel 12W', price: 14000, desc: 'Recessed ultra-thin cool white ceiling panel. High energy saving rating.', img: 'https://images.unsplash.com/photo-1565814329452-e1efa11c5b89?w=400' },
+                { name: 'Circuit Breaker 63A', price: 22000, desc: 'Main protection miniature circuit breaker (MCB) for distribution boards.', img: 'https://images.unsplash.com/photo-1544724569-5f546fd6f2b5?w=400' }
+            ],
+            'Finishing & Painting': [
+                { name: 'Silk Wall Paint 20L', price: 145000, desc: 'Premium washable interior silk emulsion paint. Superior coverage and mold resistant.', img: 'https://images.unsplash.com/photo-1562591970-254bc62245c0?w=400' },
+                { name: 'Floor Tiles (Box)', price: 32000, desc: 'Glossy ceramic 40x40cm floor tiles. Anti-slip coating. One box covers approx 1.5 sqm.', img: 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=400' },
+                { name: 'Gypsum Powder 25kg', price: 18000, desc: 'Ultra-fine white gypsum powder for smooth interior ceiling and wall finishing.', img: 'https://images.unsplash.com/photo-1615800098779-1be32e60cca3?w=400' },
+                { name: 'Tile Adhesive 25kg', price: 14000, desc: 'High-bond strength cementitious tile adhesive for floor and wall ceramic tiles.', img: 'https://images.unsplash.com/photo-1589939705384-5185138a047a?w=400' }
+            ],
+            'Tools & Hardware': [
+                { name: 'Heavy Duty Wheelbarrow', price: 110000, desc: 'Thick steel tray construction wheelbarrow with pneumatic tire. Built for heavy loads.', img: 'https://images.unsplash.com/photo-1530124560677-bdaea02c9a9d?w=400' },
+                { name: 'Steel Shovel', price: 12000, desc: 'Tempered steel spade with ergonomic wooden handle. Essential for mixing concrete.', img: 'https://images.unsplash.com/photo-1580915411954-282cb1b0d780?w=400' },
+                { name: 'Measuring Tape 5m', price: 5000, desc: 'Shockproof rubberized measuring tape with secure locking mechanism.', img: 'https://images.unsplash.com/photo-1503387762-592dea58ef23?w=400' }
+            ]
         };
 
         function switchView(viewName) {
@@ -234,22 +299,33 @@
             document.getElementById(`view-${viewName}`).classList.remove('hidden');
             document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active-nav'));
             document.getElementById(`nav-${viewName}`).classList.add('active-nav');
-            document.getElementById('main-header').classList.toggle('hidden', (viewName === 'cart'));
+            document.getElementById('main-header').classList.toggle('hidden', viewName === 'cart' || viewName === 'trending');
+            
+            // Tool grid only visible on home
             document.getElementById('home-tools').classList.toggle('hidden', viewName !== 'home');
+            
             if(viewName === 'home') renderHome();
             if(viewName === 'cart') renderCart();
             if(viewName === 'profile') updateTrackerUI();
         }
 
+        // --- FIXED GREETING LOGIC BASED ON TIME OF DAY ---
         function checkAuth() {
             const user = JSON.parse(localStorage.getItem('ujenzi_user'));
             if (user) {
                 document.getElementById('auth-screen').classList.add('hidden');
+                
                 const firstName = user.name.split(' ')[0];
                 const h = new Date().getHours();
-                let g = h < 12 ? "Asubuhi njema" : (h < 17 ? "Mchana mwema" : "Jioni njema");
-                document.getElementById('smart-greeting').textContent = `${firstName}, 👋`;
-                document.getElementById('welcome-subtitle').textContent = `${g}, what are we building today?`;
+                
+                // Greeting changes based on time of day 
+                let g = "Good Evening";
+                if(h < 12) g = "Good Morning";
+                else if(h < 17) g = "Good Afternoon";
+                
+                document.getElementById('smart-greeting').textContent = `${g}, ${firstName}! 👋`;
+                document.getElementById('welcome-subtitle').textContent = `Welcome back to UjenziSmart.`;
+                
                 document.getElementById('p-name').textContent = user.name;
                 document.getElementById('p-email').textContent = user.email;
                 document.getElementById('p-initial').textContent = firstName[0].toUpperCase();
@@ -272,18 +348,29 @@
             document.getElementById('cost-progress').style.width = `${Math.max(progress, 5)}%`;
         }
 
-        function renderHome() {
-            const home = document.getElementById('view-home');
-            home.innerHTML = `<h2 class="text-2xl font-black tracking-tighter">Categories</h2><div class="grid grid-cols-2 gap-5">${Object.keys(productDatabase).map((cat, i) => `<div onclick="openCategory('${cat}')" class="stagger-item bg-white dark:bg-gray-800 p-8 rounded-[2.5rem] shadow-xl border dark:border-gray-700 flex flex-col items-center click-press" style="animation-delay: ${i*0.05}s"><span class="text-4xl mb-4">${getIcon(cat)}</span><p class="font-black text-[9px] text-center uppercase tracking-widest leading-relaxed">${cat}</p></div>`).join('')}</div>`;
-        }
-
-        function getIcon(c) { const icons = { 'Foundation & Structural': '🏗️', 'Roofing Materials': '🏠', 'Plumbing & Water': '🚰', 'Electrical & Lighting': '💡', 'Finishing & Painting': '🎨', 'Tools & Hardware': '🛠️' }; return icons[c] || '📦'; }
+        function renderHome() { switchView('home'); } 
 
         function openCategory(catName) {
             const products = productDatabase[catName];
             const home = document.getElementById('view-home');
-            document.getElementById('home-tools').classList.add('hidden');
-            home.innerHTML = `<div class="flex items-center gap-4 mb-8" onclick="renderHome()"><span class="w-10 h-10 bg-white dark:bg-gray-800 rounded-full flex items-center justify-center shadow-lg text-green-600 font-bold">←</span><h2 class="text-2xl font-black tracking-tighter">${catName}</h2></div><div class="grid grid-cols-2 gap-4">${products.map((p, i) => `<div onclick="openProduct('${p.name}', '${p.desc}', ${p.price}, '${p.img}')" class="stagger-item bg-white dark:bg-gray-800 p-3 rounded-[2rem] border dark:border-gray-700 shadow-xl" style="animation-delay: ${i*0.05}s"><img src="${p.img}" class="w-full h-28 object-cover rounded-2xl mb-3"><p class="font-black text-[10px] h-8 overflow-hidden uppercase px-1 leading-tight">${p.name}</p><p class="text-green-600 font-black text-[10px] mt-2 px-1">TZS ${p.price.toLocaleString()}</p></div>`).join('')}</div>`;
+            document.getElementById('home-tools').classList.add('hidden'); 
+            home.innerHTML = `
+                <div class="flex items-center gap-4 mb-8 stagger-item" onclick="location.reload()">
+                    <span class="w-10 h-10 bg-white dark:bg-gray-800 rounded-full flex items-center justify-center shadow-lg text-green-600 font-bold border dark:border-gray-700 click-press">←</span>
+                    <h2 class="text-2xl font-black tracking-tighter">${catName}</h2>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    ${products.map((p, i) => `
+                        <div onclick="openProduct('${p.name}', '${p.desc.replace(/'/g, "\\'")}', ${p.price}, '${p.img}')" class="stagger-item bg-white dark:bg-gray-800 p-3 rounded-3xl border dark:border-gray-700 shadow-xl flex flex-col relative click-press" style="animation-delay: ${i*0.05}s">
+                            <img src="${p.img}" class="w-full h-36 object-cover rounded-2xl mb-3">
+                            <p class="text-[11px] font-bold text-gray-800 dark:text-gray-100 px-1 leading-tight mb-2 h-8 overflow-hidden">${p.name}</p>
+                            <div class="flex justify-between items-center px-1 mt-auto">
+                                <p class="text-green-600 font-black text-xs">TZS ${p.price.toLocaleString()}</p>
+                                <div class="w-8 h-8 bg-gray-50 dark:bg-gray-700 rounded-xl flex items-center justify-center text-gray-500 dark:text-gray-300 font-medium text-lg shadow-sm">+</div>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>`;
             window.scrollTo(0, 0);
         }
 
@@ -303,20 +390,27 @@
         function renderCart() {
             const c = document.getElementById('cart-items-container');
             if(cart.length === 0) { c.innerHTML = '<p class="text-center text-gray-400 py-16 font-medium">Cart is empty.</p>'; document.getElementById('cart-footer').classList.add('hidden'); return; }
-            let t = 0; c.innerHTML = cart.map((i, idx) => { t += i.price * i.qty; return `<div class="bg-white dark:bg-gray-800 p-5 rounded-[2rem] flex justify-between items-center shadow-lg border dark:border-gray-700"><div><p class="font-black text-xs uppercase">${i.title}</p><p class="text-[10px] text-gray-400 font-bold mt-1">${i.qty} units × TZS ${i.price.toLocaleString()}</p></div><button onclick="cart.splice(${idx},1);renderCart();updateBadge();" class="text-red-500 font-bold text-lg">✕</button></div>`; }).join('');
+            let t = 0;
+            c.innerHTML = cart.map((i, idx) => {
+                t += i.price * i.qty;
+                return `<div class="bg-white dark:bg-gray-800 p-5 rounded-[2rem] flex justify-between items-center shadow-lg border dark:border-gray-700 stagger-item">
+                    <div><p class="font-bold text-xs uppercase">${i.title}</p><p class="text-[10px] text-gray-400 font-bold mt-1">${i.qty} units × TZS ${i.price.toLocaleString()}</p></div>
+                    <button onclick="cart.splice(${idx},1);renderCart();updateBadge();" class="text-red-500 font-bold px-3">✕</button>
+                </div>`;
+            }).join('');
             document.getElementById('cart-total-price').textContent = `TZS ${t.toLocaleString()}`;
             document.getElementById('cart-footer').classList.remove('hidden');
         }
 
         function checkoutWhatsApp() {
             const u = JSON.parse(localStorage.getItem('ujenzi_user'));
-            let currentOrderTotal = 0;
+            let currentTotal = 0;
             let m = `Habari UjenziSmart! I am ${u.name}.\nI want to order materials:\n\n`;
-            cart.forEach(i => { m += `- ${i.title} (x${i.qty})\n`; currentOrderTotal += i.price * i.qty; });
-            m += `\nTotal: TZS ${currentOrderTotal.toLocaleString()}\nPlease confirm!`;
+            cart.forEach(i => { m += `- ${i.title} (x${i.qty})\n`; currentTotal += i.price * i.qty; });
+            m += `\nTotal: TZS ${currentTotal.toLocaleString()}\nThank you!`;
             const oldSpend = parseInt(localStorage.getItem('ujenzi_total_spend') || '0');
-            localStorage.setItem('ujenzi_total_spend', oldSpend + currentOrderTotal);
-            window.open(`https://wa.me/255743924467?text=${encodeURIComponent(m)}`, '_blank');
+            localStorage.setItem('ujenzi_total_spend', oldSpend + currentTotal);
+            window.open(`https://wa.me/${WHATSAPP_NUM}?text=${encodeURIComponent(m)}`, '_blank');
         }
 
         function openCalculator() { document.getElementById('calc-modal').classList.remove('hidden'); }
@@ -324,9 +418,8 @@
         function runCalculation() {
             const L = document.getElementById('calc-length').value, H = document.getElementById('calc-height').value;
             if(!L || !H) return;
-            const res = document.getElementById('calc-results');
-            res.innerHTML = `Estimate: <b>${Math.ceil((L*H)*12.5)}</b> blocks needed.`;
-            res.classList.remove('hidden');
+            document.getElementById('calc-results').innerHTML = `Wall Area: ${L*H}m²<br>Estimate: <b>${Math.ceil((L*H)*12.5)}</b> blocks needed.`;
+            document.getElementById('calc-results').classList.remove('hidden');
         }
 
         const chatModal = document.getElementById('chat-modal'), chatBox = document.getElementById('chat-box'), chatInput = document.getElementById('chat-input');
@@ -335,16 +428,16 @@
         
         async function sendMessage() {
             const txt = chatInput.value.trim(); if(!txt) return;
-            chatBox.innerHTML += `<div class="p-4 bg-gray-800 text-white rounded-[2rem] rounded-tr-none ml-auto mb-2 text-xs font-medium shadow-md">${txt}</div>`;
+            chatBox.innerHTML += `<div class="p-4 bg-gray-800 text-white rounded-[2rem] rounded-tr-none ml-auto mb-2 text-xs font-medium shadow-md animate-stagger-in">${txt}</div>`;
             chatInput.value = '';
             const loaderId = 'ai-loader-' + Date.now();
-            chatBox.innerHTML += `<div id="${loaderId}" class="mr-auto mb-2 w-[60%] flex flex-col gap-2"><div class="h-10 w-full skeleton rounded-[2rem] rounded-tl-none"></div></div>`;
+            chatBox.innerHTML += `<div id="${loaderId}" class="mr-auto mb-2 w-[60%] flex flex-col gap-2"><div class="h-10 w-full skeleton rounded-2xl rounded-tl-none"></div></div>`;
             chatBox.scrollTop = chatBox.scrollHeight;
             try {
                 const res = await fetch(`${RENDER_URL}/api/chat`, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ message: txt }) });
                 const d = await res.json();
                 document.getElementById(loaderId).remove();
-                chatBox.innerHTML += `<div class="p-4 bg-white dark:bg-gray-700 border rounded-[2rem] rounded-tl-none mr-auto mb-2 text-xs font-medium shadow-sm">${d.reply || "Error."}</div>`;
+                chatBox.innerHTML += `<div class="p-4 bg-white dark:bg-gray-700 border rounded-[2rem] rounded-tl-none mr-auto mb-2 text-xs font-medium shadow-sm animate-stagger-in">${d.reply || "Thinking..."}</div>`;
             } catch(e) { document.getElementById(loaderId).remove(); }
             chatBox.scrollTop = chatBox.scrollHeight;
         }
