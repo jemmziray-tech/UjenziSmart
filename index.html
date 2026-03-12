@@ -101,10 +101,12 @@
         </div>
 
         <div id="view-home" class="view-content flex flex-col gap-8">
+            
             <div class="relative stagger-item" style="animation-delay: 0.1s">
                 <input type="text" id="search-input" onkeyup="handleSearch()" placeholder="Search for cement, tiles, iron sheets..." class="w-full bg-white dark:bg-gray-800 border dark:border-gray-700 rounded-2xl px-12 py-4 shadow-sm outline-none focus:ring-2 focus:ring-green-500 transition-all font-bold text-xs text-gray-700 dark:text-gray-100 placeholder-gray-400">
                 <span class="absolute left-4 top-[14px] text-lg opacity-50">🔍</span>
             </div>
+
             <div id="dynamic-home-content" class="flex flex-col gap-8"></div>
         </div>
 
@@ -204,7 +206,18 @@
                     <div class="flex justify-between text-xs font-bold text-gray-500 mb-2 px-2"><span>Subtotal</span><span id="cart-subtotal">TZS 0</span></div>
                     <div class="flex justify-between text-xs font-bold text-blue-500 mb-4 px-2"><span>Transport</span><span id="cart-transport">TZS 0</span></div>
                     <div class="flex justify-between text-2xl font-black mb-8 px-2"><span>Total</span><span id="cart-total-price" class="text-green-600">TZS 0</span></div>
-                    <button onclick="checkoutWhatsApp()" class="w-full py-5 bg-[#25D366] text-white rounded-[2.5rem] font-black shadow-xl click-press uppercase text-xs tracking-widest flex items-center justify-center gap-2">Order via WhatsApp</button>
+                    
+                    <button onclick="checkoutWhatsApp()" class="w-full py-5 bg-[#25D366] text-white rounded-[2.5rem] font-black shadow-xl click-press uppercase text-xs tracking-widest mb-6">Order via WhatsApp</button>
+                    
+                    <div class="relative bg-gray-50 dark:bg-gray-800 rounded-[2rem] p-5 border border-dashed border-gray-300 dark:border-gray-600 text-center opacity-80">
+                        <div class="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-amber-400 text-amber-900 text-[9px] font-black px-3 py-1 rounded-full uppercase tracking-widest shadow-sm">Coming Soon</div>
+                        <p class="text-xs font-bold text-gray-500 dark:text-gray-400 mb-3 mt-2">Online Mobile Money Payments</p>
+                        <div class="flex justify-center items-center gap-4 grayscale opacity-60">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c2/M-Pesa_logo.svg/512px-M-Pesa_logo.svg.png" class="h-5">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/a/a2/Tigo_logo.svg" class="h-5">
+                            <img src="https://logos-world.net/wp-content/uploads/2020/12/Airtel-Logo.png" class="h-4">
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -251,8 +264,16 @@
             <div id="wishlist-render-area" class="mb-8 hidden"></div>
 
             <div class="space-y-4 stagger-item" style="animation-delay: 0.2s">
-                <div class="bg-white dark:bg-gray-800 rounded-[2.5rem] p-1 border dark:border-gray-700">
-                    <button onclick="localStorage.removeItem('ujenzi_user'); location.reload();" class="w-full p-5 bg-red-50 dark:bg-red-900/10 text-red-500 rounded-[2.5rem] font-black text-[10px] uppercase tracking-widest click-press">Logout from Account</button>
+                <div class="bg-white dark:bg-gray-800 rounded-[2.5rem] p-1 border dark:border-gray-700 shadow-sm">
+                    <button onclick="alert('Online payment service will be available soon.')" class="w-full flex items-center gap-4 p-5 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-[2rem] transition click-press">
+                        <span class="text-xl">💳</span>
+                        <span class="font-bold text-sm flex-grow text-left">Payment Methods</span>
+                        <span class="text-[9px] bg-amber-100 text-amber-700 px-2 py-1 rounded-md font-bold uppercase tracking-widest">Soon</span>
+                    </button>
+                    <button onclick="localStorage.removeItem('ujenzi_user'); location.reload();" class="w-full flex items-center gap-4 p-5 hover:bg-red-50 dark:hover:bg-red-900/10 transition click-press border-t dark:border-gray-700">
+                        <span class="text-xl">🚪</span>
+                        <span class="font-bold text-sm flex-grow text-left text-red-500">Logout from Account</span>
+                    </button>
                 </div>
             </div>
         </div>
@@ -282,7 +303,7 @@
                 <div id="fbt-section" class="mb-5 hidden">
                     <p class="text-[10px] text-gray-400 font-black uppercase tracking-widest mb-2">Frequently Bought Together</p>
                     <div class="flex items-center gap-3 bg-blue-50 dark:bg-blue-900/20 p-3 rounded-2xl border border-blue-100 dark:border-blue-800">
-                        <img id="fbt-img" src="" class="w-12 h-12 rounded-xl object-cover">
+                        <img id="fbt-img" src="" class="w-12 h-12 rounded-xl object-cover border dark:border-gray-700">
                         <div class="flex-grow">
                             <p id="fbt-title" class="text-xs font-bold dark:text-white leading-tight"></p>
                             <p id="fbt-price" class="text-[10px] text-green-500 font-black mt-1"></p>
@@ -353,8 +374,8 @@
     </div>
 
     <button id="material-expert-btn" class="fixed bottom-24 right-6 z-[100] w-16 h-16 gradient-pulse rounded-full flex flex-col items-center justify-center shadow-2xl click-press animate-stagger-in border-4 border-white dark:border-gray-800 stagger-item" style="animation-delay: 0.5s">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-7 h-7 text-white"><path fill-rule="evenodd" d="M9 4.5a.75.75 0 0 1 .721.544l.813 2.846a3.75 3.75 0 0 0 2.576 2.576l2.846.813a.75.75 0 0 1 0 1.442l-2.846.813a3.75 3.75 0 0 0-2.576 2.576l-.813 2.846a.75.75 0 0 1-1.442 0l-.813-2.846a3.75 3.75 0 0 0-2.576-2.576l-2.846-.813a.75.75 0 0 1 0-1.442l2.846-.813A3.75 3.75 0 0 0 7.466 7.89l.813-2.846A.75.75 0 0 1 9 4.5ZM18 1.5a.75.75 0 0 1 .728.568l.258 1.036c.236.94.97 1.674 1.91 1.906l1.036.258a.75.75 0 0 1 0 1.45l-1.037.259a3.003 3.003 0 0 0-1.91 1.906l-.258 1.036a.75.75 0 0 1-1.455 0l-.258-1.036a3.003 3.003 0 0 0-1.91-1.906l-1.036-.259a.75.75 0 0 1 0-1.45l1.036-.258a3.003 3.003 0 0 0 1.91-1.906l.258-1.036A.75.75 0 0 1 18 1.5ZM16.5 15a.75.75 0 0 1 .712.513l.394 1.183c.15.447.5.799.948.948l1.183.395a.75.75 0 0 1 0 1.422l-1.183.395c-.447.15-.799.5-.948.948l-.395 1.183a.75.75 0 0 1-1.422 0l-.395-1.183a1.5 1.5 0 0 0-.948-.948l-1.183-.395a.75.75 0 0 1 0-1.422l1.183-.395c.447-.15.799-.5.948-.948l.395-1.183A.75.75 0 0 1 16.5 15Z" clip-rule="evenodd" /></svg>
-        <span class="font-black text-[6px] uppercase tracking-widest text-white mt-1">Expert</span>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-7 h-7 text-white mb-0.5"><path fill-rule="evenodd" d="M9 4.5a.75.75 0 0 1 .721.544l.813 2.846a3.75 3.75 0 0 0 2.576 2.576l2.846.813a.75.75 0 0 1 0 1.442l-2.846.813a3.75 3.75 0 0 0-2.576 2.576l-.813 2.846a.75.75 0 0 1-1.442 0l-.813-2.846a3.75 3.75 0 0 0-2.576-2.576l-2.846-.813a.75.75 0 0 1 0-1.442l2.846-.813A3.75 3.75 0 0 0 7.466 7.89l.813-2.846A.75.75 0 0 1 9 4.5ZM18 1.5a.75.75 0 0 1 .728.568l.258 1.036c.236.94.97 1.674 1.91 1.906l1.036.258a.75.75 0 0 1 0 1.45l-1.037.259a3.003 3.003 0 0 0-1.91 1.906l-.258 1.036a.75.75 0 0 1-1.455 0l-.258-1.036a3.003 3.003 0 0 0-1.91-1.906l-1.036-.259a.75.75 0 0 1 0-1.45l1.036-.258a3.003 3.003 0 0 0 1.91-1.906l.258-1.036A.75.75 0 0 1 18 1.5ZM16.5 15a.75.75 0 0 1 .712.513l.394 1.183c.15.447.5.799.948.948l1.183.395a.75.75 0 0 1 0 1.422l-1.183.395c-.447.15-.799.5-.948.948l-.395 1.183a.75.75 0 0 1-1.422 0l-.395-1.183a1.5 1.5 0 0 0-.948-.948l-1.183-.395a.75.75 0 0 1 0-1.422l1.183-.395c.447-.15.799-.5.948-.948l.395-1.183A.75.75 0 0 1 16.5 15Z" clip-rule="evenodd" /></svg>
+        <span class="font-black text-[6px] uppercase tracking-widest text-white mt-0.5">Expert</span>
     </button>
 
     <nav class="fixed bottom-0 w-full bg-white/95 dark:bg-gray-900/95 glass border-t dark:border-gray-800 px-6 py-2 flex justify-around items-center z-50">
@@ -422,19 +443,14 @@
             if(viewName === 'profile') { updateTrackerUI(); updateWishlistCounts(); }
         }
 
-        // PERFECTED SMART GREETING LOGIC
+        // --- GREETING LOGIC ---
         function checkAuth() {
             const user = JSON.parse(localStorage.getItem('ujenzi_user'));
             if (user) {
                 document.getElementById('auth-screen').classList.add('hidden');
-                
                 const firstName = user.name.split(' ')[0];
                 const h = new Date().getHours();
-                
-                let g = "Good Evening";
-                if(h < 12) g = "Good Morning";
-                else if(h < 17) g = "Good Afternoon";
-                
+                let g = "Good Evening"; if(h < 12) g = "Good Morning"; else if(h < 17) g = "Good Afternoon";
                 document.getElementById('smart-greeting').textContent = `${g}, ${firstName}! 👋`;
                 document.getElementById('p-name').textContent = user.name;
                 document.getElementById('p-email').textContent = user.email;
@@ -443,7 +459,7 @@
             }
         }
 
-        // FLAWLESS THEME ANIMATION LOGIC
+        // --- FLAWLESS THEME ANIMATION LOGIC ---
         function updateThemeIcon() {
             const isDark = document.documentElement.classList.contains('dark');
             const sun = document.getElementById('icon-sun');
@@ -464,6 +480,7 @@
         }
         document.addEventListener("DOMContentLoaded", updateThemeIcon);
 
+        // --- VIP GAMIFICATION ---
         let isGoldVIP = false;
         function updateTrackerUI() {
             const spend = parseInt(localStorage.getItem('ujenzi_total_spend') || '0');
@@ -491,6 +508,7 @@
             }
         }
 
+        // --- SMART SEARCH ---
         function handleSearch() {
             const query = document.getElementById('search-input').value.toLowerCase();
             const container = document.getElementById('dynamic-home-content');
@@ -510,12 +528,12 @@
                 <div onclick="openProduct('${p.name.replace(/'/g, "\\'")}', '${p.desc.replace(/'/g, "\\'")}', ${p.price}, ${p.wt}, '${p.img}', ${p.rating}, ${p.reviews}, '${p.reviewTxt.replace(/'/g, "\\'")}')" class="stagger-item bg-white dark:bg-gray-800 rounded-3xl p-3 shadow-sm hover:shadow-xl border dark:border-gray-700 flex flex-col relative click-press group transition-all duration-300" style="animation-delay: ${i*0.05}s">
                     <div class="relative overflow-hidden rounded-2xl mb-3">
                         <img src="${p.img}" class="w-full h-36 object-cover group-hover:scale-110 transition-transform duration-500">
-                        <div class="absolute top-2 left-2 bg-white/90 dark:bg-gray-900/90 backdrop-blur-sm px-2 py-1 rounded-lg text-[9px] font-black flex items-center gap-1"><span class="text-amber-400">★</span> ${p.rating}</div>
+                        <div class="absolute top-2 left-2 bg-white/90 dark:bg-gray-900/90 backdrop-blur-sm px-2 py-1 rounded-lg text-[9px] font-black flex items-center gap-1 shadow-sm"><span class="text-amber-400">★</span> ${p.rating}</div>
                     </div>
                     <p class="text-[11px] font-bold text-gray-800 dark:text-gray-100 px-1 leading-tight mb-1 h-8 overflow-hidden group-hover:text-green-600 transition-colors">${p.name}</p>
                     <div class="flex justify-between items-center px-1 mt-auto pb-1">
                         <p class="text-green-500 font-black text-[11px]">TZS ${p.price.toLocaleString()}</p>
-                        <div class="w-7 h-7 bg-gray-50 dark:bg-gray-700 group-hover:bg-green-500 group-hover:text-white transition-colors rounded-xl flex items-center justify-center text-gray-500 font-medium text-lg">+</div>
+                        <div class="w-7 h-7 bg-gray-50 dark:bg-gray-700 group-hover:bg-green-500 group-hover:text-white transition-colors rounded-xl flex items-center justify-center text-gray-500 font-medium text-lg shadow-sm">+</div>
                     </div>
                 </div>`;
         }
@@ -527,7 +545,7 @@
                     <h2 class="text-lg font-bold mb-4 px-1 text-gray-800 dark:text-white">Product Categories</h2>
                     <div class="grid grid-cols-2 gap-4">
                         ${Object.keys(categoryImages).map((cat, i) => `
-                            <div onclick="openCategory('${cat}')" class="stagger-item bg-white dark:bg-gray-800 rounded-3xl p-3 shadow-sm border dark:border-gray-700 flex flex-col click-press transition-all" style="animation-delay: ${i*0.05}s">
+                            <div onclick="openCategory('${cat}')" class="stagger-item bg-white dark:bg-gray-800 rounded-3xl p-3 shadow-sm border dark:border-gray-700 flex flex-col click-press transition-all hover:shadow-md" style="animation-delay: ${i*0.05}s">
                                 <img src="${categoryImages[cat]}" class="w-full h-24 object-cover rounded-2xl mb-3">
                                 <p class="font-bold text-sm px-1 mb-2">${cat}</p>
                                 <button class="w-full py-2 bg-green-50 dark:bg-green-900/30 text-green-600 dark:text-green-400 rounded-xl text-xs font-bold mt-auto">Explore</button>
@@ -570,6 +588,7 @@
             document.getElementById('modal-review-text').textContent = `"${reviewTxt}"`;
             document.getElementById('modal-price').textContent = `TZS ${p.toLocaleString()}`;
             
+            // AMAZON-STYLE FBT LOGIC
             const fbtSection = document.getElementById('fbt-section');
             fbtItem = null;
             if(t.includes('Cement')) fbtItem = productDatabase['Foundation & Structural'].find(x => x.name.includes('Bar'));
@@ -661,6 +680,7 @@
             window.open(`https://wa.me/${WHATSAPP_NUM}?text=${encodeURIComponent(m)}`, '_blank');
         }
 
+        // --- SMART WISHLIST ---
         function saveToPhase() {
             if(!currentModalProduct) return;
             const phase = document.getElementById('phase-selector').value;
@@ -686,6 +706,7 @@
             container.classList.remove('hidden');
         }
 
+        // --- ESTIMATOR ---
         function openCalculator() { document.getElementById('calc-modal').classList.remove('hidden'); }
         function closeCalculator() { document.getElementById('calc-modal').classList.add('hidden'); }
         function runCalculation() {
@@ -708,6 +729,7 @@
             document.getElementById('calc-results').classList.remove('hidden');
         }
 
+        // --- AI CHAT ENGINE ---
         const chatModal = document.getElementById('chat-modal'), chatBox = document.getElementById('chat-box'), chatInput = document.getElementById('chat-input');
         document.getElementById('material-expert-btn').onclick = () => { chatModal.classList.remove('hidden'); };
         document.getElementById('close-chat').onclick = () => { chatModal.classList.add('hidden'); };
@@ -722,7 +744,7 @@
                 const res = await fetch(`${RENDER_URL}/api/chat`, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ message: txt }) });
                 const d = await res.json();
                 document.getElementById(loaderId).remove();
-                chatBox.innerHTML += `<div class="p-5 bg-white dark:bg-gray-700 border dark:border-gray-600 rounded-[2rem] rounded-tl-none mr-auto mb-2 text-sm font-medium shadow-sm leading-relaxed">${d.reply || "Error."}</div>`;
+                chatBox.innerHTML += `<div class="p-5 bg-white dark:bg-gray-700 border dark:border-gray-600 rounded-[2rem] rounded-tl-none mr-auto mb-2 text-sm font-medium shadow-sm leading-relaxed animate-stagger-in">${d.reply || "Error."}</div>`;
             } catch(e) { document.getElementById(loaderId).remove(); }
             chatBox.scrollTop = chatBox.scrollHeight;
         }
@@ -730,6 +752,7 @@
 
         checkAuth();
     </script>
+
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
         import { getAuth, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
