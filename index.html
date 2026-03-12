@@ -3,197 +3,201 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UjenziSmart - Home of Materials</title>
+    <title>UjenziSmart - Premium</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = { darkMode: 'class' }
         if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
             document.documentElement.classList.add('dark');
-        } else {
-            document.documentElement.classList.remove('dark');
         }
     </script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-        body { font-family: 'Inter', sans-serif; }
-        .hide-scrollbar::-webkit-scrollbar { display: none; }
-        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
-        .animate-slide-up { animation: slideUp 0.3s ease-out; }
+        body { font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
+        .active-nav { color: #16a34a !important; transform: scale(1.1); transition: all 0.2s; }
+        .view-content { animation: fadeIn 0.3s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 pb-24 transition-colors duration-300">
 
     <div id="auth-screen" class="fixed inset-0 z-[200] bg-gray-50 dark:bg-gray-900 flex flex-col justify-center px-6 transition-opacity duration-300">
-        <div class="max-w-md mx-auto w-full bg-white dark:bg-gray-800 p-8 rounded-3xl shadow-xl border border-gray-100 dark:border-gray-700">
+        <div class="max-w-md mx-auto w-full bg-white dark:bg-gray-800 p-8 rounded-3xl shadow-xl border dark:border-gray-700">
             <h1 class="text-3xl font-bold text-green-600 mb-2 text-center">UjenziSmart</h1>
-            <p class="text-gray-600 dark:text-gray-400 mb-8 text-center">Sign in to start building.</p>
+            <p class="text-gray-600 dark:text-gray-400 mb-8 text-center">Your construction partner.</p>
             <form id="auth-form" class="flex flex-col gap-4">
-                <input type="email" id="auth-email" required placeholder="Email Address" class="w-full bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-green-500">
-                <input type="password" id="auth-password" required placeholder="Password" class="w-full bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-green-500">
+                <input type="email" id="auth-email" required placeholder="Email" class="w-full bg-gray-50 dark:bg-gray-900 border rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-green-500">
+                <input type="password" id="auth-password" required placeholder="Password" class="w-full bg-gray-50 dark:bg-gray-900 border rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-green-500">
                 <button type="submit" class="w-full py-3 bg-green-500 text-white rounded-xl font-bold shadow-md">Sign In</button>
             </form>
             <div class="relative flex items-center justify-center my-6">
-                <div class="border-t border-gray-200 w-full absolute"></div>
+                <div class="border-t w-full absolute border-gray-200 dark:border-gray-700"></div>
                 <span class="bg-white dark:bg-gray-800 px-3 text-xs text-gray-400 relative z-10">OR</span>
             </div>
-            <button type="button" id="google-signin-btn" class="w-full py-3 bg-white dark:bg-gray-700 text-gray-700 dark:text-white border rounded-xl font-bold flex items-center justify-center gap-3">
+            <button type="button" id="google-signin-btn" class="w-full py-3 bg-white dark:bg-gray-700 text-gray-700 dark:text-white border dark:border-gray-600 rounded-xl font-bold flex items-center justify-center gap-3">
                 <svg viewBox="0 0 24 24" width="20" height="20"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
                 Sign in with Google
             </button>
         </div>
     </div>
 
-    <header class="bg-gradient-to-r from-green-600 to-emerald-700 pt-10 pb-20 px-4 rounded-b-[2.5rem] shadow-lg relative">
+    <header id="main-header" class="bg-gradient-to-r from-green-600 to-emerald-700 pt-10 pb-20 px-4 rounded-b-[2.5rem] shadow-lg relative">
         <div class="flex justify-between items-center mb-6 text-white max-w-7xl mx-auto">
             <div>
                 <h1 id="smart-greeting" class="text-2xl font-bold tracking-tight">Habari! 👋</h1>
-                <p id="welcome-subtitle" class="text-green-100 text-sm mt-1">Ready to build something great?</p>
+                <p id="welcome-subtitle" class="text-green-100 text-sm mt-1">Ready to build today?</p>
             </div>
             <button id="theme-toggle" class="p-2 bg-white/20 rounded-full">🌓</button>
         </div>
     </header>
 
-    <div id="app-content" class="hidden px-4 -mt-10 relative z-10 max-w-7xl mx-auto flex flex-col gap-6 pb-20">
+    <div class="px-4 -mt-10 relative z-10 max-w-7xl mx-auto pb-20">
         
-        <div class="grid grid-cols-2 gap-4">
-            <button onclick="openCalculator()" class="bg-white dark:bg-gray-800 p-4 rounded-2xl shadow-md border border-gray-100 dark:border-gray-700 flex flex-col items-center gap-2">
-                <span class="text-2xl">📐</span>
-                <span class="font-bold text-xs">Calculator</span>
-            </button>
-            <button id="material-expert-btn" class="bg-white dark:bg-gray-800 p-4 rounded-2xl shadow-md border border-gray-100 dark:border-gray-700 flex flex-col items-center gap-2">
-                <span class="text-2xl">🤖</span>
-                <span class="font-bold text-xs">AI Expert</span>
-            </button>
+        <div id="view-home" class="view-content flex flex-col gap-6">
+            <div class="grid grid-cols-2 gap-4">
+                <button onclick="openCalculator()" class="bg-white dark:bg-gray-800 p-4 rounded-2xl shadow-md flex flex-col items-center gap-2 border dark:border-gray-700">
+                    <span class="text-2xl">📐</span><span class="font-bold text-xs">Calculator</span>
+                </button>
+                <button id="material-expert-btn" class="bg-white dark:bg-gray-800 p-4 rounded-2xl shadow-md flex flex-col items-center gap-2 border dark:border-gray-700">
+                    <span class="text-2xl">🤖</span><span class="font-bold text-xs">AI Expert</span>
+                </button>
+            </div>
+
+            <section>
+                <h2 class="text-xl font-bold mb-4 text-gray-800 dark:text-white">Product Categories</h2>
+                <div class="grid grid-cols-2 gap-4">
+                    <div onclick="openProduct('Foundation', 'Items for stable building base.', 0, 'https://images.unsplash.com/photo-1590060417941-2f34888463f1?auto=format&fit=crop&w=300')" class="bg-white dark:bg-gray-800 rounded-2xl p-3 shadow-sm border dark:border-gray-700">
+                        <img src="https://images.unsplash.com/photo-1590060417941-2f34888463f1?auto=format&fit=crop&w=300" class="w-full h-24 object-cover rounded-xl mb-2">
+                        <p class="font-bold text-sm">Foundation</p>
+                    </div>
+                    <div onclick="openProduct('Roofing', 'Durable roofing materials.', 0, 'https://images.unsplash.com/photo-1635424710928-0544e8512eae?auto=format&fit=crop&w=300')" class="bg-white dark:bg-gray-800 rounded-2xl p-3 shadow-sm border dark:border-gray-700">
+                        <img src="https://images.unsplash.com/photo-1635424710928-0544e8512eae?auto=format&fit=crop&w=300" class="w-full h-24 object-cover rounded-xl mb-2">
+                        <p class="font-bold text-sm">Roofing</p>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h2 class="text-xl font-bold mb-4 text-gray-800 dark:text-white">Featured Materials</h2>
+                <div class="grid grid-cols-2 gap-4">
+                    <div onclick="openProduct('Simba Cement', 'Premium 50kg bags.', 18500, 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=300')" class="bg-white dark:bg-gray-800 rounded-2xl p-3 shadow-sm border dark:border-gray-700">
+                        <img src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=300" class="w-full h-32 object-cover rounded-xl mb-2">
+                        <p class="font-bold text-sm">Simba Cement</p>
+                        <p class="text-green-600 font-bold text-xs">TZS 18,500</p>
+                    </div>
+                    <div onclick="openProduct('Iron Sheet', '30G Durable sheets.', 22000, 'https://images.unsplash.com/photo-1516156008625-3a9d6067fab5?auto=format&fit=crop&w=300')" class="bg-white dark:bg-gray-800 rounded-2xl p-3 shadow-sm border dark:border-gray-700">
+                        <img src="https://images.unsplash.com/photo-1516156008625-3a9d6067fab5?auto=format&fit=crop&w=300" class="w-full h-32 object-cover rounded-xl mb-2">
+                        <p class="font-bold text-sm">Iron Sheet</p>
+                        <p class="text-green-600 font-bold text-xs">TZS 22,000</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="mb-10">
+                <h2 class="text-xl font-bold mb-4 text-gray-800 dark:text-white">AI Saved List</h2>
+                <div id="material-list" class="flex flex-col gap-3">
+                    <p class="text-center text-gray-400 text-xs py-6 border-2 border-dashed rounded-2xl">Items you save from AI appear here.</p>
+                </div>
+            </section>
         </div>
 
-        <section>
-            <h2 class="text-xl font-bold mb-4 px-1 text-gray-800 dark:text-white">Product Categories</h2>
-            <div class="grid grid-cols-2 gap-4">
-                <div onclick="openProduct('Foundation', 'Everything you need to start your base.', 0, 'https://images.unsplash.com/photo-1590060417941-2f34888463f1?auto=format&fit=crop&w=300')" class="bg-white dark:bg-gray-800 rounded-2xl p-3 shadow-sm border border-gray-100 dark:border-gray-700">
-                    <img src="https://images.unsplash.com/photo-1590060417941-2f34888463f1?auto=format&fit=crop&w=300" class="w-full h-24 object-cover rounded-xl mb-2">
-                    <p class="font-bold text-sm">Foundation</p>
-                    <button class="text-xs text-green-600 font-bold mt-1">View Details</button>
+        <div id="view-trending" class="view-content hidden">
+            <h2 class="text-2xl font-bold mb-6">Trending 📈</h2>
+            <div class="space-y-4">
+                <div class="bg-white dark:bg-gray-800 p-5 rounded-2xl border dark:border-gray-700">
+                    <p class="font-bold text-green-600">#1 Gypsum Powder</p>
+                    <p class="text-xs text-gray-400">High demand in Dar residential areas.</p>
                 </div>
-                <div onclick="openProduct('Roofing', 'High quality iron sheets and accessories.', 0, 'https://images.unsplash.com/photo-1635424710928-0544e8512eae?auto=format&fit=crop&w=300')" class="bg-white dark:bg-gray-800 rounded-2xl p-3 shadow-sm border border-gray-100 dark:border-gray-700">
-                    <img src="https://images.unsplash.com/photo-1635424710928-0544e8512eae?auto=format&fit=crop&w=300" class="w-full h-24 object-cover rounded-xl mb-2">
-                    <p class="font-bold text-sm">Roofing</p>
-                    <button class="text-xs text-green-600 font-bold mt-1">View Details</button>
+                <div class="bg-white dark:bg-gray-800 p-5 rounded-2xl border dark:border-gray-700">
+                    <p class="font-bold text-green-600">#2 Y12 Rebars</p>
+                    <p class="text-xs text-gray-400">Popular for new multi-story foundations.</p>
                 </div>
             </div>
-        </section>
+        </div>
 
-        <section>
-            <h2 class="text-xl font-bold mb-4 px-1 text-gray-800 dark:text-white">Featured Materials</h2>
-            <div class="grid grid-cols-2 gap-4">
-                <div onclick="openProduct('Simba Cement 50kg', 'Strong cement for all types of construction.', 18500, 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=300')" class="bg-white dark:bg-gray-800 rounded-2xl p-3 shadow-sm border border-gray-100 dark:border-gray-700">
-                    <img src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=300" class="w-full h-32 object-cover rounded-xl mb-3">
-                    <p class="font-bold text-sm leading-tight">Simba Cement 50kg</p>
-                    <p class="text-green-600 font-bold text-xs mt-1">TZS 18,500</p>
+        <div id="view-cart" class="view-content hidden">
+            <h2 class="text-2xl font-bold mb-6">My Cart 🛒</h2>
+            <div id="cart-items-container" class="flex flex-col gap-4"></div>
+            <div id="cart-footer" class="hidden mt-8 border-t dark:border-gray-700 pt-6">
+                <div class="flex justify-between text-xl font-bold mb-6">
+                    <span>Total:</span><span id="cart-total-price">TZS 0</span>
                 </div>
-                <div onclick="openProduct('Iron Sheet 30G', 'Durable 30G iron sheets. Available in multiple colors.', 22000, 'https://images.unsplash.com/photo-1516156008625-3a9d6067fab5?auto=format&fit=crop&w=300')" class="bg-white dark:bg-gray-800 rounded-2xl p-3 shadow-sm border border-gray-100 dark:border-gray-700">
-                    <img src="https://images.unsplash.com/photo-1516156008625-3a9d6067fab5?auto=format&fit=crop&w=300" class="w-full h-32 object-cover rounded-xl mb-3">
-                    <p class="font-bold text-sm leading-tight">Iron Sheet 30G</p>
-                    <p class="text-green-600 font-bold text-xs mt-1">TZS 22,000</p>
-                </div>
+                <button onclick="alert('Order received!')" class="w-full py-4 bg-green-500 text-white rounded-2xl font-bold">Checkout</button>
             </div>
-        </section>
+        </div>
 
-        <section class="mb-10">
-            <h2 class="text-xl font-bold mb-4 px-1 text-gray-800 dark:text-white">AI Saved List</h2>
-            <div id="material-list" class="flex flex-col gap-3">
-                <p class="text-center text-gray-400 text-sm py-6 border-2 border-dashed rounded-2xl">Ask AI to save items here.</p>
-            </div>
-        </section>
     </div>
 
     <div id="product-modal" class="fixed inset-0 z-[150] hidden bg-black/60 backdrop-blur-sm flex items-end sm:items-center justify-center p-4">
-        <div class="bg-white dark:bg-gray-900 w-full max-w-md rounded-3xl overflow-hidden animate-slide-up shadow-2xl">
+        <div class="bg-white dark:bg-gray-900 w-full max-w-md rounded-3xl overflow-hidden shadow-2xl">
             <img id="modal-img" src="" class="w-full h-56 object-cover">
             <div class="p-6">
-                <h3 id="modal-title" class="text-2xl font-bold mb-2"></h3>
+                <h3 id="modal-title" class="text-2xl font-bold mb-1"></h3>
                 <p id="modal-desc" class="text-gray-500 text-sm mb-6"></p>
                 <div class="flex justify-between items-center mb-6">
                     <span id="modal-price" class="text-2xl font-black text-green-600"></span>
-                    <div class="flex items-center gap-4 bg-gray-100 dark:bg-gray-800 px-4 py-2 rounded-xl">
-                        <button onclick="updateQty(-1)" class="font-bold">-</button>
-                        <span id="modal-qty" class="font-bold">1</span>
-                        <button onclick="updateQty(1)" class="font-bold">+</button>
-                    </div>
+                    <input type="number" id="modal-qty" value="1" min="1" class="w-16 bg-gray-100 dark:bg-gray-800 p-2 rounded-lg text-center font-bold">
                 </div>
                 <div class="flex gap-3">
-                    <button onclick="closeProduct()" class="flex-1 py-4 bg-gray-100 dark:bg-gray-800 rounded-2xl font-bold">Close</button>
-                    <button id="add-to-cart-btn" class="flex-[2] py-4 bg-green-500 text-white rounded-2xl font-bold shadow-lg shadow-green-500/30">Add to Cart</button>
+                    <button onclick="closeProduct()" class="flex-1 py-4 bg-gray-100 dark:bg-gray-800 rounded-2xl font-bold text-sm">Cancel</button>
+                    <button id="add-to-cart-btn" class="flex-[2] py-4 bg-green-500 text-white rounded-2xl font-bold text-sm">Add to Cart</button>
                 </div>
             </div>
         </div>
     </div>
 
     <div id="calc-modal" class="fixed inset-0 z-[150] hidden bg-black/60 flex items-center justify-center p-4">
-        <div class="bg-white dark:bg-gray-900 w-full max-w-md rounded-3xl p-6 shadow-2xl">
-            <div class="flex justify-between items-center mb-6">
-                <h3 class="text-xl font-bold">Material Calculator</h3>
-                <button onclick="closeCalculator()" class="text-xl">✕</button>
-            </div>
-            <div class="space-y-4">
-                <div>
-                    <label class="text-xs font-bold text-gray-400">Length (Meters)</label>
-                    <input type="number" id="calc-length" class="w-full bg-gray-100 dark:bg-gray-800 p-3 rounded-xl outline-none border-2 border-transparent focus:border-green-500">
-                </div>
-                <div>
-                    <label class="text-xs font-bold text-gray-400">Height (Meters)</label>
-                    <input type="number" id="calc-height" class="w-full bg-gray-100 dark:bg-gray-800 p-3 rounded-xl outline-none border-2 border-transparent focus:border-green-500">
-                </div>
-                <button onclick="runCalculation()" class="w-full py-4 bg-green-500 text-white rounded-2xl font-bold mt-2">Calculate Now</button>
-                <div id="calc-results" class="hidden p-4 bg-green-50 dark:bg-green-900/20 rounded-2xl text-sm leading-relaxed text-green-700 dark:text-green-300"></div>
-            </div>
+        <div class="bg-white dark:bg-gray-900 w-full max-w-sm rounded-3xl p-6 shadow-2xl">
+            <h3 class="text-xl font-bold mb-4">Calculator 📐</h3>
+            <input type="number" id="calc-length" placeholder="Length (m)" class="w-full bg-gray-100 dark:bg-gray-800 p-3 rounded-xl mb-3 outline-none border dark:border-gray-700">
+            <input type="number" id="calc-height" placeholder="Height (m)" class="w-full bg-gray-100 dark:bg-gray-800 p-3 rounded-xl mb-4 outline-none border dark:border-gray-700">
+            <button onclick="runCalculation()" class="w-full py-4 bg-green-500 text-white rounded-2xl font-bold">Calculate</button>
+            <div id="calc-results" class="hidden mt-4 p-3 bg-green-50 dark:bg-green-900/20 text-xs rounded-xl text-green-700 dark:text-green-300"></div>
+            <button onclick="closeCalculator()" class="w-full text-[10px] text-gray-400 mt-4">Close</button>
         </div>
     </div>
 
     <div id="chat-modal" class="fixed inset-0 z-[150] hidden bg-black/60 flex items-end justify-center">
-        <div class="bg-white dark:bg-gray-900 w-full max-w-md h-[80vh] rounded-t-3xl flex flex-col overflow-hidden transition-transform translate-y-full" id="chat-container">
+        <div class="bg-white dark:bg-gray-900 w-full max-w-md h-[75vh] rounded-t-3xl flex flex-col overflow-hidden transition-transform translate-y-full" id="chat-container">
             <div class="bg-green-600 p-4 flex justify-between items-center text-white">
-                <h3 class="font-bold">Expert AI</h3>
-                <button id="close-chat">✕</button>
+                <span class="font-bold">Expert AI</span><button id="close-chat">✕</button>
             </div>
             <div id="chat-box" class="flex-grow p-4 overflow-y-auto bg-gray-50 dark:bg-gray-800 flex flex-col gap-3"></div>
             <div class="p-3 flex gap-2 border-t dark:border-gray-800">
-                <input type="text" id="chat-input" class="flex-grow bg-gray-100 dark:bg-gray-700 rounded-full px-4 py-2 outline-none" placeholder="Ask construction questions...">
-                <button id="send-btn" class="bg-green-500 text-white px-5 rounded-full font-bold">→</button>
+                <input type="text" id="chat-input" class="flex-grow bg-gray-100 dark:bg-gray-700 rounded-full px-4 py-2 text-sm outline-none" placeholder="Ask AI...">
+                <button id="send-btn" class="bg-green-500 text-white px-5 rounded-full">→</button>
             </div>
         </div>
     </div>
 
     <nav class="fixed bottom-0 w-full bg-white dark:bg-gray-900 border-t px-6 py-3 flex justify-around items-center z-50">
-        <button class="flex flex-col items-center gap-1 text-green-600 text-[10px] font-bold">🏠<span>Home</span></button>
-        <button class="flex flex-col items-center gap-1 text-gray-400 text-[10px] font-bold">📈<span>Trending</span></button>
-        <button class="flex flex-col items-center gap-1 text-gray-400 text-[10px] font-bold relative">
-            🛒<span>Cart</span>
-            <span id="cart-count" class="absolute -top-1 -right-1 bg-red-500 text-white text-[8px] px-1.5 rounded-full hidden">0</span>
-        </button>
+        <button onclick="switchView('home')" id="nav-home" class="nav-btn active-nav flex flex-col items-center gap-1 text-gray-400 text-[10px] font-bold">🏠<span>Home</span></button>
+        <button onclick="switchView('trending')" id="nav-trending" class="nav-btn flex flex-col items-center gap-1 text-gray-400 text-[10px] font-bold">📈<span>Trending</span></button>
+        <button onclick="switchView('cart')" id="nav-cart" class="nav-btn flex flex-col items-center gap-1 text-gray-400 text-[10px] font-bold relative">🛒<span>Cart</span><span id="cart-badge" class="hidden absolute -top-1 right-0 bg-red-500 text-white text-[8px] px-1 rounded-full">0</span></button>
         <button onclick="localStorage.removeItem('ujenzi_user'); location.reload();" class="flex flex-col items-center gap-1 text-gray-400 text-[10px] font-bold">👤<span>Logout</span></button>
     </nav>
 
     <script>
         const RENDER_URL = 'https://ujenzismart-backend.onrender.com';
-        let currentQty = 1;
         let cart = [];
 
-        // 1. AUTH LOGIC
+        function switchView(viewName) {
+            document.querySelectorAll('.view-content').forEach(v => v.classList.add('hidden'));
+            document.getElementById(`view-${viewName}`).classList.remove('hidden');
+            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active-nav'));
+            document.getElementById(`nav-${viewName}`).classList.add('active-nav');
+            document.getElementById('main-header').classList.toggle('hidden', viewName !== 'home');
+            if(viewName === 'cart') renderCart();
+        }
+
         function checkAuth() {
             const user = JSON.parse(localStorage.getItem('ujenzi_user'));
             if (user) {
                 document.getElementById('auth-screen').classList.add('hidden');
                 document.getElementById('app-content').classList.remove('hidden');
-                
-                const name = user.name.split(' ')[0];
                 const hour = new Date().getHours();
-                let greet = "Good Evening";
-                if(hour < 12) greet = "Good Morning";
-                else if(hour < 17) greet = "Good Afternoon";
-                
-                document.getElementById('smart-greeting').textContent = `${greet}, ${name}! 👋`;
-                document.getElementById('welcome-subtitle').textContent = `Welcome back to UjenziSmart.`;
+                let greet = hour < 12 ? "Good Morning" : (hour < 17 ? "Good Afternoon" : "Good Evening");
+                document.getElementById('smart-greeting').textContent = `${greet}, ${user.name.split(' ')[0]}! 👋`;
                 renderMaterials();
             }
         }
@@ -211,67 +215,64 @@
             } catch(e) { alert(e.message); }
         };
 
-        // 2. PRODUCT MODAL LOGIC
         function openProduct(title, desc, price, img) {
-            currentQty = 1;
-            document.getElementById('modal-qty').textContent = currentQty;
             document.getElementById('modal-img').src = img;
             document.getElementById('modal-title').textContent = title;
             document.getElementById('modal-desc').textContent = desc;
-            document.getElementById('modal-price').textContent = price > 0 ? `TZS ${price.toLocaleString()}` : "Contact for Price";
+            document.getElementById('modal-price').textContent = price > 0 ? `TZS ${price.toLocaleString()}` : "Inquire Price";
             document.getElementById('product-modal').classList.remove('hidden');
-            
             document.getElementById('add-to-cart-btn').onclick = () => {
-                cart.push({ title, price, qty: currentQty });
-                document.getElementById('cart-count').textContent = cart.length;
-                document.getElementById('cart-count').classList.remove('hidden');
+                const qty = parseInt(document.getElementById('modal-qty').value);
+                cart.push({ title, price, qty });
+                updateCartBadge();
                 closeProduct();
-                alert(`${title} added to cart!`);
             };
         }
         function closeProduct() { document.getElementById('product-modal').classList.add('hidden'); }
-        function updateQty(val) {
-            currentQty = Math.max(1, currentQty + val);
-            document.getElementById('modal-qty').textContent = currentQty;
+        function updateCartBadge() {
+            const b = document.getElementById('cart-badge');
+            b.textContent = cart.length; b.classList.toggle('hidden', cart.length === 0);
+        }
+        function renderCart() {
+            const container = document.getElementById('cart-items-container');
+            if(cart.length === 0) {
+                container.innerHTML = '<p class="text-center text-gray-400 py-10">Cart is empty.</p>';
+                document.getElementById('cart-footer').classList.add('hidden');
+                return;
+            }
+            let total = 0;
+            container.innerHTML = cart.map((item, idx) => {
+                total += item.price * item.qty;
+                return `<div class="bg-white dark:bg-gray-800 p-4 rounded-xl flex justify-between shadow-sm"><div><p class="font-bold text-sm">${item.title}</p><p class="text-xs text-gray-400">${item.qty} x TZS ${item.price.toLocaleString()}</p></div><button onclick="cart.splice(${idx},1);renderCart();updateCartBadge();" class="text-red-500">✕</button></div>`;
+            }).join('');
+            document.getElementById('cart-total-price').textContent = `TZS ${total.toLocaleString()}`;
+            document.getElementById('cart-footer').classList.remove('hidden');
         }
 
-        // 3. CALCULATOR LOGIC
         function openCalculator() { document.getElementById('calc-modal').classList.remove('hidden'); }
         function closeCalculator() { document.getElementById('calc-modal').classList.add('hidden'); }
         function runCalculation() {
-            const L = parseFloat(document.getElementById('calc-length').value);
-            const H = parseFloat(document.getElementById('calc-height').value);
-            if(!L || !H) return alert("Please enter values");
-            
-            const area = L * H;
-            const blocks = Math.ceil(area * 12.5);
-            const cement = Math.ceil(blocks / 30);
-            
+            const L = document.getElementById('calc-length').value, H = document.getElementById('calc-height').value;
+            if(!L || !H) return;
             const res = document.getElementById('calc-results');
-            res.innerHTML = `<strong>Results:</strong><br>Area: ${area}sqm<br>Blocks needed: ~${blocks}<br>Cement needed: ~${cement} bags (1:4 ratio)`;
+            res.innerHTML = `Estimate: <b>${Math.ceil((L*H)*12.5)}</b> blocks needed.`;
             res.classList.remove('hidden');
         }
 
-        // 4. AI CHAT LOGIC
         const chatModal = document.getElementById('chat-modal'), chatContainer = document.getElementById('chat-container'), chatBox = document.getElementById('chat-box'), chatInput = document.getElementById('chat-input');
         document.getElementById('material-expert-btn').onclick = () => { chatModal.classList.remove('hidden'); setTimeout(() => chatContainer.classList.remove('translate-y-full'), 10); };
         document.getElementById('close-chat').onclick = () => { chatContainer.classList.add('translate-y-full'); setTimeout(() => chatModal.classList.add('hidden'), 300); };
-
+        
         async function sendMessage() {
-            const txt = chatInput.value.trim();
-            if(!txt) return;
+            const txt = chatInput.value.trim(); if(!txt) return;
             chatBox.innerHTML += `<div class="p-3 bg-gray-800 text-white rounded-2xl ml-auto mb-2 max-w-[80%] text-sm">${txt}</div>`;
             chatInput.value = '';
             try {
                 const res = await fetch(`${RENDER_URL}/api/chat`, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ message: txt }) });
                 const data = await res.json();
-                const reply = data.reply || "Sorry, error.";
-                chatBox.innerHTML += `
-                    <div class="flex flex-col gap-1 mr-auto mb-2 max-w-[80%] animate-fade-in">
-                        <div class="p-3 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-100 border dark:border-gray-600 rounded-2xl shadow-sm text-sm">${reply}</div>
-                        <button onclick="saveMaterial('${reply.substring(0, 45).replace(/'/g, "\\'")}...')" class="text-[10px] text-green-600 font-bold ml-2 text-left">+ Save Material</button>
-                    </div>`;
-            } catch(e) { chatBox.innerHTML += `<div class="p-3 bg-red-100 text-red-800 rounded-2xl mr-auto mb-2 text-xs">Offline.</div>`; }
+                const r = data.reply || "Error.";
+                chatBox.innerHTML += `<div class="flex flex-col gap-1 mr-auto mb-2 max-w-[80%]"><div class="p-3 bg-white dark:bg-gray-700 border rounded-2xl shadow-sm text-sm">${r}</div><button onclick="saveMaterial('${r.substring(0,30).replace(/'/g,"\\'")}...')" class="text-[9px] text-green-600 font-bold ml-2">+ Save</button></div>`;
+            } catch(e) { chatBox.innerHTML += `<div class="text-center text-red-500 text-xs">Offline.</div>`; }
             chatBox.scrollTop = chatBox.scrollHeight;
         }
         document.getElementById('send-btn').onclick = sendMessage;
@@ -282,29 +283,12 @@
             localStorage.setItem('ujenzi_materials', JSON.stringify(list));
             renderMaterials();
         }
-
         function renderMaterials() {
-            const container = document.getElementById('material-list');
+            const c = document.getElementById('material-list');
             const list = JSON.parse(localStorage.getItem('ujenzi_materials') || '[]');
             if(list.length === 0) return;
-            container.innerHTML = list.map(item => `
-                <div class="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 flex justify-between items-center">
-                    <span class="text-gray-700 dark:text-gray-200 text-xs font-medium">${item.text}</span>
-                    <button onclick="deleteMaterial(${item.id})" class="text-red-400 p-2 font-bold">✕</button>
-                </div>
-            `).join('');
+            c.innerHTML = list.map(i => `<div class="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm flex justify-between items-center"><span class="text-xs font-medium">${i.text}</span><button onclick="let l=JSON.parse(localStorage.getItem('ujenzi_materials'));l=l.filter(x=>x.id!==${i.id});localStorage.setItem('ujenzi_materials',JSON.stringify(l));renderMaterials();" class="text-red-400">✕</button></div>`).join('');
         }
-
-        function deleteMaterial(id) {
-            let list = JSON.parse(localStorage.getItem('ujenzi_materials') || '[]');
-            list = list.filter(i => i.id !== id);
-            localStorage.setItem('ujenzi_materials', JSON.stringify(list));
-            renderMaterials();
-        }
-
-        document.getElementById('theme-toggle').onclick = () => {
-            document.documentElement.classList.toggle('dark');
-        };
     </script>
 
     <script type="module">
@@ -319,7 +303,7 @@
                 const res = await signInWithPopup(auth, provider);
                 localStorage.setItem('ujenzi_user', JSON.stringify({ name: res.user.displayName, email: res.user.email }));
                 location.reload();
-            } catch (e) { alert("Failed"); }
+            } catch (e) { alert("Login failed."); }
         };
     </script>
 </body>
