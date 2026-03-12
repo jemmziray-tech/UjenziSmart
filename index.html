@@ -22,6 +22,10 @@
         .pb-safe { padding-bottom: env(safe-area-inset-bottom, 20px); }
         .hide-scrollbar::-webkit-scrollbar { display: none; }
         .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        /* Custom animation for smooth page transitions */
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-fade-in { animation: fadeIn 0.3s ease-out forwards; }
     </style>
 </head>
 <body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 pb-24 transition-colors duration-300">
@@ -68,7 +72,7 @@
         </div>
     </div>
 
-    <div id="app-content" class="hidden">
+    <div id="app-content" class="hidden animate-fade-in">
         
         <div class="px-4 -mt-10 relative z-10 max-w-7xl mx-auto">
             <div class="grid grid-cols-2 gap-4">
@@ -137,6 +141,67 @@
             </div>
         </div>
     </div> 
+
+    <div id="trending-view" class="hidden px-4 max-w-7xl mx-auto pt-6 pb-24 animate-fade-in">
+        <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-6">Market Insights 📈</h2>
+        
+        <div class="bg-gradient-to-br from-blue-600 to-indigo-800 rounded-3xl p-6 text-white shadow-lg mb-8 relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-32 h-32 bg-white opacity-10 rounded-full -mr-10 -mt-10 blur-2xl"></div>
+            <p class="text-blue-100 text-sm font-medium mb-1">Highest Demand This Week</p>
+            <h3 class="text-2xl font-bold mb-4">Corrugated Iron Sheets</h3>
+            <div class="flex items-center gap-2 bg-white/20 w-max px-3 py-1.5 rounded-full backdrop-blur-sm text-sm">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+                <span>Demand up 18%</span>
+            </div>
+        </div>
+
+        <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-4">Popular Projects</h3>
+        <div class="grid grid-cols-1 gap-4">
+            <div class="bg-white dark:bg-gray-800 p-4 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 flex gap-4 items-center">
+                <div class="w-16 h-16 bg-gray-200 dark:bg-gray-700 rounded-xl overflow-hidden shrink-0"><img src="https://picsum.photos/seed/block/100/100" class="w-full h-full object-cover"></div>
+                <div>
+                    <h4 class="font-bold text-gray-900 dark:text-white">Standard 3-Bedroom House</h4>
+                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">1,200 builders viewing material lists</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="profile-view" class="hidden px-4 max-w-7xl mx-auto pt-6 pb-24 animate-fade-in">
+        <div class="flex items-center gap-4 mb-8">
+            <div class="w-16 h-16 bg-gradient-to-tr from-green-500 to-emerald-400 rounded-full flex items-center justify-center text-white text-2xl font-bold shadow-lg border-2 border-white dark:border-gray-800">C</div>
+            <div>
+                <h2 class="text-2xl font-bold text-gray-900 dark:text-white leading-tight">Chesco</h2>
+                <p class="text-sm text-green-600 dark:text-green-400 font-medium flex items-center gap-1 mt-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" class="text-yellow-400"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                    Pro Builder Level
+                </p>
+            </div>
+        </div>
+
+        <div class="bg-white dark:bg-gray-800 rounded-3xl p-5 shadow-sm border border-gray-100 dark:border-gray-700 mb-6 flex justify-between items-center">
+            <div>
+                <p class="text-sm text-gray-500 dark:text-gray-400">Ujenzi Rewards</p>
+                <h3 class="text-xl font-bold text-gray-900 dark:text-white">2,450 <span class="text-sm font-normal text-gray-500">pts</span></h3>
+            </div>
+            <button class="px-4 py-2 bg-green-50 dark:bg-green-900/30 text-green-600 dark:text-green-400 text-sm font-bold rounded-xl hover:bg-green-100 transition-colors">Redeem</button>
+        </div>
+
+        <div class="bg-white dark:bg-gray-800 rounded-3xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
+            <button class="w-full flex items-center justify-between p-4 border-b border-gray-50 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors">
+                <div class="flex items-center gap-3"><span class="text-xl">📦</span><span class="font-medium text-gray-800 dark:text-gray-200">Active Deliveries</span></div>
+                <span class="text-gray-400">→</span>
+            </button>
+            <button class="w-full flex items-center justify-between p-4 border-b border-gray-50 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors">
+                <div class="flex items-center gap-3"><span class="text-xl">🧾</span><span class="font-medium text-gray-800 dark:text-gray-200">Order History</span></div>
+                <span class="text-gray-400">→</span>
+            </button>
+            <button class="w-full flex items-center justify-between p-4 hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors">
+                <div class="flex items-center gap-3"><span class="text-xl">⚙️</span><span class="font-medium text-gray-800 dark:text-gray-200">Settings</span></div>
+                <span class="text-gray-400">→</span>
+            </button>
+        </div>
+    </div>
 
     <div id="chat-modal" class="fixed inset-0 z-[100] hidden bg-black/60 backdrop-blur-sm flex items-end sm:items-center justify-center transition-opacity">
         <div class="bg-white dark:bg-gray-900 w-full sm:max-w-md h-[85vh] sm:h-[600px] rounded-t-3xl sm:rounded-3xl shadow-2xl flex flex-col overflow-hidden transform transition-transform translate-y-full" id="chat-container">
@@ -212,14 +277,22 @@
 
     <nav class="fixed bottom-0 w-full bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 px-6 py-3 flex justify-between items-center z-50 pb-safe transition-colors duration-300">
         <div class="max-w-md mx-auto w-full flex justify-between items-center">
-            <button class="flex flex-col items-center gap-1">
+            <button id="nav-home-btn" class="flex flex-col items-center gap-1">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-green-600 dark:text-green-500"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
                 <span class="text-[10px] font-medium text-green-600 dark:text-green-500">Home</span>
+            </button>
+            <button id="nav-trending-btn" class="flex flex-col items-center gap-1">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-gray-400 dark:text-gray-500"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+                <span class="text-[10px] font-medium text-gray-500">Trending</span>
             </button>
             <button id="open-cart-btn" class="flex flex-col items-center gap-1 relative">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-gray-400 dark:text-gray-500"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
                 <span class="text-[10px] font-medium text-gray-500">Cart</span>
                 <span id="cart-badge" class="absolute -top-1 right-2 flex items-center justify-center h-4 w-4 rounded-full bg-red-500 text-white text-[9px] font-bold">0</span>
+            </button>
+            <button id="nav-profile-btn" class="flex flex-col items-center gap-1">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-gray-400 dark:text-gray-500"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                <span class="text-[10px] font-medium text-gray-500">Profile</span>
             </button>
         </div>
     </nav>
@@ -440,6 +513,70 @@
 
         document.getElementById('send-btn').addEventListener('click', sendMessage);
         chatInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') sendMessage(); });
+
+        // 5. BOTTOM NAVIGATION ROUTING LOGIC
+        const viewHome = document.getElementById('app-content');
+        const viewTrending = document.getElementById('trending-view');
+        const viewProfile = document.getElementById('profile-view');
+        const header = document.querySelector('header'); // We hide the header on Profile/Trending pages
+
+        const navHomeBtn = document.getElementById('nav-home-btn');
+        const navTrendingBtn = document.getElementById('nav-trending-btn');
+        const navProfileBtn = document.getElementById('nav-profile-btn');
+
+        // Function to reset all icons to gray
+        function resetNavIcons() {
+            const buttons = [navHomeBtn, navTrendingBtn, navProfileBtn]; // Excludes cart button
+            buttons.forEach(btn => {
+                const svg = btn.querySelector('svg');
+                const span = btn.querySelector('span');
+                svg.classList.replace('text-green-600', 'text-gray-400');
+                svg.classList.replace('dark:text-green-500', 'dark:text-gray-500');
+                span.classList.replace('text-green-600', 'text-gray-500');
+                span.classList.replace('dark:text-green-500', 'text-gray-500');
+            });
+        }
+
+        // Function to set active icon to green
+        function setActiveIcon(btn) {
+            const svg = btn.querySelector('svg');
+            const span = btn.querySelector('span');
+            svg.classList.replace('text-gray-400', 'text-green-600');
+            svg.classList.replace('dark:text-gray-500', 'dark:text-green-500');
+            span.classList.replace('text-gray-500', 'text-green-600');
+            span.classList.replace('text-gray-500', 'dark:text-green-500');
+        }
+
+        // Event Listeners for clicks
+        navHomeBtn.addEventListener('click', () => {
+            viewHome.classList.remove('hidden');
+            header.classList.remove('hidden');
+            viewTrending.classList.add('hidden');
+            viewProfile.classList.add('hidden');
+            resetNavIcons();
+            setActiveIcon(navHomeBtn);
+            window.scrollTo(0,0);
+        });
+
+        navTrendingBtn.addEventListener('click', () => {
+            viewTrending.classList.remove('hidden');
+            viewHome.classList.add('hidden');
+            header.classList.add('hidden'); // Hide the big green header for a cleaner look
+            viewProfile.classList.add('hidden');
+            resetNavIcons();
+            setActiveIcon(navTrendingBtn);
+            window.scrollTo(0,0);
+        });
+
+        navProfileBtn.addEventListener('click', () => {
+            viewProfile.classList.remove('hidden');
+            viewHome.classList.add('hidden');
+            header.classList.add('hidden');
+            viewTrending.classList.add('hidden');
+            resetNavIcons();
+            setActiveIcon(navProfileBtn);
+            window.scrollTo(0,0);
+        });
     </script>
 </body>
 </html>
