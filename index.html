@@ -78,7 +78,7 @@
                 <p id="welcome-subtitle" class="text-green-50 text-xs font-medium opacity-90">Welcome back to UjenziSmart.</p>
             </div>
             
-            <button id="theme-toggle" class="w-12 h-12 bg-white/20 rounded-full glass flex items-center justify-center transition-all active:scale-90 click-press shadow-sm relative overflow-hidden">
+            <button id="theme-toggle" onclick="switchTheme()" class="w-12 h-12 bg-white/20 rounded-full glass flex items-center justify-center transition-all active:scale-90 click-press shadow-sm relative overflow-hidden">
                 <div id="theme-icon" class="w-[24px] h-[24px] rounded-full border-2 border-white/60 transition-transform duration-500 shadow-inner" style="background: linear-gradient(135deg, #4c1d95 50%, #fcd34d 50%);"></div>
             </button>
         </div>
@@ -448,17 +448,14 @@
             if(viewName === 'profile') { updateTrackerUI(); updateWishlistCounts(); }
         }
 
+        // --- GREETING LOGIC ---
         function checkAuth() {
             const user = JSON.parse(localStorage.getItem('ujenzi_user'));
             if (user) {
                 document.getElementById('auth-screen').classList.add('hidden');
-                
                 const firstName = user.name.split(' ')[0];
                 const h = new Date().getHours();
-                let g = "Good Evening";
-                if(h < 12) g = "Good Morning";
-                else if(h < 17) g = "Good Afternoon";
-                
+                let g = "Good Evening"; if(h < 12) g = "Good Morning"; else if(h < 17) g = "Good Afternoon";
                 document.getElementById('smart-greeting').textContent = `${g}, ${firstName}! 👋`;
                 document.getElementById('p-name').textContent = user.name;
                 document.getElementById('p-email').textContent = user.email;
@@ -467,6 +464,7 @@
             }
         }
 
+        // --- FLAWLESS THEME ANIMATION LOGIC ---
         function updateThemeIcon() {
             const isDark = document.documentElement.classList.contains('dark');
             const icon = document.getElementById('theme-icon');
@@ -488,6 +486,7 @@
         }
         document.addEventListener("DOMContentLoaded", updateThemeIcon);
 
+        // VIP GAMIFICATION
         let isGoldVIP = false;
         function updateTrackerUI() {
             const spend = parseInt(localStorage.getItem('ujenzi_total_spend') || '0');
@@ -515,6 +514,7 @@
             }
         }
 
+        // SMART SEARCH
         function handleSearch() {
             const query = document.getElementById('search-input').value.toLowerCase();
             const container = document.getElementById('dynamic-home-content');
@@ -594,6 +594,7 @@
             document.getElementById('modal-review-text').textContent = `"${reviewTxt}"`;
             document.getElementById('modal-price').textContent = `TZS ${p.toLocaleString()}`;
             
+            // AMAZON-STYLE FBT LOGIC
             const fbtSection = document.getElementById('fbt-section');
             fbtItem = null;
             if(t.includes('Cement')) fbtItem = productDatabase['Foundation & Structural'].find(x => x.name.includes('Bar'));
