@@ -249,6 +249,22 @@
             localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
             updateIcons();
         });
+        
+        // 1.5 SMART TIME-BASED GREETING
+        function updateGreeting() {
+            const hour = new Date().getHours();
+            let greeting = "Good Morning";
+            
+            if (hour >= 12 && hour < 17) {
+                greeting = "Good Afternoon";
+            } else if (hour >= 17) {
+                greeting = "Good Evening";
+            }
+            
+            document.getElementById('smart-greeting').innerHTML = `${greeting}, Chesco! 👋`;
+        }
+        
+        updateGreeting();
 
         // 2. DYNAMIC CART SYSTEM
         let cart = JSON.parse(localStorage.getItem('ujenzi_cart')) || [];
