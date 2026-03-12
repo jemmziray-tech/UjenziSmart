@@ -23,13 +23,32 @@
         .hide-scrollbar::-webkit-scrollbar { display: none; }
         .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
         
-        /* Custom animation for smooth page transitions */
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         .animate-fade-in { animation: fadeIn 0.3s ease-out forwards; }
     </style>
 </head>
 <body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 pb-24 transition-colors duration-300">
 
+    <div id="auth-screen" class="fixed inset-0 z-[200] bg-gray-50 dark:bg-gray-900 flex flex-col justify-center px-6 transition-opacity duration-300">
+        <div class="max-w-md mx-auto w-full bg-white dark:bg-gray-800 p-8 rounded-3xl shadow-xl border border-gray-100 dark:border-gray-700">
+            <h1 class="text-3xl font-bold text-green-600 dark:text-green-500 mb-2">UjenziSmart</h1>
+            <p class="text-gray-600 dark:text-gray-400 mb-8" id="auth-subtitle">Sign in to manage your construction.</p>
+
+            <form id="auth-form" class="flex flex-col gap-4">
+                <input type="text" id="auth-name" placeholder="Full Name (for new accounts)" class="hidden w-full bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3 focus:ring-2 focus:ring-green-500 text-gray-900 dark:text-white outline-none">
+                <input type="email" id="auth-email" required placeholder="Email Address" class="w-full bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3 focus:ring-2 focus:ring-green-500 text-gray-900 dark:text-white outline-none">
+                <input type="password" id="auth-password" required placeholder="Password" class="w-full bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3 focus:ring-2 focus:ring-green-500 text-gray-900 dark:text-white outline-none">
+
+                <button type="submit" id="auth-submit-btn" class="w-full py-3 bg-green-500 text-white rounded-xl font-bold hover:bg-green-600 transition-colors mt-2 shadow-md">Sign In</button>
+            </form>
+
+            <p class="text-center mt-6 text-sm text-gray-600 dark:text-gray-400">
+                <span id="auth-toggle-text">Don't have an account?</span>
+                <button id="auth-toggle-btn" class="text-green-600 dark:text-green-400 font-bold ml-1 hover:underline">Sign Up</button>
+            </p>
+            <p id="auth-error" class="text-red-500 bg-red-50 dark:bg-red-900/20 p-3 rounded-lg text-center text-sm mt-4 hidden"></p>
+        </div>
+    </div>
     <div id="toast" class="fixed top-20 left-1/2 transform -translate-x-1/2 z-[200] bg-gray-800 dark:bg-gray-100 text-white dark:text-gray-900 px-4 py-2 rounded-full text-sm shadow-lg transition-opacity duration-300 opacity-0 pointer-events-none">
         Item added to cart!
     </div>
@@ -37,7 +56,7 @@
     <header class="bg-gradient-to-r from-green-500 to-emerald-600 dark:from-green-700 dark:to-emerald-900 pt-10 pb-20 px-4 rounded-b-[2.5rem] shadow-lg relative transition-colors duration-300">
         <div class="flex justify-between items-center mb-6 text-white max-w-7xl mx-auto">
             <div>
-                <h1 id="smart-greeting" class="text-2xl font-bold tracking-tight">Habari, Chesco! 👋</h1>
+                <h1 id="smart-greeting" class="text-2xl font-bold tracking-tight">Loading... 👋</h1>
                 <p class="text-green-100 text-sm mt-1">What do you need today?</p>
             </div>
             
@@ -115,7 +134,6 @@
         <div class="mt-8 pl-4 pb-20 max-w-7xl mx-auto overflow-hidden">
             <h2 class="text-lg font-bold text-gray-900 dark:text-white mb-4 pr-4">Featured Materials</h2>
             <div class="flex overflow-x-auto snap-x snap-mandatory gap-4 pb-4 pr-4 hide-scrollbar">
-                
                 <div class="min-w-[160px] snap-start bg-white dark:bg-gray-800 rounded-2xl p-3 shadow-sm border border-gray-100 dark:border-gray-700 flex flex-col">
                     <div class="aspect-square rounded-xl overflow-hidden mb-3 bg-gray-100 dark:bg-gray-700"><img src="https://picsum.photos/seed/Simba/200/200" class="w-full h-full object-cover"></div>
                     <h3 class="text-sm font-medium text-gray-800 dark:text-gray-200 flex-grow">Simba Cement 50kg</h3>
@@ -137,68 +155,30 @@
                         </button>
                     </div>
                 </div>
-
             </div>
         </div>
     </div> 
 
     <div id="trending-view" class="hidden px-4 max-w-7xl mx-auto pt-6 pb-24 animate-fade-in">
         <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-6">Market Insights 📈</h2>
-        
         <div class="bg-gradient-to-br from-blue-600 to-indigo-800 rounded-3xl p-6 text-white shadow-lg mb-8 relative overflow-hidden">
             <div class="absolute top-0 right-0 w-32 h-32 bg-white opacity-10 rounded-full -mr-10 -mt-10 blur-2xl"></div>
             <p class="text-blue-100 text-sm font-medium mb-1">Highest Demand This Week</p>
             <h3 class="text-2xl font-bold mb-4">Corrugated Iron Sheets</h3>
-            <div class="flex items-center gap-2 bg-white/20 w-max px-3 py-1.5 rounded-full backdrop-blur-sm text-sm">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
-                <span>Demand up 18%</span>
-            </div>
-        </div>
-
-        <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-4">Popular Projects</h3>
-        <div class="grid grid-cols-1 gap-4">
-            <div class="bg-white dark:bg-gray-800 p-4 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 flex gap-4 items-center">
-                <div class="w-16 h-16 bg-gray-200 dark:bg-gray-700 rounded-xl overflow-hidden shrink-0"><img src="https://picsum.photos/seed/block/100/100" class="w-full h-full object-cover"></div>
-                <div>
-                    <h4 class="font-bold text-gray-900 dark:text-white">Standard 3-Bedroom House</h4>
-                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">1,200 builders viewing material lists</p>
-                </div>
-            </div>
         </div>
     </div>
 
     <div id="profile-view" class="hidden px-4 max-w-7xl mx-auto pt-6 pb-24 animate-fade-in">
         <div class="flex items-center gap-4 mb-8">
-            <div class="w-16 h-16 bg-gradient-to-tr from-green-500 to-emerald-400 rounded-full flex items-center justify-center text-white text-2xl font-bold shadow-lg border-2 border-white dark:border-gray-800">C</div>
+            <div id="profile-initial" class="w-16 h-16 bg-gradient-to-tr from-green-500 to-emerald-400 rounded-full flex items-center justify-center text-white text-2xl font-bold shadow-lg border-2 border-white dark:border-gray-800">U</div>
             <div>
-                <h2 class="text-2xl font-bold text-gray-900 dark:text-white leading-tight">Chesco</h2>
-                <p class="text-sm text-green-600 dark:text-green-400 font-medium flex items-center gap-1 mt-1">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" class="text-yellow-400"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                    Pro Builder Level
-                </p>
+                <h2 id="profile-name" class="text-2xl font-bold text-gray-900 dark:text-white leading-tight">User</h2>
+                <p id="profile-email" class="text-sm text-gray-500 dark:text-gray-400 font-medium">user@ujenzismart.com</p>
             </div>
         </div>
-
-        <div class="bg-white dark:bg-gray-800 rounded-3xl p-5 shadow-sm border border-gray-100 dark:border-gray-700 mb-6 flex justify-between items-center">
-            <div>
-                <p class="text-sm text-gray-500 dark:text-gray-400">Ujenzi Rewards</p>
-                <h3 class="text-xl font-bold text-gray-900 dark:text-white">2,450 <span class="text-sm font-normal text-gray-500">pts</span></h3>
-            </div>
-            <button class="px-4 py-2 bg-green-50 dark:bg-green-900/30 text-green-600 dark:text-green-400 text-sm font-bold rounded-xl hover:bg-green-100 transition-colors">Redeem</button>
-        </div>
-
         <div class="bg-white dark:bg-gray-800 rounded-3xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
-            <button class="w-full flex items-center justify-between p-4 border-b border-gray-50 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors">
-                <div class="flex items-center gap-3"><span class="text-xl">📦</span><span class="font-medium text-gray-800 dark:text-gray-200">Active Deliveries</span></div>
-                <span class="text-gray-400">→</span>
-            </button>
-            <button class="w-full flex items-center justify-between p-4 border-b border-gray-50 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors">
-                <div class="flex items-center gap-3"><span class="text-xl">🧾</span><span class="font-medium text-gray-800 dark:text-gray-200">Order History</span></div>
-                <span class="text-gray-400">→</span>
-            </button>
-            <button class="w-full flex items-center justify-between p-4 hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors">
-                <div class="flex items-center gap-3"><span class="text-xl">⚙️</span><span class="font-medium text-gray-800 dark:text-gray-200">Settings</span></div>
-                <span class="text-gray-400">→</span>
+            <button id="logout-btn" class="w-full flex items-center justify-between p-4 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors text-red-500">
+                <div class="flex items-center gap-3"><span class="text-xl">🚪</span><span class="font-bold">Logout</span></div>
             </button>
         </div>
     </div>
@@ -213,64 +193,12 @@
                         <p class="text-[10px] text-green-100">Online and ready to help</p>
                     </div>
                 </div>
-                <button id="close-chat" class="p-2 hover:bg-white/20 rounded-full transition">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
-                </button>
+                <button id="close-chat" class="p-2 hover:bg-white/20 rounded-full transition"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
             </div>
-            <div id="chat-box" class="flex-grow p-4 overflow-y-auto flex flex-col gap-3 bg-gray-50 dark:bg-gray-800">
-                </div>
+            <div id="chat-box" class="flex-grow p-4 overflow-y-auto flex flex-col gap-3 bg-gray-50 dark:bg-gray-800"></div>
             <div class="p-3 bg-white dark:bg-gray-900 border-t border-gray-100 dark:border-gray-800 flex gap-2 items-center pb-safe">
                 <input type="text" id="chat-input" class="flex-grow bg-gray-100 dark:bg-gray-800 rounded-full px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 text-gray-900 dark:text-white" placeholder="Ask about materials...">
-                <button id="send-btn" class="w-11 h-11 bg-green-500 rounded-full flex items-center justify-center text-white hover:bg-green-600 transition shrink-0">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <div id="estimator-modal" class="fixed inset-0 z-[100] hidden bg-black/60 backdrop-blur-sm flex items-end sm:items-center justify-center transition-opacity">
-        <div class="bg-white dark:bg-gray-900 w-full sm:max-w-md p-6 rounded-t-3xl sm:rounded-3xl shadow-2xl flex flex-col transform transition-transform translate-y-full" id="estimator-container">
-            <div class="flex justify-between items-center mb-4">
-                <h2 class="text-xl font-bold text-gray-900 dark:text-white">Concrete Slab Estimator</h2>
-                <button id="close-estimator" class="text-gray-500 hover:text-gray-800 dark:hover:text-white">✕</button>
-            </div>
-            <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">Enter your slab dimensions (in meters) to calculate needed cement for a standard 10cm thick slab.</p>
-            
-            <div class="flex gap-4 mb-4">
-                <div class="flex-1">
-                    <label class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">Length (m)</label>
-                    <input type="number" id="est-length" class="w-full bg-gray-100 dark:bg-gray-800 rounded-xl px-3 py-2 text-gray-900 dark:text-white" placeholder="e.g. 5">
-                </div>
-                <div class="flex-1">
-                    <label class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">Width (m)</label>
-                    <input type="number" id="est-width" class="w-full bg-gray-100 dark:bg-gray-800 rounded-xl px-3 py-2 text-gray-900 dark:text-white" placeholder="e.g. 4">
-                </div>
-            </div>
-            
-            <button id="calculate-btn" class="w-full py-3 bg-green-500 text-white rounded-xl font-bold hover:bg-green-600 transition-colors mb-4">Calculate Needs</button>
-            
-            <div id="est-results" class="hidden bg-green-50 dark:bg-green-900/20 p-4 rounded-xl border border-green-200 dark:border-green-800">
-                <p class="text-sm text-gray-800 dark:text-gray-200 mb-2">You will need approximately:</p>
-                <p class="font-bold text-lg text-green-700 dark:text-green-400" id="est-cement-bags">0 Bags of Cement</p>
-                <button id="add-est-to-cart" class="mt-3 w-full py-2 border-2 border-green-500 text-green-600 dark:text-green-400 font-bold rounded-xl hover:bg-green-50 dark:hover:bg-green-900/40">Add to Cart (TZS <span id="est-total-cost">0</span>)</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="cart-drawer" class="fixed inset-0 z-[100] hidden bg-black/60 backdrop-blur-sm flex justify-end transition-opacity">
-        <div class="bg-white dark:bg-gray-900 w-4/5 sm:w-96 h-full shadow-2xl flex flex-col transform transition-transform translate-x-full" id="cart-container">
-            <div class="p-4 border-b border-gray-200 dark:border-gray-800 flex justify-between items-center">
-                <h2 class="text-xl font-bold text-gray-900 dark:text-white">Your Cart</h2>
-                <button id="close-cart" class="text-gray-500 hover:text-gray-800 dark:hover:text-white">✕</button>
-            </div>
-            <div id="cart-items-list" class="flex-grow p-4 overflow-y-auto">
-                </div>
-            <div class="p-4 border-t border-gray-200 dark:border-gray-800">
-                <div class="flex justify-between mb-4 text-lg font-bold text-gray-900 dark:text-white">
-                    <span>Total:</span>
-                    <span>TZS <span id="cart-total-price">0</span></span>
-                </div>
-                <button class="w-full py-3 bg-green-500 text-white rounded-xl font-bold hover:bg-green-600 transition-colors">Checkout Securely</button>
+                <button id="send-btn" class="w-11 h-11 bg-green-500 rounded-full flex items-center justify-center text-white hover:bg-green-600 transition shrink-0"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg></button>
             </div>
         </div>
     </div>
@@ -285,11 +213,6 @@
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-gray-400 dark:text-gray-500"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
                 <span class="text-[10px] font-medium text-gray-500">Trending</span>
             </button>
-            <button id="open-cart-btn" class="flex flex-col items-center gap-1 relative">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-gray-400 dark:text-gray-500"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
-                <span class="text-[10px] font-medium text-gray-500">Cart</span>
-                <span id="cart-badge" class="absolute -top-1 right-2 flex items-center justify-center h-4 w-4 rounded-full bg-red-500 text-white text-[9px] font-bold">0</span>
-            </button>
             <button id="nav-profile-btn" class="flex flex-col items-center gap-1">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-gray-400 dark:text-gray-500"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
                 <span class="text-[10px] font-medium text-gray-500">Profile</span>
@@ -298,12 +221,104 @@
     </nav>
 
     <script>
-        // 1. UI LOADERS & DARK MODE
-        setTimeout(() => {
-            document.getElementById('skeleton-loader').classList.add('hidden');
-            document.getElementById('app-content').classList.remove('hidden');
-        }, 1000);
+        // --- 1. NEW AUTHENTICATION LOGIC ---
+        const authScreen = document.getElementById('auth-screen');
+        const authForm = document.getElementById('auth-form');
+        const authToggleBtn = document.getElementById('auth-toggle-btn');
+        const authError = document.getElementById('auth-error');
+        
+        let isSignUp = false;
 
+        // Check if user is already logged in
+        function checkAuth() {
+            const savedUser = localStorage.getItem('ujenzi_user');
+            if (savedUser) {
+                const user = JSON.parse(savedUser);
+                authScreen.classList.add('hidden'); // Hide login screen
+                
+                // Update dynamic profile info
+                const firstName = user.name ? user.name.split(' ')[0] : 'Builder';
+                const hour = new Date().getHours();
+                let timeGreeting = hour < 12 ? "Good Morning" : (hour < 17 ? "Good Afternoon" : "Good Evening");
+                
+                document.getElementById('smart-greeting').innerHTML = `${timeGreeting}, ${firstName}! 👋`;
+                document.getElementById('profile-name').textContent = user.name || 'User';
+                document.getElementById('profile-email').textContent = user.email || '';
+                document.getElementById('profile-initial').textContent = firstName.charAt(0).toUpperCase();
+
+                // Show the main app
+                document.getElementById('skeleton-loader').classList.add('hidden');
+                document.getElementById('app-content').classList.remove('hidden');
+            }
+        }
+        checkAuth(); // Run immediately on load
+
+        // Toggle between Sign In and Sign Up
+        authToggleBtn.addEventListener('click', () => {
+            isSignUp = !isSignUp;
+            document.getElementById('auth-name').classList.toggle('hidden', !isSignUp);
+            document.getElementById('auth-name').required = isSignUp;
+            
+            document.getElementById('auth-submit-btn').textContent = isSignUp ? 'Create Account' : 'Sign In';
+            document.getElementById('auth-toggle-text').textContent = isSignUp ? 'Already have an account?' : "Don't have an account?";
+            authToggleBtn.textContent = isSignUp ? 'Sign In' : 'Sign Up';
+            document.getElementById('auth-subtitle').textContent = isSignUp ? 'Create an account to start building.' : 'Sign in to manage your construction.';
+            authError.classList.add('hidden');
+        });
+
+        // Submit to Node.js / Firebase Backend
+        authForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('auth-submit-btn');
+            btn.textContent = 'Please wait...';
+            btn.disabled = true;
+            authError.classList.add('hidden');
+
+            const endpoint = isSignUp ? '/api/signup' : '/api/signin';
+            const payload = {
+                email: document.getElementById('auth-email').value,
+                password: document.getElementById('auth-password').value
+            };
+            if(isSignUp) payload.name = document.getElementById('auth-name').value;
+
+            try {
+                // This calls the server we just built!
+                const response = await fetch(`http://localhost:3000${endpoint}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) throw new Error(data.error || 'Authentication failed');
+
+                // Success! Save user to browser memory
+                localStorage.setItem('ujenzi_user', JSON.stringify(data.user));
+                
+                // Fancy fade out transition
+                authScreen.classList.add('opacity-0');
+                setTimeout(() => {
+                    checkAuth(); // Refresh the UI with the new user's name
+                }, 300);
+
+            } catch (err) {
+                authError.textContent = err.message;
+                authError.classList.remove('hidden');
+            } finally {
+                btn.textContent = isSignUp ? 'Create Account' : 'Sign In';
+                btn.disabled = false;
+            }
+        });
+
+        // Logout logic
+        document.getElementById('logout-btn').addEventListener('click', () => {
+            localStorage.removeItem('ujenzi_user');
+            location.reload(); // Refresh page to show login screen
+        });
+
+
+        // --- 2. EXISTING UI, THEME, & CHAT LOGIC ---
         const themeToggleBtn = document.getElementById('theme-toggle');
         const darkIcon = document.getElementById('theme-toggle-dark-icon');
         const lightIcon = document.getElementById('theme-toggle-light-icon');
@@ -322,138 +337,8 @@
             localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
             updateIcons();
         });
-        
-        // 1.5 SMART TIME-BASED GREETING
-        function updateGreeting() {
-            const hour = new Date().getHours();
-            let greeting = "Good Morning";
-            
-            if (hour >= 12 && hour < 17) {
-                greeting = "Good Afternoon";
-            } else if (hour >= 17) {
-                greeting = "Good Evening";
-            }
-            
-            document.getElementById('smart-greeting').innerHTML = `${greeting}, Chesco! 👋`;
-        }
-        
-        updateGreeting();
 
-        // 2. DYNAMIC CART SYSTEM
-        let cart = JSON.parse(localStorage.getItem('ujenzi_cart')) || [];
-        const cartBadge = document.getElementById('cart-badge');
-        const cartDrawer = document.getElementById('cart-drawer');
-        const cartContainer = document.getElementById('cart-container');
-        const cartItemsList = document.getElementById('cart-items-list');
-        const cartTotalPrice = document.getElementById('cart-total-price');
-
-        function updateCartUI() {
-            cartBadge.textContent = cart.reduce((sum, item) => sum + item.quantity, 0);
-            localStorage.setItem('ujenzi_cart', JSON.stringify(cart));
-            
-            cartItemsList.innerHTML = '';
-            let total = 0;
-
-            if(cart.length === 0) {
-                cartItemsList.innerHTML = '<p class="text-gray-500 text-center mt-10">Your cart is empty.</p>';
-            } else {
-                cart.forEach((item, index) => {
-                    total += item.price * item.quantity;
-                    cartItemsList.innerHTML += `
-                        <div class="flex justify-between items-center mb-4 p-3 bg-gray-50 dark:bg-gray-800 rounded-xl">
-                            <div>
-                                <h4 class="font-bold text-sm text-gray-900 dark:text-white">${item.name}</h4>
-                                <p class="text-xs text-gray-500">TZS ${item.price.toLocaleString()} x ${item.quantity}</p>
-                            </div>
-                            <button onclick="removeFromCart(${index})" class="text-red-500 text-xs font-bold">Remove</button>
-                        </div>
-                    `;
-                });
-            }
-            cartTotalPrice.textContent = total.toLocaleString();
-        }
-
-        function addToCart(name, price, quantity = 1) {
-            const existingItem = cart.find(item => item.name === name);
-            if (existingItem) existingItem.quantity += quantity;
-            else cart.push({ name, price: parseInt(price), quantity });
-            
-            updateCartUI();
-            
-            const toast = document.getElementById('toast');
-            toast.textContent = `Added ${name} to cart!`;
-            toast.classList.remove('opacity-0', 'pointer-events-none');
-            setTimeout(() => toast.classList.add('opacity-0', 'pointer-events-none'), 2000);
-            if (navigator.vibrate) navigator.vibrate(50);
-        }
-
-        window.removeFromCart = function(index) {
-            cart.splice(index, 1);
-            updateCartUI();
-        }
-
-        updateCartUI();
-
-        document.querySelectorAll('.add-to-cart-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                e.preventDefault();
-                const name = btn.getAttribute('data-name');
-                const price = btn.getAttribute('data-price');
-                addToCart(name, price);
-            });
-        });
-
-        document.getElementById('open-cart-btn').addEventListener('click', () => {
-            cartDrawer.classList.remove('hidden');
-            setTimeout(() => cartContainer.classList.remove('translate-x-full'), 10);
-        });
-        document.getElementById('close-cart').addEventListener('click', () => {
-            cartContainer.classList.add('translate-x-full');
-            setTimeout(() => cartDrawer.classList.add('hidden'), 300);
-        });
-
-        // 3. MATERIAL ESTIMATOR
-        const estimatorBtn = document.getElementById('estimator-btn');
-        const estimatorModal = document.getElementById('estimator-modal');
-        const estimatorContainer = document.getElementById('estimator-container');
-        let estimatedBags = 0;
-        let estimatedCost = 0;
-
-        estimatorBtn.addEventListener('click', () => {
-            estimatorModal.classList.remove('hidden');
-            setTimeout(() => estimatorContainer.classList.remove('translate-y-full'), 10);
-        });
-
-        document.getElementById('close-estimator').addEventListener('click', () => {
-            estimatorContainer.classList.add('translate-y-full');
-            setTimeout(() => estimatorModal.classList.add('hidden'), 300);
-        });
-
-        document.getElementById('calculate-btn').addEventListener('click', () => {
-            const length = parseFloat(document.getElementById('est-length').value);
-            const width = parseFloat(document.getElementById('est-width').value);
-            
-            if(!length || !width) {
-                alert("Please enter valid numbers");
-                return;
-            }
-
-            const area = length * width;
-            const volume = area * 0.1; 
-            estimatedBags = Math.ceil(volume * 6.5); 
-            estimatedCost = estimatedBags * 18500; 
-
-            document.getElementById('est-cement-bags').textContent = `${estimatedBags} Bags of Cement`;
-            document.getElementById('est-total-cost').textContent = estimatedCost.toLocaleString();
-            document.getElementById('est-results').classList.remove('hidden');
-        });
-
-        document.getElementById('add-est-to-cart').addEventListener('click', () => {
-            addToCart("Simba Cement 50kg", 18500, estimatedBags);
-            document.getElementById('close-estimator').click();
-        });
-
-        // 4. SECURE AI CHATBOT (Calling Local Backend)
+        // Chat Logic
         const chatModal = document.getElementById('chat-modal');
         const chatContainer = document.getElementById('chat-container');
         const chatBox = document.getElementById('chat-box');
@@ -495,7 +380,7 @@
             chatBox.scrollTop = chatBox.scrollHeight;
 
             try {
-                // Fetching from your local Node.js server!
+                // Calls your live AI Backend!
                 const response = await fetch('http://localhost:3000/api/chat', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -514,69 +399,46 @@
         document.getElementById('send-btn').addEventListener('click', sendMessage);
         chatInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') sendMessage(); });
 
-        // 5. BOTTOM NAVIGATION ROUTING LOGIC
-        const viewHome = document.getElementById('app-content');
-        const viewTrending = document.getElementById('trending-view');
-        const viewProfile = document.getElementById('profile-view');
-        const header = document.querySelector('header'); // We hide the header on Profile/Trending pages
-
-        const navHomeBtn = document.getElementById('nav-home-btn');
-        const navTrendingBtn = document.getElementById('nav-trending-btn');
-        const navProfileBtn = document.getElementById('nav-profile-btn');
-
-        // Function to reset all icons to gray
-        function resetNavIcons() {
-            const buttons = [navHomeBtn, navTrendingBtn, navProfileBtn]; // Excludes cart button
-            buttons.forEach(btn => {
+        // Navigation Logic
+        const views = {
+            home: document.getElementById('app-content'),
+            trending: document.getElementById('trending-view'),
+            profile: document.getElementById('profile-view')
+        };
+        const header = document.querySelector('header');
+        
+        function switchView(viewName, activeBtn) {
+            Object.values(views).forEach(v => v.classList.add('hidden'));
+            views[viewName].classList.remove('hidden');
+            header.classList.toggle('hidden', viewName !== 'home');
+            
+            // Reset icons
+            document.querySelectorAll('nav button').forEach(btn => {
                 const svg = btn.querySelector('svg');
                 const span = btn.querySelector('span');
-                svg.classList.replace('text-green-600', 'text-gray-400');
-                svg.classList.replace('dark:text-green-500', 'dark:text-gray-500');
-                span.classList.replace('text-green-600', 'text-gray-500');
-                span.classList.replace('dark:text-green-500', 'text-gray-500');
+                if(svg) {
+                    svg.classList.replace('text-green-600', 'text-gray-400');
+                    svg.classList.replace('dark:text-green-500', 'dark:text-gray-500');
+                }
+                if(span) {
+                    span.classList.replace('text-green-600', 'text-gray-500');
+                    span.classList.replace('dark:text-green-500', 'text-gray-500');
+                }
             });
-        }
-
-        // Function to set active icon to green
-        function setActiveIcon(btn) {
-            const svg = btn.querySelector('svg');
-            const span = btn.querySelector('span');
+            
+            // Set active icon
+            const svg = activeBtn.querySelector('svg');
+            const span = activeBtn.querySelector('span');
             svg.classList.replace('text-gray-400', 'text-green-600');
             svg.classList.replace('dark:text-gray-500', 'dark:text-green-500');
             span.classList.replace('text-gray-500', 'text-green-600');
             span.classList.replace('text-gray-500', 'dark:text-green-500');
+            window.scrollTo(0,0);
         }
 
-        // Event Listeners for clicks
-        navHomeBtn.addEventListener('click', () => {
-            viewHome.classList.remove('hidden');
-            header.classList.remove('hidden');
-            viewTrending.classList.add('hidden');
-            viewProfile.classList.add('hidden');
-            resetNavIcons();
-            setActiveIcon(navHomeBtn);
-            window.scrollTo(0,0);
-        });
-
-        navTrendingBtn.addEventListener('click', () => {
-            viewTrending.classList.remove('hidden');
-            viewHome.classList.add('hidden');
-            header.classList.add('hidden'); // Hide the big green header for a cleaner look
-            viewProfile.classList.add('hidden');
-            resetNavIcons();
-            setActiveIcon(navTrendingBtn);
-            window.scrollTo(0,0);
-        });
-
-        navProfileBtn.addEventListener('click', () => {
-            viewProfile.classList.remove('hidden');
-            viewHome.classList.add('hidden');
-            header.classList.add('hidden');
-            viewTrending.classList.add('hidden');
-            resetNavIcons();
-            setActiveIcon(navProfileBtn);
-            window.scrollTo(0,0);
-        });
+        document.getElementById('nav-home-btn').addEventListener('click', function() { switchView('home', this); });
+        document.getElementById('nav-trending-btn').addEventListener('click', function() { switchView('trending', this); });
+        document.getElementById('nav-profile-btn').addEventListener('click', function() { switchView('profile', this); });
     </script>
 </body>
 </html>
