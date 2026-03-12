@@ -8,9 +8,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     
     <script>
-        tailwind.config = {
-            darkMode: 'class',
-        }
+        tailwind.config = { darkMode: 'class' }
         if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
             document.documentElement.classList.add('dark');
         } else {
@@ -40,4 +38,392 @@
             </div>
             
             <button id="theme-toggle" class="p-2 bg-white/20 rounded-full backdrop-blur-sm hover:bg-white/30 transition">
-                <svg id="theme-toggle-light-icon" class="hidden w-5 h-5 text-white" fill="currentColor" viewBox="0
+                <svg id="theme-toggle-light-icon" class="hidden w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
+                <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+            </button>
+        </div>
+        
+        <div class="relative z-50 max-w-7xl mx-auto flex gap-2">
+            <div class="relative flex-grow">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gray-400"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                </div>
+                <input type="text" id="main-search-input" class="block w-full pl-10 pr-3 py-3 border border-transparent rounded-xl leading-5 bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500 sm:text-sm shadow-md transition-colors duration-300" placeholder="Search for materials...">
+            </div>
+            <button id="voice-search-btn" class="w-12 h-12 bg-white dark:bg-gray-800 rounded-xl shadow-md flex items-center justify-center text-green-500 hover:bg-green-50 dark:hover:bg-gray-700 transition-colors shrink-0">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" x2="12" y1="19" y2="22"/></svg>
+            </button>
+        </div>
+    </header>
+
+    <div id="skeleton-loader" class="px-4 -mt-10 max-w-7xl mx-auto animate-pulse pb-20">
+        <div class="grid grid-cols-2 gap-4 relative z-10 mb-8">
+            <div class="bg-gray-200 dark:bg-gray-800 h-32 rounded-2xl shadow-md"></div>
+            <div class="bg-gray-200 dark:bg-gray-800 h-32 rounded-2xl shadow-md"></div>
+        </div>
+        <div class="h-6 bg-gray-200 dark:bg-gray-800 rounded w-1/3 mb-4"></div>
+        <div class="grid grid-cols-2 gap-4 mb-8">
+            <div class="bg-gray-200 dark:bg-gray-800 h-48 rounded-2xl"></div>
+            <div class="bg-gray-200 dark:bg-gray-800 h-48 rounded-2xl"></div>
+        </div>
+    </div>
+
+    <div id="app-content" class="hidden">
+        
+        <div class="px-4 -mt-10 relative z-10 max-w-7xl mx-auto">
+            <div class="grid grid-cols-2 gap-4">
+                <button id="material-expert-btn" class="bg-white dark:bg-gray-800 p-4 rounded-2xl shadow-md flex flex-col items-center justify-center gap-3 hover:shadow-lg transition-all border border-gray-100 dark:border-gray-700 active:scale-95 transform">
+                    <div class="w-14 h-14 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center text-green-600 dark:text-green-400">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></svg>
+                    </div>
+                    <span class="font-semibold text-gray-800 dark:text-gray-100 text-center leading-tight">Material Expert<br><span class="text-xs text-gray-500 dark:text-gray-400 font-normal">Ask anything</span></span>
+                </button>
+                
+                <button id="estimator-btn" class="bg-white dark:bg-gray-800 p-4 rounded-2xl shadow-md flex flex-col items-center justify-center gap-3 hover:shadow-lg transition-all border border-gray-100 dark:border-gray-700 active:scale-95 transform">
+                    <div class="w-14 h-14 bg-emerald-100 dark:bg-emerald-900/30 rounded-full flex items-center justify-center text-emerald-600 dark:text-emerald-400">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3h18v18H3z"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
+                    </div>
+                    <span class="font-semibold text-gray-800 dark:text-gray-100 text-center leading-tight">Slab Estimator<br><span class="text-xs text-gray-500 dark:text-gray-400 font-normal">Calculate usage</span></span>
+                </button>
+            </div>
+        </div>
+
+        <div class="mt-8 px-4 max-w-7xl mx-auto">
+            <h2 class="text-lg font-bold text-gray-900 dark:text-white mb-4">Product Categories</h2>
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden flex flex-col">
+                    <div class="h-28 sm:h-36 bg-gray-200 dark:bg-gray-700 relative"><img src="https://picsum.photos/seed/cement/400/300" class="w-full h-full object-cover"></div>
+                    <div class="p-3 sm:p-4 flex flex-col flex-grow">
+                        <h3 class="font-bold text-gray-900 dark:text-white mb-2 text-sm">Foundation</h3>
+                        <button class="w-full py-2 bg-green-50 dark:bg-green-900/20 text-green-700 rounded-xl text-xs mt-auto">Explore</button>
+                    </div>
+                </div>
+                <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden flex flex-col">
+                    <div class="h-28 sm:h-36 bg-gray-200 dark:bg-gray-700 relative"><img src="https://picsum.photos/seed/roof/400/300" class="w-full h-full object-cover"></div>
+                    <div class="p-3 sm:p-4 flex flex-col flex-grow">
+                        <h3 class="font-bold text-gray-900 dark:text-white mb-2 text-sm">Roofing</h3>
+                        <button class="w-full py-2 bg-green-50 dark:bg-green-900/20 text-green-700 rounded-xl text-xs mt-auto">Explore</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-8 pl-4 pb-20 max-w-7xl mx-auto overflow-hidden">
+            <h2 class="text-lg font-bold text-gray-900 dark:text-white mb-4 pr-4">Featured Materials</h2>
+            <div class="flex overflow-x-auto snap-x snap-mandatory gap-4 pb-4 pr-4 hide-scrollbar">
+                
+                <div class="min-w-[160px] snap-start bg-white dark:bg-gray-800 rounded-2xl p-3 shadow-sm border border-gray-100 dark:border-gray-700 flex flex-col">
+                    <div class="aspect-square rounded-xl overflow-hidden mb-3 bg-gray-100 dark:bg-gray-700"><img src="https://picsum.photos/seed/Simba/200/200" class="w-full h-full object-cover"></div>
+                    <h3 class="text-sm font-medium text-gray-800 dark:text-gray-200 flex-grow">Simba Cement 50kg</h3>
+                    <div class="flex justify-between items-center mt-1">
+                        <p class="text-green-600 dark:text-green-400 font-bold text-sm">TZS 18,500</p>
+                        <button class="add-to-cart-btn p-1.5 rounded-lg bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 active:scale-90" data-name="Simba Cement 50kg" data-price="18500">
+                            <svg class="icon-plus w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="min-w-[160px] snap-start bg-white dark:bg-gray-800 rounded-2xl p-3 shadow-sm border border-gray-100 dark:border-gray-700 flex flex-col">
+                    <div class="aspect-square rounded-xl overflow-hidden mb-3 bg-gray-100 dark:bg-gray-700"><img src="https://picsum.photos/seed/Iron/200/200" class="w-full h-full object-cover"></div>
+                    <h3 class="text-sm font-medium text-gray-800 dark:text-gray-200 flex-grow">Iron Sheet 30G</h3>
+                    <div class="flex justify-between items-center mt-1">
+                        <p class="text-green-600 dark:text-green-400 font-bold text-sm">TZS 22,000</p>
+                        <button class="add-to-cart-btn p-1.5 rounded-lg bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 active:scale-90" data-name="Iron Sheet 30G" data-price="22000">
+                            <svg class="icon-plus w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div> 
+
+    <div id="chat-modal" class="fixed inset-0 z-[100] hidden bg-black/60 backdrop-blur-sm flex items-end sm:items-center justify-center transition-opacity">
+        <div class="bg-white dark:bg-gray-900 w-full sm:max-w-md h-[85vh] sm:h-[600px] rounded-t-3xl sm:rounded-3xl shadow-2xl flex flex-col overflow-hidden transform transition-transform translate-y-full" id="chat-container">
+            <div class="bg-gradient-to-r from-green-500 to-emerald-600 p-4 flex justify-between items-center text-white">
+                <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">🤖</div>
+                    <div>
+                        <h3 class="font-bold text-sm">Material Expert AI</h3>
+                        <p class="text-[10px] text-green-100">Online and ready to help</p>
+                    </div>
+                </div>
+                <button id="close-chat" class="p-2 hover:bg-white/20 rounded-full transition">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+                </button>
+            </div>
+            <div id="chat-box" class="flex-grow p-4 overflow-y-auto flex flex-col gap-3 bg-gray-50 dark:bg-gray-800">
+                </div>
+            <div class="p-3 bg-white dark:bg-gray-900 border-t border-gray-100 dark:border-gray-800 flex gap-2 items-center pb-safe">
+                <input type="text" id="chat-input" class="flex-grow bg-gray-100 dark:bg-gray-800 rounded-full px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 text-gray-900 dark:text-white" placeholder="Ask about materials...">
+                <button id="send-btn" class="w-11 h-11 bg-green-500 rounded-full flex items-center justify-center text-white hover:bg-green-600 transition shrink-0">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="estimator-modal" class="fixed inset-0 z-[100] hidden bg-black/60 backdrop-blur-sm flex items-end sm:items-center justify-center transition-opacity">
+        <div class="bg-white dark:bg-gray-900 w-full sm:max-w-md p-6 rounded-t-3xl sm:rounded-3xl shadow-2xl flex flex-col transform transition-transform translate-y-full" id="estimator-container">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-xl font-bold text-gray-900 dark:text-white">Concrete Slab Estimator</h2>
+                <button id="close-estimator" class="text-gray-500 hover:text-gray-800 dark:hover:text-white">✕</button>
+            </div>
+            <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">Enter your slab dimensions (in meters) to calculate needed cement for a standard 10cm thick slab.</p>
+            
+            <div class="flex gap-4 mb-4">
+                <div class="flex-1">
+                    <label class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">Length (m)</label>
+                    <input type="number" id="est-length" class="w-full bg-gray-100 dark:bg-gray-800 rounded-xl px-3 py-2 text-gray-900 dark:text-white" placeholder="e.g. 5">
+                </div>
+                <div class="flex-1">
+                    <label class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">Width (m)</label>
+                    <input type="number" id="est-width" class="w-full bg-gray-100 dark:bg-gray-800 rounded-xl px-3 py-2 text-gray-900 dark:text-white" placeholder="e.g. 4">
+                </div>
+            </div>
+            
+            <button id="calculate-btn" class="w-full py-3 bg-green-500 text-white rounded-xl font-bold hover:bg-green-600 transition-colors mb-4">Calculate Needs</button>
+            
+            <div id="est-results" class="hidden bg-green-50 dark:bg-green-900/20 p-4 rounded-xl border border-green-200 dark:border-green-800">
+                <p class="text-sm text-gray-800 dark:text-gray-200 mb-2">You will need approximately:</p>
+                <p class="font-bold text-lg text-green-700 dark:text-green-400" id="est-cement-bags">0 Bags of Cement</p>
+                <button id="add-est-to-cart" class="mt-3 w-full py-2 border-2 border-green-500 text-green-600 dark:text-green-400 font-bold rounded-xl hover:bg-green-50 dark:hover:bg-green-900/40">Add to Cart (TZS <span id="est-total-cost">0</span>)</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="cart-drawer" class="fixed inset-0 z-[100] hidden bg-black/60 backdrop-blur-sm flex justify-end transition-opacity">
+        <div class="bg-white dark:bg-gray-900 w-4/5 sm:w-96 h-full shadow-2xl flex flex-col transform transition-transform translate-x-full" id="cart-container">
+            <div class="p-4 border-b border-gray-200 dark:border-gray-800 flex justify-between items-center">
+                <h2 class="text-xl font-bold text-gray-900 dark:text-white">Your Cart</h2>
+                <button id="close-cart" class="text-gray-500 hover:text-gray-800 dark:hover:text-white">✕</button>
+            </div>
+            <div id="cart-items-list" class="flex-grow p-4 overflow-y-auto">
+                </div>
+            <div class="p-4 border-t border-gray-200 dark:border-gray-800">
+                <div class="flex justify-between mb-4 text-lg font-bold text-gray-900 dark:text-white">
+                    <span>Total:</span>
+                    <span>TZS <span id="cart-total-price">0</span></span>
+                </div>
+                <button class="w-full py-3 bg-green-500 text-white rounded-xl font-bold hover:bg-green-600 transition-colors">Checkout Securely</button>
+            </div>
+        </div>
+    </div>
+
+    <nav class="fixed bottom-0 w-full bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 px-6 py-3 flex justify-between items-center z-50 pb-safe transition-colors duration-300">
+        <div class="max-w-md mx-auto w-full flex justify-between items-center">
+            <button class="flex flex-col items-center gap-1">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-green-600 dark:text-green-500"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                <span class="text-[10px] font-medium text-green-600 dark:text-green-500">Home</span>
+            </button>
+            <button id="open-cart-btn" class="flex flex-col items-center gap-1 relative">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-gray-400 dark:text-gray-500"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
+                <span class="text-[10px] font-medium text-gray-500">Cart</span>
+                <span id="cart-badge" class="absolute -top-1 right-2 flex items-center justify-center h-4 w-4 rounded-full bg-red-500 text-white text-[9px] font-bold">0</span>
+            </button>
+        </div>
+    </nav>
+
+    <script>
+        // 1. UI LOADERS & DARK MODE
+        setTimeout(() => {
+            document.getElementById('skeleton-loader').classList.add('hidden');
+            document.getElementById('app-content').classList.remove('hidden');
+        }, 1000);
+
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        const darkIcon = document.getElementById('theme-toggle-dark-icon');
+        const lightIcon = document.getElementById('theme-toggle-light-icon');
+
+        function updateIcons() {
+            if (document.documentElement.classList.contains('dark')) {
+                darkIcon.classList.add('hidden'); lightIcon.classList.remove('hidden');
+            } else {
+                lightIcon.classList.add('hidden'); darkIcon.classList.remove('hidden');
+            }
+        }
+        updateIcons();
+
+        themeToggleBtn.addEventListener('click', function() {
+            document.documentElement.classList.toggle('dark');
+            localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+            updateIcons();
+        });
+
+        // 2. DYNAMIC CART SYSTEM
+        let cart = JSON.parse(localStorage.getItem('ujenzi_cart')) || [];
+        const cartBadge = document.getElementById('cart-badge');
+        const cartDrawer = document.getElementById('cart-drawer');
+        const cartContainer = document.getElementById('cart-container');
+        const cartItemsList = document.getElementById('cart-items-list');
+        const cartTotalPrice = document.getElementById('cart-total-price');
+
+        function updateCartUI() {
+            cartBadge.textContent = cart.reduce((sum, item) => sum + item.quantity, 0);
+            localStorage.setItem('ujenzi_cart', JSON.stringify(cart));
+            
+            cartItemsList.innerHTML = '';
+            let total = 0;
+
+            if(cart.length === 0) {
+                cartItemsList.innerHTML = '<p class="text-gray-500 text-center mt-10">Your cart is empty.</p>';
+            } else {
+                cart.forEach((item, index) => {
+                    total += item.price * item.quantity;
+                    cartItemsList.innerHTML += `
+                        <div class="flex justify-between items-center mb-4 p-3 bg-gray-50 dark:bg-gray-800 rounded-xl">
+                            <div>
+                                <h4 class="font-bold text-sm text-gray-900 dark:text-white">${item.name}</h4>
+                                <p class="text-xs text-gray-500">TZS ${item.price.toLocaleString()} x ${item.quantity}</p>
+                            </div>
+                            <button onclick="removeFromCart(${index})" class="text-red-500 text-xs font-bold">Remove</button>
+                        </div>
+                    `;
+                });
+            }
+            cartTotalPrice.textContent = total.toLocaleString();
+        }
+
+        function addToCart(name, price, quantity = 1) {
+            const existingItem = cart.find(item => item.name === name);
+            if (existingItem) existingItem.quantity += quantity;
+            else cart.push({ name, price: parseInt(price), quantity });
+            
+            updateCartUI();
+            
+            const toast = document.getElementById('toast');
+            toast.textContent = `Added ${name} to cart!`;
+            toast.classList.remove('opacity-0', 'pointer-events-none');
+            setTimeout(() => toast.classList.add('opacity-0', 'pointer-events-none'), 2000);
+            if (navigator.vibrate) navigator.vibrate(50);
+        }
+
+        window.removeFromCart = function(index) {
+            cart.splice(index, 1);
+            updateCartUI();
+        }
+
+        updateCartUI();
+
+        document.querySelectorAll('.add-to-cart-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                const name = btn.getAttribute('data-name');
+                const price = btn.getAttribute('data-price');
+                addToCart(name, price);
+            });
+        });
+
+        document.getElementById('open-cart-btn').addEventListener('click', () => {
+            cartDrawer.classList.remove('hidden');
+            setTimeout(() => cartContainer.classList.remove('translate-x-full'), 10);
+        });
+        document.getElementById('close-cart').addEventListener('click', () => {
+            cartContainer.classList.add('translate-x-full');
+            setTimeout(() => cartDrawer.classList.add('hidden'), 300);
+        });
+
+        // 3. MATERIAL ESTIMATOR
+        const estimatorBtn = document.getElementById('estimator-btn');
+        const estimatorModal = document.getElementById('estimator-modal');
+        const estimatorContainer = document.getElementById('estimator-container');
+        let estimatedBags = 0;
+        let estimatedCost = 0;
+
+        estimatorBtn.addEventListener('click', () => {
+            estimatorModal.classList.remove('hidden');
+            setTimeout(() => estimatorContainer.classList.remove('translate-y-full'), 10);
+        });
+
+        document.getElementById('close-estimator').addEventListener('click', () => {
+            estimatorContainer.classList.add('translate-y-full');
+            setTimeout(() => estimatorModal.classList.add('hidden'), 300);
+        });
+
+        document.getElementById('calculate-btn').addEventListener('click', () => {
+            const length = parseFloat(document.getElementById('est-length').value);
+            const width = parseFloat(document.getElementById('est-width').value);
+            
+            if(!length || !width) {
+                alert("Please enter valid numbers");
+                return;
+            }
+
+            const area = length * width;
+            const volume = area * 0.1; 
+            estimatedBags = Math.ceil(volume * 6.5); 
+            estimatedCost = estimatedBags * 18500; 
+
+            document.getElementById('est-cement-bags').textContent = `${estimatedBags} Bags of Cement`;
+            document.getElementById('est-total-cost').textContent = estimatedCost.toLocaleString();
+            document.getElementById('est-results').classList.remove('hidden');
+        });
+
+        document.getElementById('add-est-to-cart').addEventListener('click', () => {
+            addToCart("Simba Cement 50kg", 18500, estimatedBags);
+            document.getElementById('close-estimator').click();
+        });
+
+        // 4. SECURE AI CHATBOT (Calling Local Backend)
+        const chatModal = document.getElementById('chat-modal');
+        const chatContainer = document.getElementById('chat-container');
+        const chatBox = document.getElementById('chat-box');
+        const chatInput = document.getElementById('chat-input');
+        
+        document.getElementById('material-expert-btn').addEventListener('click', () => {
+            chatModal.classList.remove('hidden');
+            setTimeout(() => chatContainer.classList.remove('translate-y-full'), 10);
+        });
+        document.getElementById('close-chat').addEventListener('click', () => {
+            chatContainer.classList.add('translate-y-full');
+            setTimeout(() => chatModal.classList.add('hidden'), 300);
+        });
+
+        function appendMessage(text, isUser) {
+            const msgDiv = document.createElement('div');
+            msgDiv.className = `flex items-start gap-2 w-full ${isUser ? 'flex-row-reverse' : ''}`;
+            msgDiv.innerHTML = `
+                <div class="w-6 h-6 rounded-full flex items-center justify-center shrink-0 text-xs ${isUser ? 'bg-gray-800 text-white' : 'bg-green-100 text-xl'}">${isUser ? '👤' : '🤖'}</div>
+                <div class="p-3 rounded-2xl shadow-sm text-sm border ${isUser ? 'bg-gray-800 text-white rounded-tr-none' : 'bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-100 rounded-tl-none'}">${text}</div>
+            `;
+            chatBox.appendChild(msgDiv);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        async function sendMessage() {
+            const userText = chatInput.value.trim();
+            if (!userText) return;
+            
+            appendMessage(userText, true);
+            chatInput.value = '';
+
+            const loadingId = "loading-" + Date.now();
+            const loadingDiv = document.createElement('div');
+            loadingDiv.id = loadingId;
+            loadingDiv.className = "text-xs text-gray-400 italic ml-8";
+            loadingDiv.textContent = "AI is typing...";
+            chatBox.appendChild(loadingDiv);
+            chatBox.scrollTop = chatBox.scrollHeight;
+
+            try {
+                // Fetching from your local Node.js server!
+                const response = await fetch('http://localhost:3000/api/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: userText })
+                });
+                
+                const data = await response.json();
+                document.getElementById(loadingId).remove();
+                appendMessage(data.reply || "Error: No response from server.", false);
+            } catch (error) {
+                document.getElementById(loadingId).remove();
+                appendMessage("Cannot connect to the server. Make sure your Node.js backend is running!", false);
+            }
+        }
+
+        document.getElementById('send-btn').addEventListener('click', sendMessage);
+        chatInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') sendMessage(); });
+    </script>
+</body>
+</html>
