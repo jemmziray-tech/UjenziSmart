@@ -307,7 +307,7 @@
                         <span class="text-[9px] bg-amber-100 text-amber-700 px-2 py-1 rounded-md font-bold uppercase tracking-widest">Soon</span>
                     </button>
                     
-                    <button onclick="localStorage.removeItem('ujenzi_user'); location.reload();" class="w-full flex items-center gap-4 p-5 hover:bg-red-50 dark:hover:bg-red-900/10 transition click-press text-red-500 rounded-b-[2.5rem]">
+                    <button onclick="window.logoutUser()" class="w-full flex items-center gap-4 p-5 hover:bg-red-50 dark:hover:bg-red-900/10 transition click-press text-red-500 rounded-b-[2.5rem]">
                         <span class="text-xl">🚪</span>
                         <span class="font-bold text-sm text-left">Logout from Account</span>
                     </button>
@@ -918,8 +918,9 @@
     
         <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-        import { getAuth, GoogleAuthProvider, signInWithRedirect, getRedirectResult } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
-        import { getMessaging, getToken, onMessage } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-messaging.js";
+        // IMPORT ADDED: signOut and onAuthStateChanged
+        import { getAuth, GoogleAuthProvider, signInWithRedirect, getRedirectResult, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+        import { getMessaging, getToken } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-messaging.js";
         
         const firebaseConfig = { 
             apiKey: "AIzaSyCX2C1TXRb20nGtxEaYXGUo2KEH7gbZCY0", 
@@ -935,58 +936,59 @@
         const auth = getAuth(app);
         const provider = new GoogleAuthProvider();
         const messaging = getMessaging(app);
-        
-        // Listen for foreground messages
-        onMessage(messaging, (payload) => {
-            alert(`📢 UjenziSmart News: ${payload.notification.title}\n${payload.notification.body}`);
-        });
 
+        // 🛠️ AUTO-HEALER: If Firebase remembers you but the app forgot, this fixes it instantly!
+        onAuthStateChanged(auth, (user) => {
+            if (user && !localStorage.getItem('ujenzi_user')) {
+                localStorage.setItem('ujenzi_user', JSON.stringify({ 
+                    name: user.displayName, 
+                    email: user.email, 
+                    photoURL: user.photoURL 
+                }));
+                location.reload();
+            }
+        });
+        
         getRedirectResult(auth).then((res) => { 
             if (res) { 
                 localStorage.setItem('ujenzi_user', JSON.stringify({ name: res.user.displayName, email: res.user.email, photoURL: res.user.photoURL })); 
                 location.reload(); 
             } 
         }).catch((e) => { 
-            if (e.code !== 'auth/popup-closed-by-user') console.error(e); 
+            console.error(e); 
+            document.getElementById('google-signin-btn').innerHTML = "Continue with Google";
         });
 
         document.getElementById('google-signin-btn').onclick = () => { 
-            document.getElementById('google-signin-btn').innerHTML = "⏳ Securely connecting..."; 
+            document.getElementById('google-signin-btn').innerHTML = "⏳ Connecting..."; 
             signInWithRedirect(auth, provider); 
         };
 
+        // 🛠️ PROPER LOGOUT LOGIC
+        window.logoutUser = async function() {
+            try {
+                await signOut(auth); // Tells Firebase to log out securely
+                localStorage.removeItem('ujenzi_user'); // Clears the app memory
+                localStorage.removeItem('ujenzi_notif'); 
+                localStorage.removeItem('fcm_token');
+                location.reload(); // Refreshes back to login screen
+            } catch (error) {
+                console.error("Logout Error:", error);
+            }
+        };
+
         window.toggleNotifications = async function() {
-            const toggle = document.getElementById('notif-toggle');
+            const toggle = document.getElementById('notif-toggle'); 
             if (toggle.checked) {
                 try {
                     const p = await Notification.requestPermission();
                     if (p === 'granted') {
-                        const reg = await navigator.serviceWorker.register('/UjenziSmart/firebase-messaging-sw.js', { scope: '/UjenziSmart/' });
-                        const readyReg = await navigator.serviceWorker.ready;
-                        
-                        // 🚨 EXACT CORRECT VAPID KEY 🚨
-                        const tok = await getToken(messaging, { 
-                            vapidKey: "BJjI5bm8ik4BOMzJ-OGkMELrR1ub_Z0HXQKsJ7pBa2oXtGlwzbBSPrGsnRoJEcLna9KfJ6vgNhvDejOfA02khro", 
-                            serviceWorkerRegistration: readyReg 
-                        });
-
-                        if (tok) { 
-                            localStorage.setItem('ujenzi_notif', 'true'); 
-                            localStorage.setItem('fcm_token', tok);
-                            console.log("FCM Token:", tok);
-                            alert("Notifications Enabled Successfully!"); 
-                        }
-                    } else { 
-                        toggle.checked = false; 
-                    }
-                } catch (e) { 
-                    console.error("FCM Error:", e);
-                    alert("Error authorizing notifications. See console."); 
-                    toggle.checked = false; 
-                }
-            } else { 
-                localStorage.setItem('ujenzi_notif', 'false'); 
-            }
+                        const reg = await navigator.serviceWorker.register('/UjenziSmart/firebase-messaging-sw.js');
+                        const tok = await getToken(messaging, { vapidKey: "BJJl5bm8iK4BOMzJ-OGkMELrR1ub_Z0HXQKsJ7pBa2oXtGlwzbBSPrGsnRoJEcLna9KfJ6vgNhvDejOfA02khro", serviceWorkerRegistration: reg });
+                        if (tok) { localStorage.setItem('ujenzi_notif', 'true'); alert("Notifications Enabled!"); }
+                    } else { toggle.checked = false; }
+                } catch (e) { alert("Enable failed. Ensure SW file exists."); toggle.checked = false; }
+            } else { localStorage.setItem('ujenzi_notif', 'false'); }
         };
     </script>
 </body>
