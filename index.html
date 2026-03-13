@@ -918,9 +918,9 @@
     
         <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-        // IMPORT ADDED: signOut and onAuthStateChanged
-        import { getAuth, GoogleAuthProvider, signInWithRedirect, getRedirectResult, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
-        import { getMessaging, getToken } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-messaging.js";
+        // Switched back to signInWithPopup for maximum reliability on GitHub Pages
+        import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+        import { getMessaging, getToken, onMessage } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-messaging.js";
         
         const firebaseConfig = { 
             apiKey: "AIzaSyCX2C1TXRb20nGtxEaYXGUo2KEH7gbZCY0", 
@@ -936,8 +936,13 @@
         const auth = getAuth(app);
         const provider = new GoogleAuthProvider();
         const messaging = getMessaging(app);
+        
+        // Listen for foreground notifications
+        onMessage(messaging, (payload) => {
+            alert(`📢 UjenziSmart News: ${payload.notification.title}\n${payload.notification.body}`);
+        });
 
-        // 🛠️ AUTO-HEALER: If Firebase remembers you but the app forgot, this fixes it instantly!
+        // AUTO-HEALER: If Firebase remembers you, log in instantly without reloading the page
         onAuthStateChanged(auth, (user) => {
             if (user && !localStorage.getItem('ujenzi_user')) {
                 localStorage.setItem('ujenzi_user', JSON.stringify({ 
@@ -945,50 +950,80 @@
                     email: user.email, 
                     photoURL: user.photoURL 
                 }));
-                location.reload();
+                // Manually run checkAuth from the main script to hide the login screen instantly
+                if(typeof checkAuth === "function") checkAuth();
             }
         });
-        
-        getRedirectResult(auth).then((res) => { 
-            if (res) { 
-                localStorage.setItem('ujenzi_user', JSON.stringify({ name: res.user.displayName, email: res.user.email, photoURL: res.user.photoURL })); 
-                location.reload(); 
-            } 
-        }).catch((e) => { 
-            console.error(e); 
-            document.getElementById('google-signin-btn').innerHTML = "Continue with Google";
-        });
 
-        document.getElementById('google-signin-btn').onclick = () => { 
-            document.getElementById('google-signin-btn').innerHTML = "⏳ Connecting..."; 
-            signInWithRedirect(auth, provider); 
+        // THE LOGIN BUTTON (Using secure Popup)
+        document.getElementById('google-signin-btn').onclick = async () => { 
+            const btn = document.getElementById('google-signin-btn');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = "⏳ Securely logging in..."; 
+            
+            try {
+                const result = await signInWithPopup(auth, provider);
+                localStorage.setItem('ujenzi_user', JSON.stringify({ 
+                    name: result.user.displayName, 
+                    email: result.user.email, 
+                    photoURL: result.user.photoURL 
+                }));
+                location.reload(); 
+            } catch (error) {
+                console.error("Login Error:", error);
+                // If they just closed the popup, don't show an error, just reset the button
+                if (error.code !== 'auth/popup-closed-by-user') {
+                    alert("Login failed. Please try again.");
+                }
+                btn.innerHTML = originalText;
+            }
         };
 
-        // 🛠️ PROPER LOGOUT LOGIC
+        // THE LOGOUT BUTTON
         window.logoutUser = async function() {
             try {
-                await signOut(auth); // Tells Firebase to log out securely
-                localStorage.removeItem('ujenzi_user'); // Clears the app memory
+                await signOut(auth); // Tell Firebase to forget the user
+                localStorage.removeItem('ujenzi_user'); // Tell our app to forget the user
                 localStorage.removeItem('ujenzi_notif'); 
                 localStorage.removeItem('fcm_token');
-                location.reload(); // Refreshes back to login screen
+                location.reload(); // Refresh the page to show the login screen again
             } catch (error) {
                 console.error("Logout Error:", error);
             }
         };
 
+        // PUSH NOTIFICATIONS
         window.toggleNotifications = async function() {
-            const toggle = document.getElementById('notif-toggle'); 
+            const toggle = document.getElementById('notif-toggle');
             if (toggle.checked) {
                 try {
                     const p = await Notification.requestPermission();
                     if (p === 'granted') {
-                        const reg = await navigator.serviceWorker.register('/UjenziSmart/firebase-messaging-sw.js');
-                        const tok = await getToken(messaging, { vapidKey: "BJJl5bm8iK4BOMzJ-OGkMELrR1ub_Z0HXQKsJ7pBa2oXtGlwzbBSPrGsnRoJEcLna9KfJ6vgNhvDejOfA02khro", serviceWorkerRegistration: reg });
-                        if (tok) { localStorage.setItem('ujenzi_notif', 'true'); alert("Notifications Enabled!"); }
-                    } else { toggle.checked = false; }
-                } catch (e) { alert("Enable failed. Ensure SW file exists."); toggle.checked = false; }
-            } else { localStorage.setItem('ujenzi_notif', 'false'); }
+                        const reg = await navigator.serviceWorker.register('/UjenziSmart/firebase-messaging-sw.js', { scope: '/UjenziSmart/' });
+                        const readyReg = await navigator.serviceWorker.ready;
+                        
+                        const tok = await getToken(messaging, { 
+                            vapidKey: "BJjI5bm8ik4BOMzJ-OGkMELrR1ub_Z0HXQKsJ7pBa2oXtGlwzbBSPrGsnRoJEcLna9KfJ6vgNhvDejOfA02khro", 
+                            serviceWorkerRegistration: readyReg 
+                        });
+
+                        if (tok) { 
+                            localStorage.setItem('ujenzi_notif', 'true'); 
+                            localStorage.setItem('fcm_token', tok);
+                            console.log("FCM Token:", tok);
+                            alert("Notifications Enabled Successfully!"); 
+                        }
+                    } else { 
+                        toggle.checked = false; 
+                    }
+                } catch (e) { 
+                    console.error("FCM Error:", e);
+                    alert("Error authorizing notifications. See console."); 
+                    toggle.checked = false; 
+                }
+            } else { 
+                localStorage.setItem('ujenzi_notif', 'false'); 
+            }
         };
     </script>
 </body>
