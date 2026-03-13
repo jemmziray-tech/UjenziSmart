@@ -24,5 +24,5 @@ messaging.onBackgroundMessage((payload) => {
         icon: 'https://ui-avatars.com/api/?name=US&background=10b981&color=fff' // Default icon
     };
 
-    self.registration.showNotification(notificationTitle, notificationOptions);
+    return self.registration.showNotification(notificationTitle, notificationOptions);
 });
