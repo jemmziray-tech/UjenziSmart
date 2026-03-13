@@ -918,9 +918,7 @@
     
         <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-        // WE KEEP REDIRECT LOGIN SO IT DOESN'T BREAK
         import { getAuth, GoogleAuthProvider, signInWithRedirect, getRedirectResult } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
-        // WE ADDED onMessage FROM THE AI'S ADVICE
         import { getMessaging, getToken, onMessage } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-messaging.js";
         
         const firebaseConfig = { 
@@ -929,7 +927,7 @@
             projectId: "ujenzismart-878af", 
             storageBucket: "ujenzismart-878af.firebasestorage.app", 
             messagingSenderId: "626807014511", 
-            appId: "1:626807014511:web:844e137d32048d6460399a",
+            appId: "1:626807014511:web:844e137d32048d6460399a", 
             measurementId: "G-V8C9KKGKFY" 
         };
 
@@ -937,97 +935,59 @@
         const auth = getAuth(app);
         const provider = new GoogleAuthProvider();
         const messaging = getMessaging(app);
-
-        // --- FOREGROUND NOTIFICATIONS (The AI's great addition) ---
+        
+        // Listen for foreground messages
         onMessage(messaging, (payload) => {
-            console.log('Message received while app is open:', payload);
             alert(`📢 UjenziSmart News: ${payload.notification.title}\n${payload.notification.body}`);
         });
 
-        // --- GOOGLE LOGIN (Kept as Redirect so it works on mobile) ---
-        getRedirectResult(auth).then((result) => {
-            if (result) {
-                localStorage.setItem('ujenzi_user', JSON.stringify({ 
-                    name: result.user.displayName, 
-                    email: result.user.email,
-                    photoURL: result.user.photoURL
-                }));
+        getRedirectResult(auth).then((res) => { 
+            if (res) { 
+                localStorage.setItem('ujenzi_user', JSON.stringify({ name: res.user.displayName, email: res.user.email, photoURL: res.user.photoURL })); 
                 location.reload(); 
-            }
-        }).catch((error) => {
-            if (error.code !== 'auth/popup-closed-by-user') {
-                console.error("Login Error: ", error);
-            }
+            } 
+        }).catch((e) => { 
+            if (e.code !== 'auth/popup-closed-by-user') console.error(e); 
         });
 
-        document.getElementById('google-signin-btn').onclick = () => {
-            const btn = document.getElementById('google-signin-btn');
-            btn.innerHTML = "⏳ Redirecting securely...";
-            signInWithRedirect(auth, provider);
+        document.getElementById('google-signin-btn').onclick = () => { 
+            document.getElementById('google-signin-btn').innerHTML = "⏳ Securely connecting..."; 
+            signInWithRedirect(auth, provider); 
         };
 
-        // --- PUSH NOTIFICATIONS (With our GitHub Pages Sub-folder fix) ---
         window.toggleNotifications = async function() {
             const toggle = document.getElementById('notif-toggle');
-            const userStr = localStorage.getItem('ujenzi_user');
-            
-            if (!userStr) {
-                alert("Please sign in first to enable notifications!");
-                toggle.checked = false;
-                return;
-            }
-            
             if (toggle.checked) {
                 try {
-                    const permission = await Notification.requestPermission();
-                    if (permission === 'granted') {
-                        
-                        // 1. Force the Service worker to the correct GitHub sub-folder
-                        const registration = await navigator.serviceWorker.register('/UjenziSmart/firebase-messaging-sw.js', {
-                            scope: '/UjenziSmart/'
-                        });
-                        
-                        // 2. Wait for it to be ready
+                    const p = await Notification.requestPermission();
+                    if (p === 'granted') {
+                        const reg = await navigator.serviceWorker.register('/UjenziSmart/firebase-messaging-sw.js', { scope: '/UjenziSmart/' });
                         const readyReg = await navigator.serviceWorker.ready;
                         
-                        // 3. Ask for the token using the precise registration
-                        const token = await getToken(messaging, { 
-                            vapidKey: "BJJl5bm8iK4BOMzJ-OGkMELrR1ub_Z0HXQKsJ7pBa2oXtGlwzbBSPrGsnRoJEcLna9KfJ6vgNhvDejOfA02khro",
-                            serviceWorkerRegistration: readyReg
+                        // 🚨 EXACT CORRECT VAPID KEY 🚨
+                        const tok = await getToken(messaging, { 
+                            vapidKey: "BJjI5bm8ik4BOMzJ-OGkMELrR1ub_Z0HXQKsJ7pBa2oXtGlwzbBSPrGsnRoJEcLna9KfJ6vgNhvDejOfA02khro", 
+                            serviceWorkerRegistration: readyReg 
                         });
-                        
-                        if (token) {
-                            console.log("FCM Token:", token);
-                            localStorage.setItem('ujenzi_notif', 'true');
-                            localStorage.setItem('fcm_token', token);
-                            alert("Notifications enabled successfully!");
-                        } else {
-                            alert("Failed to get push token.");
-                            toggle.checked = false;
+
+                        if (tok) { 
+                            localStorage.setItem('ujenzi_notif', 'true'); 
+                            localStorage.setItem('fcm_token', tok);
+                            console.log("FCM Token:", tok);
+                            alert("Notifications Enabled Successfully!"); 
                         }
-                    } else {
-                        alert("Permission denied by browser.");
-                        toggle.checked = false;
+                    } else { 
+                        toggle.checked = false; 
                     }
-                } catch (error) {
-                    console.error("Notification Setup Error:", error);
-                    alert("Error: Check developer console. Ensure firebase-messaging-sw.js is in the UjenziSmart repository.");
-                    toggle.checked = false;
+                } catch (e) { 
+                    console.error("FCM Error:", e);
+                    alert("Error authorizing notifications. See console."); 
+                    toggle.checked = false; 
                 }
-            } else {
-                localStorage.setItem('ujenzi_notif', 'false');
-                localStorage.removeItem('fcm_token');
+            } else { 
+                localStorage.setItem('ujenzi_notif', 'false'); 
             }
         };
-
-        // Check if toggle should be ON when page loads
-        document.addEventListener("DOMContentLoaded", () => {
-            const notifToggle = document.getElementById('notif-toggle');
-            if (notifToggle) {
-                notifToggle.checked = localStorage.getItem('ujenzi_notif') === 'true';
-            }
-        });
     </script>
-
 </body>
 </html>
