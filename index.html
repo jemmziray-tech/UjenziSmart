@@ -27,7 +27,7 @@
         /* Smartphone Side-Slide Transition for Back Navigation */
         @keyframes slideBackFade { from { opacity: 0; transform: translateX(-30px); } to { opacity: 1; transform: translateX(0); } }
 
-        .stagger-item { animation: staggerIn 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) both; }
+        .stagger-item { animation: staggerIn 0.5s cubic-bezier(0.22, 1, 0.36, 1) both; }
         @keyframes staggerIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
 
         .click-press { transition: transform 0.1s ease; }
@@ -129,7 +129,7 @@
             <div class="flex items-center justify-between mb-4 h-12">
                 <div class="flex items-center gap-3">
                     <button id="header-back-btn" onclick="goBack()" class="hidden w-11 h-11 bg-white/10 rounded-full border border-white/20 flex items-center justify-center font-bold text-xl click-press glass hover:bg-white/20 transition-colors">←</button>
-                    <img id="header-p-image" src="https://ui-avatars.com/api/?name=User&background=10b981&color=fff" class="w-11 h-11 rounded-full border-[3px] border-white/20 shadow-lg object-cover click-press cursor-pointer transition-transform active:scale-95" onclick="navigateTo('profile')">
+                    <img id="header-p-image" src="https://ui-avatars.com/api/?name=User&background=10b981&color=fff" class="w-11 h-11 rounded-full border-[3px] border-white/20 shadow-lg object-cover click-press cursor-pointer transition-transform active:scale-95" onclick="navigateTo('profile', false, true)">
                 </div>
 
                 <button onclick="window.switchTheme()" class="w-11 h-11 bg-white/5 rounded-full border border-white/10 flex items-center justify-center click-press shadow-inner glass relative overflow-hidden transition-colors hover:bg-white/10">
@@ -485,17 +485,17 @@
     </button>
 
     <nav class="fixed bottom-0 w-full bg-white/95 dark:bg-[#0f172a]/95 glass border-t dark:border-gray-800 px-6 py-2 flex justify-around items-center z-50">
-        <button onclick="navigateTo('home')" id="nav-home" class="nav-btn active-nav flex flex-col items-center gap-1 text-gray-400 text-[10px] font-bold transition-all p-2 click-press w-16 text-green-600">
+        <button onclick="navigateTo('home', false, true)" id="nav-home" class="nav-btn active-nav flex flex-col items-center gap-1 text-gray-400 text-[10px] font-bold transition-all p-2 click-press w-16 text-green-600">
             <span class="text-2xl mb-0.5">🏠</span><span>Home</span>
         </button>
-        <button onclick="navigateTo('trending')" id="nav-trending" class="nav-btn flex flex-col items-center gap-1 text-gray-400 text-[10px] font-bold transition-all p-2 click-press w-16">
+        <button onclick="navigateTo('trending', false, true)" id="nav-trending" class="nav-btn flex flex-col items-center gap-1 text-gray-400 text-[10px] font-bold transition-all p-2 click-press w-16">
             <span class="text-2xl mb-0.5">📈</span><span>Watch</span>
         </button>
-        <button onclick="navigateTo('cart')" id="nav-cart" class="nav-btn flex flex-col items-center gap-1 text-gray-400 text-[10px] font-bold transition-all p-2 relative click-press w-16">
+        <button onclick="navigateTo('cart', false, true)" id="nav-cart" class="nav-btn flex flex-col items-center gap-1 text-gray-400 text-[10px] font-bold transition-all p-2 relative click-press w-16">
             <span class="text-2xl mb-0.5">🛒</span><span>Cart</span>
             <span id="cart-badge" class="hidden absolute top-1 right-2 bg-red-500 text-white text-[8px] px-1.5 rounded-full font-black ring-2 ring-white dark:ring-gray-900 shadow-sm">0</span>
         </button>
-        <button onclick="navigateTo('profile')" id="nav-profile" class="nav-btn flex flex-col items-center gap-1 text-gray-400 text-[10px] font-bold transition-all p-2 click-press w-16">
+        <button onclick="navigateTo('profile', false, true)" id="nav-profile" class="nav-btn flex flex-col items-center gap-1 text-gray-400 text-[10px] font-bold transition-all p-2 click-press w-16">
             <span class="text-2xl mb-0.5">👤</span><span>Profile</span>
         </button>
     </nav>
@@ -558,7 +558,7 @@
 
             if (event.state && event.state.view) {
                 viewHistory.pop();
-                navigateTo(event.state.view, true); // True triggers the slide back animation
+                navigateTo(event.state.view, true);
             } else {
                 navigateTo('home', true);
             }
@@ -595,7 +595,7 @@
         };
 
         // --- NAVIGATION CONTROLLER ---
-        window.navigateTo = function(viewName, isBack = false) {
+        window.navigateTo = function(viewName, isBack = false, isTab = false) {
             document.querySelectorAll('.view-content').forEach(v => {
                 v.classList.add('hidden');
                 v.style.animation = 'none'; 
@@ -605,10 +605,12 @@
                 targetView.classList.remove('hidden');
                 targetView.offsetHeight; 
                 
-                if (isBack) {
-                    targetView.style.animation = 'slideBackFade 0.4s cubic-bezier(0.2, 0.8, 0.2, 1) forwards';
+                if (isTab) {
+                    targetView.style.animation = 'tabFadeScale 0.35s cubic-bezier(0.22, 1, 0.36, 1) forwards';
+                } else if (isBack) {
+                    targetView.style.animation = 'slideInLeftNative 0.35s cubic-bezier(0.22, 1, 0.36, 1) forwards';
                 } else {
-                    targetView.style.animation = 'slideUpFade 0.4s cubic-bezier(0.2, 0.8, 0.2, 1) forwards';
+                    targetView.style.animation = 'slideInRightNative 0.35s cubic-bezier(0.22, 1, 0.36, 1) forwards';
                 }
             }
 
@@ -660,13 +662,13 @@
             if(viewHistory.length > 1) {
                 viewHistory.pop(); 
                 const previous = viewHistory[viewHistory.length - 1];
-                navigateTo(previous, true);
+                navigateTo(previous, true, false);
             } else {
-                navigateTo('home');
+                navigateTo('home', false, true);
             }
         }
 
-        // --- PROFILE & SETUP LOGIC ---
+        // --- AUTH, PROFILE & SETUP ---
         window.checkAuth = function() {
             const user = JSON.parse(localStorage.getItem('ujenzi_user'));
             if (user) {
@@ -939,7 +941,7 @@
             window.open(`https://wa.me/${WHATSAPP_NUM}?text=${encodeURIComponent(m)}`, '_blank');
         }
 
-        // --- WISHLIST PHASE ---
+        // --- 🌟 NEW: ADVANCED WISHLIST PHASE MANAGEMENT 🌟 ---
         window.saveToPhase = function() {
             if(!currentModalProduct) return;
             const phase = document.getElementById('phase-selector').value;
@@ -951,6 +953,24 @@
             if(document.getElementById('view-profile').classList.contains('hidden') === false) updateWishlistCounts();
         }
 
+        window.removeFromPhase = function(phase, originalIndex) {
+            let list = JSON.parse(localStorage.getItem('ujenzi_wishlist') || '[]');
+            list.splice(originalIndex, 1);
+            localStorage.setItem('ujenzi_wishlist', JSON.stringify(list));
+            updateWishlistCounts();
+            renderWishlistPhase(phase); // refresh the view instantly
+        };
+
+        window.clearPhase = function(phase) {
+            if(confirm(`Are you sure you want to remove all items from ${phase}?`)) {
+                let list = JSON.parse(localStorage.getItem('ujenzi_wishlist') || '[]');
+                list = list.filter(x => x.phase !== phase); // Keep everything EXCEPT this phase
+                localStorage.setItem('ujenzi_wishlist', JSON.stringify(list));
+                updateWishlistCounts();
+                renderWishlistPhase(phase); // refresh the view instantly
+            }
+        };
+
         function updateWishlistCounts() {
             const list = JSON.parse(localStorage.getItem('ujenzi_wishlist') || '[]');
             document.getElementById('count-foundation').textContent = `${list.filter(x => x.phase === 'Foundation').length} Items`;
@@ -960,10 +980,40 @@
 
         window.renderWishlistPhase = function(phase) {
             const list = JSON.parse(localStorage.getItem('ujenzi_wishlist') || '[]');
-            const items = list.filter(x => x.phase === phase);
+            
+            // Map the items so we remember their exact original index in the main array for accurate deletion
+            const items = list.map((item, index) => ({...item, originalIndex: index})).filter(x => x.phase === phase);
+            
             const container = document.getElementById('wishlist-render-area');
-            if(items.length === 0) { container.innerHTML = `<p class="text-xs text-gray-400 italic mb-6 text-center">No items saved in this phase yet.</p>`; container.classList.remove('hidden'); return; }
-            container.innerHTML = `<div class="mb-4 flex items-center justify-between"><h4 class="font-bold text-sm uppercase tracking-widest text-green-600">${phase} Items</h4><button onclick="document.getElementById('wishlist-render-area').classList.add('hidden')" class="text-xs text-gray-400 font-bold click-press">Close</button></div><div class="grid grid-cols-2 gap-4 mb-6">${items.map(p => `<div class="bg-white dark:bg-gray-800 p-3 rounded-2xl shadow-sm border dark:border-gray-700 animate-slideUpFade"><img src="${p.img}" class="w-full h-20 object-cover rounded-xl mb-2"><p class="text-[9px] font-bold h-6 overflow-hidden">${p.name}</p><p class="text-green-600 font-black text-[10px]">TZS ${p.price.toLocaleString()}</p></div>`).join('')}</div>`;
+            
+            if(items.length === 0) { 
+                container.innerHTML = `
+                    <div class="mb-4 flex items-center justify-between">
+                        <h4 class="font-bold text-sm uppercase tracking-widest text-green-600">${phase} Items</h4>
+                        <button onclick="document.getElementById('wishlist-render-area').classList.add('hidden')" class="text-xs text-gray-400 font-bold click-press">Close</button>
+                    </div>
+                    <p class="text-xs text-gray-400 italic mb-6 text-center bg-gray-50 dark:bg-gray-800 p-4 rounded-[1.5rem] border dark:border-gray-700">No items saved in this phase yet.</p>`; 
+                container.classList.remove('hidden'); 
+                return; 
+            }
+            
+            container.innerHTML = `
+                <div class="mb-4 flex items-center justify-between">
+                    <h4 class="font-bold text-sm uppercase tracking-widest text-green-600">${phase} Items</h4>
+                    <div class="flex gap-4 items-center">
+                        <button onclick="clearPhase('${phase}')" class="text-xs text-red-500 font-bold click-press uppercase tracking-widest bg-red-50 dark:bg-red-900/20 px-2 py-1 rounded-md">Clear All</button>
+                        <button onclick="document.getElementById('wishlist-render-area').classList.add('hidden')" class="text-xs text-gray-400 font-bold click-press">Close</button>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-4 mb-6">
+                    ${items.map(p => `
+                    <div class="bg-white dark:bg-gray-800 p-3 rounded-2xl shadow-sm border dark:border-gray-700 relative animate-slideUpFade group">
+                        <button onclick="removeFromPhase('${phase}', ${p.originalIndex})" class="absolute top-1 right-1 w-7 h-7 bg-red-50 dark:bg-red-900/40 text-red-500 rounded-full flex items-center justify-center text-xs font-bold shadow-sm z-10 click-press transition-colors hover:bg-red-100">✕</button>
+                        <img src="${p.img}" class="w-full h-20 object-cover rounded-xl mb-2">
+                        <p class="text-[9px] font-bold h-6 overflow-hidden">${p.name}</p>
+                        <p class="text-green-600 font-black text-[10px]">TZS ${p.price.toLocaleString()}</p>
+                    </div>`).join('')}
+                </div>`;
             container.classList.remove('hidden');
         }
 
@@ -1048,8 +1098,8 @@
     
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-        import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged, updateProfile } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
-        import { getMessaging, getToken, onMessage } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-messaging.js"; // RESTORED PUSH NOTIFICATIONS
+        import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithRedirect, getRedirectResult, signOut, onAuthStateChanged, updateProfile } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+        import { getMessaging, getToken, onMessage } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-messaging.js";
         
         const firebaseConfig = { 
             apiKey: "AIzaSyCX2C1TXRb20nGtxEaYXGUo2KEH7gbZCY0", 
@@ -1064,11 +1114,47 @@
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const provider = new GoogleAuthProvider();
-        
-        // CRITICAL FIX: Forces Google to prompt the user to choose an account upon logging in. Breaks the infinite cache loop!
+
         provider.setCustomParameters({ prompt: 'select_account' });
 
-        // AUTO-HEALER
+        // 1. FALLBACK REDIRECT CATCHER 
+        getRedirectResult(auth).then((result) => {
+            if (result) {
+                localStorage.setItem('ujenzi_user', JSON.stringify({ 
+                    name: result.user.displayName, 
+                    email: result.user.email, 
+                    photoURL: result.user.photoURL 
+                }));
+                location.reload();
+            }
+        }).catch((error) => {
+            console.error("Redirect Login Error:", error);
+            if (error.code === 'auth/unauthorized-domain') {
+                 alert("🚨 DEVELOPER ALERT: You must add 'jemmziray-tech.github.io' to your Firebase Console under Authentication > Settings > Authorized Domains.");
+            }
+        });
+
+        // 2. THE BULLETPROOF LOGIN BUTTON (Popup with Redirect Fallback)
+        const googleBtn = document.getElementById('google-signin-btn');
+        if(googleBtn) {
+            googleBtn.onclick = async () => { 
+                const originalText = googleBtn.innerHTML;
+                googleBtn.innerHTML = "⏳ Securely logging in..."; 
+                try {
+                    await signInWithPopup(auth, provider);
+                } catch (error) {
+                    console.error("Login Trigger Error:", error);
+                    if (error.code === 'auth/popup-blocked') {
+                        await signInWithRedirect(auth, provider);
+                    } else if (error.code !== 'auth/popup-closed-by-user' && error.code !== 'auth/cancelled-popup-request') {
+                        alert("Login failed: " + error.message);
+                    }
+                    googleBtn.innerHTML = originalText;
+                }
+            };
+        }
+
+        // 3. AUTO-HEALER
         onAuthStateChanged(auth, (user) => {
             if (user) {
                 localStorage.setItem('ujenzi_user', JSON.stringify({ 
@@ -1084,38 +1170,17 @@
             }
         });
 
-        // THE LOGIN BUTTON (Safe Popup Mode)
-        const googleBtn = document.getElementById('google-signin-btn');
-        if(googleBtn) {
-            googleBtn.onclick = async () => { 
-                const originalText = googleBtn.innerHTML;
-                googleBtn.innerHTML = "⏳ Securely logging in..."; 
-                try {
-                    await signInWithPopup(auth, provider);
-                    googleBtn.innerHTML = originalText;
-                } catch (error) {
-                    console.error("Login Trigger Error:", error);
-                    if (error.code !== 'auth/popup-closed-by-user' && error.code !== 'auth/cancelled-popup-request') {
-                        alert("Login failed: " + error.message);
-                    }
-                    googleBtn.innerHTML = originalText;
-                }
-            };
-        }
-
-        // LOGOUT BUTTON
-        window.logoutUser = function() {
-            signOut(auth).then(() => {
+        // 4. LOGOUT & PROFILE EDITING
+        window.logoutUser = async function() {
+            try {
+                await signOut(auth);
                 localStorage.removeItem('ujenzi_user');
                 localStorage.removeItem('ujenzi_notif'); 
                 localStorage.removeItem('fcm_token');
                 location.reload(); 
-            }).catch((error) => {
-                console.error("Logout Error:", error);
-            });
+            } catch (error) { console.error("Logout Error:", error); }
         };
 
-        // UPDATE FIREBASE PROFILE NAME
         window.updateFirebaseName = async function(newName) {
             if(auth.currentUser) {
                 try {
@@ -1125,7 +1190,7 @@
             }
         };
 
-        // 🌟 RESTORED PUSH NOTIFICATIONS (Wrapped in Try/Catch for supreme safety) 🌟
+        // 5. PUSH NOTIFICATIONS (Wrapped in try/catch to absolutely prevent login crashes)
         let messaging = null;
         try {
             messaging = getMessaging(app);
