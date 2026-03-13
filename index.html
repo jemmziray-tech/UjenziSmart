@@ -283,17 +283,17 @@
             <div class="grid grid-cols-3 gap-3 mb-8 stagger-item" style="animation-delay: 0.1s">
                 <div class="bg-white dark:bg-gray-800 p-4 rounded-[1.5rem] border dark:border-gray-700 shadow-sm click-press flex flex-col items-center text-center transition-shadow hover:shadow-md" onclick="renderWishlistPhase('Foundation')">
                     <div class="text-2xl mb-1">🏗️</div>
-                    <p class="font-black text-[10px] text-gray-800 dark:text-white">Phase 1</p>
+                    <p class="font-black text-[10px] text-gray-800 dark:text-white">Foundation</p>
                     <p class="text-[9px] text-green-500 font-black mt-2" id="count-foundation">0 Items</p>
                 </div>
                 <div class="bg-white dark:bg-gray-800 p-4 rounded-[1.5rem] border dark:border-gray-700 shadow-sm click-press flex flex-col items-center text-center transition-shadow hover:shadow-md" onclick="renderWishlistPhase('Roofing')">
                     <div class="text-2xl mb-1">🏠</div>
-                    <p class="font-black text-[10px] text-gray-800 dark:text-white">Phase 2</p>
+                    <p class="font-black text-[10px] text-gray-800 dark:text-white">Roofing</p>
                     <p class="text-[9px] text-green-500 font-black mt-2" id="count-roofing">0 Items</p>
                 </div>
                 <div class="bg-white dark:bg-gray-800 p-4 rounded-[1.5rem] border dark:border-gray-700 shadow-sm click-press flex flex-col items-center text-center transition-shadow hover:shadow-md" onclick="renderWishlistPhase('Finishing')">
                     <div class="text-2xl mb-1">🎨</div>
-                    <p class="font-black text-[10px] text-gray-800 dark:text-white">Phase 3</p>
+                    <p class="font-black text-[10px] text-gray-800 dark:text-white">Finishing</p>
                     <p class="text-[9px] text-green-500 font-black mt-2" id="count-finishing">0 Items</p>
                 </div>
             </div>
@@ -1286,9 +1286,9 @@
         let unsubscribeOrders = null;
 
         function listenToUserOrders(uid) {
-            const q = query(collection(db, "orders"), where("userId", "==", uid), orderBy("createdAt", "desc"));
+            // BYPASS GOOGLE'S INDEX BLOCK: We removed the orderBy rule from Firebase
+            const q = query(collection(db, "orders"), where("userId", "==", uid));
             
-            // Try-catch block in case Firestore requires an index creation first
             try {
                 unsubscribeOrders = onSnapshot(q, (snapshot) => {
                     let history = [];
@@ -1302,6 +1302,13 @@
                         }
                     });
 
+                    // THE TRICK: Sort the data using Javascript instead of Firebase!
+                    history.sort((a, b) => {
+                        const timeA = a.createdAt ? a.createdAt.toMillis() : 0;
+                        const timeB = b.createdAt ? b.createdAt.toMillis() : 0;
+                        return timeB - timeA;
+                    });
+
                     window.appHistory = history;
                     window.appSpend = approvedSpend;
                     window.localStorage.setItem('ujenzi_total_spend', approvedSpend.toString());
@@ -1313,13 +1320,12 @@
                         window.updateTrackerUI();
                     }
                 }, (error) => {
-                    console.error("Firestore Listen Error. Please check console for Index link:", error);
+                    console.error("Firestore Listen Error:", error);
                 });
             } catch (err) {
                 console.error("Query Error:", err);
             }
         }
-
         window.submitCloudOrder = async function(receipt) {
             const user = auth.currentUser;
             if(!user) return alert("You must be signed in to place a secure order.");
