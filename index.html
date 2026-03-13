@@ -36,6 +36,7 @@
 
         .click-press { transition: transform 0.1s ease; }
         .click-press:active { transform: scale(0.96); }
+
         .glass { backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); }
         
         /* Premium Blue Tech Background (Header Only) */
@@ -43,13 +44,31 @@
         .pattern-overlay { background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.03' fill-rule='evenodd'%3E%3Ccircle cx='20' cy='20' r='1'/%3E%3C/g%3E%3C/svg%3E"); }
 
         /* Animated Floating Products */
-        @keyframes floatObj1 { 0%, 100% { transform: translateY(0px) rotate(-5deg); } 50% { transform: translateY(-15px) rotate(5deg); } }
-        @keyframes floatObj2 { 0%, 100% { transform: translateY(0px) translateX(0px) rotate(10deg); } 50% { transform: translateY(12px) translateX(-8px) rotate(-5deg); } }
-        @keyframes floatObj3 { 0%, 100% { transform: scale(1) rotate(0deg); } 50% { transform: scale(1.05) rotate(-5deg) translateY(-10px); } }
-        .anim-prod { position: absolute; color: rgba(255, 255, 255, 0.06); pointer-events: none; z-index: 1; }
+        @keyframes floatObj1 {
+            0%, 100% { transform: translateY(0px) rotate(-5deg); }
+            50% { transform: translateY(-15px) rotate(5deg); }
+        }
+        @keyframes floatObj2 {
+            0%, 100% { transform: translateY(0px) translateX(0px) rotate(10deg); }
+            50% { transform: translateY(12px) translateX(-8px) rotate(-5deg); }
+        }
+        @keyframes floatObj3 {
+            0%, 100% { transform: scale(1) rotate(0deg); }
+            50% { transform: scale(1.05) rotate(-5deg) translateY(-10px); }
+        }
+        .anim-prod {
+            position: absolute;
+            color: rgba(255, 255, 255, 0.06);
+            pointer-events: none;
+            z-index: 1; 
+        }
 
         /* The Signature Green Gradient Pulse */
-        .gradient-pulse { background: linear-gradient(-45deg, #059669, #10b981, #34d399, #059669); background-size: 400% 400%; animation: gradientMove 10s ease infinite; }
+        .gradient-pulse {
+            background: linear-gradient(-45deg, #059669, #10b981, #34d399, #059669);
+            background-size: 400% 400%;
+            animation: gradientMove 10s ease infinite;
+        }
         @keyframes gradientMove { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
 
         .skeleton { background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%); background-size: 200% 100%; animation: skeleton-loading 1.5s infinite; }
@@ -57,8 +76,10 @@
         @keyframes skeleton-loading { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
         
         ::-webkit-scrollbar { width: 0px; background: transparent; }
+        
         .bar-grow { animation: growUp 1s ease-out forwards; transform-origin: bottom; }
         @keyframes growUp { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+
         .bottom-sheet { transition: transform 0.3s cubic-bezier(0.32, 1.25, 0.32, 1); transform: translateY(100%); }
         .bottom-sheet.open { transform: translateY(0); }
         
@@ -95,23 +116,36 @@
         <div class="absolute inset-0 pattern-overlay pointer-events-none"></div>
         <div class="absolute top-0 right-0 w-64 h-64 bg-blue-500/20 rounded-full blur-[80px] pointer-events-none"></div>
         
-        <svg class="anim-prod w-24 h-24 top-6 right-4" style="animation: floatObj1 8s ease-in-out infinite;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-width="1.5" stroke-linecap="round" d="M3 4.5h18M3 9.5h18M3 14.5h18M3 19.5h18M8 4.5v5M16 4.5v5M5 9.5v5M13 9.5v5M21 9.5v5M9 14.5v5M17 14.5v5"/></svg>
-        <svg class="anim-prod w-20 h-20 bottom-12 left-6" style="animation: floatObj2 10s ease-in-out infinite;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" d="M4 20h16L4 4v16zM8 20v-4M12 20v-4M16 20v-4M4 16h4M4 12h4M4 8h4"/></svg>
-        <svg class="anim-prod w-28 h-28 top-20 right-32" style="animation: floatObj3 12s ease-in-out infinite;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" d="M3 10l9-7 9 7v10a2 2 0 01-2 2H5a2 2 0 01-2-2V10z M9 21V12h6v9"/></svg>
-        <svg class="anim-prod w-16 h-16 top-10 left-32" style="animation: floatObj1 9s ease-in-out infinite;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" d="M6 6c0-2 2-4 6-4s6 2 6 4v12c0 2-2 4-6 4s-6-2-6-4V6z M6 10h12 M6 14h12"/></svg>
+        <svg class="anim-prod w-24 h-24 top-6 right-4" style="animation: floatObj1 8s ease-in-out infinite;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <path stroke="currentColor" stroke-width="1.5" stroke-linecap="round" d="M3 4.5h18M3 9.5h18M3 14.5h18M3 19.5h18M8 4.5v5M16 4.5v5M5 9.5v5M13 9.5v5M21 9.5v5M9 14.5v5M17 14.5v5"/>
+        </svg>
+        <svg class="anim-prod w-20 h-20 bottom-12 left-6" style="animation: floatObj2 10s ease-in-out infinite;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <path stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" d="M4 20h16L4 4v16zM8 20v-4M12 20v-4M16 20v-4M4 16h4M4 12h4M4 8h4"/>
+        </svg>
+        <svg class="anim-prod w-28 h-28 top-20 right-32" style="animation: floatObj3 12s ease-in-out infinite;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <path stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" d="M3 10l9-7 9 7v10a2 2 0 01-2 2H5a2 2 0 01-2-2V10z M9 21V12h6v9"/>
+        </svg>
+        <svg class="anim-prod w-16 h-16 top-10 left-32" style="animation: floatObj1 9s ease-in-out infinite;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <path stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" d="M6 6c0-2 2-4 6-4s6 2 6 4v12c0 2-2 4-6 4s-6-2-6-4V6z M6 10h12 M6 14h12"/>
+        </svg>
 
         <div class="max-w-7xl mx-auto relative z-10">
             <div class="flex items-center justify-between mb-4 h-12">
                 <div class="flex items-center gap-3">
-                    <button id="header-back-btn" onclick="window.goBack()" class="hidden w-11 h-11 bg-white/10 rounded-full border border-white/20 flex items-center justify-center font-bold text-xl click-press glass hover:bg-white/20 transition-colors">←</button>
-                    <img id="header-p-image" src="https://ui-avatars.com/api/?name=User&background=10b981&color=fff" class="w-11 h-11 rounded-full border-[3px] border-white/20 shadow-lg object-cover click-press cursor-pointer transition-transform active:scale-95" onclick="window.navigateTo('profile', false, true)">
+                    <button id="header-back-btn" onclick="goBack()" class="hidden w-11 h-11 bg-white/10 rounded-full border border-white/20 flex items-center justify-center font-bold text-xl click-press glass hover:bg-white/20 transition-colors">←</button>
+                    <img id="header-p-image" src="https://ui-avatars.com/api/?name=User&background=10b981&color=fff" class="w-11 h-11 rounded-full border-[3px] border-white/20 shadow-lg object-cover click-press cursor-pointer transition-transform active:scale-95" onclick="navigateTo('profile', false, true)">
                 </div>
 
-                <button onclick="window.switchTheme()" class="w-11 h-11 bg-white/5 rounded-full border border-white/10 flex items-center justify-center click-press shadow-inner glass relative overflow-hidden transition-colors hover:bg-white/10">
-                    <svg id="icon-sun" style="display:none;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-[24px] h-[24px] text-amber-300 drop-shadow-[0_0_5px_rgba(252,211,77,0.5)]"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-2.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z" /></svg>
-                    <svg id="icon-moon" style="display:none;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-[20px] h-[20px] text-blue-100"><path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998Z" /></svg>
+                <button onclick="switchTheme()" class="w-11 h-11 bg-white/5 rounded-full border border-white/10 flex items-center justify-center click-press shadow-inner glass relative overflow-hidden transition-colors hover:bg-white/10">
+                    <svg id="icon-sun" style="display:none;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-[24px] h-[24px] text-amber-300 drop-shadow-[0_0_5px_rgba(252,211,77,0.5)]">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-2.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z" />
+                    </svg>
+                    <svg id="icon-moon" style="display:none;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-[20px] h-[20px] text-blue-100">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998Z" />
+                    </svg>
                 </button>
             </div>
+
             <div id="header-text-container" class="transition-all duration-300">
                 <h1 id="header-title" class="text-[28px] font-black tracking-tight leading-tight text-white drop-shadow-md">Good morning</h1>
                 <p id="header-subtitle" class="text-blue-200/80 text-[11px] font-semibold mt-1 tracking-wider uppercase opacity-90">Project Status: Ready to Build | 60% Complete</p>
@@ -124,10 +158,11 @@
         <div id="view-home" class="view-content flex flex-col gap-6">
             <div id="search-sticky-wrapper" class="sticky top-0 z-50 -mx-5 px-5 py-3 transition-all duration-300 stagger-item">
                 <div class="relative shadow-[0_15px_30px_rgba(0,0,0,0.08)] rounded-[2rem] bg-white dark:bg-gray-800 border border-transparent dark:border-gray-700 transition-all hover:shadow-lg">
-                    <input type="text" id="search-input" onkeyup="window.handleSearch()" placeholder="Search cement, tiles, rebars..." class="w-full bg-transparent rounded-[2rem] px-14 py-[18px] outline-none font-bold text-[13px] text-gray-800 dark:text-gray-100 placeholder-gray-400 focus:ring-2 focus:ring-green-500">
+                    <input type="text" id="search-input" onkeyup="handleSearch()" placeholder="Search cement, tiles, rebars..." class="w-full bg-transparent rounded-[2rem] px-14 py-[18px] outline-none font-bold text-[13px] text-gray-800 dark:text-gray-100 placeholder-gray-400 focus:ring-2 focus:ring-green-500">
                     <span class="absolute left-5 top-[17px] text-lg opacity-40">🔍</span>
                 </div>
             </div>
+
             <div id="dynamic-home-content" class="flex flex-col gap-8"></div>
         </div>
 
@@ -137,7 +172,7 @@
                 <span class="text-[10px] font-black text-red-500 uppercase tracking-widest mb-1 flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span> Live</span>
             </div>
 
-            <div onclick="window.openProduct('Simba Cement 50kg', 'Grade 42.5R high-strength cement. Ideal for heavy load structural works.', 18500, 50, 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=600', 4.9, 342, 'Excellent quality.')" class="bg-white dark:bg-gray-800 rounded-[2.5rem] overflow-hidden shadow-xl border dark:border-gray-700 stagger-item click-press group">
+            <div onclick="openProduct('Simba Cement 50kg', 'Grade 42.5R high-strength cement. Ideal for heavy load structural works.', 18500, 50, 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=600', 4.9, 342, 'Excellent quality.')" class="bg-white dark:bg-gray-800 rounded-[2.5rem] overflow-hidden shadow-xl border dark:border-gray-700 stagger-item click-press group">
                 <div class="relative h-48 overflow-hidden">
                     <img src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=600" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
                     <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
@@ -162,8 +197,8 @@
                     </div>
                 </div>
             </div>
-            
-            <div onclick="window.openProduct('Deformed Bar 12mm', 'TBS approved Grade 500 steel rebars.', 24000, 10, 'https://images.unsplash.com/photo-1536882240095-0379873feb4e?w=600', 4.8, 156, 'Accurate weight.')" class="bg-white dark:bg-gray-800 rounded-[2.5rem] overflow-hidden shadow-xl border dark:border-gray-700 stagger-item click-press group" style="animation-delay: 0.1s">
+
+            <div onclick="openProduct('Deformed Bar 12mm', 'TBS approved Grade 500 steel rebars.', 24000, 10, 'https://images.unsplash.com/photo-1536882240095-0379873feb4e?w=600', 4.8, 156, 'Accurate weight.')" class="bg-white dark:bg-gray-800 rounded-[2.5rem] overflow-hidden shadow-xl border dark:border-gray-700 stagger-item click-press group" style="animation-delay: 0.1s">
                 <div class="relative h-48 overflow-hidden">
                     <img src="https://images.unsplash.com/photo-1536882240095-0379873feb4e?w=600" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
                     <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
@@ -199,7 +234,7 @@
                     <div class="absolute -right-4 -top-4 opacity-5 text-6xl">🚚</div>
                     <h3 class="font-black text-sm mb-1">Smart Delivery Estimator</h3>
                     <p class="text-[10px] text-gray-400 mb-4 font-bold">Select Dar Es Salaam Zone</p>
-                    <select id="delivery-zone" onchange="window.calculateDelivery()" class="w-full bg-gray-50 dark:bg-gray-900 border dark:border-gray-700 rounded-xl px-4 py-3 outline-none font-bold text-xs mb-4">
+                    <select id="delivery-zone" onchange="calculateDelivery()" class="w-full bg-gray-50 dark:bg-gray-900 border dark:border-gray-700 rounded-xl px-4 py-3 outline-none font-bold text-xs mb-4">
                         <option value="0">Self Pickup (Store Collection)</option>
                         <option value="1">Tegeta / Boko / Bunju</option>
                         <option value="1.2">Mbezi / Kimara</option>
@@ -223,7 +258,7 @@
                     <div class="flex justify-between text-xs font-bold text-green-500 mb-4 px-2"><span>Transport</span><span id="cart-transport">TZS 0</span></div>
                     <div class="flex justify-between text-2xl font-black mb-8 px-2"><span>Total</span><span id="cart-total-price" class="text-green-600 dark:text-green-400">TZS 0</span></div>
                     
-                    <button onclick="window.checkoutWhatsApp()" class="w-full py-5 bg-[#25D366] text-white rounded-[2.5rem] font-black shadow-[0_10px_20px_rgba(37,211,102,0.3)] click-press uppercase text-xs tracking-widest mb-6">Order via WhatsApp</button>
+                    <button onclick="checkoutWhatsApp()" class="w-full py-5 bg-[#25D366] text-white rounded-[2.5rem] font-black shadow-[0_10px_20px_rgba(37,211,102,0.3)] click-press uppercase text-xs tracking-widest mb-6">Order via WhatsApp</button>
 
                     <div class="relative bg-gray-50 dark:bg-gray-800 rounded-[2rem] p-5 border border-dashed border-gray-300 dark:border-gray-600 text-center opacity-80">
                         <div class="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-300 text-[9px] font-black px-3 py-1 rounded-full uppercase tracking-widest shadow-sm">Coming Soon</div>
@@ -243,12 +278,12 @@
                 <div class="relative -mt-16 mb-4 group cursor-pointer z-10" onclick="document.getElementById('profile-upload').click()">
                     <img id="p-image" src="https://ui-avatars.com/api/?name=User&background=10b981&color=fff&size=128" class="w-28 h-28 rounded-full object-cover border-[6px] border-white dark:border-gray-800 shadow-xl click-press transition-transform bg-white dark:bg-gray-800">
                     <div class="absolute bottom-1 right-1 bg-green-600 text-white w-8 h-8 rounded-full shadow-md border-2 border-white dark:border-gray-800 flex items-center justify-center text-xs">📷</div>
-                    <input type="file" id="profile-upload" class="hidden" accept="image/*" onchange="window.handleProfileUpload(event)">
+                    <input type="file" id="profile-upload" class="hidden" accept="image/*" onchange="handleProfileUpload(event)">
                 </div>
                 
                 <div class="flex items-center justify-center gap-3 mb-1 mt-2">
                     <h2 id="p-name" class="text-2xl font-black text-gray-800 dark:text-white leading-tight">User</h2>
-                    <button onclick="window.openEditNameModal()" class="w-8 h-8 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center text-gray-400 hover:text-green-600 transition-colors click-press shadow-sm">
+                    <button onclick="openEditNameModal()" class="w-8 h-8 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center text-gray-400 hover:text-green-600 transition-colors click-press shadow-sm">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4"><path d="m2.695 14.762-1.262 3.155a.5.5 0 0 0 .65.65l3.155-1.262a4 4 0 0 0 1.343-.886L17.5 5.501a2.121 2.121 0 0 0-3-3L3.58 13.419a4 4 0 0 0-.885 1.343Z" /></svg>
                     </button>
                 </div>
@@ -257,7 +292,7 @@
                 <div id="vip-badge" class="px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest bg-gray-200 text-gray-600 shadow-sm inline-block">Standard Builder</div>
             </div>
 
-            <div id="tracker-card" onclick="window.navigateTo('history')" class="bg-gray-900 text-white p-6 rounded-[2.5rem] shadow-2xl mb-8 relative overflow-hidden stagger-item click-press group cursor-pointer transition-transform hover:scale-[1.02]">
+            <div id="tracker-card" onclick="navigateTo('history')" class="bg-gray-900 text-white p-6 rounded-[2.5rem] shadow-2xl mb-8 relative overflow-hidden stagger-item click-press group cursor-pointer transition-transform hover:scale-[1.02]">
                 <div class="relative z-10">
                     <div class="flex justify-between items-start mb-1">
                         <div>
@@ -284,17 +319,17 @@
             <div class="grid grid-cols-3 gap-3 mb-8 stagger-item" style="animation-delay: 0.1s">
                 <div class="bg-white dark:bg-gray-800 p-4 rounded-[1.5rem] border dark:border-gray-700 shadow-sm click-press flex flex-col items-center text-center transition-shadow hover:shadow-md" onclick="window.renderWishlistPhase('Foundation')">
                     <div class="text-2xl mb-1">🏗️</div>
-                    <p class="font-black text-[10px] text-gray-800 dark:text-white">Foundation</p>
+                    <p class="font-black text-[10px] text-gray-800 dark:text-white">Phase 1</p>
                     <p class="text-[9px] text-green-500 font-black mt-2" id="count-foundation">0 Items</p>
                 </div>
                 <div class="bg-white dark:bg-gray-800 p-4 rounded-[1.5rem] border dark:border-gray-700 shadow-sm click-press flex flex-col items-center text-center transition-shadow hover:shadow-md" onclick="window.renderWishlistPhase('Roofing')">
                     <div class="text-2xl mb-1">🏠</div>
-                    <p class="font-black text-[10px] text-gray-800 dark:text-white">Roofing</p>
+                    <p class="font-black text-[10px] text-gray-800 dark:text-white">Phase 2</p>
                     <p class="text-[9px] text-green-500 font-black mt-2" id="count-roofing">0 Items</p>
                 </div>
                 <div class="bg-white dark:bg-gray-800 p-4 rounded-[1.5rem] border dark:border-gray-700 shadow-sm click-press flex flex-col items-center text-center transition-shadow hover:shadow-md" onclick="window.renderWishlistPhase('Finishing')">
                     <div class="text-2xl mb-1">🎨</div>
-                    <p class="font-black text-[10px] text-gray-800 dark:text-white">Finishing</p>
+                    <p class="font-black text-[10px] text-gray-800 dark:text-white">Phase 3</p>
                     <p class="text-[9px] text-green-500 font-black mt-2" id="count-finishing">0 Items</p>
                 </div>
             </div>
@@ -309,17 +344,17 @@
                         <span class="font-bold text-sm">Notifications</span>
                     </div>
                     <div class="relative inline-block w-12 mr-2 align-middle select-none transition duration-200 ease-in">
-                        <input type="checkbox" id="notif-toggle" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer" onclick="window.toggleNotifications()"/>
+                        <input type="checkbox" id="notif-toggle" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer" onclick="toggleNotifications()"/>
                         <label for="notif-toggle" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"></label>
                     </div>
                 </div>
 
-                <button onclick="window.navigateTo('cs')" class="w-full flex items-center justify-between p-5 hover:bg-gray-50 dark:hover:bg-gray-700 transition click-press border-b dark:border-gray-700">
+                <button onclick="navigateTo('cs')" class="w-full flex items-center justify-between p-5 hover:bg-gray-50 dark:hover:bg-gray-700 transition click-press border-b dark:border-gray-700">
                     <div class="flex items-center gap-4"><span class="text-xl">🎧</span><span class="font-bold text-sm">Customer Support</span></div>
                     <span class="text-gray-400 font-bold text-xl">›</span>
                 </button>
 
-                <button onclick="window.navigateTo('legal')" class="w-full flex items-center justify-between p-5 hover:bg-gray-50 dark:hover:bg-gray-700 transition click-press border-b dark:border-gray-700">
+                <button onclick="navigateTo('legal')" class="w-full flex items-center justify-between p-5 hover:bg-gray-50 dark:hover:bg-gray-700 transition click-press border-b dark:border-gray-700">
                     <div class="flex items-center gap-4"><span class="text-xl">📜</span><span class="font-bold text-sm">Legal & Policies</span></div>
                     <span class="text-gray-400 font-bold text-xl">›</span>
                 </button>
@@ -333,12 +368,12 @@
 
         <div id="view-history" class="view-content hidden">
             <div class="bg-white dark:bg-gray-800 rounded-[2.5rem] p-6 shadow-xl border dark:border-gray-700 mb-8 mt-2 stagger-item">
-                <div class="flex items-center gap-3 mb-6 click-press cursor-pointer" onclick="window.goBack()">
+                <div class="flex items-center gap-3 mb-6 click-press cursor-pointer" onclick="goBack()">
                     <span class="w-8 h-8 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center shadow-sm font-bold border border-transparent dark:border-gray-600">←</span>
                     <h2 class="text-lg font-black">Financial Overview</h2>
                 </div>
                 
-                <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest text-center mb-1">Total Lifetime Spend</p>
+                <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest text-center mb-1">Total Lifetime Spend (Paid)</p>
                 <h2 id="history-total" class="text-4xl font-black text-center text-gray-900 dark:text-white mb-6 tracking-tighter">TZS 0</h2>
 
                 <div class="space-y-4 mb-6">
@@ -358,10 +393,10 @@
                 </div>
 
                 <div class="flex gap-3 mt-4">
-                    <button onclick="window.downloadStatement()" class="flex-1 py-3 bg-gray-900 text-white rounded-2xl font-black click-press shadow-md text-[10px] uppercase tracking-widest flex items-center justify-center gap-2">
+                    <button onclick="downloadStatement()" class="flex-1 py-3 bg-gray-900 text-white rounded-2xl font-black click-press shadow-md text-[10px] uppercase tracking-widest flex items-center justify-center gap-2">
                         📄 Save PDF
                     </button>
-                    <button onclick="window.shareStatement()" class="flex-1 py-3 bg-[#25D366] text-white rounded-2xl font-black click-press shadow-md text-[10px] uppercase tracking-widest flex items-center justify-center gap-2">
+                    <button onclick="shareStatement()" class="flex-1 py-3 bg-[#25D366] text-white rounded-2xl font-black click-press shadow-md text-[10px] uppercase tracking-widest flex items-center justify-center gap-2">
                         💬 Share
                     </button>
                 </div>
@@ -370,7 +405,7 @@
             <h3 class="font-black text-lg mb-4 px-2">Transaction Feed</h3>
             <div id="receipt-feed" class="flex flex-col gap-4 mb-6">
                 </div>
-            <button onclick="window.clearHistory()" class="w-full py-4 text-xs font-bold text-red-500 bg-red-50 dark:bg-red-900/20 rounded-[2rem] click-press mb-4">Clear Transaction History</button>
+            <button onclick="clearHistory()" class="w-full py-4 text-xs font-bold text-red-500 bg-red-50 dark:bg-red-900/20 rounded-[2rem] click-press mb-4">Clear Transaction History</button>
         </div>
 
         <div id="view-cs" class="view-content hidden">
@@ -399,8 +434,8 @@
             <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest text-center mb-5">Update your display name</p>
             <input type="text" id="edit-name-input" class="w-full bg-gray-50 dark:bg-gray-800 p-4 rounded-2xl outline-none border dark:border-gray-700 font-bold text-sm text-gray-800 dark:text-gray-100 mb-5 focus:ring-2 focus:ring-green-500 transition-shadow">
             <div class="flex gap-3">
-                <button onclick="window.closeEditNameModal()" class="flex-1 py-3.5 bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 rounded-2xl font-black click-press text-xs uppercase tracking-widest">Cancel</button>
-                <button onclick="window.saveNewName()" class="flex-1 py-3.5 bg-green-600 text-white rounded-2xl font-black click-press shadow-md text-xs uppercase tracking-widest">Save</button>
+                <button onclick="closeEditNameModal()" class="flex-1 py-3.5 bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 rounded-2xl font-black click-press text-xs uppercase tracking-widest">Cancel</button>
+                <button onclick="saveNewName()" class="flex-1 py-3.5 bg-green-600 text-white rounded-2xl font-black click-press shadow-md text-xs uppercase tracking-widest">Save</button>
             </div>
         </div>
     </div>
@@ -409,7 +444,7 @@
         <div id="product-sheet" class="bg-white dark:bg-gray-900 w-full max-w-md rounded-t-[2.5rem] overflow-hidden shadow-2xl flex flex-col max-h-[92vh] bottom-sheet">
             <div class="relative shrink-0">
                 <img id="modal-img" src="" class="w-full h-56 object-cover">
-                <button onclick="window.closeProduct()" class="absolute top-4 right-4 w-10 h-10 bg-black/40 text-white rounded-full flex items-center justify-center font-bold backdrop-blur-md click-press">✕</button>
+                <button onclick="closeProduct()" class="absolute top-4 right-4 w-10 h-10 bg-black/40 text-white rounded-full flex items-center justify-center font-bold backdrop-blur-md click-press">✕</button>
             </div>
             <div class="p-6 overflow-y-auto shrink-1 hide-scrollbar">
                 <h3 id="modal-title" class="text-2xl font-black mb-1 text-gray-900 dark:text-white leading-tight"></h3>
@@ -435,24 +470,24 @@
                 <div class="flex justify-between items-center mb-3 border-t dark:border-gray-700 pt-5">
                     <span id="modal-price" class="text-2xl font-black text-green-600 dark:text-green-400"></span>
                     <div class="flex items-center bg-gray-100 dark:bg-gray-800 rounded-xl p-1 border dark:border-gray-700 shadow-inner">
-                        <button onclick="window.changeQty(-1)" class="w-10 h-10 flex items-center justify-center font-black text-gray-500 text-lg click-press hover:bg-gray-200 dark:hover:bg-gray-700 rounded-lg transition-colors">-</button>
-                        <input type="number" id="modal-qty" value="1" min="1" onchange="window.validateQty()" class="w-14 bg-transparent text-center font-black outline-none text-lg text-gray-900 dark:text-white">
-                        <button onclick="window.changeQty(1)" class="w-10 h-10 flex items-center justify-center font-black text-gray-500 text-lg click-press hover:bg-gray-200 dark:hover:bg-gray-700 rounded-lg transition-colors">+</button>
+                        <button onclick="changeQty(-1)" class="w-10 h-10 flex items-center justify-center font-black text-gray-500 text-lg click-press hover:bg-gray-200 dark:hover:bg-gray-700 rounded-lg transition-colors">-</button>
+                        <input type="number" id="modal-qty" value="1" min="1" onblur="validateQty()" class="w-14 bg-transparent text-center font-black outline-none text-lg text-gray-900 dark:text-white">
+                        <button onclick="changeQty(1)" class="w-10 h-10 flex items-center justify-center font-black text-gray-500 text-lg click-press hover:bg-gray-200 dark:hover:bg-gray-700 rounded-lg transition-colors">+</button>
                     </div>
                 </div>
                 
                 <div class="flex justify-end gap-2 mb-6">
                     <span class="text-[9px] text-gray-400 font-bold uppercase tracking-widest flex items-center mr-1">Bulk Add:</span>
-                    <button onclick="window.changeQty(10)" class="px-3 py-1.5 bg-green-50 text-green-600 dark:bg-green-900/30 dark:text-green-400 rounded-lg text-[10px] font-black click-press transition-colors border border-green-100 dark:border-green-800">+10</button>
-                    <button onclick="window.changeQty(50)" class="px-3 py-1.5 bg-green-50 text-green-600 dark:bg-green-900/30 dark:text-green-400 rounded-lg text-[10px] font-black click-press transition-colors border border-green-100 dark:border-green-800">+50</button>
-                    <button onclick="window.changeQty(100)" class="px-3 py-1.5 bg-green-50 text-green-600 dark:bg-green-900/30 dark:text-green-400 rounded-lg text-[10px] font-black click-press transition-colors border border-green-100 dark:border-green-800">+100</button>
+                    <button onclick="changeQty(10)" class="px-3 py-1.5 bg-green-50 text-green-600 dark:bg-green-900/30 dark:text-green-400 rounded-lg text-[10px] font-black click-press transition-colors border border-green-100 dark:border-green-800">+10</button>
+                    <button onclick="changeQty(50)" class="px-3 py-1.5 bg-green-50 text-green-600 dark:bg-green-900/30 dark:text-green-400 rounded-lg text-[10px] font-black click-press transition-colors border border-green-100 dark:border-green-800">+50</button>
+                    <button onclick="changeQty(100)" class="px-3 py-1.5 bg-green-50 text-green-600 dark:bg-green-900/30 dark:text-green-400 rounded-lg text-[10px] font-black click-press transition-colors border border-green-100 dark:border-green-800">+100</button>
                 </div>
 
                 <div class="flex gap-2 mb-6">
                     <select id="phase-selector" class="flex-grow bg-gray-50 dark:bg-gray-800 border dark:border-gray-700 rounded-2xl px-4 outline-none text-xs font-bold dark:text-gray-200">
                         <option value="Foundation">Phase 1: Foundation</option><option value="Roofing">Phase 2: Roofing</option><option value="Finishing">Phase 3: Finishing</option>
                     </select>
-                    <button onclick="window.saveToPhase()" class="px-5 py-4 bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 rounded-2xl font-black text-[10px] uppercase tracking-widest click-press shadow-sm">Save 📌</button>
+                    <button onclick="saveToPhase()" class="px-5 py-4 bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 rounded-2xl font-black text-[10px] uppercase tracking-widest click-press shadow-sm">Save 📌</button>
                 </div>
                 <button id="add-to-cart-btn" class="w-full py-5 bg-green-600 text-white rounded-[2rem] font-black text-sm uppercase tracking-widest shadow-[0_10px_20px_rgba(22,163,74,0.3)] click-press">Add to Basket</button>
             </div>
@@ -468,12 +503,12 @@
                     </div>
                     <div><h2 class="font-black text-sm leading-tight text-white">AI Hub</h2><p class="text-[9px] text-green-100 font-bold uppercase tracking-widest mt-1">Smart Construction</p></div>
                 </div>
-                <button onclick="window.closeAiHub()" class="w-8 h-8 flex items-center justify-center bg-black/20 hover:bg-black/30 rounded-full font-bold transition-colors">✕</button>
+                <button onclick="closeAiHub()" class="w-8 h-8 flex items-center justify-center bg-black/20 hover:bg-black/30 rounded-full font-bold transition-colors">✕</button>
             </div>
             
             <div class="flex border-b dark:border-gray-700 shrink-0 bg-white dark:bg-gray-900">
-                <button onclick="window.switchAiTab('chat')" id="tab-chat" class="flex-1 py-4 text-xs font-black text-green-600 border-b-[3px] border-green-600 uppercase tracking-widest transition-colors">Advisor</button>
-                <button onclick="window.switchAiTab('calc')" id="tab-calc" class="flex-1 py-4 text-xs font-black text-gray-400 border-b-[3px] border-transparent uppercase tracking-widest transition-colors">Estimator</button>
+                <button onclick="switchAiTab('chat')" id="tab-chat" class="flex-1 py-4 text-xs font-black text-green-600 border-b-[3px] border-green-600 uppercase tracking-widest transition-colors">Advisor</button>
+                <button onclick="switchAiTab('calc')" id="tab-calc" class="flex-1 py-4 text-xs font-black text-gray-400 border-b-[3px] border-transparent uppercase tracking-widest transition-colors">Estimator</button>
             </div>
 
             <div id="ai-content-chat" class="flex-grow flex flex-col overflow-hidden bg-gray-50 dark:bg-gray-900">
@@ -481,8 +516,8 @@
                     <div class="p-4 bg-white dark:bg-gray-700 border dark:border-gray-600 rounded-[2rem] rounded-tl-none mr-auto mb-2 text-sm font-medium shadow-sm">Habari! Ask me any construction question.</div>
                 </div>
                 <div class="p-4 bg-white dark:bg-gray-800 border-t dark:border-gray-700 flex gap-2 shrink-0">
-                    <input type="text" id="chat-input" onkeypress="if(event.key === 'Enter') window.sendMessage()" class="flex-grow bg-gray-100 dark:bg-gray-900 rounded-xl px-5 py-4 text-sm font-medium outline-none border dark:border-gray-600 focus:ring-2 focus:ring-green-500 transition-shadow" placeholder="Ask anything...">
-                    <button id="send-btn" onclick="window.sendMessage()" class="w-14 h-14 bg-green-600 hover:bg-green-700 text-white rounded-xl font-bold click-press shadow-md transition-colors flex items-center justify-center text-xl shrink-0">→</button>
+                    <input type="text" id="chat-input" onkeypress="if(event.key === 'Enter') sendMessage()" class="flex-grow bg-gray-100 dark:bg-gray-900 rounded-xl px-5 py-4 text-sm font-medium outline-none border dark:border-gray-600 focus:ring-2 focus:ring-green-500 transition-shadow" placeholder="Ask anything...">
+                    <button id="send-btn" onclick="sendMessage()" class="w-14 h-14 bg-green-600 hover:bg-green-700 text-white rounded-xl font-bold click-press shadow-md transition-colors flex items-center justify-center text-xl shrink-0">→</button>
                 </div>
             </div>
 
@@ -496,14 +531,14 @@
                         <input type="number" id="calc-l" placeholder="Length (m)" class="w-full bg-gray-50 dark:bg-gray-900 p-4 rounded-2xl outline-none border dark:border-gray-700 font-bold text-sm text-gray-700 dark:text-gray-200">
                         <input type="number" id="calc-w" placeholder="Width/Height" class="w-full bg-gray-50 dark:bg-gray-900 p-4 rounded-2xl outline-none border dark:border-gray-700 font-bold text-sm text-gray-700 dark:text-gray-200">
                     </div>
-                    <button onclick="window.runCalculation()" class="w-full py-4 bg-green-600 text-white rounded-2xl font-black click-press shadow-lg text-sm uppercase tracking-widest">Calculate Now</button>
+                    <button onclick="runCalculation()" class="w-full py-4 bg-green-600 text-white rounded-2xl font-black click-press shadow-lg text-sm uppercase tracking-widest">Calculate Now</button>
                     <div id="calc-results" class="hidden mt-6 p-5 bg-green-50 dark:bg-green-900/20 rounded-2xl text-sm font-medium text-green-900 dark:text-green-100 border border-green-100 dark:border-green-800 leading-relaxed shadow-inner"></div>
                 </div>
             </div>
         </div>
     </div>
 
-    <button onclick="window.openAiHub()" class="fixed bottom-24 right-6 z-[100] w-[68px] h-[68px] gradient-pulse rounded-full flex flex-col items-center justify-center shadow-[0_0_25px_rgba(16,185,129,0.6)] border-2 border-white/20 click-press animate-stagger-in group" style="animation-delay: 0.5s">
+    <button onclick="openAiHub()" class="fixed bottom-24 right-6 z-[100] w-[68px] h-[68px] gradient-pulse rounded-full flex flex-col items-center justify-center shadow-[0_0_25px_rgba(16,185,129,0.6)] border-2 border-white/20 click-press animate-stagger-in group" style="animation-delay: 0.5s">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-7 h-7 text-white mb-0.5 group-hover:scale-110 transition-transform drop-shadow-md">
             <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005Z" clip-rule="evenodd" />
         </svg>
@@ -511,116 +546,32 @@
     </button>
 
     <nav class="fixed bottom-0 w-full bg-white/95 dark:bg-[#0f172a]/95 glass border-t dark:border-gray-800 px-6 py-2 flex justify-around items-center z-50">
-        <button onclick="window.navigateTo('home', false, true)" id="nav-home" class="nav-btn active-nav flex flex-col items-center gap-1 text-gray-400 text-[10px] font-bold transition-all p-2 click-press w-16 text-green-600">
+        <button onclick="navigateTo('home', false, true)" id="nav-home" class="nav-btn active-nav flex flex-col items-center gap-1 text-gray-400 text-[10px] font-bold transition-all p-2 click-press w-16 text-green-600">
             <span class="text-2xl mb-0.5">🏠</span><span>Home</span>
         </button>
-        <button onclick="window.navigateTo('trending', false, true)" id="nav-trending" class="nav-btn flex flex-col items-center gap-1 text-gray-400 text-[10px] font-bold transition-all p-2 click-press w-16">
+        <button onclick="navigateTo('trending', false, true)" id="nav-trending" class="nav-btn flex flex-col items-center gap-1 text-gray-400 text-[10px] font-bold transition-all p-2 click-press w-16">
             <span class="text-2xl mb-0.5">📈</span><span>Watch</span>
         </button>
-        <button onclick="window.navigateTo('cart', false, true)" id="nav-cart" class="nav-btn flex flex-col items-center gap-1 text-gray-400 text-[10px] font-bold transition-all p-2 relative click-press w-16">
+        <button onclick="navigateTo('cart', false, true)" id="nav-cart" class="nav-btn flex flex-col items-center gap-1 text-gray-400 text-[10px] font-bold transition-all p-2 relative click-press w-16">
             <span class="text-2xl mb-0.5">🛒</span><span>Cart</span>
             <span id="cart-badge" class="hidden absolute top-1 right-2 bg-red-500 text-white text-[8px] px-1.5 rounded-full font-black ring-2 ring-white dark:ring-gray-900 shadow-sm">0</span>
         </button>
-        <button onclick="window.navigateTo('profile', false, true)" id="nav-profile" class="nav-btn flex flex-col items-center gap-1 text-gray-400 text-[10px] font-bold transition-all p-2 click-press w-16">
+        <button onclick="navigateTo('profile', false, true)" id="nav-profile" class="nav-btn flex flex-col items-center gap-1 text-gray-400 text-[10px] font-bold transition-all p-2 click-press w-16">
             <span class="text-2xl mb-0.5">👤</span><span>Profile</span>
         </button>
     </nav>
 
     <script>
-        const RENDER_URL = 'https://ujenzismart-backend.onrender.com';
         const WHATSAPP_NUM = '255743924467'; 
         let cart = [];
         let currentModalProduct = null;
         let fbtItem = null;
         let viewHistory = ['home'];
-
-        // --- THEME TOGGLE LOGIC ---
-        window.updateThemeIcon = function() {
-            const isDark = document.documentElement.classList.contains('dark');
-            const sun = document.getElementById('icon-sun');
-            const moon = document.getElementById('icon-moon');
-            if(sun && moon) {
-                sun.style.display = isDark ? 'block' : 'none';
-                moon.style.display = isDark ? 'none' : 'block';
-            }
-        }
         
-        window.switchTheme = function() {
-            const html = document.documentElement;
-            html.classList.toggle('dark');
-            localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
-            window.updateThemeIcon();
-        }
-        document.addEventListener("DOMContentLoaded", window.updateThemeIcon);
+        // Used by Firestore later
+        window.appHistory = [];
+        window.appSpend = 0;
 
-        // --- 🌟 STICKY SEARCH BAR FROSTED GLASS EFFECT 🌟 ---
-        window.addEventListener('scroll', () => {
-            const sw = document.getElementById('search-sticky-wrapper');
-            if(sw) {
-                if(window.scrollY > 40) {
-                    sw.classList.add('bg-[#f4f6f9]/95', 'dark:bg-gray-900/95', 'backdrop-blur-md', 'border-b', 'border-gray-200', 'dark:border-gray-800');
-                    sw.classList.remove('py-3');
-                    sw.classList.add('py-4');
-                } else {
-                    sw.classList.remove('bg-[#f4f6f9]/95', 'dark:bg-gray-900/95', 'backdrop-blur-md', 'border-b', 'border-gray-200', 'dark:border-gray-800');
-                    sw.classList.remove('py-4');
-                    sw.classList.add('py-3');
-                }
-            }
-        });
-
-        // --- HISTORY API LOGIC (WITH SMOOTH SLIDE BACK) ---
-        window.addEventListener('popstate', (event) => {
-            const productSheet = document.getElementById('product-sheet');
-            const aiHubSheet = document.getElementById('ai-hub-sheet');
-            const editModal = document.getElementById('edit-name-modal');
-            
-            let sheetClosed = false;
-            if (productSheet && productSheet.classList.contains('open')) { window.closeProduct(); sheetClosed = true; }
-            if (aiHubSheet && aiHubSheet.classList.contains('open')) { window.closeAiHub(); sheetClosed = true; }
-            if (editModal && !editModal.classList.contains('hidden')) { window.closeEditNameModal(); sheetClosed = true; }
-            
-            if (sheetClosed) return;
-
-            if (event.state && event.state.view) {
-                viewHistory.pop();
-                window.navigateTo(event.state.view, true);
-            } else {
-                window.navigateTo('home', true);
-            }
-        });
-        history.replaceState({ view: 'home' }, '', '#home');
-
-        // --- PRODUCT DATABASE ---
-        const categoryImages = {
-            'Foundation': 'https://images.unsplash.com/photo-1590060417941-2f34888463f1?w=400',
-            'Roofing': 'https://images.unsplash.com/photo-1635424710928-0544e8512eae?w=400',
-            'Plumbing': 'https://images.unsplash.com/photo-1581244277943-fe4a9c777189?w=400',
-            'Electrical': 'https://images.unsplash.com/photo-1550009158-9ebf69173e03?w=400',
-            'Finishing': 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=400',
-            'Tools': 'https://images.unsplash.com/photo-1530124560677-bdaea02c9a9d?w=400'
-        };
-
-        const productDatabase = {
-            'Foundation & Structural': [
-                { name: 'Simba Cement 50kg', price: 18500, wt: 50, desc: 'Grade 42.5R high-strength cement.', img: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=400', rating: 4.9, reviews: 342, reviewTxt: "Always strong, sets perfectly." },
-                { name: 'Twiga Cement 50kg', price: 18000, wt: 50, desc: 'Standard 32.5N multipurpose cement.', img: 'https://images.unsplash.com/photo-1621360841013-c76831f1dbce?w=400', rating: 4.8, reviews: 215, reviewTxt: "Great for plastering walls." },
-                { name: 'Deformed Bar 12mm', price: 24000, wt: 10, desc: 'TBS approved Grade 500 steel rebars.', img: 'https://images.unsplash.com/photo-1536882240095-0379873feb4e?w=400', rating: 4.8, reviews: 156, reviewTxt: "Accurate weight." },
-                { name: 'Blocks 6-inch', price: 1200, wt: 15, desc: 'Machine-vibrated, solid concrete blocks.', img: 'https://images.unsplash.com/photo-1589939705384-5185138a047a?w=400', rating: 4.6, reviews: 89, reviewTxt: "Minimal breakages." }
-            ],
-            'Roofing Materials': [
-                { name: 'Iron Sheet 30G', price: 22000, wt: 4, desc: 'Corrugated premium anti-corrosive roofing sheets.', img: 'https://images.unsplash.com/photo-1635424710928-0544e8512eae?w=400', rating: 4.7, reviews: 210, reviewTxt: "Color doesn't fade." }
-            ],
-            'Finishing & Painting': [
-                { name: 'Floor Tiles Box', price: 32000, wt: 20, desc: 'Glossy ceramic 40x40cm floor tiles.', img: 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=400', rating: 4.7, reviews: 88, reviewTxt: "Beautiful finish." },
-                { name: 'Tile Adhesive 25kg', price: 14000, wt: 25, desc: 'High-bond strength cementitious tile adhesive.', img: 'https://images.unsplash.com/photo-1589939705384-5185138a047a?w=400', rating: 4.5, reviews: 90, reviewTxt: "Bonds perfectly." }
-            ],
-            'Tools & Hardware': [
-                { name: 'Wheelbarrow', price: 110000, wt: 15, desc: 'Thick steel tray construction wheelbarrow.', img: 'https://images.unsplash.com/photo-1530124560677-bdaea02c9a9d?w=400', rating: 4.8, reviews: 312, reviewTxt: "Very tough." }
-            ]
-        };
-
-        // --- NAVIGATION CONTROLLER ---
         window.navigateTo = function(viewName, isBack = false, isTab = false) {
             document.querySelectorAll('.view-content').forEach(v => {
                 v.classList.add('hidden');
@@ -656,7 +607,7 @@
             
             if (mainTabs.includes(viewName)) {
                 backBtn.classList.add('hidden');
-                if(viewName === 'home') window.setGreeting();
+                if(viewName === 'home') setGreeting();
                 if(viewName === 'trending') { headerTitle.textContent = "Market Watch"; headerSub.textContent = "Live Price Tracking"; }
                 if(viewName === 'cart') { headerTitle.textContent = "Your Cart"; headerSub.textContent = "Secure Checkout"; }
                 if(viewName === 'profile') { headerTitle.textContent = "Profile"; headerSub.textContent = "Manage your account"; }
@@ -664,7 +615,7 @@
                 backBtn.classList.remove('hidden');
                 if(viewName === 'cs') { headerTitle.textContent = "Support"; headerSub.textContent = "We are here to help"; }
                 if(viewName === 'legal') { headerTitle.textContent = "Legal"; headerSub.textContent = "Policies & Terms"; }
-                if(viewName === 'history') { headerTitle.textContent = "My Expenses"; headerSub.textContent = "Transaction History & Receipts"; window.renderHistory(); }
+                if(viewName === 'history') { headerTitle.textContent = "My Expenses"; headerSub.textContent = "Transaction History & Receipts"; renderHistory(); }
             }
 
             if(!isBack) {
@@ -678,9 +629,9 @@
                 }
             }
 
-            if(viewName === 'home') { document.getElementById('search-input').value = ''; window.renderHomeBase(); }
-            if(viewName === 'cart') window.renderCart();
-            if(viewName === 'profile') { window.updateTrackerUI(); window.updateWishlistCounts(); }
+            if(viewName === 'home') { document.getElementById('search-input').value = ''; renderHomeBase(); }
+            if(viewName === 'cart') renderCart();
+            if(viewName === 'profile') { updateTrackerUI(); window.updateWishlistCounts(); }
             
             window.scrollTo(0,0);
         }
@@ -689,18 +640,17 @@
             if(viewHistory.length > 1) {
                 viewHistory.pop(); 
                 const previous = viewHistory[viewHistory.length - 1];
-                window.navigateTo(previous, true, false);
+                navigateTo(previous, true, false);
             } else {
-                window.navigateTo('home', false, true);
+                navigateTo('home', false, true);
             }
         }
 
-        // --- AUTH, PROFILE & SETUP ---
         window.checkAuth = function() {
             const user = JSON.parse(localStorage.getItem('ujenzi_user'));
             if (user) {
                 document.getElementById('auth-screen').classList.add('hidden');
-                window.setGreeting();
+                setGreeting();
                 document.getElementById('p-name').textContent = user.name;
                 document.getElementById('p-email').textContent = user.email;
                 
@@ -709,13 +659,13 @@
                 document.getElementById('header-p-image').src = photoSrc;
                 
                 document.getElementById('notif-toggle').checked = localStorage.getItem('ujenzi_notif') === 'true';
-                window.renderHomeBase();
+                renderHomeBase();
             } else {
                 document.getElementById('auth-screen').classList.remove('hidden');
             }
         }
 
-        window.setGreeting = function() {
+        function setGreeting() {
             const user = JSON.parse(localStorage.getItem('ujenzi_user'));
             if(!user) return;
             const firstName = user.name.split(' ')[0];
@@ -740,7 +690,6 @@
             }
         }
         
-        // --- EDIT NAME LOGIC ---
         window.openEditNameModal = function() {
             const user = JSON.parse(localStorage.getItem('ujenzi_user'));
             if(user) document.getElementById('edit-name-input').value = user.name;
@@ -762,25 +711,28 @@
                 user.name = newName;
                 localStorage.setItem('ujenzi_user', JSON.stringify(user));
                 document.getElementById('p-name').textContent = newName;
-                window.setGreeting(); 
-                window.closeEditNameModal();
+                setGreeting(); 
+                closeEditNameModal();
                 
                 if(window.updateFirebaseName) window.updateFirebaseName(newName);
             }
         };
 
-        window.updateTrackerUI = function() {
+        let isGoldVIP = false;
+        function updateTrackerUI() {
             const spend = parseInt(localStorage.getItem('ujenzi_total_spend') || '0');
             document.getElementById('total-project-cost').textContent = `TZS ${spend.toLocaleString()}`;
             document.getElementById('cost-progress').style.width = `${Math.min((spend / 5000000) * 100, 100)}%`;
 
             const badge = document.getElementById('vip-badge');
             const perk = document.getElementById('vip-perk-text');
+            isGoldVIP = false;
 
             if(spend >= 5000000) {
                 badge.className = "px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest bg-gradient-to-r from-amber-400 to-yellow-600 text-white shadow-md inline-block";
                 badge.innerHTML = "👑 Gold Builder";
                 perk.classList.remove('hidden');
+                isGoldVIP = true;
             } else if (spend >= 1000000) {
                 badge.className = "px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest bg-gradient-to-r from-gray-300 to-gray-400 text-gray-800 shadow-md inline-block";
                 badge.innerHTML = "🥈 Silver Builder";
@@ -792,22 +744,21 @@
             }
         }
 
-        // --- HOME SEARCH & GRID ---
         window.handleSearch = function() {
             const query = document.getElementById('search-input').value.toLowerCase();
             const container = document.getElementById('dynamic-home-content');
-            if(!query) { window.renderHomeBase(); return; }
+            if(!query) { renderHomeBase(); return; }
             let results = [];
             for(let cat in productDatabase) {
                 productDatabase[cat].forEach(p => { if(p.name.toLowerCase().includes(query) || p.desc.toLowerCase().includes(query)) results.push(p); });
             }
             if(results.length === 0) { container.innerHTML = `<div class="text-center py-16 text-gray-400 font-bold">No results found.</div>`; return; }
-            container.innerHTML = `<div class="flex items-center gap-3 mb-2 click-press cursor-pointer" onclick="document.getElementById('search-input').value=''; window.renderHomeBase();"><span class="w-8 h-8 bg-white dark:bg-gray-800 rounded-full flex items-center justify-center shadow-sm font-bold border dark:border-gray-700">←</span><h2 class="text-lg font-bold">Search Results</h2></div><div class="grid grid-cols-2 gap-4">${results.map((p, i) => window.generateProductCardHTML(p, i)).join('')}</div>`;
+            container.innerHTML = `<div class="flex items-center gap-3 mb-2 click-press cursor-pointer" onclick="document.getElementById('search-input').value=''; renderHomeBase();"><span class="w-8 h-8 bg-white dark:bg-gray-800 rounded-full flex items-center justify-center shadow-sm font-bold border dark:border-gray-700">←</span><h2 class="text-lg font-bold">Search Results</h2></div><div class="grid grid-cols-2 gap-4">${results.map((p, i) => generateProductCardHTML(p, i)).join('')}</div>`;
         }
 
-        window.generateProductCardHTML = function(p, i) {
+        function generateProductCardHTML(p, i) {
             return `
-                <div onclick="window.openProduct('${p.name.replace(/'/g, "\\'")}', '${p.desc.replace(/'/g, "\\'")}', ${p.price}, ${p.wt}, '${p.img}', ${p.rating}, ${p.reviews}, '${p.reviewTxt.replace(/'/g, "\\'")}')" class="bg-white dark:bg-gray-800 rounded-3xl p-3 shadow-sm border dark:border-gray-700 flex flex-col relative click-press group stagger-item" style="animation-delay: ${i*0.05}s">
+                <div onclick="openProduct('${p.name.replace(/'/g, "\\'")}', '${p.desc.replace(/'/g, "\\'")}', ${p.price}, ${p.wt}, '${p.img}', ${p.rating}, ${p.reviews}, '${p.reviewTxt.replace(/'/g, "\\'")}')" class="bg-white dark:bg-gray-800 rounded-3xl p-3 shadow-sm border dark:border-gray-700 flex flex-col relative click-press group stagger-item" style="animation-delay: ${i*0.05}s">
                     <div class="relative overflow-hidden rounded-2xl mb-3 bg-gray-100 dark:bg-gray-700">
                         <img src="${p.img}" loading="lazy" class="w-full h-32 object-cover group-hover:scale-105 transition-transform duration-500">
                         <div class="absolute top-2 left-2 bg-white/90 dark:bg-gray-900/90 backdrop-blur px-2 py-0.5 rounded text-[9px] font-black flex items-center gap-1 shadow-sm"><span class="text-amber-400">★</span> ${p.rating}</div>
@@ -827,7 +778,7 @@
                     <h2 class="text-lg font-bold mb-4 px-1">Categories</h2>
                     <div class="grid grid-cols-2 gap-4">
                         ${Object.keys(categoryImages).map((cat, i) => `
-                            <div onclick="window.openCategory('${cat}')" class="bg-white dark:bg-gray-800 rounded-3xl p-3 shadow-sm border dark:border-gray-700 flex flex-col click-press transition-all stagger-item" style="animation-delay: ${i*0.05}s">
+                            <div onclick="openCategory('${cat}')" class="bg-white dark:bg-gray-800 rounded-3xl p-3 shadow-sm border dark:border-gray-700 flex flex-col click-press transition-all stagger-item" style="animation-delay: ${i*0.05}s">
                                 <img src="${categoryImages[cat]}" class="w-full h-24 object-cover rounded-2xl mb-3">
                                 <p class="font-bold text-sm px-1 mb-2">${cat}</p>
                                 <button class="w-full py-2 bg-green-50 dark:bg-green-900/30 text-green-600 dark:text-green-400 rounded-xl text-xs font-bold mt-auto">Explore</button>
@@ -838,30 +789,27 @@
                 <section class="mt-4">
                     <h2 class="text-lg font-bold mb-4 px-1">Featured</h2>
                     <div class="grid grid-cols-2 gap-4">
-                        ${window.generateProductCardHTML(productDatabase['Foundation & Structural'][0], 0)}
-                        ${window.generateProductCardHTML(productDatabase['Roofing Materials'][0], 1)}
+                        ${generateProductCardHTML(productDatabase['Foundation & Structural'][0], 0)}
+                        ${generateProductCardHTML(productDatabase['Roofing Materials'][0], 1)}
                     </div>
                 </section>`;
         }
-
-        const catMap = { 'Foundation': 'Foundation & Structural', 'Roofing': 'Roofing Materials', 'Plumbing': 'Plumbing & Water', 'Electrical': 'Electrical & Lighting', 'Finishing': 'Finishing & Painting', 'Tools': 'Tools & Hardware' };
 
         window.openCategory = function(shortCatName) {
             const fullCatName = catMap[shortCatName] || shortCatName;
             const products = productDatabase[fullCatName] || [];
             const container = document.getElementById('dynamic-home-content');
             container.innerHTML = `
-                <div class="flex items-center gap-3 mb-4 click-press cursor-pointer" onclick="window.renderHomeBase()">
+                <div class="flex items-center gap-3 mb-4 click-press cursor-pointer" onclick="renderHomeBase()">
                     <span class="w-8 h-8 bg-white dark:bg-gray-800 rounded-full flex items-center justify-center shadow-sm font-bold border dark:border-gray-700">←</span>
                     <h2 class="text-xl font-bold">${shortCatName}</h2>
                 </div>
                 <div class="grid grid-cols-2 gap-4">
-                    ${products.map((p, i) => window.generateProductCardHTML(p, i)).join('')}
+                    ${products.map((p, i) => generateProductCardHTML(p, i)).join('')}
                 </div>`;
             window.scrollTo(0, 0);
         }
 
-        // --- PRODUCT BOTTOM SHEET LOGIC ---
         window.openProduct = function(t, d, p, wt, i, rating, reviews, reviewTxt) {
             currentModalProduct = { name: t, desc: d, price: p, wt: wt, img: i };
             document.getElementById('modal-img').src = i;
@@ -892,13 +840,13 @@
             
             document.getElementById('add-to-cart-btn').onclick = () => {
                 let qtyVal = parseInt(document.getElementById('modal-qty').value);
-                const qty = isNaN(qtyVal) || qtyVal < 1 ? 1 : qtyVal; // Safely default to 1 if user left it blank
+                const qty = isNaN(qtyVal) || qtyVal < 1 ? 1 : qtyVal; 
                 cart.push({ title: t, price: p, wt: wt, qty: qty });
                 if(fbtItem && document.getElementById('fbt-checkbox').checked) {
                     cart.push({ title: fbtItem.name, price: fbtItem.price, wt: fbtItem.wt, qty: 1 });
                 }
-                window.updateBadge(); 
-                window.closeProduct();
+                updateBadge(); 
+                closeProduct();
             };
         }
 
@@ -908,11 +856,10 @@
             if(window.location.hash === '#product') history.back();
         }
 
-        // 🌟 TASK 2: UPDATED QUANTITY LOGIC (Supports typing & bulk adding) 🌟
         window.changeQty = function(amt) {
             const input = document.getElementById('modal-qty');
             let current = parseInt(input.value);
-            if (isNaN(current)) current = 0; // If they deleted the text and tap a chip, treat it as 0
+            if (isNaN(current)) current = 0; 
             let v = current + amt;
             if(v > 0) input.value = v;
             else input.value = 1;
@@ -921,19 +868,17 @@
         window.validateQty = function() {
             const input = document.getElementById('modal-qty');
             let v = parseInt(input.value);
-            // Only defaults back to 1 if they click away (blur) while it's empty, so they can type normally
             if(isNaN(v) || v < 1) {
                 input.value = 1;
             }
         }
 
-        window.updateBadge = function() { 
+        function updateBadge() { 
             const b = document.getElementById('cart-badge'); 
             b.textContent = cart.length; 
             b.classList.toggle('hidden', cart.length === 0); 
         }
 
-        // --- CART & DELIVERY ---
         let transportCost = 0;
         window.calculateDelivery = function() {
             const zone = parseFloat(document.getElementById('delivery-zone').value);
@@ -964,17 +909,15 @@
             c.innerHTML = cart.map((i, idx) => `
                 <div class="bg-white dark:bg-gray-800 p-4 rounded-2xl flex justify-between items-center shadow-sm border dark:border-gray-700 stagger-item" style="animation-delay: ${idx*0.05}s">
                     <div><p class="font-bold text-xs uppercase">${i.title}</p><p class="text-xs text-gray-500 mt-1">${i.qty} units × TZS ${i.price.toLocaleString()}</p></div>
-                    <button onclick="cart.splice(${idx},1);window.renderCart();window.updateBadge();" class="w-8 h-8 flex items-center justify-center bg-red-50 dark:bg-red-900/20 text-red-500 rounded-full font-bold click-press">✕</button>
+                    <button onclick="cart.splice(${idx},1);renderCart();updateBadge();" class="w-8 h-8 flex items-center justify-center bg-red-50 dark:bg-red-900/20 text-red-500 rounded-full font-bold click-press">✕</button>
                 </div>`).join('');
             document.getElementById('cart-footer').classList.remove('hidden');
-            window.calculateDelivery();
+            calculateDelivery();
         }
 
-        // 🌟 NEW: ACCURATE CHECKOUT WITH DIGITAL RECEIPTS 🌟
         window.checkoutWhatsApp = function() {
             const u = JSON.parse(localStorage.getItem('ujenzi_user'));
             let sub = 0; 
-            // Safe fallback just in case user object is missing
             let m = `Habari UjenziSmart! I am ${u ? u.name : 'Guest'}.\nI want to order:\n\n`;
             
             let itemsString = "";
@@ -990,40 +933,44 @@
 
             m += `\nSubtotal: TZS ${sub.toLocaleString()}\nZone: ${zoneName}\nTransport: TZS ${transportCost.toLocaleString()}\n*TOTAL: TZS ${totalCost.toLocaleString()}*`;
             
-            // Generate Accurate Digital Receipt
+            const orderId = 'US-' + Math.floor(1000 + Math.random() * 9000);
+            
             const receipt = {
-                date: new Date().toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' }),
+                orderId: orderId,
+                dateString: new Date().toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' }),
                 items: itemsString.slice(0, -2), 
                 subtotal: sub,
                 transport: transportCost,
                 total: totalCost,
-                type: 'WhatsApp Order'
+                type: 'WhatsApp Order',
+                status: 'PENDING'
             };
 
-            // Save to Local History
-            let history = JSON.parse(localStorage.getItem('ujenzi_history') || '[]');
-            history.unshift(receipt); 
-            localStorage.setItem('ujenzi_history', JSON.stringify(history));
+            // Call the secure cloud function if it exists
+            if(window.submitCloudOrder) {
+                window.submitCloudOrder(receipt);
+            }
 
-            // Update Total Lifetime Spend
-            localStorage.setItem('ujenzi_total_spend', parseInt(localStorage.getItem('ujenzi_total_spend')||'0') + totalCost); 
+            m += `\n\n*Order ID: ${orderId}*\n*(Admin: Check your Dashboard to mark this as Paid)*`;
             
-            // Clear cart & Redirect
             cart = [];
-            window.updateBadge();
+            updateBadge();
             window.open(`https://wa.me/${WHATSAPP_NUM}?text=${encodeURIComponent(m)}`, '_blank');
-            window.navigateTo('home', false, true); 
+            navigateTo('history', false, true); 
         }
 
-        // 🌟 NEW: FINANCIAL DASHBOARD RENDERER 🌟
         window.renderHistory = function() {
-            const history = JSON.parse(localStorage.getItem('ujenzi_history') || '[]');
-            const spend = parseInt(localStorage.getItem('ujenzi_total_spend') || '0');
+            const history = window.appHistory;
+            const spend = window.appSpend;
             
             document.getElementById('history-total').textContent = `TZS ${spend.toLocaleString()}`;
 
             let totalMat = 0; let totalTrans = 0;
-            history.forEach(r => { totalMat += r.subtotal; totalTrans += r.transport; });
+            history.forEach(r => { 
+                if(r.status === 'PAID') {
+                    totalMat += r.subtotal; totalTrans += r.transport; 
+                }
+            });
 
             document.getElementById('history-materials-val').textContent = `TZS ${totalMat.toLocaleString()}`;
             document.getElementById('history-transport-val').textContent = `TZS ${totalTrans.toLocaleString()}`;
@@ -1038,64 +985,62 @@
 
             const feed = document.getElementById('receipt-feed');
             if(history.length === 0) {
-                feed.innerHTML = `<div class="bg-gray-50 dark:bg-gray-800 p-6 rounded-3xl border dark:border-gray-700 text-center"><p class="text-3xl mb-2 opacity-50">🧾</p><p class="text-xs text-gray-400 font-bold">No transactions yet.</p></div>`;
+                feed.innerHTML = `<div class="bg-gray-50 dark:bg-gray-800 p-6 rounded-3xl border dark:border-gray-700 text-center"><p class="text-3xl mb-2 opacity-50">🧾</p><p class="text-xs text-gray-400 font-bold">No secure transactions found.</p></div>`;
                 return;
             }
 
-            feed.innerHTML = history.map((r, i) => `
+            feed.innerHTML = history.map((r, i) => {
+                const isPaid = r.status === 'PAID';
+                const badgeColor = isPaid ? 'bg-green-50 text-green-600 dark:bg-green-900/30 dark:text-green-400' : 'bg-amber-50 text-amber-600 dark:bg-amber-900/30 dark:text-amber-400';
+                const moneyColor = isPaid ? 'text-red-500 font-black' : 'text-gray-400 dark:text-gray-500 font-bold line-through';
+                
+                return `
                 <div class="bg-white dark:bg-gray-800 p-5 rounded-[2rem] shadow-sm border dark:border-gray-700 stagger-item" style="animation-delay: ${i*0.05}s">
                     <div class="flex justify-between items-start mb-3 border-b dark:border-gray-700 pb-3">
                         <div>
-                            <p class="text-[9px] text-gray-400 font-black uppercase tracking-widest">${r.date}</p>
-                            <p class="text-xs font-bold text-gray-800 dark:text-gray-100 mt-0.5">${r.type}</p>
+                            <p class="text-[9px] text-gray-400 font-black uppercase tracking-widest">${r.dateString}</p>
+                            <p class="text-xs font-bold text-gray-800 dark:text-gray-100 mt-0.5">Order ${r.orderId}</p>
                         </div>
-                        <span class="bg-green-50 text-green-600 dark:bg-green-900/30 dark:text-green-400 text-[9px] font-black px-2 py-1 rounded-md uppercase tracking-widest">Paid</span>
+                        <span class="${badgeColor} text-[9px] font-black px-2 py-1 rounded-md uppercase tracking-widest">${r.status || 'PENDING'}</span>
                     </div>
                     <p class="text-xs text-gray-500 dark:text-gray-400 font-medium leading-relaxed mb-3">${r.items}</p>
                     <div class="flex justify-between items-center">
                         <span class="text-[10px] text-gray-400 font-bold">Transport: TZS ${r.transport.toLocaleString()}</span>
-                        <span class="text-sm font-black text-red-500">- TZS ${r.total.toLocaleString()}</span>
+                        <span class="text-sm ${moneyColor}">- TZS ${r.total.toLocaleString()}</span>
                     </div>
-                </div>
-            `).join('');
+                </div>`;
+            }).join('');
         };
 
         window.clearHistory = function() {
-            if(confirm("Are you sure you want to permanently delete all financial history? This cannot be undone.")) {
-                localStorage.removeItem('ujenzi_history');
-                localStorage.setItem('ujenzi_total_spend', '0');
-                window.renderHistory();
-            }
+            alert("For financial security, official cloud receipts cannot be deleted. Please contact Support to cancel an order.");
         };
 
-        // 🌟 TASK 1: SHARE & PDF GENERATION 🌟
         window.shareStatement = function() {
             const u = JSON.parse(localStorage.getItem('ujenzi_user'));
-            const h = JSON.parse(localStorage.getItem('ujenzi_history') || '[]');
-            const spend = parseInt(localStorage.getItem('ujenzi_total_spend') || '0');
+            const h = window.appHistory; 
+            const spend = window.appSpend;
             
             if(h.length === 0) return alert("No transactions to share yet.");
 
             let m = `📊 *UjenziSmart Financial Report*\nBuilder: ${u ? u.name : 'Guest'}\nLifetime Spend: *TZS ${spend.toLocaleString()}*\n\n*Recent Transactions:*\n`;
-            
             h.slice(0, 5).forEach(r => {
-                m += `🗓️ ${r.date}\n📦 ${r.items}\n🚚 Transport: TZS ${r.transport.toLocaleString()}\n💰 Total: TZS ${r.total.toLocaleString()}\n\n`;
+                m += `🗓️ ${r.dateString}\n📦 ${r.items}\n🚚 Transport: TZS ${r.transport.toLocaleString()}\n💰 Total: TZS ${r.total.toLocaleString()}\nStatus: ${r.status}\n\n`;
             });
-            
             window.open(`https://wa.me/?text=${encodeURIComponent(m)}`, '_blank');
         };
 
         window.downloadStatement = function() {
-            const h = JSON.parse(localStorage.getItem('ujenzi_history') || '[]');
+            const h = window.appHistory;
             if(h.length === 0) return alert("No transactions to download yet.");
 
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
             const u = JSON.parse(localStorage.getItem('ujenzi_user'));
-            const spend = parseInt(localStorage.getItem('ujenzi_total_spend') || '0');
+            const spend = window.appSpend;
 
             doc.setFontSize(22);
-            doc.setTextColor(16, 185, 129); // UjenziSmart Green
+            doc.setTextColor(16, 185, 129);
             doc.text("UjenziSmart", 14, 22);
             
             doc.setFontSize(10);
@@ -1106,23 +1051,21 @@
             doc.setTextColor(0);
             doc.text(`Account Name: ${u ? u.name : 'Guest'}`, 14, 42);
             doc.text(`Date Generated: ${new Date().toLocaleDateString()}`, 14, 48);
-            doc.text(`Total Lifetime Spend: TZS ${spend.toLocaleString()}`, 14, 56);
+            doc.text(`Total Lifetime Spend (Paid): TZS ${spend.toLocaleString()}`, 14, 56);
 
-            const tableData = h.map(r => [r.date, r.type, r.items, `TZS ${r.total.toLocaleString()}`]);
+            const tableData = h.map(r => [r.dateString, r.status, r.items, `TZS ${r.total.toLocaleString()}`]);
             
             doc.autoTable({
                 startY: 65,
-                head: [['Date', 'Type', 'Items Purchased', 'Total Cost']],
+                head: [['Date', 'Status', 'Items Purchased', 'Total Cost']],
                 body: tableData,
                 theme: 'striped',
                 headStyles: { fillColor: [16, 185, 129] },
                 styles: { fontSize: 9 }
             });
-
             doc.save("UjenziSmart_Financial_Statement.pdf");
         };
 
-        // --- WISHLIST PHASE MANAGEMENT ---
         window.saveToPhase = function() {
             if(!currentModalProduct) return;
             const phase = document.getElementById('phase-selector').value;
@@ -1130,15 +1073,15 @@
             list.push({ ...currentModalProduct, phase: phase });
             localStorage.setItem('ujenzi_wishlist', JSON.stringify(list));
             alert(`Saved to Phase: ${phase}`);
-            window.closeProduct();
-            if(document.getElementById('view-profile').classList.contains('hidden') === false) window.updateWishlistCounts();
+            closeProduct();
+            if(document.getElementById('view-profile').classList.contains('hidden') === false) updateWishlistCounts();
         }
 
         window.removeFromPhase = function(phase, originalIndex) {
             let list = JSON.parse(localStorage.getItem('ujenzi_wishlist') || '[]');
             list.splice(originalIndex, 1);
             localStorage.setItem('ujenzi_wishlist', JSON.stringify(list));
-            window.updateWishlistCounts();
+            updateWishlistCounts();
             window.renderWishlistPhase(phase); 
         };
 
@@ -1147,12 +1090,12 @@
                 let list = JSON.parse(localStorage.getItem('ujenzi_wishlist') || '[]');
                 list = list.filter(x => x.phase !== phase); 
                 localStorage.setItem('ujenzi_wishlist', JSON.stringify(list));
-                window.updateWishlistCounts();
+                updateWishlistCounts();
                 window.renderWishlistPhase(phase); 
             }
         };
 
-        window.updateWishlistCounts = function() {
+        function updateWishlistCounts() {
             const list = JSON.parse(localStorage.getItem('ujenzi_wishlist') || '[]');
             document.getElementById('count-foundation').textContent = `${list.filter(x => x.phase === 'Foundation').length} Items`;
             document.getElementById('count-roofing').textContent = `${list.filter(x => x.phase === 'Roofing').length} Items`;
@@ -1162,7 +1105,6 @@
         window.renderWishlistPhase = function(phase) {
             const list = JSON.parse(localStorage.getItem('ujenzi_wishlist') || '[]');
             const items = list.map((item, index) => ({...item, originalIndex: index})).filter(x => x.phase === phase);
-            
             const container = document.getElementById('wishlist-render-area');
             
             if(items.length === 0) { 
@@ -1180,14 +1122,14 @@
                 <div class="mb-4 flex items-center justify-between">
                     <h4 class="font-bold text-sm uppercase tracking-widest text-green-600">${phase} Items</h4>
                     <div class="flex gap-4 items-center">
-                        <button onclick="window.clearPhase('${phase}')" class="text-xs text-red-500 font-bold click-press uppercase tracking-widest bg-red-50 dark:bg-red-900/20 px-2 py-1 rounded-md">Clear All</button>
+                        <button onclick="clearPhase('${phase}')" class="text-xs text-red-500 font-bold click-press uppercase tracking-widest bg-red-50 dark:bg-red-900/20 px-2 py-1 rounded-md">Clear All</button>
                         <button onclick="document.getElementById('wishlist-render-area').classList.add('hidden')" class="text-xs text-gray-400 font-bold click-press">Close</button>
                     </div>
                 </div>
                 <div class="grid grid-cols-2 gap-4 mb-6">
                     ${items.map(p => `
                     <div class="bg-white dark:bg-gray-800 p-3 rounded-2xl shadow-sm border dark:border-gray-700 relative animate-slideUpFade group">
-                        <button onclick="window.removeFromPhase('${phase}', ${p.originalIndex})" class="absolute top-1 right-1 w-7 h-7 bg-red-50 dark:bg-red-900/40 text-red-500 rounded-full flex items-center justify-center text-xs font-bold shadow-sm z-10 click-press transition-colors hover:bg-red-100">✕</button>
+                        <button onclick="removeFromPhase('${phase}', ${p.originalIndex})" class="absolute top-1 right-1 w-7 h-7 bg-red-50 dark:bg-red-900/40 text-red-500 rounded-full flex items-center justify-center text-xs font-bold shadow-sm z-10 click-press transition-colors hover:bg-red-100">✕</button>
                         <img src="${p.img}" class="w-full h-20 object-cover rounded-xl mb-2">
                         <p class="text-[9px] font-bold h-6 overflow-hidden">${p.name}</p>
                         <p class="text-green-600 font-black text-[10px]">TZS ${p.price.toLocaleString()}</p>
@@ -1196,7 +1138,6 @@
             container.classList.remove('hidden');
         }
 
-        // --- AI HUB (Tabbed: Chat & Estimator) ---
         window.switchAiTab = function(tab) {
             document.getElementById('ai-content-chat').classList.add('hidden'); 
             document.getElementById('ai-content-calc').classList.add('hidden');
@@ -1249,7 +1190,6 @@
             chatBox.innerHTML += `<div id="${loaderId}" class="p-4 bg-white dark:bg-gray-800 border dark:border-gray-700 rounded-2xl rounded-tl-none mr-auto w-[60%] skeleton h-10"></div>`;
             chatBox.scrollTop = chatBox.scrollHeight;
             
-            // LOCAL AI DEMO - Instantly replies so you don't wait for Render!
             setTimeout(() => {
                 const loader = document.getElementById(loaderId);
                 if(loader) loader.remove();
@@ -1271,13 +1211,12 @@
                 chatBox.scrollTop = chatBox.scrollHeight;
             }, 1200);
         };
-        
-        window.checkAuth();
     </script>
     
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
         import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithRedirect, getRedirectResult, signOut, onAuthStateChanged, updateProfile } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+        import { getFirestore, collection, addDoc, query, where, onSnapshot, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
         import { getMessaging, getToken, onMessage } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-messaging.js";
         
         const firebaseConfig = { 
@@ -1286,34 +1225,76 @@
             projectId: "ujenzismart-878af", 
             storageBucket: "ujenzismart-878af.firebasestorage.app", 
             messagingSenderId: "626807014511", 
-            appId: "1:626807014511:web:844e137d32048d6460399a", 
+            appId: "1:626807014511:web:844e137d32048d6460399a",
             measurementId: "G-V8C9KKGKFY" 
         };
 
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
+        const db = getFirestore(app);
         const provider = new GoogleAuthProvider();
-
         provider.setCustomParameters({ prompt: 'select_account' });
 
-        // 1. FALLBACK REDIRECT CATCHER 
+        // --- REAL-TIME CLOUD LISTENER FOR EXPENSES ---
+        let unsubscribeOrders = null;
+
+        function listenToUserOrders(uid) {
+            const q = query(collection(db, "orders"), where("userId", "==", uid), orderBy("createdAt", "desc"));
+            unsubscribeOrders = onSnapshot(q, (snapshot) => {
+                let history = [];
+                let approvedSpend = 0;
+
+                snapshot.forEach((doc) => {
+                    const data = doc.data();
+                    history.push({ id: doc.id, ...data });
+                    if(data.status === 'PAID') {
+                        approvedSpend += data.total;
+                    }
+                });
+
+                window.appHistory = history;
+                window.appSpend = approvedSpend;
+                window.localStorage.setItem('ujenzi_total_spend', approvedSpend.toString());
+
+                if(!document.getElementById('view-history').classList.contains('hidden')) {
+                    window.renderHistory();
+                }
+                if(!document.getElementById('view-profile').classList.contains('hidden')) {
+                    window.updateTrackerUI();
+                }
+            });
+        }
+
+        // --- CLOUD ORDER SUBMISSION CALLED BY CHECKOUT ---
+        window.submitCloudOrder = async function(receipt) {
+            const user = auth.currentUser;
+            if(!user) return alert("You must be signed in to place a secure order.");
+            try {
+                await addDoc(collection(db, "orders"), {
+                    ...receipt,
+                    userId: user.uid,
+                    userName: user.displayName || 'Customer',
+                    userEmail: user.email,
+                    createdAt: serverTimestamp()
+                });
+            } catch (error) {
+                console.error("Error saving order to cloud:", error);
+                alert("Failed to sync secure order. Check connection.");
+            }
+        };
+
         getRedirectResult(auth).then((result) => {
             if (result) {
-                localStorage.setItem('ujenzi_user', JSON.stringify({ 
-                    name: result.user.displayName, 
-                    email: result.user.email, 
-                    photoURL: result.user.photoURL 
-                }));
+                localStorage.setItem('ujenzi_user', JSON.stringify({ name: result.user.displayName, email: result.user.email, photoURL: result.user.photoURL }));
                 location.reload();
             }
         }).catch((error) => {
             console.error("Redirect Login Error:", error);
             if (error.code === 'auth/unauthorized-domain') {
-                 alert("🚨 DEVELOPER ALERT: You must add 'jemmziray-tech.github.io' to your Firebase Console under Authentication > Settings > Authorized Domains.");
+                 alert("🚨 DEVELOPER ALERT: Add 'jemmziray-tech.github.io' to your Firebase Authorized Domains.");
             }
         });
 
-        // 2. THE BULLETPROOF LOGIN BUTTON (Popup with Redirect Fallback)
         const googleBtn = document.getElementById('google-signin-btn');
         if(googleBtn) {
             googleBtn.onclick = async () => { 
@@ -1322,54 +1303,37 @@
                 try {
                     await signInWithPopup(auth, provider);
                 } catch (error) {
-                    console.error("Login Trigger Error:", error);
-                    if (error.code === 'auth/popup-blocked') {
-                        await signInWithRedirect(auth, provider);
-                    } else if (error.code !== 'auth/popup-closed-by-user' && error.code !== 'auth/cancelled-popup-request') {
-                        alert("Login failed: " + error.message);
-                    }
+                    if (error.code === 'auth/popup-blocked') await signInWithRedirect(auth, provider);
+                    else if (error.code !== 'auth/popup-closed-by-user' && error.code !== 'auth/cancelled-popup-request') alert("Login failed: " + error.message);
                     googleBtn.innerHTML = originalText;
                 }
             };
         }
 
-        // 3. AUTO-HEALER
         onAuthStateChanged(auth, (user) => {
             if (user) {
-                localStorage.setItem('ujenzi_user', JSON.stringify({ 
-                    name: user.displayName, 
-                    email: user.email, 
-                    photoURL: user.photoURL 
-                }));
+                localStorage.setItem('ujenzi_user', JSON.stringify({ name: user.displayName, email: user.email, photoURL: user.photoURL }));
                 document.getElementById('auth-screen').classList.add('hidden');
+                listenToUserOrders(user.uid); 
                 if(typeof window.checkAuth === "function") window.checkAuth();
             } else {
+                if(unsubscribeOrders) unsubscribeOrders(); 
                 localStorage.removeItem('ujenzi_user');
+                window.appHistory = []; window.appSpend = 0;
                 document.getElementById('auth-screen').classList.remove('hidden');
             }
         });
 
-        // 4. LOGOUT & PROFILE EDITING
         window.logoutUser = async function() {
-            try {
-                await signOut(auth);
-                localStorage.removeItem('ujenzi_user');
-                localStorage.removeItem('ujenzi_notif'); 
-                localStorage.removeItem('fcm_token');
-                location.reload(); 
-            } catch (error) { console.error("Logout Error:", error); }
+            try { await signOut(auth); localStorage.removeItem('ujenzi_user'); location.reload(); } catch (error) { console.error("Logout Error:", error); }
         };
 
         window.updateFirebaseName = async function(newName) {
             if(auth.currentUser) {
-                try {
-                    await updateProfile(auth.currentUser, { displayName: newName });
-                    console.log("Firebase Profile officially updated to:", newName);
-                } catch (error) { console.error("Error updating Firebase profile:", error); }
+                try { await updateProfile(auth.currentUser, { displayName: newName }); } catch (error) { console.error("Update profile error", error); }
             }
         };
 
-        // 5. PUSH NOTIFICATIONS
         let messaging = null;
         try {
             messaging = getMessaging(app);
