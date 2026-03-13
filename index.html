@@ -39,7 +39,7 @@
         .bg-deep-tech { background: radial-gradient(circle at top right, #112347 0%, #030814 100%); }
         .pattern-overlay { background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.03' fill-rule='evenodd'%3E%3Ccircle cx='20' cy='20' r='1'/%3E%3C/g%3E%3C/svg%3E"); }
 
-        /* 🌟 NEW: Premium Floating Product Animations 🌟 */
+        /* Animated Floating Products */
         @keyframes floatObj1 {
             0%, 100% { transform: translateY(0px) rotate(-5deg); }
             50% { transform: translateY(-15px) rotate(5deg); }
@@ -307,17 +307,17 @@
             <div class="grid grid-cols-3 gap-3 mb-8 stagger-item" style="animation-delay: 0.1s">
                 <div class="bg-white dark:bg-gray-800 p-4 rounded-[1.5rem] border dark:border-gray-700 shadow-sm click-press flex flex-col items-center text-center transition-shadow hover:shadow-md" onclick="renderWishlistPhase('Foundation')">
                     <div class="text-2xl mb-1">🏗️</div>
-                    <p class="font-black text-[10px] text-gray-800 dark:text-white">Foundation</p>
+                    <p class="font-black text-[10px] text-gray-800 dark:text-white">Phase 1</p>
                     <p class="text-[9px] text-green-500 font-black mt-2" id="count-foundation">0 Items</p>
                 </div>
                 <div class="bg-white dark:bg-gray-800 p-4 rounded-[1.5rem] border dark:border-gray-700 shadow-sm click-press flex flex-col items-center text-center transition-shadow hover:shadow-md" onclick="renderWishlistPhase('Roofing')">
                     <div class="text-2xl mb-1">🏠</div>
-                    <p class="font-black text-[10px] text-gray-800 dark:text-white">Roofing</p>
+                    <p class="font-black text-[10px] text-gray-800 dark:text-white">Phase 2</p>
                     <p class="text-[9px] text-green-500 font-black mt-2" id="count-roofing">0 Items</p>
                 </div>
                 <div class="bg-white dark:bg-gray-800 p-4 rounded-[1.5rem] border dark:border-gray-700 shadow-sm click-press flex flex-col items-center text-center transition-shadow hover:shadow-md" onclick="renderWishlistPhase('Finishing')">
                     <div class="text-2xl mb-1">🎨</div>
-                    <p class="font-black text-[10px] text-gray-800 dark:text-white">Finishing</p>
+                    <p class="font-black text-[10px] text-gray-800 dark:text-white">Phase 3</p>
                     <p class="text-[9px] text-green-500 font-black mt-2" id="count-finishing">0 Items</p>
                 </div>
             </div>
@@ -452,7 +452,7 @@
 
             <div id="ai-content-chat" class="flex-grow flex flex-col overflow-hidden bg-gray-50 dark:bg-gray-900">
                 <div id="chat-box" class="flex-grow p-6 overflow-y-auto flex flex-col gap-4">
-                    <div class="p-4 bg-white dark:bg-gray-800 border dark:border-gray-700 rounded-[2rem] rounded-tl-none mr-auto mb-2 text-sm font-medium shadow-sm">Habari! Ask me any construction question.</div>
+                    <div class="p-4 bg-white dark:bg-gray-700 border dark:border-gray-600 rounded-[2rem] rounded-tl-none mr-auto mb-2 text-sm font-medium shadow-sm">Habari! Ask me any construction question.</div>
                 </div>
                 <div class="p-4 bg-white dark:bg-gray-800 border-t dark:border-gray-700 flex gap-2 shrink-0">
                     <input type="text" id="chat-input" onkeypress="if(event.key === 'Enter') window.sendMessage()" class="flex-grow bg-gray-100 dark:bg-gray-900 rounded-xl px-5 py-4 text-sm font-medium outline-none border dark:border-gray-600 focus:ring-2 focus:ring-green-500 transition-shadow" placeholder="Ask anything...">
@@ -558,7 +558,8 @@
 
             if (event.state && event.state.view) {
                 viewHistory.pop();
-                navigateTo(event.state.view, true); // True triggers the slide back animation
+                // Pass true to trigger the slideBackFade animation!
+                navigateTo(event.state.view, true);
             } else {
                 navigateTo('home', true);
             }
@@ -660,6 +661,7 @@
             if(viewHistory.length > 1) {
                 viewHistory.pop(); 
                 const previous = viewHistory[viewHistory.length - 1];
+                // Pass true to trigger the slideBackFade animation!
                 navigateTo(previous, true);
             } else {
                 navigateTo('home');
@@ -686,7 +688,7 @@
             const firstName = user.name.split(' ')[0];
             const h = new Date().getHours();
             let g = "Good Evening"; if(h < 12) g = "Good Morning"; else if(h < 17) g = "Good Afternoon";
-            document.getElementById('header-title').textContent = `${g}, ${firstName}`;
+            document.getElementById('header-title').textContent = `${g}, ${firstName}! 👋`;
             document.getElementById('header-subtitle').textContent = `Project Status: Ready to Build | 60% Complete`;
         }
 
@@ -744,7 +746,7 @@
             isGoldVIP = false;
 
             if(spend >= 5000000) {
-                badge.className = "px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest bg-gradient-to-r from-amber-400 to-yellow-600 text-white shadow-md inline-block";
+                badge.className = "px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest bg-gradient-to-r from-yellow-400 to-yellow-600 text-white shadow-md inline-block";
                 badge.innerHTML = "👑 Gold Builder";
                 perk.classList.remove('hidden');
                 isGoldVIP = true;
@@ -1040,7 +1042,8 @@
     
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-        import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithRedirect, getRedirectResult, signOut, onAuthStateChanged, updateProfile } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+        // CRITICAL FIX: Imported updateProfile and signInWithRedirect!
+        import { getAuth, GoogleAuthProvider, signInWithRedirect, signOut, onAuthStateChanged, updateProfile } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
         import { getMessaging, getToken, onMessage } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-messaging.js";
         
         const firebaseConfig = { 
@@ -1057,66 +1060,58 @@
         const auth = getAuth(app);
         const provider = new GoogleAuthProvider();
 
-        // 1. FALLBACK REDIRECT CATCHER 
-        getRedirectResult(auth).then((result) => {
-            if (result) {
-                localStorage.setItem('ujenzi_user', JSON.stringify({ 
-                    name: result.user.displayName, 
-                    email: result.user.email, 
-                    photoURL: result.user.photoURL 
-                }));
-                location.reload();
-            }
-        }).catch((error) => {
-            console.error("Redirect Login Error:", error);
-            if (error.code === 'auth/unauthorized-domain') {
-                 alert("🚨 DEVELOPER ALERT: You must add 'jemmziray-tech.github.io' to your Firebase Console under Authentication > Settings > Authorized Domains.");
-            }
+        // CRITICAL FIX: Force Google to ask for the account again after logout!
+        provider.setCustomParameters({
+            prompt: 'select_account'
         });
 
-        // 2. THE BULLETPROOF LOGIN BUTTON
-        const googleBtn = document.getElementById('google-signin-btn');
-        if(googleBtn) {
-            googleBtn.onclick = async () => { 
-                const originalText = googleBtn.innerHTML;
-                googleBtn.innerHTML = "⏳ Securely logging in..."; 
-                try {
-                    await signInWithRedirect(auth, provider);
-                } catch (error) {
-                    console.error("Login Trigger Error:", error);
-                    googleBtn.innerHTML = originalText;
-                }
-            };
-        }
-
-        // 3. AUTO-HEALER
+        // 1. AUTO-HEALER & LOGIN LISTENER
         onAuthStateChanged(auth, (user) => {
-            if (user && !localStorage.getItem('ujenzi_user')) {
+            if (user) {
                 localStorage.setItem('ujenzi_user', JSON.stringify({ 
                     name: user.displayName, 
                     email: user.email, 
                     photoURL: user.photoURL 
                 }));
+                // Automatically update UI without needing a hard reload
+                document.getElementById('auth-screen').classList.add('hidden');
                 if(typeof checkAuth === "function") checkAuth();
+            } else {
+                localStorage.removeItem('ujenzi_user');
+                document.getElementById('auth-screen').classList.remove('hidden');
             }
         });
 
-        // 4. LOGOUT & PROFILE EDITING
-        window.logoutUser = async function() {
-            try {
-                await signOut(auth);
+        // 2. THE LOGIN BUTTON (Using ultra-safe Redirect)
+        const googleBtn = document.getElementById('google-signin-btn');
+        if(googleBtn) {
+            googleBtn.onclick = () => { 
+                const originalText = googleBtn.innerHTML;
+                googleBtn.innerHTML = "⏳ Redirecting to Google..."; 
+                signInWithRedirect(auth, provider).catch((error) => {
+                    console.error("Login Trigger Error:", error);
+                    googleBtn.innerHTML = originalText;
+                });
+            };
+        }
+
+        // 3. LOGOUT BUTTON
+        window.logoutUser = function() {
+            signOut(auth).then(() => {
                 localStorage.removeItem('ujenzi_user');
                 localStorage.removeItem('ujenzi_notif'); 
                 localStorage.removeItem('fcm_token');
-                location.reload(); 
-            } catch (error) { console.error("Logout Error:", error); }
+                location.reload(); // Clean state wipe
+            }).catch((error) => {
+                console.error("Logout Error:", error);
+            });
         };
 
+        // 4. UPDATE FIREBASE PROFILE NAME
         window.updateFirebaseName = async function(newName) {
             if(auth.currentUser) {
                 try {
                     await updateProfile(auth.currentUser, { displayName: newName });
-                    console.log("Firebase Profile officially updated to:", newName);
                 } catch (error) { console.error("Error updating Firebase profile:", error); }
             }
         };
