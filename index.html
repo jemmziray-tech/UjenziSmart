@@ -54,7 +54,7 @@
         }
         .anim-prod {
             position: absolute;
-            color: rgba(255, 255, 255, 0.06); /* Very subtle white texture */
+            color: rgba(255, 255, 255, 0.06);
             pointer-events: none;
             z-index: 1; 
         }
@@ -115,18 +115,16 @@
         <svg class="anim-prod w-24 h-24 top-6 right-4" style="animation: floatObj1 8s ease-in-out infinite;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
             <path stroke="currentColor" stroke-width="1.5" stroke-linecap="round" d="M3 4.5h18M3 9.5h18M3 14.5h18M3 19.5h18M8 4.5v5M16 4.5v5M5 9.5v5M13 9.5v5M21 9.5v5M9 14.5v5M17 14.5v5"/>
         </svg>
-        
         <svg class="anim-prod w-20 h-20 bottom-12 left-6" style="animation: floatObj2 10s ease-in-out infinite;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
             <path stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" d="M4 20h16L4 4v16zM8 20v-4M12 20v-4M16 20v-4M4 16h4M4 12h4M4 8h4"/>
         </svg>
-
         <svg class="anim-prod w-28 h-28 top-20 right-32" style="animation: floatObj3 12s ease-in-out infinite;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
             <path stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" d="M3 10l9-7 9 7v10a2 2 0 01-2 2H5a2 2 0 01-2-2V10z M9 21V12h6v9"/>
         </svg>
-        
         <svg class="anim-prod w-16 h-16 top-10 left-32" style="animation: floatObj1 9s ease-in-out infinite;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
             <path stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" d="M6 6c0-2 2-4 6-4s6 2 6 4v12c0 2-2 4-6 4s-6-2-6-4V6z M6 10h12 M6 14h12"/>
         </svg>
+
         <div class="max-w-7xl mx-auto relative z-10">
             <div class="flex items-center justify-between mb-4 h-12">
                 <div class="flex items-center gap-3">
@@ -452,13 +450,13 @@
                 <button onclick="switchAiTab('calc')" id="tab-calc" class="flex-1 py-4 text-xs font-black text-gray-400 border-b-[3px] border-transparent uppercase tracking-widest transition-colors">Estimator</button>
             </div>
 
-            <div id="ai-content-chat" class="flex-grow flex flex-col overflow-hidden bg-gray-50 dark:bg-gray-800">
+            <div id="ai-content-chat" class="flex-grow flex flex-col overflow-hidden bg-gray-50 dark:bg-gray-900">
                 <div id="chat-box" class="flex-grow p-6 overflow-y-auto flex flex-col gap-4">
-                    <div class="p-4 bg-white dark:bg-gray-700 border dark:border-gray-600 rounded-[2rem] rounded-tl-none mr-auto mb-2 text-sm font-medium shadow-sm">Habari! Ask me any construction question.</div>
+                    <div class="p-4 bg-white dark:bg-gray-800 border dark:border-gray-700 rounded-[2rem] rounded-tl-none mr-auto mb-2 text-sm font-medium shadow-sm">Habari! Ask me any construction question.</div>
                 </div>
                 <div class="p-4 bg-white dark:bg-gray-800 border-t dark:border-gray-700 flex gap-2 shrink-0">
-                    <input type="text" id="chat-input" class="flex-grow bg-gray-50 dark:bg-gray-800 rounded-full px-6 py-4 text-sm font-medium outline-none border dark:border-gray-700 focus:ring-2 focus:ring-green-500 transition-shadow" placeholder="Ask anything...">
-                    <button id="send-btn" class="w-14 h-14 bg-green-600 hover:bg-green-700 text-white rounded-full font-bold click-press shadow-lg flex items-center justify-center text-xl shrink-0">→</button>
+                    <input type="text" id="chat-input" onkeypress="if(event.key === 'Enter') window.sendMessage()" class="flex-grow bg-gray-100 dark:bg-gray-900 rounded-xl px-5 py-4 text-sm font-medium outline-none border dark:border-gray-600 focus:ring-2 focus:ring-green-500 transition-shadow" placeholder="Ask anything...">
+                    <button id="send-btn" onclick="window.sendMessage()" class="w-14 h-14 bg-green-600 hover:bg-green-700 text-white rounded-xl font-bold click-press shadow-md transition-colors flex items-center justify-center text-xl shrink-0">→</button>
                 </div>
             </div>
 
@@ -479,7 +477,7 @@
         </div>
     </div>
 
-    <button onclick="window.openAiHub()" class="fixed bottom-24 right-6 z-[100] w-[68px] h-[68px] gradient-pulse rounded-full flex flex-col items-center justify-center shadow-[0_0_25px_rgba(16,185,129,0.6)] border-2 border-white/20 click-press animate-stagger-in group">
+    <button onclick="window.openAiHub()" class="fixed bottom-24 right-6 z-[100] w-[68px] h-[68px] gradient-pulse rounded-full flex flex-col items-center justify-center shadow-[0_0_25px_rgba(16,185,129,0.6)] border-2 border-white/20 click-press animate-stagger-in group" style="animation-delay: 0.5s">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-7 h-7 text-white mb-0.5 group-hover:scale-110 transition-transform drop-shadow-md">
             <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005Z" clip-rule="evenodd" />
         </svg>
@@ -662,7 +660,6 @@
             if(viewHistory.length > 1) {
                 viewHistory.pop(); 
                 const previous = viewHistory[viewHistory.length - 1];
-                // Pass true to trigger the slideBackFade animation!
                 navigateTo(previous, true);
             } else {
                 navigateTo('home');
@@ -708,17 +705,17 @@
         }
         
         // --- EDIT NAME LOGIC ---
-        function openEditNameModal() {
+        window.openEditNameModal = function() {
             const user = JSON.parse(localStorage.getItem('ujenzi_user'));
             if(user) document.getElementById('edit-name-input').value = user.name;
             document.getElementById('edit-name-modal').classList.remove('hidden');
             history.pushState({ modal: 'edit-name' }, '', '#edit-name');
-        }
+        };
 
-        function closeEditNameModal() {
+        window.closeEditNameModal = function() {
             document.getElementById('edit-name-modal').classList.add('hidden');
             if(window.location.hash === '#edit-name') history.back();
-        }
+        };
 
         window.saveNewName = function() {
             const newName = document.getElementById('edit-name-input').value.trim();
@@ -734,7 +731,7 @@
                 
                 if(window.updateFirebaseName) window.updateFirebaseName(newName);
             }
-        }
+        };
 
         let isGoldVIP = false;
         function updateTrackerUI() {
@@ -747,7 +744,7 @@
             isGoldVIP = false;
 
             if(spend >= 5000000) {
-                badge.className = "px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest bg-gradient-to-r from-yellow-400 to-yellow-600 text-white shadow-md inline-block";
+                badge.className = "px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest bg-gradient-to-r from-amber-400 to-yellow-600 text-white shadow-md inline-block";
                 badge.innerHTML = "👑 Gold Builder";
                 perk.classList.remove('hidden');
                 isGoldVIP = true;
@@ -763,7 +760,7 @@
         }
 
         // --- HOME SEARCH & GRID ---
-        function handleSearch() {
+        window.handleSearch = function() {
             const query = document.getElementById('search-input').value.toLowerCase();
             const container = document.getElementById('dynamic-home-content');
             if(!query) { renderHomeBase(); return; }
@@ -816,7 +813,7 @@
 
         const catMap = { 'Foundation': 'Foundation & Structural', 'Roofing': 'Roofing Materials', 'Plumbing': 'Plumbing & Water', 'Electrical': 'Electrical & Lighting', 'Finishing': 'Finishing & Painting', 'Tools': 'Tools & Hardware' };
 
-        function openCategory(shortCatName) {
+        window.openCategory = function(shortCatName) {
             const fullCatName = catMap[shortCatName] || shortCatName;
             const products = productDatabase[fullCatName] || [];
             const container = document.getElementById('dynamic-home-content');
@@ -832,7 +829,7 @@
         }
 
         // --- PRODUCT BOTTOM SHEET LOGIC ---
-        function openProduct(t, d, p, wt, i, rating, reviews, reviewTxt) {
+        window.openProduct = function(t, d, p, wt, i, rating, reviews, reviewTxt) {
             currentModalProduct = { name: t, desc: d, price: p, wt: wt, img: i };
             document.getElementById('modal-img').src = i;
             document.getElementById('modal-title').textContent = t;
@@ -870,13 +867,13 @@
             };
         }
 
-        function closeProduct() { 
+        window.closeProduct = function() { 
             document.getElementById('product-sheet').classList.remove('open');
             setTimeout(() => document.getElementById('product-modal').classList.add('hidden'), 300);
             if(window.location.hash === '#product') history.back();
         }
 
-        function changeQty(amt) {
+        window.changeQty = function(amt) {
             const input = document.getElementById('modal-qty');
             let v = parseInt(input.value) + amt;
             if(v > 0) input.value = v;
@@ -890,7 +887,7 @@
 
         // --- CART & DELIVERY ---
         let transportCost = 0;
-        function calculateDelivery() {
+        window.calculateDelivery = function() {
             const zone = parseFloat(document.getElementById('delivery-zone').value);
             let tw = 0; cart.forEach(i => tw += (i.wt * i.qty));
             let br = 0; let n = "Store Pickup"; 
@@ -925,7 +922,7 @@
             calculateDelivery();
         }
 
-        function checkoutWhatsApp() {
+        window.checkoutWhatsApp = function() {
             const u = JSON.parse(localStorage.getItem('ujenzi_user'));
             let sub = 0; let m = `Habari UjenziSmart! I am ${u.name}.\nI want to order:\n\n`;
             cart.forEach(i => { m += `- ${i.title} (x${i.qty})\n`; sub += i.price * i.qty; });
@@ -936,7 +933,7 @@
         }
 
         // --- WISHLIST PHASE ---
-        function saveToPhase() {
+        window.saveToPhase = function() {
             if(!currentModalProduct) return;
             const phase = document.getElementById('phase-selector').value;
             let list = JSON.parse(localStorage.getItem('ujenzi_wishlist') || '[]');
@@ -954,7 +951,7 @@
             document.getElementById('count-finishing').textContent = `${list.filter(x => x.phase === 'Finishing').length} Items`;
         }
 
-        function renderWishlistPhase(phase) {
+        window.renderWishlistPhase = function(phase) {
             const list = JSON.parse(localStorage.getItem('ujenzi_wishlist') || '[]');
             const items = list.filter(x => x.phase === phase);
             const container = document.getElementById('wishlist-render-area');
@@ -964,7 +961,7 @@
         }
 
         // --- AI HUB (Tabbed: Chat & Estimator) ---
-        function switchAiTab(tab) {
+        window.switchAiTab = function(tab) {
             document.getElementById('ai-content-chat').classList.add('hidden'); 
             document.getElementById('ai-content-calc').classList.add('hidden');
             
@@ -979,7 +976,7 @@
             document.getElementById(`tab-${tab}`).classList.add('text-green-600', 'border-green-600');
         }
 
-        function runCalculation() {
+        window.runCalculation = function() {
             const type = document.getElementById('calc-type').value;
             const L = parseFloat(document.getElementById('calc-l').value);
             const W = parseFloat(document.getElementById('calc-w').value);
@@ -992,49 +989,57 @@
             res.innerHTML = r; res.classList.remove('hidden');
         }
 
-        // 🚨 PROPERLY BIND THE OPEN AI HUB FUNCTION SO THE BUTTON WORKS 🚨
         window.openAiHub = function() { 
             history.pushState({ modal: 'ai-hub' }, '', '#ai-hub'); 
             document.getElementById('ai-hub-modal').classList.remove('hidden'); 
             setTimeout(() => document.getElementById('ai-hub-sheet').classList.add('open'), 10);
         };
         
-        function closeAiHub() { 
+        window.closeAiHub = function() { 
             document.getElementById('ai-hub-sheet').classList.remove('open');
             setTimeout(() => document.getElementById('ai-hub-modal').classList.add('hidden'), 300);
             if(window.location.hash === '#ai-hub') history.back();
         }
 
-        const chatBox = document.getElementById('chat-box');
-        async function sendMessage() {
+        window.sendMessage = async function() {
             const input = document.getElementById('chat-input');
+            const chatBox = document.getElementById('chat-box');
             const txt = input.value.trim(); if(!txt) return;
+            
             chatBox.innerHTML += `<div class="p-3 bg-green-600 text-white rounded-2xl rounded-tr-none ml-auto max-w-[85%] text-sm shadow-md animate-stagger-in">${txt}</div>`;
             input.value = '';
+            
             const loaderId = 'ai-loader-' + Date.now();
             chatBox.innerHTML += `<div id="${loaderId}" class="p-4 bg-white dark:bg-gray-800 border dark:border-gray-700 rounded-2xl rounded-tl-none mr-auto w-[60%] skeleton h-10"></div>`;
             chatBox.scrollTop = chatBox.scrollHeight;
+            
             try {
-                const res = await fetch(`${RENDER_URL}/api/chat`, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ message: txt }) });
+                const res = await fetch(`${RENDER_URL}/api/chat`, { 
+                    method: 'POST', 
+                    headers: {'Content-Type': 'application/json'}, 
+                    body: JSON.stringify({ message: txt }) 
+                });
+                
+                if (!res.ok) throw new Error("Server sleeping");
                 const d = await res.json();
-                document.getElementById(loaderId).remove();
-                chatBox.innerHTML += `<div class="p-4 bg-white dark:bg-gray-800 border dark:border-gray-700 rounded-2xl rounded-tl-none mr-auto max-w-[85%] text-sm font-medium leading-relaxed animate-stagger-in">${d.reply || "Error connecting to AI."}</div>`;
+                
+                const loader = document.getElementById(loaderId);
+                if(loader) loader.remove();
+                
+                chatBox.innerHTML += `<div class="p-4 bg-white dark:bg-gray-800 border dark:border-gray-700 rounded-2xl rounded-tl-none mr-auto max-w-[85%] text-sm font-medium leading-relaxed animate-stagger-in">${d.reply || "No response generated."}</div>`;
             } catch(e) { 
-                document.getElementById(loaderId).remove(); 
-                chatBox.innerHTML += `<div class="p-4 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 rounded-2xl rounded-tl-none mr-auto text-sm">Offline. Please use WhatsApp support.</div>`;
+                const loader = document.getElementById(loaderId);
+                if(loader) loader.remove(); 
+                chatBox.innerHTML += `<div class="p-4 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 rounded-2xl rounded-tl-none mr-auto text-sm">AI Server is waking up (takes ~30s) or is offline. Please try again.</div>`;
             }
             chatBox.scrollTop = chatBox.scrollHeight;
-        }
-
-        const sendBtn = document.getElementById('send-btn');
-        if (sendBtn) sendBtn.onclick = sendMessage;
+        };
 
         checkAuth();
     </script>
     
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-        // CRITICAL FIX: Imported updateProfile and signInWithRedirect!
         import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithRedirect, getRedirectResult, signOut, onAuthStateChanged, updateProfile } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
         import { getMessaging, getToken, onMessage } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-messaging.js";
         
@@ -1052,7 +1057,7 @@
         const auth = getAuth(app);
         const provider = new GoogleAuthProvider();
 
-        // 1. FALLBACK REDIRECT CATCHER (If mobile browser blocks popup)
+        // 1. FALLBACK REDIRECT CATCHER 
         getRedirectResult(auth).then((result) => {
             if (result) {
                 localStorage.setItem('ujenzi_user', JSON.stringify({ 
@@ -1075,8 +1080,6 @@
             googleBtn.onclick = async () => { 
                 const originalText = googleBtn.innerHTML;
                 googleBtn.innerHTML = "⏳ Securely logging in..."; 
-                
-                // On GitHub pages, redirect is safer to avoid COOP blocks.
                 try {
                     await signInWithRedirect(auth, provider);
                 } catch (error) {
