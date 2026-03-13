@@ -20,8 +20,18 @@
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
         body { font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; scroll-behavior: smooth; overscroll-behavior-y: none; }
         
+        /* Smooth Native App Transitions */
         .view-content { animation: slideUpFade 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); }
-        @keyframes slideUpFade { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        
+        @keyframes slideUpFade { 
+            from { opacity: 0; transform: translateY(20px); } 
+            to { opacity: 1; transform: translateY(0); } 
+        }
+        
+        @keyframes slideBackFade { 
+            from { opacity: 0; transform: translateX(-30px); } 
+            to { opacity: 1; transform: translateX(0); } 
+        }
 
         .stagger-item { animation: staggerIn 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) both; }
         @keyframes staggerIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
@@ -59,7 +69,7 @@
 </head>
 <body class="bg-[#f4f6f9] dark:bg-gray-900 text-gray-800 dark:text-gray-100 pb-24 transition-colors duration-300 relative min-h-screen">
 
-    <div id="auth-screen" class="fixed inset-0 z-[200] bg-[#f4f6f9] dark:bg-gray-900 flex flex-col justify-center px-6">
+    <div id="auth-screen" class="fixed inset-0 z-[200] bg-[#f4f6f9] dark:bg-gray-900 flex flex-col justify-center px-6 transition-opacity duration-300">
         <div class="max-w-md mx-auto w-full bg-white dark:bg-gray-800 p-8 rounded-[2.5rem] shadow-2xl border dark:border-gray-700 text-center animate-stagger-in">
             <h1 class="text-4xl font-black text-blue-600 dark:text-blue-400 mb-2 tracking-tighter">UjenziSmart</h1>
             <p class="text-gray-500 mb-8 text-sm font-medium">Your premium building partner.</p>
@@ -79,22 +89,22 @@
         </div>
     </div>
 
-    <header class="bg-deep-tech pt-12 pb-14 px-6 shadow-[0_10px_30px_rgba(3,8,20,0.5)] fixed top-0 w-full z-40 text-white rounded-b-[2.5rem] overflow-hidden border-b border-white/5">
+    <header class="bg-deep-tech pt-12 pb-10 px-6 shadow-[0_10px_30px_rgba(3,8,20,0.5)] fixed top-0 w-full z-40 text-white rounded-b-[2.5rem] overflow-hidden border-b border-white/5">
         <div class="absolute inset-0 pattern-overlay pointer-events-none"></div>
         <div class="absolute top-0 right-0 w-64 h-64 bg-blue-500/20 rounded-full blur-[80px] pointer-events-none"></div>
         
         <div class="max-w-7xl mx-auto relative z-10">
-            <div class="flex items-center justify-between mb-6 h-12">
+            <div class="flex items-center justify-between mb-4 h-12">
                 <div class="flex items-center gap-3">
                     <button id="header-back-btn" onclick="goBack()" class="hidden w-11 h-11 bg-white/10 rounded-full border border-white/20 flex items-center justify-center font-bold text-xl click-press glass hover:bg-white/20 transition-colors">←</button>
                     <img id="header-p-image" src="https://ui-avatars.com/api/?name=User&background=0D1B2A&color=fff" class="w-11 h-11 rounded-full border-[3px] border-white/20 shadow-lg object-cover click-press cursor-pointer transition-transform active:scale-95" onclick="navigateTo('profile')">
                 </div>
 
                 <button onclick="window.switchTheme()" class="w-11 h-11 bg-white/5 rounded-full border border-white/10 flex items-center justify-center click-press shadow-inner glass relative overflow-hidden group hover:bg-white/10 transition-colors">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-[22px] h-[22px] text-amber-300 hidden dark:block transition-transform duration-500 group-hover:rotate-90 drop-shadow-[0_0_5px_rgba(252,211,77,0.5)]">
+                    <svg id="icon-sun" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-[22px] h-[22px] text-amber-300 hidden dark:block transition-transform duration-500 group-hover:rotate-90 drop-shadow-[0_0_5px_rgba(252,211,77,0.5)]">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-2.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z" />
                     </svg>
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-[20px] h-[20px] text-blue-100 block dark:hidden transition-transform duration-500 group-hover:-rotate-12">
+                    <svg id="icon-moon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-[20px] h-[20px] text-blue-100 block dark:hidden transition-transform duration-500 group-hover:-rotate-12">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998Z" />
                     </svg>
                 </button>
@@ -107,11 +117,11 @@
         </div>
     </header>
 
-    <div class="px-5 pt-[175px] relative z-10 max-w-7xl mx-auto pb-24">
+    <div class="px-5 pt-[230px] relative z-10 max-w-7xl mx-auto pb-24">
         
         <div id="view-home" class="view-content flex flex-col gap-6">
             
-            <div id="home-tools" class="-mt-12 relative z-50">
+            <div id="home-tools" class="-mt-16 relative z-50">
                 <button onclick="openCalculator()" class="w-full bg-[#162444]/90 backdrop-blur-2xl border border-white/10 p-5 rounded-[1.8rem] shadow-[0_20px_40px_rgba(0,0,0,0.3)] flex items-center justify-between click-press stagger-item relative overflow-hidden group">
                     <div class="absolute left-0 top-0 bottom-0 w-1.5 bg-gradient-to-b from-blue-400 to-indigo-600"></div>
                     <div class="absolute -right-8 -top-8 w-32 h-32 bg-blue-500/20 rounded-full blur-[30px] group-hover:bg-blue-400/30 transition-all duration-500 pointer-events-none"></div>
@@ -242,20 +252,21 @@
             </div>
         </div>
 
-        <div id="view-profile" class="view-content hidden mt-4">
-            <div class="flex flex-col items-center mb-6">
-                <div class="relative mb-3 group cursor-pointer" onclick="document.getElementById('profile-upload').click()">
-                    <img id="p-image" src="https://ui-avatars.com/api/?name=User&background=0D1B2A&color=fff&size=128" class="w-24 h-24 rounded-full object-cover border-4 border-white dark:border-gray-800 shadow-xl click-press transition-transform">
-                    <div class="absolute bottom-0 right-0 bg-white dark:bg-gray-700 p-1.5 rounded-full shadow-md border dark:border-gray-600 text-xs">📷</div>
+        <div id="view-profile" class="view-content hidden">
+            <div class="bg-white dark:bg-gray-800 rounded-[2.5rem] p-6 shadow-xl border border-transparent dark:border-gray-700 text-center relative mb-8 mt-2 flex flex-col items-center">
+                <div class="relative -mt-16 mb-4 group cursor-pointer z-10" onclick="document.getElementById('profile-upload').click()">
+                    <img id="p-image" src="https://ui-avatars.com/api/?name=User&background=0D1B2A&color=fff&size=128" class="w-28 h-28 rounded-full object-cover border-[6px] border-white dark:border-gray-800 shadow-xl click-press transition-transform bg-white dark:bg-gray-800">
+                    <div class="absolute bottom-1 right-1 bg-blue-600 text-white w-8 h-8 rounded-full shadow-md border-2 border-white dark:border-gray-800 flex items-center justify-center text-xs">📷</div>
                     <input type="file" id="profile-upload" class="hidden" accept="image/*" onchange="handleProfileUpload(event)">
                 </div>
-                <h2 id="p-name" class="text-xl font-black text-gray-800 dark:text-white">User</h2>
-                <p id="p-email" class="text-xs text-gray-400 font-medium mb-2">user@email.com</p>
-                <div id="vip-badge" class="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest bg-gray-200 text-gray-600 shadow-sm">Standard Builder</div>
+                
+                <h2 id="p-name" class="text-2xl font-black text-gray-800 dark:text-white leading-tight">User</h2>
+                <p id="p-email" class="text-xs text-gray-400 font-medium mb-4">user@email.com</p>
+                <div id="vip-badge" class="px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest bg-gray-200 text-gray-600 shadow-sm inline-block">Standard Builder</div>
             </div>
 
             <div id="tracker-card" class="bg-gradient-to-br from-[#0f172a] to-[#1e3a8a] text-white p-6 rounded-[2.5rem] shadow-[0_15px_30px_rgba(30,58,138,0.3)] mb-8 relative overflow-hidden stagger-item">
-                <div class="absolute right-0 top-0 w-48 h-48 bg-white/5 rounded-full blur-3xl"></div>
+                <div class="absolute right-0 top-0 w-48 h-48 bg-white/5 rounded-full blur-3xl pointer-events-none"></div>
                 <div class="relative z-10">
                     <div class="flex justify-between items-end mb-1">
                         <p class="text-[10px] uppercase font-black tracking-widest text-blue-200">Total Project Spend</p>
@@ -266,10 +277,10 @@
                         <div id="cost-progress" class="bg-gradient-to-r from-blue-400 to-blue-200 h-full transition-all duration-1000 shadow-[0_0_10px_rgba(96,165,250,0.8)]" style="width: 5%"></div>
                     </div>
                 </div>
-                <div class="absolute -right-4 -bottom-6 text-white/5 text-[100px] font-black italic tracking-tighter">COST</div>
+                <div class="absolute -right-4 -bottom-6 text-white/5 text-[100px] font-black italic tracking-tighter pointer-events-none">COST</div>
             </div>
 
-            <h3 class="font-black text-lg mb-4 px-2">My Project Phases</h3>
+            <h3 class="font-black text-lg mb-4 px-2 tracking-tight">My Project Phases</h3>
             <div class="grid grid-cols-3 gap-3 mb-8 stagger-item" style="animation-delay: 0.1s">
                 <div class="bg-white dark:bg-gray-800 p-4 rounded-[1.5rem] border dark:border-gray-700 shadow-sm click-press flex flex-col items-center text-center transition-shadow hover:shadow-md" onclick="renderWishlistPhase('Foundation')">
                     <div class="text-2xl mb-1">🏗️</div>
@@ -290,7 +301,7 @@
             
             <div id="wishlist-render-area" class="mb-8 hidden"></div>
 
-            <h3 class="font-black text-lg mb-4 px-2 mt-4">Settings & Support</h3>
+            <h3 class="font-black text-lg mb-4 px-2 mt-4 tracking-tight">Settings & Support</h3>
             <div class="bg-white dark:bg-gray-800 rounded-[2.5rem] p-1 border dark:border-gray-700 shadow-sm mb-6 stagger-item" style="animation-delay: 0.2s">
                 <div class="flex items-center justify-between p-5 border-b dark:border-gray-700">
                     <div class="flex items-center gap-4">
@@ -487,39 +498,95 @@
         };
         const categoryImages = { 'Foundation': 'https://images.unsplash.com/photo-1590060417941-2f34888463f1?w=400', 'Roofing': 'https://images.unsplash.com/photo-1635424710928-0544e8512eae?w=400', 'Plumbing': 'https://images.unsplash.com/photo-1581244277943-fe4a9c777189?w=400', 'Electrical': 'https://images.unsplash.com/photo-1550009158-9ebf69173e03?w=400', 'Finishing': 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=400', 'Tools': 'https://images.unsplash.com/photo-1530124560677-bdaea02c9a9d?w=400' };
 
+        // --- THEME TOGGLE LOGIC ---
+        function updateThemeIcon() {
+            const isDark = document.documentElement.classList.contains('dark');
+            const sun = document.getElementById('icon-sun');
+            const moon = document.getElementById('icon-moon');
+            if(sun && moon) {
+                if(isDark) {
+                    sun.classList.remove('hidden');
+                    moon.classList.add('hidden');
+                } else {
+                    sun.classList.add('hidden');
+                    moon.classList.remove('hidden');
+                }
+            }
+        }
+
+        window.switchTheme = function() {
+            const html = document.documentElement;
+            html.classList.toggle('dark');
+            localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+            updateThemeIcon(); 
+        }
+        document.addEventListener("DOMContentLoaded", updateThemeIcon);
+
         // --- NAVIGATION ENGINE ---
         function navigateTo(viewName, isBack = false) {
-            document.querySelectorAll('.view-content').forEach(v => v.classList.add('hidden'));
-            const target = document.getElementById(`view-${viewName}`); if(target) target.classList.remove('hidden');
-            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active-nav', 'text-blue-600'));
-            const activeBtn = document.getElementById(`nav-${viewName}`); if(activeBtn) activeBtn.classList.add('active-nav', 'text-blue-600');
+            document.querySelectorAll('.view-content').forEach(v => {
+                v.classList.add('hidden');
+                v.style.animation = 'none'; 
+            });
             
-            const backBtn = document.getElementById('header-back-btn'), title = document.getElementById('header-title'), sub = document.getElementById('header-subtitle');
+            const targetView = document.getElementById(`view-${viewName}`);
+            if(targetView) {
+                targetView.classList.remove('hidden');
+                
+                targetView.offsetHeight; 
+                
+                if (isBack) {
+                    targetView.style.animation = 'slideBackFade 0.4s cubic-bezier(0.2, 0.8, 0.2, 1) forwards';
+                } else {
+                    targetView.style.animation = 'slideUpFade 0.4s cubic-bezier(0.2, 0.8, 0.2, 1) forwards';
+                }
+            }
+
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('active-nav', 'text-blue-600');
+            });
+            const activeBtn = document.getElementById(`nav-${viewName}`);
+            if(activeBtn) {
+                activeBtn.classList.add('active-nav', 'text-blue-600');
+            }
+
+            const backBtn = document.getElementById('header-back-btn');
+            const headerTitle = document.getElementById('header-title');
+            const headerSub = document.getElementById('header-subtitle');
+            
             const mainTabs = ['home', 'trending', 'cart', 'profile'];
             
             if (mainTabs.includes(viewName)) {
                 backBtn.classList.add('hidden');
+                document.getElementById('home-tools').classList.toggle('hidden', viewName !== 'home');
                 if(viewName === 'home') setGreeting();
-                else if(viewName === 'trending') { title.textContent = "Market Watch"; sub.textContent = "Live Price Tracking"; }
-                else if(viewName === 'cart') { title.textContent = "Your Cart"; sub.textContent = "Secure Checkout"; }
-                else if(viewName === 'profile') { title.textContent = "Profile"; sub.textContent = "Manage account"; }
+                if(viewName === 'trending') { headerTitle.textContent = "Market Watch"; headerSub.textContent = "Live Price Tracking"; }
+                if(viewName === 'cart') { headerTitle.textContent = "Your Cart"; headerSub.textContent = "Secure Checkout"; }
+                if(viewName === 'profile') { headerTitle.textContent = "Profile"; headerSub.textContent = "Manage your account"; }
             } else {
                 backBtn.classList.remove('hidden');
-                if(viewName === 'cs') { title.textContent = "Support"; sub.textContent = "We help builders"; }
-                else if(viewName === 'legal') { title.textContent = "Legal"; sub.textContent = "Terms & Policies"; }
+                document.getElementById('home-tools').classList.add('hidden');
+                if(viewName === 'cs') { headerTitle.textContent = "Support"; headerSub.textContent = "We are here to help"; }
+                if(viewName === 'legal') { headerTitle.textContent = "Legal"; headerSub.textContent = "Policies & Terms"; }
             }
-            if(!isBack && viewHistory[viewHistory.length - 1] !== viewName) {
-                viewHistory.push(viewName);
-                if(mainTabs.includes(viewName)) history.replaceState({ view: viewName }, '', '#' + viewName);
-                else history.pushState({ view: viewName }, '', '#' + viewName);
+
+            if(!isBack) {
+                if(viewHistory[viewHistory.length - 1] !== viewName) {
+                    viewHistory.push(viewName);
+                    if(mainTabs.includes(viewName)) {
+                        history.replaceState({ view: viewName }, '', '#' + viewName);
+                    } else {
+                        history.pushState({ view: viewName }, '', '#' + viewName);
+                    }
+                }
             }
+
             if(viewName === 'home') { document.getElementById('search-input').value = ''; renderHomeBase(); }
             if(viewName === 'cart') renderCart();
             if(viewName === 'profile') { updateTrackerUI(); updateWishlistCounts(); }
+            
             window.scrollTo(0,0);
         }
-
-        function goBack() { if(viewHistory.length > 1) { viewHistory.pop(); navigateTo(viewHistory[viewHistory.length - 1], true); } else navigateTo('home'); }
 
         // --- AUTH & SETUP ---
         function checkAuth() {
@@ -560,7 +627,7 @@
             document.getElementById('total-project-cost').textContent = `TZS ${spend.toLocaleString()}`;
             document.getElementById('cost-progress').style.width = `${Math.min((spend / 5000000) * 100, 100)}%`;
             const badge = document.getElementById('vip-badge'), gold = spend >= 5000000;
-            badge.className = gold ? "mt-2 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest bg-gradient-to-r from-amber-400 to-yellow-600 text-white shadow-md" : "mt-2 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest bg-gray-200 text-gray-600";
+            badge.className = gold ? "px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest bg-gradient-to-r from-amber-400 to-yellow-600 text-white shadow-md inline-block" : "px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest bg-gray-200 text-gray-600 shadow-sm inline-block";
             badge.innerHTML = gold ? "👑 Gold Builder" : "Standard Builder";
             if(gold) document.getElementById('vip-perk-text').classList.remove('hidden'); else document.getElementById('vip-perk-text').classList.add('hidden');
         }
@@ -766,11 +833,11 @@
         // PROPER LOGOUT BUTTON
         window.logoutUser = async function() {
             try {
-                await signOut(auth);
-                localStorage.removeItem('ujenzi_user');
+                await signOut(auth); // Tell Firebase to forget the user
+                localStorage.removeItem('ujenzi_user'); // Tell our app to forget the user
                 localStorage.removeItem('ujenzi_notif'); 
                 localStorage.removeItem('fcm_token');
-                location.reload(); 
+                location.reload(); // Refresh the page to show the login screen again
             } catch (error) {
                 console.error("Logout Error:", error);
             }
