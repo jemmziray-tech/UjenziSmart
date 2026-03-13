@@ -899,14 +899,16 @@
         document.getElementById('send-btn').onclick = sendMessage;
 
         checkAuth();
-    </script>
-    
     <script type="module">
+        console.log("🔥 Firebase System Booting Up...");
+
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-        import { getAuth, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+        import { getAuth, GoogleAuthProvider, signInWithRedirect, getRedirectResult } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
         import { getMessaging, getToken } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-messaging.js";
-        
-        // ⚠️ YOUR ACTUAL FIREBASE KEYS ⚠️
+
+        console.log("✅ Modules Imported");
+
+        // ⚠️ PASTE YOUR EXACT FIREBASE CONFIG HERE ⚠️
         const firebaseConfig = { 
             apiKey: "AIzaSyCX2C1TXRb20nGtxEaYXGUo2KEH7gbZCY0", 
             authDomain: "ujenzismart-878af.firebaseapp.com", 
@@ -917,64 +919,85 @@
             measurementId: "G-V8C9KKGKFY"
         };
 
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const provider = new GoogleAuthProvider();
-        const messaging = getMessaging(app);
+        try {
+            const app = initializeApp(firebaseConfig);
+            const auth = getAuth(app);
+            const provider = new GoogleAuthProvider();
+            const messaging = getMessaging(app);
+            console.log("✅ Firebase Initialized Successfully");
 
-        // --- PUSH NOTIFICATIONS LOGIC ---
-        window.toggleNotifications = async function() {
-            const toggle = document.getElementById('notif-toggle');
-            const userStr = localStorage.getItem('ujenzi_user');
-            
-            if (!userStr) {
-                alert("Please sign in first!");
-                toggle.checked = false;
-                return;
-            }
-            
-            if (toggle.checked) {
-                try {
-                    const permission = await Notification.requestPermission();
-                    if (permission === 'granted') {
-                        // THIS FIXES THE GITHUB PAGES SUBFOLDER ERROR
-                        const registration = await navigator.serviceWorker.register('/UjenziSmart/firebase-messaging-sw.js');
-                        
-                        const token = await getToken(messaging, { 
-                            vapidKey: "BJJl5bm8iK4BOMzJ-OGkMELrR1ub_Z0HXQKsJ7pBa2oXtGlwzbBSPrGsnRoJEcLna9KfJ6vgNhvDejOfA02khro",
-                            serviceWorkerRegistration: registration
-                        });
-                        
-                        if (token) {
-                            console.log("FCM Token:", token);
-                            localStorage.setItem('ujenzi_notif', 'true');
-                            alert("Notifications enabled successfully!");
+            // --- CHECK FOR LOGIN REDIRECT RESULT ---
+            // Because we use Redirect instead of Popup, the page reloads. We check for the result here.
+            getRedirectResult(auth).then((result) => {
+                if (result) {
+                    console.log("✅ Google Login Successful!", result.user);
+                    localStorage.setItem('ujenzi_user', JSON.stringify({ 
+                        name: result.user.displayName, 
+                        email: result.user.email,
+                        photoURL: result.user.photoURL
+                    }));
+                    location.reload(); // Reload to show the dashboard
+                }
+            }).catch((error) => {
+                console.error("❌ Firebase Auth Error:", error);
+                alert("Login Error: " + error.message);
+            });
+
+            // --- PUSH NOTIFICATIONS LOGIC ---
+            window.toggleNotifications = async function() {
+                const toggle = document.getElementById('notif-toggle');
+                const userStr = localStorage.getItem('ujenzi_user');
+                
+                if (!userStr) {
+                    alert("Please sign in first!");
+                    toggle.checked = false;
+                    return;
+                }
+                
+                if (toggle.checked) {
+                    try {
+                        const permission = await Notification.requestPermission();
+                        if (permission === 'granted') {
+                            const registration = await navigator.serviceWorker.register('/UjenziSmart/firebase-messaging-sw.js');
+                            const token = await getToken(messaging, { 
+                                vapidKey: "BJJl5bm8iK4BOMzJ-OGkMELrR1ub_Z0HXQKsJ7pBa2oXtGlwzbBSPrGsnRoJEcLna9KfJ6vgNhvDejOfA02khro",
+                                serviceWorkerRegistration: registration
+                            });
+                            
+                            if (token) {
+                                localStorage.setItem('ujenzi_notif', 'true');
+                                alert("Notifications enabled successfully!");
+                            }
                         } else {
-                            alert("Failed to get push token.");
                             toggle.checked = false;
                         }
-                    } else {
-                        alert("Permission denied by browser.");
+                    } catch (error) {
+                        console.error(error);
+                        alert("Error connecting notifications. Check your VAPID key.");
                         toggle.checked = false;
                     }
-                } catch (error) {
-                    console.error("Error setting up notifications:", error);
-                    alert("Error: Make sure firebase-messaging-sw.js is uploaded to your GitHub repository.");
-                    toggle.checked = false;
+                } else {
+                    localStorage.setItem('ujenzi_notif', 'false');
                 }
-            } else {
-                localStorage.setItem('ujenzi_notif', 'false');
-            }
-        };
+            };
 
-        // --- GOOGLE AUTH ---
-        document.getElementById('google-signin-btn').onclick = async () => {
-            try {
-                const res = await signInWithPopup(auth, provider);
-                localStorage.setItem('ujenzi_user', JSON.stringify({ name: res.user.displayName, email: res.user.email }));
-                location.reload();
-            } catch (e) { alert("Authentication Failed."); }
-        };
+            // --- ATTACH BUTTON LISTENER ---
+            const signinBtn = document.getElementById('google-signin-btn');
+            if(signinBtn) {
+                signinBtn.onclick = () => {
+                    console.log("🖱️ Button Clicked! Starting redirect...");
+                    signinBtn.innerHTML = "⏳ Redirecting securely...";
+                    // Using Redirect instead of Popup!
+                    signInWithRedirect(auth, provider);
+                };
+            } else {
+                console.error("❌ CRITICAL: Could not find the Google button in HTML.");
+            }
+
+        } catch(e) {
+            console.error("❌ CRITICAL SCRIPT CRASH:", e);
+            alert("System Error: Check browser console for details.");
+        }
     </script>
 </body>
 </html>
