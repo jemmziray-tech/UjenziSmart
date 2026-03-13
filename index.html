@@ -230,21 +230,18 @@
 
         <div id="view-profile" class="view-content hidden">
             <div class="flex flex-col items-center mb-6">
-                <div class="relative mb-3 group cursor-pointer" onclick="document.getElementById('profile-upload').click()">
-                    <img id="p-image" src="https://ui-avatars.com/api/?name=User&background=10b981&color=fff&size=128" class="w-24 h-24 rounded-full object-cover border-4 border-white dark:border-gray-800 shadow-xl bg-green-500 transition-transform click-press">
-                    <div class="absolute bottom-0 right-0 bg-white dark:bg-gray-700 p-1.5 rounded-full shadow-md border dark:border-gray-600 text-xs">📷</div>
-                    <input type="file" id="profile-upload" class="hidden" accept="image/*" onchange="handleProfileUpload(event)">
+                <div id="p-initial-box" class="w-20 h-20 bg-gradient-to-tr from-green-500 to-emerald-400 rounded-full flex items-center justify-center text-white text-3xl font-black shadow-xl mb-3 border-4 border-white dark:border-gray-800">
+                    <span id="p-initial">U</span>
                 </div>
                 <h2 id="p-name" class="text-xl font-black text-gray-800 dark:text-white">User</h2>
-                <p id="p-email" class="text-xs text-gray-400 font-medium mb-2">user@email.com</p>
-                <div id="vip-badge" class="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest bg-gray-200 text-gray-600 shadow-sm">Standard Builder</div>
+                <div id="vip-badge" class="mt-2 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest bg-gray-200 text-gray-600 shadow-sm">Standard Builder</div>
             </div>
 
             <div id="tracker-card" class="bg-gray-900 text-white p-6 rounded-[2.5rem] shadow-2xl mb-8 relative overflow-hidden stagger-item">
                 <div class="relative z-10">
                     <div class="flex justify-between items-end mb-1">
                         <p class="text-[10px] uppercase font-black tracking-widest opacity-60">Total Project Spend</p>
-                        <p id="vip-perk-text" class="text-[8px] text-amber-400 font-bold hidden">★ 50% Off Transport Active</p>
+                        <p id="vip-perk-text" class="text-[8px] text-amber-400 font-bold hidden">★ 50% Off Transport</p>
                     </div>
                     <h3 id="total-project-cost" class="text-3xl font-black mb-4">TZS 0</h3>
                     <div class="w-full bg-white/10 h-2 rounded-full overflow-hidden">
@@ -278,13 +275,13 @@
             
             <div id="wishlist-render-area" class="mb-8 hidden"></div>
 
-            <h3 class="font-black text-lg mb-4 px-2 mt-4">Settings & Support</h3>
             <div class="space-y-4 stagger-item" style="animation-delay: 0.2s">
                 <div class="bg-white dark:bg-gray-800 rounded-[2.5rem] p-1 border dark:border-gray-700 shadow-sm">
                     
                     <div class="flex items-center justify-between p-5 border-b dark:border-gray-700">
                         <div class="flex items-center gap-4">
-                            <span class="text-xl">🔔</span><span class="font-bold text-sm">Notifications</span>
+                            <span class="text-xl">🔔</span>
+                            <span class="font-bold text-sm">Notifications</span>
                         </div>
                         <div class="relative inline-block w-12 align-middle select-none transition duration-200 ease-in">
                             <input type="checkbox" id="notif-toggle" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer" onclick="toggleNotifications()"/>
@@ -346,12 +343,10 @@
             </div>
             <div class="p-6 overflow-y-auto flex-grow hide-scrollbar">
                 <h3 id="modal-title" class="text-2xl font-black mb-1 text-gray-900 dark:text-white leading-tight"></h3>
-                
                 <div class="flex items-center gap-2 mb-3">
                     <div class="flex text-amber-400 text-sm">★★★★★</div>
                     <span id="modal-rating-text" class="text-xs text-gray-500 font-bold"></span>
                 </div>
-
                 <p id="modal-desc" class="text-gray-500 dark:text-gray-400 text-sm mb-4 leading-relaxed font-medium"></p>
                 
                 <div class="bg-gray-50 dark:bg-gray-800 p-4 rounded-2xl mb-4 border dark:border-gray-700 shadow-inner">
@@ -391,7 +386,6 @@
                     </select>
                     <button onclick="saveToPhase()" class="px-5 py-4 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-2xl font-black text-[10px] uppercase tracking-widest click-press shadow-sm">Save 📌</button>
                 </div>
-                
                 <button id="add-to-cart-btn" class="w-full py-5 bg-green-600 text-white rounded-[2rem] font-black text-sm uppercase tracking-widest shadow-lg click-press">Add to Basket</button>
             </div>
         </div>
@@ -401,21 +395,18 @@
         <div class="bg-white dark:bg-gray-900 w-full max-w-sm rounded-[3rem] p-8 shadow-2xl animate-stagger-in">
             <h3 class="text-2xl font-black mb-1 text-center">Site Estimator</h3>
             <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest text-center mb-6">Calculate Required Materials</p>
-            
-            <select id="calc-type" class="w-full bg-gray-50 dark:bg-gray-800 p-4 rounded-2xl mb-4 outline-none border dark:border-gray-700 font-bold text-sm text-gray-700 dark:text-gray-200">
+            <select id="calc-type" class="w-full bg-gray-50 dark:bg-gray-800 p-4 rounded-2xl mb-4 outline-none border dark:border-gray-700 font-bold text-sm text-gray-700 dark:text-gray-200 shadow-sm">
                 <option value="wall">Wall (Blocks & Cement)</option>
                 <option value="floor">Floor (Tiles 40x40)</option>
                 <option value="roof">Roof (Iron Sheets)</option>
             </select>
-
             <div class="flex gap-3 mb-6">
-                <input type="number" id="calc-l" placeholder="Length (m)" class="w-full bg-gray-50 dark:bg-gray-800 p-4 rounded-2xl outline-none border dark:border-gray-700 font-bold text-sm">
-                <input type="number" id="calc-w" placeholder="Width/Height" class="w-full bg-gray-50 dark:bg-gray-800 p-4 rounded-2xl outline-none border dark:border-gray-700 font-bold text-sm">
+                <input type="number" id="calc-l" placeholder="Length (m)" class="w-full bg-gray-50 dark:bg-gray-800 p-4 rounded-2xl outline-none border dark:border-gray-700 font-bold text-sm shadow-sm">
+                <input type="number" id="calc-w" placeholder="Width/Height" class="w-full bg-gray-50 dark:bg-gray-800 p-4 rounded-2xl outline-none border dark:border-gray-700 font-bold text-sm shadow-sm">
             </div>
-
-            <button onclick="runCalculation()" class="w-full py-4 bg-green-600 text-white rounded-[2rem] font-black click-press shadow-lg uppercase text-[10px] tracking-widest">Calculate Now</button>
-            <div id="calc-results" class="hidden mt-6 p-5 bg-green-50 dark:bg-green-900/20 rounded-2xl text-sm font-medium text-green-800 dark:text-green-300 leading-relaxed border border-green-100 dark:border-green-800"></div>
-            <button onclick="closeCalculator()" class="w-full mt-5 text-[10px] font-black text-gray-400 uppercase tracking-widest click-press">Close Window</button>
+            <button onclick="runCalculation()" class="w-full py-5 bg-green-500 text-white rounded-[2rem] font-black click-press shadow-lg uppercase text-xs tracking-widest">Calculate Now</button>
+            <div id="calc-results" class="hidden mt-6 p-5 bg-green-50 dark:bg-green-900/20 rounded-2xl text-sm font-medium text-green-800 dark:text-green-300 leading-relaxed border border-green-100 dark:border-green-800 shadow-inner"></div>
+            <button onclick="closeCalculator()" class="w-full mt-6 text-[10px] font-black text-gray-400 uppercase tracking-widest click-press">Close Window</button>
         </div>
     </div>
 
@@ -428,7 +419,7 @@
                 </div>
                 <button id="close-chat" class="text-xl w-8 h-8 flex items-center justify-center bg-black/20 rounded-full click-press">✕</button>
             </div>
-            <div id="chat-box" class="flex-grow p-6 overflow-y-auto bg-gray-50 dark:bg-gray-800 flex flex-col gap-4">
+            <div id="chat-box" class="flex-grow p-6 overflow-y-auto bg-gray-50 dark:bg-gray-900 flex flex-col gap-4">
                 <div class="p-4 bg-white dark:bg-gray-700 border dark:border-gray-600 rounded-[2rem] rounded-tl-none mr-auto mb-2 text-sm font-medium shadow-sm">Habari! Ask me any construction question.</div>
             </div>
             <div class="p-4 flex gap-3 border-t dark:border-gray-700 bg-white dark:bg-gray-900 shrink-0">
@@ -452,7 +443,7 @@
         </button>
         <button onclick="navigateTo('cart')" id="nav-cart" class="nav-btn flex flex-col items-center gap-1 text-gray-400 text-[10px] font-bold transition-all p-2 relative click-press w-16">
             <span class="text-xl mb-0.5">🛒</span><span>Cart</span>
-            <span id="cart-badge" class="hidden absolute top-1 right-2 bg-red-500 text-white text-[8px] px-1.5 rounded-full ring-2 ring-white dark:ring-gray-900">0</span>
+            <span id="cart-badge" class="hidden absolute top-1 right-2 bg-red-500 text-white text-[8px] px-1.5 rounded-full font-black ring-2 ring-white dark:ring-gray-900">0</span>
         </button>
         <button onclick="navigateTo('profile')" id="nav-profile" class="nav-btn flex flex-col items-center gap-1 text-gray-400 text-[10px] font-bold transition-all p-2 click-press w-16">
             <span class="text-xl mb-0.5">👤</span><span>Profile</span>
@@ -467,9 +458,8 @@
         let fbtItem = null;
         let viewHistory = ['home'];
 
-        // HISTORY API FOR NATIVE MOBILE BACK BUTTON
+        // --- NATIVE BACK BUTTON LOGIC ---
         window.addEventListener('popstate', (event) => {
-            // First check if any bottom sheet is open, close it instead of navigating
             const productSheet = document.getElementById('product-sheet');
             const chatSheet = document.getElementById('chat-sheet');
             
@@ -478,7 +468,7 @@
             if (chatSheet && chatSheet.classList.contains('open')) { document.getElementById('close-chat').click(); sheetClosed = true; }
             if (!document.getElementById('calc-modal').classList.contains('hidden')) { closeCalculator(); sheetClosed = true; }
             
-            if (sheetClosed) return; // Stop here
+            if (sheetClosed) return; 
 
             if (event.state && event.state.view) {
                 viewHistory.pop();
@@ -487,8 +477,6 @@
                 navigateTo('home', true);
             }
         });
-
-        // Initialize state
         history.replaceState({ view: 'home' }, '', '#home');
 
         const categoryImages = {
@@ -519,7 +507,6 @@
             ]
         };
 
-        // --- NAVIGATION CONTROLLER ---
         function navigateTo(viewName, isBack = false) {
             document.querySelectorAll('.view-content').forEach(v => v.classList.add('hidden'));
             const targetView = document.getElementById(`view-${viewName}`);
@@ -567,17 +554,6 @@
             window.scrollTo(0,0);
         }
 
-        function goBack() {
-            if(viewHistory.length > 1) {
-                viewHistory.pop(); 
-                const previous = viewHistory[viewHistory.length - 1];
-                navigateTo(previous, true);
-            } else {
-                navigateTo('home');
-            }
-        }
-
-        // --- AUTH & SETUP ---
         function checkAuth() {
             const user = JSON.parse(localStorage.getItem('ujenzi_user'));
             if (user) {
@@ -607,7 +583,6 @@
             if(icon) icon.style.transform = isDark ? 'rotate(180deg)' : 'rotate(0deg)'; 
         }
         
-        // This is correctly attached via onclick in the HTML
         window.switchTheme = function() {
             const html = document.documentElement;
             html.classList.toggle('dark');
@@ -616,7 +591,6 @@
         }
         document.addEventListener("DOMContentLoaded", updateThemeIcon);
 
-        // --- PROFILE INTERACTIONS ---
         function handleProfileUpload(event) {
             const file = event.target.files[0];
             if(file) {
@@ -629,9 +603,6 @@
                 }
                 reader.readAsDataURL(file);
             }
-        }
-        function toggleNotifications() {
-            localStorage.setItem('ujenzi_notif', document.getElementById('notif-toggle').checked);
         }
 
         let isGoldVIP = false;
@@ -660,7 +631,6 @@
             }
         }
 
-        // --- HOME SEARCH & GRID ---
         function handleSearch() {
             const query = document.getElementById('search-input').value.toLowerCase();
             const container = document.getElementById('dynamic-home-content');
@@ -703,8 +673,8 @@
                         `).join('')}
                     </div>
                 </section>
-                <section class="mt-4">
-                    <h2 class="text-lg font-bold mb-4 px-1">Featured</h2>
+                <section class="mt-2">
+                    <h2 class="text-lg font-bold mb-4 px-1">Featured Materials</h2>
                     <div class="grid grid-cols-2 gap-4">
                         ${generateProductCardHTML(productDatabase['Foundation & Structural'][0], 0)}
                         ${generateProductCardHTML(productDatabase['Roofing Materials'][0], 1)}
@@ -729,7 +699,6 @@
             window.scrollTo(0, 0);
         }
 
-        // --- PRODUCT BOTTOM SHEET LOGIC ---
         function openProduct(t, d, p, wt, i, rating, reviews, reviewTxt) {
             currentModalProduct = { name: t, desc: d, price: p, wt: wt, img: i };
             document.getElementById('modal-img').src = i;
@@ -740,13 +709,11 @@
             document.getElementById('modal-price').textContent = `TZS ${p.toLocaleString()}`;
             document.getElementById('modal-qty').value = 1;
             
-            // Push State for Android Back Button dismiss
             history.pushState({ modal: 'product' }, '', '#product');
             
-            // FBT Logic
             const fbtSection = document.getElementById('fbt-section');
             fbtItem = productDatabase['Tools & Hardware'][0]; 
-            if(t.includes('Cement')) fbtItem = productDatabase['Foundation & Structural'][2]; // Rebars
+            if(t.includes('Cement')) fbtItem = productDatabase['Foundation & Structural'][2];
             
             if(fbtItem && fbtItem.name !== t) {
                 document.getElementById('fbt-img').src = fbtItem.img;
@@ -773,7 +740,6 @@
         function closeProduct() { 
             document.getElementById('product-sheet').classList.remove('open');
             setTimeout(() => document.getElementById('product-modal').classList.add('hidden'), 300);
-            // If the hash is #product, remove it so history is clean
             if(window.location.hash === '#product') history.back();
         }
 
@@ -789,7 +755,6 @@
             b.classList.toggle('hidden', cart.length === 0); 
         }
 
-        // --- CART & DELIVERY ---
         let transportCost = 0;
         function calculateDelivery() {
             const zone = parseFloat(document.getElementById('delivery-zone').value);
@@ -836,7 +801,6 @@
             window.open(`https://wa.me/${WHATSAPP_NUM}?text=${encodeURIComponent(m)}`, '_blank');
         }
 
-        // --- WISHLIST PHASE ---
         function saveToPhase() {
             if(!currentModalProduct) return;
             const phase = document.getElementById('phase-selector').value;
@@ -864,7 +828,6 @@
             container.classList.remove('hidden');
         }
 
-        // --- ESTIMATOR ---
         function openCalculator() { document.getElementById('calc-modal').classList.remove('hidden'); }
         function closeCalculator() { document.getElementById('calc-modal').classList.add('hidden'); }
         function runCalculation() {
@@ -880,7 +843,6 @@
             res.innerHTML = r; res.classList.remove('hidden');
         }
 
-        // --- AI HUB ---
         const chatModal = document.getElementById('chat-modal'), chatBox = document.getElementById('chat-box');
         document.getElementById('material-expert-btn').onclick = () => { 
             history.pushState({ modal: 'chat' }, '', '#chat');
@@ -919,8 +881,9 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
         import { getAuth, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+        import { getMessaging, getToken } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-messaging.js";
         
-        // ⚠️ YOUR ACTUAL FIREBASE KEYS - SAFE TO COPY VIA THE COPY BUTTON ⚠️
+        // YOUR REAL FIREBASE KEYS
         const firebaseConfig = { 
             apiKey: "AIzaSyCX2C1TXRb20nGtxEaYXGUo2KEH7gbZCY0", 
             authDomain: "ujenzismart-878af.firebaseapp.com", 
@@ -935,6 +898,52 @@
         const auth = getAuth(app);
         const provider = new GoogleAuthProvider();
         
+        // --- PUSH NOTIFICATIONS LOGIC ---
+        const messaging = getMessaging(app);
+
+        window.toggleNotifications = async function() {
+            const toggle = document.getElementById('notif-toggle');
+            const userStr = localStorage.getItem('ujenzi_user');
+            
+            if (!userStr) {
+                alert("Please sign in first!");
+                toggle.checked = false;
+                return;
+            }
+            
+            if (toggle.checked) {
+                try {
+                    const permission = await Notification.requestPermission();
+                    if (permission === 'granted') {
+                        // REPLACE 'PASTE_YOUR_VAPID_KEY_HERE' WITH YOUR KEY FROM FIREBASE CONSOLE!
+                        const token = await getToken(messaging, { 
+                            vapidKey: "BJjI5bm8ik4BOMzJ-OGkMELrR1ub_Z0HXQKsJ7pBa2oXtGlwzbBSPrGsnRoJEcLna9KfJ6vgNhvDejOfA02khro" 
+                        });
+                        
+                        if (token) {
+                            console.log("FCM Token:", token);
+                            // Normally you save this token to Firestore here so your admin panel can target this user
+                            localStorage.setItem('ujenzi_notif', 'true');
+                            alert("Notifications enabled successfully!");
+                        } else {
+                            alert("Failed to get push token.");
+                            toggle.checked = false;
+                        }
+                    } else {
+                        alert("Permission denied by browser.");
+                        toggle.checked = false;
+                    }
+                } catch (error) {
+                    console.error("Error setting up notifications:", error);
+                    alert("Error. Ensure you are on HTTPS and have firebase-messaging-sw.js in your root.");
+                    toggle.checked = false;
+                }
+            } else {
+                localStorage.setItem('ujenzi_notif', 'false');
+            }
+        };
+        // ---------------------------------
+
         document.getElementById('google-signin-btn').onclick = async () => {
             try {
                 const res = await signInWithPopup(auth, provider);
