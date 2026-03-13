@@ -17,77 +17,58 @@
         applyTheme();
     </script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
         body { font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; scroll-behavior: smooth; overscroll-behavior-y: none; }
-        
         .view-content { animation: slideUpFade 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); }
         @keyframes slideUpFade { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-
         .stagger-item { animation: staggerIn 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) both; }
         @keyframes staggerIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
-
         .click-press { transition: transform 0.1s ease; }
-        .click-press:active { transform: scale(0.95); }
-
+        .click-press:active { transform: scale(0.96); }
         .glass { backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
-        
-        .gradient-pulse {
-            background: linear-gradient(-45deg, #059669, #10b981, #34d399, #059669);
-            background-size: 400% 400%;
-            animation: gradientMove 10s ease infinite;
-        }
+        .gradient-header { background: linear-gradient(135deg, #059669, #10b981); }
+        .gradient-pulse { background: linear-gradient(-45deg, #059669, #10b981, #34d399, #059669); background-size: 400% 400%; animation: gradientMove 10s ease infinite; }
         @keyframes gradientMove { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
-
         .skeleton { background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%); background-size: 200% 100%; animation: skeleton-loading 1.5s infinite; }
         .dark .skeleton { background: linear-gradient(90deg, #1f2937 25%, #374151 50%, #1f2937 75%); }
         @keyframes skeleton-loading { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
-        
         ::-webkit-scrollbar { width: 0px; background: transparent; }
-        
         .bar-grow { animation: growUp 1s ease-out forwards; transform-origin: bottom; }
         @keyframes growUp { from { transform: scaleY(0); } to { transform: scaleY(1); } }
-
-        /* Bottom Sheet Styles */
         .bottom-sheet { transition: transform 0.3s cubic-bezier(0.32, 1.25, 0.32, 1); transform: translateY(100%); }
         .bottom-sheet.open { transform: translateY(0); }
-        
-        /* Toggle Switch */
-        .toggle-checkbox:checked { right: 0; border-color: #10b981; }
-        .toggle-checkbox:checked + .toggle-label { background-color: #10b981; }
-        .toggle-checkbox { right: 4px; z-index: 1; border-color: #e5e7eb; transition: all 0.3s; }
-        .toggle-label { width: 3rem; height: 1.5rem; background-color: #e5e7eb; border-radius: 9999px; transition: all 0.3s; }
     </style>
 </head>
-<body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 pb-24 transition-colors duration-300 relative">
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 pb-20 transition-colors duration-300 relative">
 
-    <div id="auth-screen" class="fixed inset-0 z-[200] bg-gray-50 dark:bg-gray-900 flex flex-col justify-center px-6 transition-opacity duration-300">
+    <div id="auth-screen" class="fixed inset-0 z-[200] bg-gray-50 dark:bg-gray-900 flex flex-col justify-center px-6">
         <div class="max-w-md mx-auto w-full bg-white dark:bg-gray-800 p-8 rounded-[2.5rem] shadow-2xl border dark:border-gray-700 text-center animate-stagger-in">
             <h1 class="text-4xl font-black text-green-600 mb-2 tracking-tighter">UjenziSmart</h1>
-            <p class="text-gray-500 mb-8 text-sm">Your premium building partner.</p>
+            <p class="text-gray-500 mb-8 text-sm font-medium">Your premium building partner.</p>
             <form id="auth-form" class="flex flex-col gap-4 text-left">
-                <input type="email" id="auth-email" required placeholder="Email Address" class="w-full bg-gray-50 dark:bg-gray-900 border dark:border-gray-700 rounded-2xl px-5 py-4 outline-none focus:ring-2 focus:ring-green-500 transition-all">
-                <input type="password" id="auth-password" required placeholder="Password" class="w-full bg-gray-50 dark:bg-gray-900 border dark:border-gray-700 rounded-2xl px-5 py-4 outline-none focus:ring-2 focus:ring-green-500 transition-all">
-                <button type="submit" class="w-full py-4 bg-green-500 text-white rounded-2xl font-bold shadow-lg click-press">Sign In</button>
+                <input type="email" id="auth-email" required placeholder="Email Address" class="w-full bg-gray-50 dark:bg-gray-900 border dark:border-gray-700 rounded-2xl px-5 py-4 outline-none focus:ring-2 focus:ring-green-500">
+                <input type="password" id="auth-password" required placeholder="Password" class="w-full bg-gray-50 dark:bg-gray-900 border dark:border-gray-700 rounded-2xl px-5 py-4 outline-none focus:ring-2 focus:ring-green-500">
+                <button type="submit" class="w-full py-4 bg-green-500 text-white rounded-2xl font-bold click-press shadow-lg">Sign In</button>
             </form>
             <div class="relative flex items-center justify-center my-6">
                 <div class="border-t w-full absolute border-gray-200 dark:border-gray-700"></div>
-                <span class="bg-white dark:bg-gray-800 px-3 text-[10px] text-gray-400 font-bold uppercase tracking-widest relative z-10">OR</span>
+                <span class="bg-white dark:bg-gray-800 px-3 text-[10px] text-gray-400 font-bold uppercase relative z-10">OR</span>
             </div>
             <button type="button" id="google-signin-btn" class="w-full py-4 bg-white dark:bg-gray-700 text-gray-700 dark:text-white border dark:border-gray-600 rounded-2xl font-bold flex items-center justify-center gap-3 click-press shadow-sm">
                 <svg viewBox="0 0 24 24" width="18" height="18"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
-                Sign in with Google
+                Continue with Google
             </button>
         </div>
     </div>
 
-    <header id="main-header" class="gradient-pulse pt-10 pb-6 px-6 shadow-md fixed top-0 w-full z-40 transition-all text-white rounded-b-[2rem]">
+    <header class="gradient-header pt-10 pb-6 px-6 shadow-xl fixed top-0 w-full z-40 text-white rounded-b-[2rem]">
         <div class="max-w-7xl mx-auto flex items-center justify-between h-12">
             <button id="header-back-btn" onclick="goBack()" class="hidden w-10 h-10 bg-white/20 rounded-full flex items-center justify-center font-bold text-xl click-press mr-4 backdrop-blur-sm">←</button>
             <div id="header-title-container" class="flex-grow">
                 <h1 id="header-title" class="text-2xl font-black tracking-tight leading-tight">Habari! 👋</h1>
                 <p id="header-subtitle" class="text-green-50 text-xs font-medium opacity-90">Welcome back to UjenziSmart.</p>
             </div>
-            <button id="theme-toggle" onclick="switchTheme()" class="w-12 h-12 bg-white/20 rounded-full glass flex items-center justify-center transition-all active:scale-90 click-press shadow-sm relative overflow-hidden flex-shrink-0">
+            <button onclick="window.switchTheme()" class="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center click-press relative overflow-hidden flex-shrink-0 shadow-sm">
                 <div id="theme-icon" class="w-[24px] h-[24px] rounded-full border-2 border-white/60 transition-transform duration-500 shadow-inner" style="background: linear-gradient(135deg, #4c1d95 50%, #fcd34d 50%);"></div>
             </button>
         </div>
@@ -100,20 +81,15 @@
                 <button onclick="openCalculator()" class="bg-white dark:bg-gray-800 p-5 rounded-3xl shadow-lg border dark:border-gray-700 flex items-center justify-between px-6 click-press stagger-item">
                     <div class="flex items-center gap-4">
                         <div class="w-12 h-12 bg-amber-100 rounded-2xl flex items-center justify-center text-2xl shadow-inner">📐</div>
-                        <div class="text-left">
-                            <span class="font-black text-sm text-gray-800 dark:text-white block">Site Estimator</span>
-                            <span class="text-[10px] text-gray-500 font-bold uppercase tracking-widest">Calculate Materials</span>
-                        </div>
+                        <div class="text-left"><span class="font-black text-sm block">Site Estimator</span><span class="text-[10px] text-gray-500 font-bold uppercase tracking-widest">Calculate Materials</span></div>
                     </div>
                     <span class="text-gray-300 font-bold text-xl">›</span>
                 </button>
             </div>
-
-            <div class="relative stagger-item" style="animation-delay: 0.1s">
-                <input type="text" id="search-input" onkeyup="handleSearch()" placeholder="Search cement, tiles, iron sheets..." class="w-full bg-white dark:bg-gray-800 border dark:border-gray-700 rounded-2xl px-12 py-4 shadow-sm outline-none focus:ring-2 focus:ring-green-500 transition-all font-bold text-xs text-gray-700 dark:text-gray-100 placeholder-gray-400">
+            <div class="relative stagger-item">
+                <input type="text" id="search-input" onkeyup="handleSearch()" placeholder="Search cement, tiles, iron sheets..." class="w-full bg-white dark:bg-gray-800 border dark:border-gray-700 rounded-2xl px-12 py-4 shadow-sm outline-none focus:ring-2 focus:ring-green-500 font-bold text-xs text-gray-700 dark:text-gray-100 placeholder-gray-400">
                 <span class="absolute left-4 top-[14px] text-lg opacity-50">🔍</span>
             </div>
-
             <div id="dynamic-home-content" class="flex flex-col gap-8"></div>
         </div>
 
@@ -122,108 +98,43 @@
                 <h2 class="text-3xl font-black tracking-tighter">Market Watch</h2>
                 <span class="text-[10px] font-black text-red-500 uppercase tracking-widest mb-1 flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span> Live</span>
             </div>
-
-            <div onclick="openProduct('Simba Cement 50kg', 'Grade 42.5R high-strength cement.', 18500, 50, 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=600', 4.9, 342, 'Excellent quality.')" class="bg-white dark:bg-gray-800 rounded-[2.5rem] overflow-hidden shadow-xl border dark:border-gray-700 stagger-item click-press group">
-                <div class="relative h-48 overflow-hidden">
-                    <img src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=600" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
-                    <div class="absolute bottom-4 left-4 text-white">
-                        <span class="bg-green-500 text-white text-[9px] font-black px-2 py-1 rounded-md uppercase tracking-widest mb-2 inline-block shadow-lg">#1 Best Seller</span>
-                        <h3 class="font-black text-xl leading-tight">Simba Cement 50kg</h3>
-                    </div>
-                    <div class="absolute top-4 right-4 bg-white/90 glass text-gray-900 text-[10px] font-black px-3 py-1 rounded-full flex items-center gap-1 shadow-lg">
-                        <span class="text-green-600">▼</span> -2% this week
-                    </div>
+            <div onclick="openProduct('Simba Cement 50kg', 'Grade 42.5R high-strength.', 18500, 50, 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=600', 4.9, 342, 'Excellent quality.')" class="bg-white dark:bg-gray-800 rounded-[2.5rem] overflow-hidden shadow-xl border dark:border-gray-700 stagger-item click-press group">
+                <div class="relative h-48 overflow-hidden"><img src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=600" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"><div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
+                    <div class="absolute bottom-4 left-4 text-white"><span class="bg-green-500 text-white text-[9px] font-black px-2 py-1 rounded-md uppercase mb-2 inline-block shadow-lg">#1 Best Seller</span><h3 class="font-black text-xl leading-tight">Simba Cement 50kg</h3></div>
+                    <div class="absolute top-4 right-4 bg-white/90 glass text-gray-900 text-[10px] font-black px-3 py-1 rounded-full flex items-center gap-1 shadow-lg"><span class="text-green-600">▼</span> -2% this week</div>
                 </div>
-                <div class="p-5">
-                    <div class="flex justify-between items-end mb-4">
-                        <div>
-                            <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-1">Current Market Price</p>
-                            <p class="text-green-600 font-black text-xl">TZS 18,500</p>
-                        </div>
-                        <div class="flex items-end gap-1 h-8">
-                            <div class="w-2 bg-gray-200 dark:bg-gray-700 rounded-t-sm h-[60%] bar-grow" style="animation-delay: 0.1s"></div>
-                            <div class="w-2 bg-gray-200 dark:bg-gray-700 rounded-t-sm h-[80%] bar-grow" style="animation-delay: 0.2s"></div>
-                            <div class="w-2 bg-gray-200 dark:bg-gray-700 rounded-t-sm h-[100%] bar-grow" style="animation-delay: 0.3s"></div>
-                            <div class="w-2 bg-green-500 rounded-t-sm h-[70%] bar-grow" style="animation-delay: 0.4s"></div>
-                        </div>
+                <div class="p-5 flex justify-between items-end">
+                    <div><p class="text-[10px] text-gray-400 font-bold uppercase mb-1">Current Price</p><p class="text-green-600 font-black text-xl">TZS 18,500</p></div>
+                    <div class="flex items-end gap-1 h-8">
+                        <div class="w-2 bg-gray-200 dark:bg-gray-700 rounded-t-sm h-[60%] bar-grow"></div><div class="w-2 bg-gray-200 dark:bg-gray-700 rounded-t-sm h-[80%] bar-grow"></div>
+                        <div class="w-2 bg-gray-200 dark:bg-gray-700 rounded-t-sm h-[100%] bar-grow"></div><div class="w-2 bg-green-500 rounded-t-sm h-[70%] bar-grow"></div>
                     </div>
-                    <p class="text-xs text-gray-500 dark:text-gray-400 leading-relaxed font-medium">Supply is stabilizing in Dar Es Salaam. Excellent time to buy in bulk.</p>
-                </div>
-            </div>
-
-            <div onclick="openProduct('Deformed Bar 12mm', 'TBS approved Grade 500 steel.', 24000, 10, 'https://images.unsplash.com/photo-1536882240095-0379873feb4e?w=600', 4.8, 156, 'Accurate length.')" class="bg-white dark:bg-gray-800 rounded-[2.5rem] overflow-hidden shadow-xl border dark:border-gray-700 stagger-item click-press group" style="animation-delay: 0.1s">
-                <div class="relative h-48 overflow-hidden">
-                    <img src="https://images.unsplash.com/photo-1536882240095-0379873feb4e?w=600" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
-                    <div class="absolute bottom-4 left-4 text-white">
-                        <span class="bg-red-500 text-white text-[9px] font-black px-2 py-1 rounded-md uppercase tracking-widest mb-2 inline-block shadow-lg">High Demand</span>
-                        <h3 class="font-black text-xl leading-tight">Y12 Steel Rebars</h3>
-                    </div>
-                    <div class="absolute top-4 right-4 bg-white/90 glass text-gray-900 text-[10px] font-black px-3 py-1 rounded-full flex items-center gap-1 shadow-lg">
-                        <span class="text-red-500">▲</span> +3% this week
-                    </div>
-                </div>
-                <div class="p-5">
-                    <div class="flex justify-between items-end mb-4">
-                        <div>
-                            <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-1">Current Market Price</p>
-                            <p class="text-green-600 font-black text-xl">TZS 24,000</p>
-                        </div>
-                        <div class="flex items-end gap-1 h-8">
-                            <div class="w-2 bg-gray-200 dark:bg-gray-700 rounded-t-sm h-[50%] bar-grow" style="animation-delay: 0.2s"></div>
-                            <div class="w-2 bg-gray-200 dark:bg-gray-700 rounded-t-sm h-[70%] bar-grow" style="animation-delay: 0.3s"></div>
-                            <div class="w-2 bg-gray-200 dark:bg-gray-700 rounded-t-sm h-[85%] bar-grow" style="animation-delay: 0.4s"></div>
-                            <div class="w-2 bg-red-500 rounded-t-sm h-[100%] bar-grow" style="animation-delay: 0.5s"></div>
-                        </div>
-                    </div>
-                    <p class="text-xs text-gray-500 dark:text-gray-400 leading-relaxed font-medium">Global steel prices are pushing local costs up. Lock in prices today.</p>
                 </div>
             </div>
         </div>
 
         <div id="view-cart" class="view-content hidden">
+            <h2 class="text-3xl font-black tracking-tighter mb-6 text-center">My Cart 🛒</h2>
             <div id="cart-items-container" class="flex flex-col gap-4 mb-6"></div>
-            
             <div id="cart-footer" class="hidden">
                 <div class="bg-white dark:bg-gray-800 rounded-3xl p-5 border dark:border-gray-700 shadow-md mb-6 relative overflow-hidden">
                     <div class="absolute -right-4 -top-4 opacity-5 text-6xl">🚚</div>
                     <h3 class="font-black text-sm mb-1">Smart Delivery Estimator</h3>
-                    <p class="text-[10px] text-gray-400 mb-4 font-bold">Select Dar Es Salaam Zone</p>
+                    <p class="text-[10px] text-gray-400 mb-4 font-bold">Dar Es Salaam Zone</p>
                     <select id="delivery-zone" onchange="calculateDelivery()" class="w-full bg-gray-50 dark:bg-gray-900 border dark:border-gray-700 rounded-xl px-4 py-3 outline-none font-bold text-xs mb-4">
-                        <option value="0">Self Pickup (Store Collection)</option>
-                        <option value="1">Tegeta / Boko / Bunju</option>
-                        <option value="1.2">Mbezi / Kimara</option>
-                        <option value="1.5">Kigamboni (Includes Toll)</option>
-                        <option value="0.8">Kinondoni / Posta</option>
+                        <option value="0">Self Pickup (Store Collection)</option><option value="1">Tegeta / Boko / Bunju</option>
+                        <option value="1.2">Mbezi / Kimara</option><option value="1.5">Kigamboni</option><option value="0.8">Kinondoni / Posta</option>
                     </select>
-                    <div id="delivery-result-box" class="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-xl border border-blue-100 dark:border-blue-800 transition-all">
-                        <div class="flex items-center gap-3">
-                            <span id="vehicle-icon" class="text-2xl">🏪</span>
-                            <div>
-                                <p class="text-[10px] font-black uppercase tracking-widest text-blue-800 dark:text-blue-300">Transport Method</p>
-                                <p class="text-sm font-black text-blue-900 dark:text-white" id="vehicle-name">Store Pickup</p>
-                            </div>
-                        </div>
+                    <div id="delivery-result-box" class="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-xl border border-blue-100 dark:border-blue-800 flex items-center justify-between">
+                        <div class="flex items-center gap-3"><span id="vehicle-icon" class="text-2xl">🏪</span><div><p class="text-[10px] font-black uppercase text-blue-800 dark:text-blue-300">Method</p><p class="text-sm font-black dark:text-white" id="vehicle-name">Store Pickup</p></div></div>
+                        <span class="text-lg font-black text-blue-900 dark:text-white" id="transport-cost-display">Free</span>
                     </div>
                 </div>
-
                 <div class="border-t dark:border-gray-700 pt-6">
                     <div class="flex justify-between text-xs font-bold text-gray-500 mb-2 px-2"><span>Subtotal</span><span id="cart-subtotal">TZS 0</span></div>
                     <div class="flex justify-between text-xs font-bold text-blue-500 mb-4 px-2"><span>Transport</span><span id="cart-transport">TZS 0</span></div>
                     <div class="flex justify-between text-2xl font-black mb-8 px-2"><span>Total</span><span id="cart-total-price" class="text-green-600">TZS 0</span></div>
-                    
-                    <button onclick="checkoutWhatsApp()" class="w-full py-5 bg-[#25D366] text-white rounded-[2.5rem] font-black shadow-xl click-press uppercase text-xs tracking-widest mb-6">Order via WhatsApp</button>
-
-                    <div class="relative bg-gray-50 dark:bg-gray-800 rounded-[2rem] p-5 border border-dashed border-gray-300 dark:border-gray-600 text-center opacity-80">
-                        <div class="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-amber-400 text-amber-900 text-[9px] font-black px-3 py-1 rounded-full uppercase tracking-widest shadow-sm">Coming Soon</div>
-                        <p class="text-xs font-bold text-gray-500 dark:text-gray-400 mb-3 mt-2">Online Mobile Money Payments</p>
-                        <div class="flex justify-center items-center gap-4 grayscale opacity-60">
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c2/M-Pesa_logo.svg/512px-M-Pesa_logo.svg.png" class="h-5">
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/a/a2/Tigo_logo.svg" class="h-5">
-                            <img src="https://logos-world.net/wp-content/uploads/2020/12/Airtel-Logo.png" class="h-4">
-                        </div>
-                    </div>
+                    <button onclick="checkoutWhatsApp()" class="w-full py-5 bg-[#25D366] text-white rounded-[2.5rem] font-black shadow-xl click-press uppercase text-xs tracking-widest">Order via WhatsApp</button>
                 </div>
             </div>
         </div>
@@ -231,348 +142,131 @@
         <div id="view-profile" class="view-content hidden">
             <div class="flex flex-col items-center mb-6">
                 <div class="relative mb-3 group cursor-pointer" onclick="document.getElementById('profile-upload').click()">
-                    <img id="p-image" src="https://ui-avatars.com/api/?name=User&background=10b981&color=fff&size=128" class="w-24 h-24 rounded-full object-cover border-4 border-white dark:border-gray-800 shadow-xl bg-green-500 transition-transform click-press">
+                    <img id="p-image" src="https://ui-avatars.com/api/?name=User&background=10b981&color=fff&size=128" class="w-24 h-24 rounded-full object-cover border-4 border-white dark:border-gray-800 shadow-xl click-press">
                     <div class="absolute bottom-0 right-0 bg-white dark:bg-gray-700 p-1.5 rounded-full shadow-md border dark:border-gray-600 text-xs">📷</div>
                     <input type="file" id="profile-upload" class="hidden" accept="image/*" onchange="handleProfileUpload(event)">
                 </div>
-                <h2 id="p-name" class="text-xl font-black text-gray-800 dark:text-white">User</h2>
-                <p id="p-email" class="text-xs text-gray-400 font-medium mb-2">user@email.com</p>
-                <div id="vip-badge" class="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest bg-gray-200 text-gray-600 shadow-sm">Standard Builder</div>
+                <h2 id="p-name" class="text-xl font-black dark:text-white">User</h2>
+                <div id="vip-badge" class="mt-2 px-3 py-1 rounded-full text-[10px] font-black uppercase bg-gray-200 text-gray-600">Standard Builder</div>
             </div>
-
             <div id="tracker-card" class="bg-gray-900 text-white p-6 rounded-[2.5rem] shadow-2xl mb-8 relative overflow-hidden stagger-item">
-                <div class="relative z-10">
-                    <div class="flex justify-between items-end mb-1">
-                        <p class="text-[10px] uppercase font-black tracking-widest opacity-60">Total Project Spend</p>
-                        <p id="vip-perk-text" class="text-[8px] text-amber-400 font-bold hidden">★ 50% Off Transport Active</p>
-                    </div>
-                    <h3 id="total-project-cost" class="text-3xl font-black mb-4">TZS 0</h3>
-                    <div class="w-full bg-white/10 h-2 rounded-full overflow-hidden">
-                        <div id="cost-progress" class="bg-green-500 h-full transition-all duration-1000" style="width: 5%"></div>
-                    </div>
+                <div class="relative z-10"><p class="text-[10px] uppercase font-black opacity-60">Project Spend</p><h3 id="total-project-cost" class="text-3xl font-black mb-4">TZS 0</h3>
+                    <div class="w-full bg-white/10 h-2 rounded-full overflow-hidden"><div id="cost-progress" class="bg-green-500 h-full transition-all duration-1000" style="width: 5%"></div></div>
                 </div>
                 <div class="absolute -right-4 -bottom-4 text-white/5 text-8xl font-black italic">COST</div>
             </div>
-
-            <h3 class="font-black text-lg mb-4 px-2">My Project Phases</h3>
-            <div class="grid grid-cols-3 gap-3 mb-8 stagger-item" style="animation-delay: 0.1s">
-                <div class="bg-white dark:bg-gray-800 p-4 rounded-[1.5rem] border dark:border-gray-700 shadow-sm click-press flex flex-col items-center text-center" onclick="renderWishlistPhase('Foundation')">
-                    <div class="text-2xl mb-1">🏗️</div>
-                    <p class="font-black text-[10px] text-gray-800 dark:text-white">Phase 1</p>
-                    <p class="text-[8px] text-gray-400 font-bold uppercase tracking-widest">Foundation</p>
-                    <p class="text-[9px] text-green-500 font-black mt-2" id="count-foundation">0 Items</p>
-                </div>
-                <div class="bg-white dark:bg-gray-800 p-4 rounded-[1.5rem] border dark:border-gray-700 shadow-sm click-press flex flex-col items-center text-center" onclick="renderWishlistPhase('Roofing')">
-                    <div class="text-2xl mb-1">🏠</div>
-                    <p class="font-black text-[10px] text-gray-800 dark:text-white">Phase 2</p>
-                    <p class="text-[8px] text-gray-400 font-bold uppercase tracking-widest">Roofing</p>
-                    <p class="text-[9px] text-green-500 font-black mt-2" id="count-roofing">0 Items</p>
-                </div>
-                <div class="bg-white dark:bg-gray-800 p-4 rounded-[1.5rem] border dark:border-gray-700 shadow-sm click-press flex flex-col items-center text-center" onclick="renderWishlistPhase('Finishing')">
-                    <div class="text-2xl mb-1">🎨</div>
-                    <p class="font-black text-[10px] text-gray-800 dark:text-white">Phase 3</p>
-                    <p class="text-[8px] text-gray-400 font-bold uppercase tracking-widest">Finishing</p>
-                    <p class="text-[9px] text-green-500 font-black mt-2" id="count-finishing">0 Items</p>
-                </div>
+            <h3 class="font-black text-lg mb-4 px-2">Project Phases</h3>
+            <div class="grid grid-cols-3 gap-3 mb-8 stagger-item">
+                <div class="bg-white dark:bg-gray-800 p-4 rounded-[1.5rem] border dark:border-gray-700 shadow-sm click-press flex flex-col items-center text-center" onclick="renderWishlistPhase('Foundation')"><div class="text-2xl mb-1">🏗️</div><p class="font-black text-[10px]">Phase 1</p><p class="text-[9px] text-green-500 font-black mt-2" id="count-foundation">0 Items</p></div>
+                <div class="bg-white dark:bg-gray-800 p-4 rounded-[1.5rem] border dark:border-gray-700 shadow-sm click-press flex flex-col items-center text-center" onclick="renderWishlistPhase('Roofing')"><div class="text-2xl mb-1">🏠</div><p class="font-black text-[10px]">Phase 2</p><p class="text-[9px] text-green-500 font-black mt-2" id="count-roofing">0 Items</p></div>
+                <div class="bg-white dark:bg-gray-800 p-4 rounded-[1.5rem] border dark:border-gray-700 shadow-sm click-press flex flex-col items-center text-center" onclick="renderWishlistPhase('Finishing')"><div class="text-2xl mb-1">🎨</div><p class="font-black text-[10px]">Phase 3</p><p class="text-[9px] text-green-500 font-black mt-2" id="count-finishing">0 Items</p></div>
             </div>
-            
             <div id="wishlist-render-area" class="mb-8 hidden"></div>
-
-            <h3 class="font-black text-lg mb-4 px-2 mt-4">Settings & Support</h3>
-            <div class="space-y-4 stagger-item" style="animation-delay: 0.2s">
-                <div class="bg-white dark:bg-gray-800 rounded-[2.5rem] p-1 border dark:border-gray-700 shadow-sm">
-                    
-                    <div class="flex items-center justify-between p-5 border-b dark:border-gray-700">
-                        <div class="flex items-center gap-4">
-                            <span class="text-xl">🔔</span>
-                            <span class="font-bold text-sm">Notifications</span>
-                        </div>
-                        <div class="relative inline-block w-12 align-middle select-none transition duration-200 ease-in">
-                            <input type="checkbox" id="notif-toggle" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer" onclick="toggleNotifications()"/>
-                            <label for="notif-toggle" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"></label>
-                        </div>
-                    </div>
-
-                    <button onclick="navigateTo('cs')" class="w-full flex items-center justify-between p-5 hover:bg-gray-50 dark:hover:bg-gray-700 transition click-press border-b dark:border-gray-700">
-                        <div class="flex items-center gap-4"><span class="text-xl">🎧</span><span class="font-bold text-sm">Customer Support</span></div>
-                        <span class="text-gray-400 font-bold text-xl">›</span>
-                    </button>
-
-                    <button onclick="navigateTo('legal')" class="w-full flex items-center justify-between p-5 hover:bg-gray-50 dark:hover:bg-gray-700 transition click-press border-b dark:border-gray-700">
-                        <div class="flex items-center gap-4"><span class="text-xl">📜</span><span class="font-bold text-sm">Legal & Policies</span></div>
-                        <span class="text-gray-400 font-bold text-xl">›</span>
-                    </button>
-
-                    <button onclick="alert('Online payment service will be available soon.')" class="w-full flex items-center justify-between p-5 hover:bg-gray-50 dark:hover:bg-gray-700 transition click-press border-b dark:border-gray-700">
-                        <div class="flex items-center gap-4"><span class="text-xl">💳</span><span class="font-bold text-sm">Payment Methods</span></div>
-                        <span class="text-[9px] bg-amber-100 text-amber-700 px-2 py-1 rounded-md font-bold uppercase tracking-widest">Soon</span>
-                    </button>
-                    
-                    <button onclick="localStorage.removeItem('ujenzi_user'); location.reload();" class="w-full flex items-center gap-4 p-5 hover:bg-red-50 dark:hover:bg-red-900/10 transition click-press text-red-500 rounded-b-[2.5rem]">
-                        <span class="text-xl">🚪</span>
-                        <span class="font-bold text-sm text-left">Logout from Account</span>
-                    </button>
+            <div class="bg-white dark:bg-gray-800 rounded-[2.5rem] p-1 border dark:border-gray-700 shadow-sm">
+                <div class="flex items-center justify-between p-5 border-b dark:border-gray-700">
+                    <div class="flex items-center gap-4"><span class="text-xl">🔔</span><span class="font-bold text-sm">Notifications</span></div>
+                    <div class="relative inline-block w-12 align-middle select-none transition duration-200 ease-in"><input type="checkbox" id="notif-toggle" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer" onclick="toggleNotifications()"/><label for="notif-toggle" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"></label></div>
                 </div>
+                <button onclick="navigateTo('cs')" class="w-full flex items-center justify-between p-5 border-b dark:border-gray-700"><div class="flex items-center gap-4"><span class="text-xl">🎧</span><span class="font-bold text-sm">Customer Support</span></div><span class="text-gray-400 text-xl">›</span></button>
+                <button onclick="navigateTo('legal')" class="w-full flex items-center justify-between p-5 border-b dark:border-gray-700"><div class="flex items-center gap-4"><span class="text-xl">📜</span><span class="font-bold text-sm">Legal & Policies</span></div><span class="text-gray-400 text-xl">›</span></button>
+                <button onclick="localStorage.removeItem('ujenzi_user'); location.reload();" class="w-full flex items-center gap-4 p-5 text-red-500 rounded-b-[2.5rem]"><span class="text-xl">🚪</span><span class="font-bold text-sm">Logout</span></button>
             </div>
         </div>
 
-        <div id="view-cs" class="view-content hidden">
-            <div class="bg-white dark:bg-gray-800 p-8 rounded-[2.5rem] border dark:border-gray-700 shadow-xl text-center mt-4">
-                <div class="text-6xl mb-4">🎧</div>
-                <h2 class="text-2xl font-black mb-2">We're here to help</h2>
-                <p class="text-sm text-gray-500 dark:text-gray-400 mb-8 font-medium leading-relaxed">Our construction experts are available Monday to Saturday, 8:00 AM to 6:00 PM (EAT).</p>
-                <a href="https://wa.me/255743924467" target="_blank" class="flex items-center justify-center gap-3 w-full py-5 bg-[#25D366] text-white rounded-2xl font-black mb-4 click-press shadow-md">
-                    <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.305-.885-.653-1.482-1.459-1.656-1.756-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-                    Chat on WhatsApp
-                </a>
-                <a href="tel:+255743924467" class="block w-full py-5 bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-white rounded-2xl font-black click-press">Call +255 743 924 467</a>
-            </div>
-        </div>
-
-        <div id="view-legal" class="view-content hidden">
-            <div class="bg-white dark:bg-gray-800 p-8 rounded-[2.5rem] border dark:border-gray-700 shadow-xl mt-4">
-                <h3 class="font-black text-xl mb-3 text-green-600">Terms of Service</h3>
-                <p class="text-sm text-gray-500 dark:text-gray-400 mb-8 leading-relaxed font-medium">UjenziSmart provides a platform for estimating and ordering construction materials in Tanzania. Prices are indicative and subject to market changes. Delivery times depend strictly on the selected zone.</p>
-                <h3 class="font-black text-xl mb-3 text-green-600">Privacy Policy</h3>
-                <p class="text-sm text-gray-500 dark:text-gray-400 leading-relaxed font-medium">We collect your phone number, email, and project data solely to fulfill orders and provide accurate AI estimations. Your data is encrypted and never sold to third parties.</p>
-            </div>
-        </div>
+        <div id="view-cs" class="view-content hidden"><div class="bg-white dark:bg-gray-800 p-8 rounded-[2.5rem] border shadow-xl text-center mt-4"><div class="text-6xl mb-4">🎧</div><h2 class="text-2xl font-black mb-2">Help Center</h2><p class="text-sm text-gray-500 mb-8 font-medium">Available Mon-Sat, 8AM-6PM (EAT).</p><a href="https://wa.me/255743924467" class="flex items-center justify-center gap-3 w-full py-5 bg-[#25D366] text-white rounded-2xl font-black mb-4 click-press shadow-md">Chat on WhatsApp</a></div></div>
+        <div id="view-legal" class="view-content hidden"><div class="bg-white dark:bg-gray-800 p-8 rounded-[2.5rem] border shadow-xl mt-4"><h3 class="font-black text-xl mb-3 text-green-600">Policies</h3><p class="text-sm text-gray-500 font-medium leading-relaxed">Prices are subject to market changes. Delivery is zone-based.</p></div></div>
     </div>
 
     <div id="product-modal" class="fixed inset-0 z-[150] hidden bg-black/60 flex items-end justify-center transition-opacity backdrop-blur-sm">
         <div id="product-sheet" class="bg-white dark:bg-gray-900 w-full max-w-md rounded-t-[2.5rem] overflow-hidden shadow-2xl flex flex-col max-h-[92vh] bottom-sheet">
-            <div class="relative flex-shrink-0">
-                <img id="modal-img" src="" class="w-full h-48 object-cover">
-                <button onclick="closeProduct()" class="absolute top-4 right-4 w-10 h-10 bg-black/40 text-white rounded-full flex items-center justify-center font-bold backdrop-blur-md click-press">✕</button>
-            </div>
-            <div class="p-6 overflow-y-auto flex-grow hide-scrollbar">
-                <h3 id="modal-title" class="text-2xl font-black mb-1 text-gray-900 dark:text-white leading-tight"></h3>
-                
-                <div class="flex items-center gap-2 mb-3">
-                    <div class="flex text-amber-400 text-sm">★★★★★</div>
-                    <span id="modal-rating-text" class="text-xs text-gray-500 font-bold"></span>
-                </div>
-
-                <p id="modal-desc" class="text-gray-500 dark:text-gray-400 text-sm mb-4 leading-relaxed font-medium"></p>
-                
-                <div class="bg-gray-50 dark:bg-gray-800 p-4 rounded-2xl mb-4 border dark:border-gray-700 shadow-inner">
-                    <p class="text-[9px] text-green-600 font-black uppercase tracking-widest mb-1 flex items-center gap-1">✓ Verified Review</p>
-                    <p id="modal-review-text" class="text-xs italic text-gray-700 dark:text-gray-300 font-medium"></p>
-                </div>
-
-                <div id="fbt-section" class="mb-5 hidden">
-                    <p class="text-[10px] text-gray-400 font-black uppercase tracking-widest mb-2">Frequently Bought Together</p>
-                    <div class="flex items-center gap-3 bg-blue-50 dark:bg-blue-900/20 p-3 rounded-2xl border border-blue-100 dark:border-blue-800">
-                        <img id="fbt-img" src="" class="w-12 h-12 rounded-xl object-cover border dark:border-gray-700">
-                        <div class="flex-grow">
-                            <p id="fbt-title" class="text-xs font-bold dark:text-white leading-tight"></p>
-                            <p id="fbt-price" class="text-[10px] text-green-600 font-black mt-1"></p>
-                        </div>
-                        <input type="checkbox" id="fbt-checkbox" class="w-6 h-6 accent-green-500 rounded border-gray-300">
-                    </div>
-                </div>
-
-                <div class="flex justify-between items-center mb-5 border-t border-b dark:border-gray-700 py-5">
-                    <span id="modal-price" class="text-2xl font-black text-green-600"></span>
-                    <div class="flex flex-col items-end">
-                        <span class="text-[9px] text-gray-400 font-black uppercase tracking-widest mb-2">Quantity</span>
-                        <div class="flex items-center bg-gray-100 dark:bg-gray-800 rounded-xl p-1 border dark:border-gray-700 shadow-inner">
-                            <button onclick="changeQty(-1)" class="w-10 h-10 flex items-center justify-center font-black text-gray-500 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-lg text-lg click-press">-</button>
-                            <input type="number" id="modal-qty" value="1" min="1" class="w-12 bg-transparent text-center font-black outline-none pointer-events-none text-lg">
-                            <button onclick="changeQty(1)" class="w-10 h-10 flex items-center justify-center font-black text-gray-500 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-lg text-lg click-press">+</button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="flex gap-2 mb-6">
-                    <select id="phase-selector" class="flex-grow bg-gray-50 dark:bg-gray-800 border dark:border-gray-700 rounded-2xl px-4 outline-none text-xs font-bold text-gray-700 dark:text-gray-200 shadow-sm">
-                        <option value="Foundation">Phase 1: Foundation</option>
-                        <option value="Roofing">Phase 2: Roofing</option>
-                        <option value="Finishing">Phase 3: Finishing</option>
-                    </select>
-                    <button onclick="saveToPhase()" class="px-5 py-4 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-2xl font-black text-[10px] uppercase tracking-widest click-press shadow-sm">Save 📌</button>
-                </div>
-                
-                <button id="add-to-cart-btn" class="w-full py-5 bg-green-600 text-white rounded-[2rem] font-black text-sm uppercase tracking-widest shadow-lg click-press">Add to Basket</button>
+            <div class="relative shrink-0"><img id="modal-img" src="" class="w-full h-48 object-cover"><button onclick="closeProduct()" class="absolute top-4 right-4 w-10 h-10 bg-black/40 text-white rounded-full flex items-center justify-center font-bold backdrop-blur-md">✕</button></div>
+            <div class="p-6 overflow-y-auto shrink-1 hide-scrollbar">
+                <h3 id="modal-title" class="text-2xl font-black mb-1 leading-tight"></h3>
+                <div class="flex items-center gap-2 mb-3"><div class="flex text-amber-400 text-sm">★★★★★</div><span id="modal-rating-text" class="text-xs text-gray-500 font-bold"></span></div>
+                <p id="modal-desc" class="text-gray-500 dark:text-gray-400 text-xs mb-4 leading-relaxed"></p>
+                <div class="bg-gray-50 dark:bg-gray-800 p-4 rounded-2xl mb-4 border dark:border-gray-700 shadow-inner"><p class="text-[9px] text-green-600 font-black uppercase mb-1">✓ Verified Review</p><p id="modal-review-text" class="text-xs italic dark:text-gray-300 font-medium"></p></div>
+                <div id="fbt-section" class="mb-5 hidden"><p class="text-[10px] text-gray-400 font-black uppercase mb-2">Frequently Bought Together</p><div class="flex items-center gap-3 bg-blue-50 dark:bg-blue-900/20 p-3 rounded-2xl border border-blue-100 dark:border-blue-800"><img id="fbt-img" src="" class="w-12 h-12 rounded-xl object-cover border dark:border-gray-700"><div class="flex-grow"><p id="fbt-title" class="text-xs font-bold dark:text-white leading-tight"></p><p id="fbt-price" class="text-[10px] text-green-600 font-black mt-1"></p></div><input type="checkbox" id="fbt-checkbox" class="w-5 h-5 accent-green-500 rounded border-gray-300"></div></div>
+                <div class="flex justify-between items-center mb-5 border-t border-b dark:border-gray-700 py-5"><span id="modal-price" class="text-2xl font-black text-green-600"></span><div class="flex items-center bg-gray-100 dark:bg-gray-800 rounded-xl p-1 border dark:border-gray-700 shadow-inner"><button onclick="changeQty(-1)" class="w-10 h-10 flex items-center justify-center font-black text-gray-500 text-lg click-press">-</button><input type="number" id="modal-qty" value="1" min="1" class="w-12 bg-transparent text-center font-black outline-none pointer-events-none text-lg"><button onclick="changeQty(1)" class="w-10 h-10 flex items-center justify-center font-black text-gray-500 text-lg click-press">+</button></div></div>
+                <div class="flex gap-2 mb-6"><select id="phase-selector" class="flex-grow bg-gray-50 dark:bg-gray-800 border dark:border-gray-700 rounded-2xl px-3 outline-none text-[10px] font-bold"><option value="Foundation">Phase 1: Foundation</option><option value="Roofing">Phase 2: Roofing</option><option value="Finishing">Phase 3: Finishing</option></select><button onclick="saveToPhase()" class="px-4 py-3 bg-blue-50 dark:bg-blue-900/20 text-blue-600 rounded-2xl font-black text-[10px] uppercase">Save 📌</button></div>
+                <button id="add-to-cart-btn" class="w-full py-5 bg-green-500 text-white rounded-[2rem] font-black text-sm uppercase shadow-lg click-press">Add to Basket</button>
             </div>
         </div>
     </div>
 
-    <div id="calc-modal" class="fixed inset-0 z-[150] hidden bg-black/50 glass flex items-center justify-center p-4">
-        <div class="bg-white dark:bg-gray-900 w-full max-w-sm rounded-[3rem] p-8 shadow-2xl animate-stagger-in">
-            <h3 class="text-2xl font-black mb-1 text-center">Site Estimator</h3>
-            <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest text-center mb-6">Calculate Required Materials</p>
-            
-            <select id="calc-type" class="w-full bg-gray-50 dark:bg-gray-800 p-4 rounded-2xl mb-4 outline-none border dark:border-gray-700 font-bold text-sm text-gray-700 dark:text-gray-200 shadow-sm">
-                <option value="wall">Wall (Blocks & Cement)</option>
-                <option value="floor">Floor (Tiles 40x40)</option>
-                <option value="roof">Roof (Iron Sheets)</option>
-            </select>
-
-            <div class="flex gap-3 mb-6">
-                <input type="number" id="calc-l" placeholder="Length (m)" class="w-full bg-gray-50 dark:bg-gray-800 p-4 rounded-2xl outline-none border dark:border-gray-700 font-bold text-sm shadow-sm">
-                <input type="number" id="calc-w" placeholder="Width/Height" class="w-full bg-gray-50 dark:bg-gray-800 p-4 rounded-2xl outline-none border dark:border-gray-700 font-bold text-sm shadow-sm">
-            </div>
-
-            <button onclick="runCalculation()" class="w-full py-5 bg-green-500 text-white rounded-[2rem] font-black click-press shadow-lg uppercase text-xs tracking-widest">Calculate Now</button>
-            <div id="calc-results" class="hidden mt-6 p-5 bg-green-50 dark:bg-green-900/20 rounded-2xl text-sm font-medium text-green-800 dark:text-green-300 leading-relaxed border border-green-100 dark:border-green-800 shadow-inner"></div>
-            <button onclick="closeCalculator()" class="w-full mt-6 text-[10px] font-black text-gray-400 uppercase tracking-widest click-press">Close Window</button>
-        </div>
-    </div>
-
-    <div id="chat-modal" class="fixed inset-0 z-[150] hidden bg-black/60 flex items-end justify-center transition-opacity backdrop-blur-sm">
-        <div id="chat-sheet" class="bg-white dark:bg-gray-900 w-full max-w-md h-[85vh] rounded-t-[2.5rem] flex flex-col overflow-hidden shadow-2xl bottom-sheet">
-            <div class="bg-green-600 p-6 flex justify-between items-center text-white shrink-0">
-                <div class="flex items-center gap-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 text-white"><path fill-rule="evenodd" d="M9 4.5a.75.75 0 0 1 .721.544l.813 2.846a3.75 3.75 0 0 0 2.576 2.576l2.846.813a.75.75 0 0 1 0 1.442l-2.846.813a3.75 3.75 0 0 0-2.576 2.576l-.813 2.846a.75.75 0 0 1-1.442 0l-.813-2.846a3.75 3.75 0 0 0-2.576-2.576l-2.846-.813a.75.75 0 0 1 0-1.442l2.846-.813A3.75 3.75 0 0 0 7.466 7.89l.813-2.846A.75.75 0 0 1 9 4.5ZM18 1.5a.75.75 0 0 1 .728.568l.258 1.036c.236.94.97 1.674 1.91 1.906l1.036.258a.75.75 0 0 1 0 1.45l-1.037.259a3.003 3.003 0 0 0-1.91 1.906l-.258 1.036a.75.75 0 0 1-1.455 0l-.258-1.036a3.003 3.003 0 0 0-1.91-1.906l-1.036-.259a.75.75 0 0 1 0-1.45l1.036-.258a3.003 3.003 0 0 0 1.91-1.906l.258-1.036A.75.75 0 0 1 18 1.5ZM16.5 15a.75.75 0 0 1 .712.513l.394 1.183c.15.447.5.799.948.948l1.183.395a.75.75 0 0 1 0 1.422l-1.183.395c-.447.15-.799.5-.948.948l-.395 1.183a.75.75 0 0 1-1.422 0l-.395-1.183a1.5 1.5 0 0 0-.948-.948l-1.183-.395a.75.75 0 0 1 0-1.422l1.183-.395c.447-.15.799-.5.948-.948l.395-1.183A.75.75 0 0 1 16.5 15Z" clip-rule="evenodd" /></svg>
-                    <span class="font-black uppercase tracking-widest text-[10px]">Material Expert AI</span>
+    <div id="ai-hub-modal" class="fixed inset-0 z-[150] hidden bg-black/60 flex items-end justify-center transition-opacity backdrop-blur-sm">
+        <div id="ai-hub-sheet" class="bg-white dark:bg-gray-900 w-full max-w-md h-[85vh] rounded-t-[2.5rem] flex flex-col overflow-hidden shadow-2xl bottom-sheet">
+            <div class="bg-gray-900 p-5 flex justify-between items-center text-white shrink-0"><div class="flex items-center gap-3"><div class="bg-gradient-to-tr from-green-400 to-blue-500 p-2 rounded-xl shadow-inner"><svg viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5"><path fill-rule="evenodd" d="M9 4.5a.75.75 0 0 1 .721.544l.813 2.846a3.75 3.75 0 0 0 2.576 2.576l2.846.813a.75.75 0 0 1 0 1.442l-2.846.813a3.75 3.75 0 0 0-2.576 2.576l-.813 2.846a.75.75 0 0 1-1.442 0l-.813-2.846a3.75 3.75 0 0 0-2.576-2.576l-2.846-.813a.75.75 0 0 1 0-1.442l2.846-.813A3.75 3.75 0 0 0 7.466 7.89l.813-2.846A.75.75 0 0 1 9 4.5ZM18 1.5a.75.75 0 0 1 .728.568l.258 1.036c.236.94.97 1.674 1.91 1.906l1.036.258a.75.75 0 0 1 0 1.45l-1.037.259a3.003 3.003 0 0 0-1.91 1.906l-.258 1.036a.75.75 0 0 1-1.455 0l-.258-1.036a3.003 3.003 0 0 0-1.91-1.906l-1.036-.259a.75.75 0 0 1 0-1.45l1.036-.258a3.003 3.003 0 0 0 1.91-1.906l.258-1.036A.75.75 0 0 1 18 1.5ZM16.5 15a.75.75 0 0 1 .712.513l.394 1.183c.15.447.5.799.948.948l1.183.395a.75.75 0 0 1 0 1.422l-1.183.395c-.447.15-.799.5-.948.948l-.395 1.183a.75.75 0 0 1-1.422 0l-.395-1.183a1.5 1.5 0 0 0-.948-.948l-1.183-.395a.75.75 0 0 1 0-1.422l1.183-.395c.447-.15.799-.5.948-.948l.395-1.183A.75.75 0 0 1 16.5 15Z" clip-rule="evenodd" /></svg></div><div><h2 class="font-black text-sm leading-tight">AI Construction Hub</h2><p class="text-[9px] text-gray-400 font-bold uppercase tracking-widest">Powered by Smart Tech</p></div></div><button onclick="closeAiHub()" class="w-8 h-8 flex items-center justify-center bg-white/10 rounded-full font-bold">✕</button></div>
+            <div class="flex border-b dark:border-gray-700 shrink-0 bg-white dark:bg-gray-900"><button onclick="switchAiTab('chat')" id="tab-chat" class="flex-1 py-3 text-xs font-bold text-green-600 border-b-2 border-green-600">Advisor</button><button onclick="switchAiTab('calc')" id="tab-calc" class="flex-1 py-3 text-xs font-bold text-gray-500 dark:text-gray-400">Estimator</button></div>
+            <div id="ai-content-chat" class="flex-grow flex flex-col overflow-hidden bg-gray-50 dark:bg-gray-900"><div id="chat-box" class="flex-grow p-5 overflow-y-auto flex flex-col gap-4"></div><div class="p-4 bg-white dark:bg-gray-800 border-t dark:border-gray-700 flex gap-2 shrink-0"><input type="text" id="chat-input" class="flex-grow bg-gray-100 dark:bg-gray-900 rounded-xl px-4 py-3 text-sm outline-none border dark:border-gray-600" placeholder="Ask a question..."><button onclick="sendMessage()" class="w-12 h-12 bg-green-600 text-white rounded-xl font-bold click-press shadow-md">→</button></div></div>
+            <div id="ai-content-calc" class="flex-grow p-6 overflow-y-auto hidden bg-gray-50 dark:bg-gray-900">
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl border dark:border-gray-700 shadow-sm"><p class="text-[10px] text-gray-400 font-bold uppercase mb-4 text-center">Material Calculator</p><select id="calc-type" class="w-full bg-gray-50 dark:bg-gray-900 p-4 rounded-xl mb-4 outline-none border dark:border-gray-700 font-bold text-sm"><option value="wall">Wall (Blocks & Cement)</option><option value="floor">Floor (Tiles 40x40)</option><option value="roof">Roof (Iron Sheets)</option></select>
+                    <div class="flex gap-3 mb-6"><input type="number" id="calc-l" placeholder="Length (m)" class="w-full bg-gray-50 dark:bg-gray-900 p-4 rounded-xl outline-none border dark:border-gray-700 font-bold text-sm"><input type="number" id="calc-w" placeholder="Width/Height" class="w-full bg-gray-50 dark:bg-gray-900 p-4 rounded-xl outline-none border dark:border-gray-700 font-bold text-sm"></div>
+                    <button onclick="runCalculation()" class="w-full py-4 bg-green-600 text-white rounded-xl font-black click-press shadow-md text-sm uppercase">Calculate</button><div id="calc-results" class="hidden mt-6 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-xl text-sm font-medium text-blue-900 dark:text-blue-100 border border-blue-100 dark:border-blue-800 leading-relaxed shadow-inner"></div>
                 </div>
-                <button id="close-chat" class="text-xl w-8 h-8 flex items-center justify-center bg-black/20 rounded-full click-press">✕</button>
-            </div>
-            <div id="chat-box" class="flex-grow p-6 overflow-y-auto bg-gray-50 dark:bg-gray-800 flex flex-col gap-4">
-                <div class="p-4 bg-white dark:bg-gray-700 border dark:border-gray-600 rounded-[2rem] rounded-tl-none mr-auto mb-2 text-sm font-medium shadow-sm">Habari! Ask me any construction question.</div>
-            </div>
-            <div class="p-4 flex gap-3 border-t dark:border-gray-700 bg-white dark:bg-gray-900 shrink-0">
-                <input type="text" id="chat-input" class="flex-grow bg-gray-50 dark:bg-gray-800 rounded-full px-6 py-4 text-sm font-medium outline-none border dark:border-gray-700 focus:ring-2 focus:ring-green-500" placeholder="Ask about materials...">
-                <button id="send-btn" class="w-14 h-14 bg-green-600 text-white rounded-full font-bold click-press shadow-lg flex items-center justify-center text-xl shrink-0">→</button>
             </div>
         </div>
     </div>
 
-    <button id="material-expert-btn" class="fixed bottom-24 right-6 z-[100] w-16 h-16 gradient-pulse rounded-full flex flex-col items-center justify-center shadow-2xl click-press animate-stagger-in border-4 border-white dark:border-gray-800 stagger-item" style="animation-delay: 0.5s">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 text-white mb-0.5"><path fill-rule="evenodd" d="M9 4.5a.75.75 0 0 1 .721.544l.813 2.846a3.75 3.75 0 0 0 2.576 2.576l2.846.813a.75.75 0 0 1 0 1.442l-2.846.813a3.75 3.75 0 0 0-2.576 2.576l-.813 2.846a.75.75 0 0 1-1.442 0l-.813-2.846a3.75 3.75 0 0 0-2.576-2.576l-2.846-.813a.75.75 0 0 1 0-1.442l2.846-.813A3.75 3.75 0 0 0 7.466 7.89l.813-2.846A.75.75 0 0 1 9 4.5ZM18 1.5a.75.75 0 0 1 .728.568l.258 1.036c.236.94.97 1.674 1.91 1.906l1.036.258a.75.75 0 0 1 0 1.45l-1.037.259a3.003 3.003 0 0 0-1.91 1.906l-.258 1.036a.75.75 0 0 1-1.455 0l-.258-1.036a3.003 3.003 0 0 0-1.91-1.906l-1.036-.259a.75.75 0 0 1 0-1.45l1.036-.258a3.003 3.003 0 0 0 1.91-1.906l.258-1.036A.75.75 0 0 1 18 1.5ZM16.5 15a.75.75 0 0 1 .712.513l.394 1.183c.15.447.5.799.948.948l1.183.395a.75.75 0 0 1 0 1.422l-1.183.395c-.447.15-.799.5-.948.948l-.395 1.183a.75.75 0 0 1-1.422 0l-.395-1.183a1.5 1.5 0 0 0-.948-.948l-1.183-.395a.75.75 0 0 1 0-1.422l1.183-.395c.447-.15.799-.5.948-.948l.395-1.183A.75.75 0 0 1 16.5 15Z" clip-rule="evenodd" /></svg>
+    <button onclick="openAiHub()" class="fixed bottom-24 right-6 z-[100] w-16 h-16 gradient-pulse rounded-full flex flex-col items-center justify-center shadow-2xl click-press border-4 border-white dark:border-gray-800 animate-stagger-in">
+        <svg viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 text-white mb-0.5"><path fill-rule="evenodd" d="M9 4.5a.75.75 0 0 1 .721.544l.813 2.846a3.75 3.75 0 0 0 2.576 2.576l2.846.813a.75.75 0 0 1 0 1.442l-2.846.813a3.75 3.75 0 0 0-2.576 2.576l-.813 2.846a.75.75 0 0 1-1.442 0l-.813-2.846a3.75 3.75 0 0 0-2.576-2.576l-2.846-.813a.75.75 0 0 1 0-1.442l2.846-.813A3.75 3.75 0 0 0 7.466 7.89l.813-2.846A.75.75 0 0 1 9 4.5ZM18 1.5a.75.75 0 0 1 .728.568l.258 1.036c.236.94.97 1.674 1.91 1.906l1.036.258a.75.75 0 0 1 0 1.45l-1.037.259a3.003 3.003 0 0 0-1.91 1.906l-.258 1.036a.75.75 0 0 1-1.455 0l-.258-1.036a3.003 3.003 0 0 0-1.91-1.906l-1.036-.259a.75.75 0 0 1 0-1.45l1.036-.258a3.003 3.003 0 0 0 1.91-1.906l.258-1.036A.75.75 0 0 1 18 1.5ZM16.5 15a.75.75 0 0 1 .712.513l.394 1.183c.15.447.5.799.948.948l1.183.395a.75.75 0 0 1 0 1.422l-1.183.395c-.447.15-.799.5-.948.948l-.395 1.183a.75.75 0 0 1-1.422 0l-.395-1.183a1.5 1.5 0 0 0-.948-.948l-1.183-.395a.75.75 0 0 1 0-1.422l1.183-.395c.447-.15.799-.5.948-.948l.395-1.183A.75.75 0 0 1 16.5 15Z" clip-rule="evenodd" /></svg>
         <span class="font-black text-[6px] uppercase tracking-widest text-white mt-0.5">Expert</span>
     </button>
 
-    <nav class="fixed bottom-0 w-full bg-white/95 dark:bg-gray-900/95 glass border-t dark:border-gray-800 px-6 py-2 flex justify-around items-center z-50">
-        <button onclick="navigateTo('home')" id="nav-home" class="nav-btn active-nav flex flex-col items-center gap-1 text-gray-400 text-[10px] font-bold transition-all p-2 click-press w-16 text-green-600">
-            <span class="text-xl mb-0.5">🏠</span><span>Home</span>
-        </button>
-        <button onclick="navigateTo('trending')" id="nav-trending" class="nav-btn flex flex-col items-center gap-1 text-gray-400 text-[10px] font-bold transition-all p-2 click-press w-16">
-            <span class="text-xl mb-0.5">📈</span><span>Watch</span>
-        </button>
-        <button onclick="navigateTo('cart')" id="nav-cart" class="nav-btn flex flex-col items-center gap-1 text-gray-400 text-[10px] font-bold transition-all p-2 relative click-press w-16">
-            <span class="text-xl mb-0.5">🛒</span><span>Cart</span>
-            <span id="cart-badge" class="hidden absolute top-1 right-2 bg-red-500 text-white text-[8px] px-1.5 rounded-full font-black ring-2 ring-white dark:ring-gray-900">0</span>
-        </button>
-        <button onclick="navigateTo('profile')" id="nav-profile" class="nav-btn flex flex-col items-center gap-1 text-gray-400 text-[10px] font-bold transition-all p-2 click-press w-16">
-            <span class="text-xl mb-0.5">👤</span><span>Profile</span>
-        </button>
-    </nav>
-
     <script>
-        const RENDER_URL = 'https://ujenzismart-backend.onrender.com';
-        const WHATSAPP_NUM = '255743924467'; 
-        let cart = [];
-        let currentModalProduct = null;
-        let fbtItem = null;
-        let viewHistory = ['home'];
+        const RENDER_URL = 'https://ujenzismart-backend.onrender.com', WHATSAPP_NUM = '255743924467'; 
+        let cart = [], currentModalProduct = null, fbtItem = null, viewHistory = ['home'];
 
-        window.addEventListener('popstate', (event) => {
-            const productSheet = document.getElementById('product-sheet');
-            const chatSheet = document.getElementById('chat-sheet');
-            
-            let sheetClosed = false;
-            if (productSheet && productSheet.classList.contains('open')) { closeProduct(); sheetClosed = true; }
-            if (chatSheet && chatSheet.classList.contains('open')) { document.getElementById('close-chat').click(); sheetClosed = true; }
-            if (!document.getElementById('calc-modal').classList.contains('hidden')) { closeCalculator(); sheetClosed = true; }
-            
-            if (sheetClosed) return;
-
-            if (event.state && event.state.view) {
-                viewHistory.pop();
-                navigateTo(event.state.view, true);
-            } else {
-                navigateTo('home', true);
-            }
+        window.addEventListener('popstate', (e) => {
+            const pSheet = document.getElementById('product-sheet'), aiSheet = document.getElementById('ai-hub-sheet');
+            let closed = false;
+            if(pSheet.classList.contains('open')) { closeProduct(); closed = true; }
+            if(aiSheet.classList.contains('open')) { closeAiHub(); closed = true; }
+            if(!document.getElementById('calc-modal').classList.contains('hidden')) { closeCalculator(); closed = true; }
+            if(closed) return;
+            if(e.state && e.state.view) { viewHistory.pop(); navigateTo(e.state.view, true); }
+            else { navigateTo('home', true); }
         });
-
         history.replaceState({ view: 'home' }, '', '#home');
-
-        const categoryImages = {
-            'Foundation': 'https://images.unsplash.com/photo-1590060417941-2f34888463f1?w=400',
-            'Roofing': 'https://images.unsplash.com/photo-1635424710928-0544e8512eae?w=400',
-            'Plumbing': 'https://images.unsplash.com/photo-1581244277943-fe4a9c777189?w=400',
-            'Electrical': 'https://images.unsplash.com/photo-1550009158-9ebf69173e03?w=400',
-            'Finishing': 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=400',
-            'Tools': 'https://images.unsplash.com/photo-1530124560677-bdaea02c9a9d?w=400'
-        };
 
         const productDatabase = {
             'Foundation & Structural': [
-                { name: 'Simba Cement 50kg', price: 18500, wt: 50, desc: 'Grade 42.5R high-strength cement.', img: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=400', rating: 4.9, reviews: 342, reviewTxt: "Always strong, sets perfectly." },
-                { name: 'Twiga Cement 50kg', price: 18000, wt: 50, desc: 'Standard 32.5N multipurpose cement.', img: 'https://images.unsplash.com/photo-1621360841013-c76831f1dbce?w=400', rating: 4.8, reviews: 215, reviewTxt: "Great for plastering walls." },
-                { name: 'Deformed Bar 12mm', price: 24000, wt: 10, desc: 'TBS approved Grade 500 steel rebars.', img: 'https://images.unsplash.com/photo-1536882240095-0379873feb4e?w=400', rating: 4.8, reviews: 156, reviewTxt: "Accurate weight." },
-                { name: 'Blocks 6-inch', price: 1200, wt: 15, desc: 'Machine-vibrated, solid concrete blocks.', img: 'https://images.unsplash.com/photo-1589939705384-5185138a047a?w=400', rating: 4.6, reviews: 89, reviewTxt: "Minimal breakages." }
-            ],
-            'Roofing Materials': [
-                { name: 'Iron Sheet 30G', price: 22000, wt: 4, desc: 'Corrugated premium anti-corrosive roofing sheets.', img: 'https://images.unsplash.com/photo-1635424710928-0544e8512eae?w=400', rating: 4.7, reviews: 210, reviewTxt: "Color doesn't fade." }
-            ],
-            'Finishing & Painting': [
-                { name: 'Floor Tiles Box', price: 32000, wt: 20, desc: 'Glossy ceramic 40x40cm floor tiles.', img: 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=400', rating: 4.7, reviews: 88, reviewTxt: "Beautiful finish." },
-                { name: 'Tile Adhesive 25kg', price: 14000, wt: 25, desc: 'High-bond strength cementitious tile adhesive.', img: 'https://images.unsplash.com/photo-1589939705384-5185138a047a?w=400', rating: 4.5, reviews: 90, reviewTxt: "Bonds perfectly." }
-            ],
-            'Tools & Hardware': [
-                { name: 'Wheelbarrow', price: 110000, wt: 15, desc: 'Thick steel tray construction wheelbarrow.', img: 'https://images.unsplash.com/photo-1530124560677-bdaea02c9a9d?w=400', rating: 4.8, reviews: 312, reviewTxt: "Very tough." }
+                { name: 'Simba Cement 50kg', price: 18500, wt: 50, desc: 'Grade 42.5R high-strength.', img: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=400', rating: 4.9, reviews: 342, reviewTxt: "Sets perfectly." },
+                { name: 'Twiga Cement 50kg', price: 18000, wt: 50, desc: 'Standard multipurpose.', img: 'https://images.unsplash.com/photo-1621360841013-c76831f1dbce?w=400', rating: 4.8, reviews: 215, reviewTxt: "Great for plastering." },
+                { name: 'Deformed Bar 12mm', price: 24000, wt: 10, desc: 'TBS rebars.', img: 'https://images.unsplash.com/photo-1536882240095-0379873feb4e?w=400', rating: 4.8, reviews: 156, reviewTxt: "Accurate weight." }
             ]
         };
+        const categoryImages = { 'Foundation': 'https://images.unsplash.com/photo-1590060417941-2f34888463f1?w=400', 'Roofing': 'https://images.unsplash.com/photo-1635424710928-0544e8512eae?w=400' };
 
         function navigateTo(viewName, isBack = false) {
             document.querySelectorAll('.view-content').forEach(v => v.classList.add('hidden'));
-            const targetView = document.getElementById(`view-${viewName}`);
-            if(targetView) targetView.classList.remove('hidden');
-
-            document.querySelectorAll('.nav-btn').forEach(btn => {
-                btn.classList.remove('active-nav', 'text-green-600');
-            });
-            const activeBtn = document.getElementById(`nav-${viewName}`);
-            if(activeBtn) {
-                activeBtn.classList.add('active-nav', 'text-green-600');
-            }
-
-            const backBtn = document.getElementById('header-back-btn');
-            const headerTitle = document.getElementById('header-title');
-            const headerSub = document.getElementById('header-subtitle');
-            
-            const mainTabs = ['home', 'trending', 'cart', 'profile'];
-            
-            if (mainTabs.includes(viewName)) {
+            const target = document.getElementById(`view-${viewName}`); if(target) target.classList.remove('hidden');
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active-nav', 'text-green-600'));
+            const activeBtn = document.getElementById(`nav-${viewName}`); if(activeBtn) activeBtn.classList.add('active-nav', 'text-green-600');
+            const backBtn = document.getElementById('header-back-btn'), title = document.getElementById('header-title'), sub = document.getElementById('header-subtitle');
+            const tabs = ['home', 'trending', 'cart', 'profile'];
+            if (tabs.includes(viewName)) {
                 backBtn.classList.add('hidden');
-                document.getElementById('home-tools').classList.toggle('hidden', viewName !== 'home');
                 if(viewName === 'home') setGreeting();
-                if(viewName === 'trending') { headerTitle.textContent = "Market Watch"; headerSub.textContent = "Live Price Tracking"; }
-                if(viewName === 'cart') { headerTitle.textContent = "Your Cart"; headerSub.textContent = "Secure Checkout"; }
-                if(viewName === 'profile') { headerTitle.textContent = "Profile"; headerSub.textContent = "Manage your account"; }
+                else if(viewName === 'trending') { title.textContent = "Market Watch"; sub.textContent = "Live Price Tracking"; }
+                else if(viewName === 'cart') { title.textContent = "Your Cart"; sub.textContent = "Secure Checkout"; }
+                else if(viewName === 'profile') { title.textContent = "Profile"; sub.textContent = "Manage account"; }
             } else {
                 backBtn.classList.remove('hidden');
-                document.getElementById('home-tools').classList.add('hidden');
-                if(viewName === 'cs') { headerTitle.textContent = "Support"; headerSub.textContent = "We are here to help"; }
-                if(viewName === 'legal') { headerTitle.textContent = "Legal"; headerSub.textContent = "Policies & Terms"; }
+                if(viewName === 'cs') { title.textContent = "Support"; sub.textContent = "We help builders"; }
+                else if(viewName === 'legal') { title.textContent = "Legal"; sub.textContent = "Terms & Policies"; }
             }
-
-            if(!isBack) {
-                if(viewHistory[viewHistory.length - 1] !== viewName) {
-                    viewHistory.push(viewName);
-                    history.pushState({ view: viewName }, '', '#' + viewName);
-                }
+            if(!isBack && viewHistory[viewHistory.length - 1] !== viewName) {
+                viewHistory.push(viewName);
+                if(tabs.includes(viewName)) history.replaceState({ view: viewName }, '', '#' + viewName);
+                else history.pushState({ view: viewName }, '', '#' + viewName);
             }
-
-            if(viewName === 'home') { document.getElementById('search-input').value = ''; renderHomeBase(); }
+            if(viewName === 'home') renderHomeBase();
             if(viewName === 'cart') renderCart();
             if(viewName === 'profile') { updateTrackerUI(); updateWishlistCounts(); }
-            
             window.scrollTo(0,0);
         }
 
-        function goBack() {
-            if(viewHistory.length > 1) {
-                viewHistory.pop(); 
-                const previous = viewHistory[viewHistory.length - 1];
-                navigateTo(previous, true);
-            } else {
-                navigateTo('home');
-            }
-        }
+        function goBack() { if(viewHistory.length > 1) { viewHistory.pop(); navigateTo(viewHistory[viewHistory.length - 1], true); } else navigateTo('home'); }
 
         function checkAuth() {
             const user = JSON.parse(localStorage.getItem('ujenzi_user'));
@@ -580,324 +274,149 @@
                 document.getElementById('auth-screen').classList.add('hidden');
                 setGreeting();
                 document.getElementById('p-name').textContent = user.name;
-                document.getElementById('p-email').textContent = user.email;
-                if(user.photoURL) {
-                    document.getElementById('p-image').src = user.photoURL;
-                } else {
-                    document.getElementById('p-image').src = `https://ui-avatars.com/api/?name=${user.name}&background=10b981&color=fff&size=128`;
-                }
+                document.getElementById('p-image').src = user.photoURL || `https://ui-avatars.com/api/?name=${user.name}&background=10b981&color=fff`;
                 document.getElementById('notif-toggle').checked = localStorage.getItem('ujenzi_notif') === 'true';
                 renderHomeBase();
             }
         }
 
         function setGreeting() {
-            const user = JSON.parse(localStorage.getItem('ujenzi_user'));
-            if(!user) return;
-            const firstName = user.name.split(' ')[0];
-            const h = new Date().getHours();
-            let g = "Good Evening"; if(h < 12) g = "Good Morning"; else if(h < 17) g = "Good Afternoon";
-            document.getElementById('header-title').textContent = `${g}, ${firstName}! 👋`;
-            document.getElementById('header-subtitle').textContent = `Welcome back to UjenziSmart.`;
+            const user = JSON.parse(localStorage.getItem('ujenzi_user')); if(!user) return;
+            const h = new Date().getHours(); let g = "Good Evening"; if(h < 12) g = "Good Morning"; else if(h < 17) g = "Good Afternoon";
+            document.getElementById('header-title').textContent = `${g}, ${user.name.split(' ')[0]}! 👋`;
+            document.getElementById('header-subtitle').textContent = `Building tomorrow, today.`;
         }
 
-        function updateThemeIcon() {
-            const isDark = document.documentElement.classList.contains('dark');
-            const icon = document.getElementById('theme-icon');
-            if(icon) icon.style.transform = isDark ? 'rotate(180deg)' : 'rotate(0deg)'; 
-        }
-        
         window.switchTheme = function() {
-            const html = document.documentElement;
-            html.classList.toggle('dark');
-            localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
-            updateThemeIcon();
+            const h = document.documentElement; h.classList.toggle('dark');
+            localStorage.setItem('theme', h.classList.contains('dark') ? 'dark' : 'light');
+            const icon = document.getElementById('theme-icon'); if(icon) icon.style.transform = h.classList.contains('dark') ? 'rotate(180deg)' : 'rotate(0deg)';
         }
-        document.addEventListener("DOMContentLoaded", updateThemeIcon);
 
-        function handleProfileUpload(event) {
-            const file = event.target.files[0];
-            if(file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    document.getElementById('p-image').src = e.target.result;
-                    let u = JSON.parse(localStorage.getItem('ujenzi_user'));
-                    u.photoURL = e.target.result;
-                    localStorage.setItem('ujenzi_user', JSON.stringify(u));
-                }
-                reader.readAsDataURL(file);
+        function handleProfileUpload(e) {
+            const file = e.target.files[0]; if(file) {
+                const reader = new FileReader(); reader.onload = (ev) => {
+                    document.getElementById('p-image').src = ev.target.result;
+                    let u = JSON.parse(localStorage.getItem('ujenzi_user')); u.photoURL = ev.target.result; localStorage.setItem('ujenzi_user', JSON.stringify(u));
+                }; reader.readAsDataURL(file);
             }
         }
 
-        let isGoldVIP = false;
         function updateTrackerUI() {
-            const spend = parseInt(localStorage.getItem('ujenzi_total_spend') || '0');
-            document.getElementById('total-project-cost').textContent = `TZS ${spend.toLocaleString()}`;
-            document.getElementById('cost-progress').style.width = `${Math.min((spend / 5000000) * 100, 100)}%`;
-
-            const badge = document.getElementById('vip-badge');
-            const perk = document.getElementById('vip-perk-text');
-            isGoldVIP = false;
-
-            if(spend >= 5000000) {
-                badge.className = "mt-2 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest bg-gradient-to-r from-yellow-400 to-yellow-600 text-white shadow-lg";
-                badge.innerHTML = "👑 Gold Builder";
-                perk.classList.remove('hidden');
-                isGoldVIP = true;
-            } else if (spend >= 1000000) {
-                badge.className = "mt-2 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest bg-gradient-to-r from-gray-300 to-gray-400 text-gray-800 shadow-md";
-                badge.innerHTML = "🥈 Silver Builder";
-                perk.classList.add('hidden');
-            } else {
-                badge.className = "mt-2 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest bg-gray-200 text-gray-600 shadow-sm";
-                badge.innerHTML = "Standard Builder";
-                perk.classList.add('hidden');
-            }
-        }
-
-        function handleSearch() {
-            const query = document.getElementById('search-input').value.toLowerCase();
-            const container = document.getElementById('dynamic-home-content');
-            if(!query) { renderHomeBase(); return; }
-            let results = [];
-            for(let cat in productDatabase) {
-                productDatabase[cat].forEach(p => { if(p.name.toLowerCase().includes(query) || p.desc.toLowerCase().includes(query)) results.push(p); });
-            }
-            if(results.length === 0) { container.innerHTML = `<div class="text-center py-16 text-gray-400 font-bold">No results found.</div>`; return; }
-            container.innerHTML = `<div class="flex items-center gap-3 mb-2 click-press cursor-pointer" onclick="document.getElementById('search-input').value=''; renderHomeBase();"><span class="w-8 h-8 bg-white dark:bg-gray-800 rounded-full flex items-center justify-center shadow-sm font-bold border dark:border-gray-700">←</span><h2 class="text-lg font-bold">Search Results</h2></div><div class="grid grid-cols-2 gap-4">${results.map((p, i) => generateProductCardHTML(p, i)).join('')}</div>`;
-        }
-
-        function generateProductCardHTML(p, i) {
-            return `
-                <div onclick="openProduct('${p.name.replace(/'/g, "\\'")}', '${p.desc.replace(/'/g, "\\'")}', ${p.price}, ${p.wt}, '${p.img}', ${p.rating}, ${p.reviews}, '${p.reviewTxt.replace(/'/g, "\\'")}')" class="bg-white dark:bg-gray-800 rounded-3xl p-3 shadow-sm border dark:border-gray-700 flex flex-col relative click-press group stagger-item" style="animation-delay: ${i*0.05}s">
-                    <div class="relative overflow-hidden rounded-2xl mb-3 bg-gray-100 dark:bg-gray-700">
-                        <img src="${p.img}" loading="lazy" class="w-full h-32 object-cover group-hover:scale-105 transition-transform duration-500">
-                        <div class="absolute top-2 left-2 bg-white/90 dark:bg-gray-900/90 backdrop-blur px-2 py-0.5 rounded text-[9px] font-black flex items-center gap-1 shadow-sm"><span class="text-amber-400">★</span> ${p.rating}</div>
-                    </div>
-                    <p class="text-[11px] font-bold px-1 leading-tight mb-1 h-8 overflow-hidden">${p.name}</p>
-                    <div class="flex justify-between items-center px-1 mt-auto pb-1">
-                        <p class="text-green-600 font-black text-[11px]">TZS ${p.price.toLocaleString()}</p>
-                        <div class="w-7 h-7 bg-gray-100 dark:bg-gray-700 rounded-lg flex items-center justify-center font-bold text-lg">+</div>
-                    </div>
-                </div>`;
+            const s = parseInt(localStorage.getItem('ujenzi_total_spend') || '0');
+            document.getElementById('total-project-cost').textContent = `TZS ${s.toLocaleString()}`;
+            document.getElementById('cost-progress').style.width = `${Math.min((s / 5000000) * 100, 100)}%`;
+            const gold = s >= 5000000;
+            document.getElementById('vip-badge').className = gold ? "mt-2 px-3 py-1 rounded-full text-[10px] font-black uppercase bg-gradient-to-r from-yellow-400 to-yellow-600 text-white" : "mt-2 px-3 py-1 rounded-full text-[10px] font-black uppercase bg-gray-200 text-gray-600";
+            document.getElementById('vip-badge').innerHTML = gold ? "👑 Gold Builder" : "Standard Builder";
+            if(gold) document.getElementById('vip-perk-text').classList.remove('hidden'); else document.getElementById('vip-perk-text').classList.add('hidden');
         }
 
         function renderHomeBase() {
             const container = document.getElementById('dynamic-home-content');
-            container.innerHTML = `
-                <section>
-                    <h2 class="text-lg font-bold mb-4 px-1">Categories</h2>
-                    <div class="grid grid-cols-2 gap-4">
-                        ${Object.keys(categoryImages).map((cat, i) => `
-                            <div onclick="openCategory('${cat}')" class="bg-white dark:bg-gray-800 rounded-3xl p-3 shadow-sm border dark:border-gray-700 flex flex-col click-press transition-all stagger-item" style="animation-delay: ${i*0.05}s">
-                                <img src="${categoryImages[cat]}" class="w-full h-24 object-cover rounded-2xl mb-3">
-                                <p class="font-bold text-sm px-1 mb-2">${cat}</p>
-                                <button class="w-full py-2 bg-green-50 dark:bg-green-900/30 text-green-600 dark:text-green-400 rounded-xl text-xs font-bold mt-auto">Explore</button>
-                            </div>
-                        `).join('')}
-                    </div>
-                </section>
-                <section class="mt-4">
-                    <h2 class="text-lg font-bold mb-4 px-1">Featured</h2>
-                    <div class="grid grid-cols-2 gap-4">
-                        ${generateProductCardHTML(productDatabase['Foundation & Structural'][0], 0)}
-                        ${generateProductCardHTML(productDatabase['Roofing Materials'][0], 1)}
-                    </div>
-                </section>`;
+            container.innerHTML = `<section><h2 class="text-lg font-bold mb-4">Categories</h2><div class="grid grid-cols-2 gap-4">${Object.keys(categoryImages).map((cat, i) => `<div onclick="openCategory('${cat}')" class="bg-white dark:bg-gray-800 rounded-3xl p-3 shadow-sm border dark:border-gray-700 flex flex-col click-press stagger-item" style="animation-delay: ${i*0.05}s"><img src="${categoryImages[cat]}" class="w-full h-24 object-cover rounded-2xl mb-3"><p class="font-bold text-sm px-1 mb-2">${cat}</p></div>`).join('')}</div></section><section class="mt-4"><h2 class="text-lg font-bold mb-4">Featured</h2><div class="grid grid-cols-2 gap-4">${generateProductCardHTML(productDatabase['Foundation & Structural'][0], 0)}${generateProductCardHTML(productDatabase['Foundation & Structural'][2], 1)}</div></section>`;
         }
 
-        const catMap = { 'Foundation': 'Foundation & Structural', 'Roofing': 'Roofing Materials', 'Plumbing': 'Plumbing & Water', 'Electrical': 'Electrical & Lighting', 'Finishing': 'Finishing & Painting', 'Tools': 'Tools & Hardware' };
-
-        function openCategory(shortCatName) {
-            const fullCatName = catMap[shortCatName] || shortCatName;
-            const products = productDatabase[fullCatName] || [];
-            const container = document.getElementById('dynamic-home-content');
-            container.innerHTML = `
-                <div class="flex items-center gap-3 mb-4 click-press cursor-pointer" onclick="renderHomeBase()">
-                    <span class="w-8 h-8 bg-white dark:bg-gray-800 rounded-full flex items-center justify-center shadow-sm font-bold border dark:border-gray-700">←</span>
-                    <h2 class="text-xl font-bold">${shortCatName}</h2>
-                </div>
-                <div class="grid grid-cols-2 gap-4">
-                    ${products.map((p, i) => generateProductCardHTML(p, i)).join('')}
-                </div>`;
-            window.scrollTo(0, 0);
+        function generateProductCardHTML(p, i) {
+            return `<div onclick="openProduct('${p.name.replace(/'/g, "\\'")}', '${p.desc.replace(/'/g, "\\'")}', ${p.price}, ${p.wt}, '${p.img}', ${p.rating}, ${p.reviews}, '${p.reviewTxt.replace(/'/g, "\\'")}')" class="bg-white dark:bg-gray-800 rounded-3xl p-3 shadow-sm border dark:border-gray-700 flex flex-col click-press stagger-item" style="animation-delay: ${i*0.05}s"><div class="relative overflow-hidden rounded-2xl mb-3"><img src="${p.img}" loading="lazy" class="w-full h-32 object-cover"><div class="absolute top-2 left-2 bg-white/90 dark:bg-gray-900/90 px-2 py-0.5 rounded text-[9px] font-black"><span class="text-amber-400">★</span> ${p.rating}</div></div><p class="text-[11px] font-bold px-1 h-8 overflow-hidden">${p.name}</p><div class="flex justify-between items-center px-1 mt-auto pb-1"><p class="text-green-600 font-black text-[11px]">TZS ${p.price.toLocaleString()}</p><div class="w-7 h-7 bg-gray-100 dark:bg-gray-700 rounded-lg flex items-center justify-center font-bold text-lg">+</div></div></div>`;
         }
 
-        function openProduct(t, d, p, wt, i, rating, reviews, reviewTxt) {
-            currentModalProduct = { name: t, desc: d, price: p, wt: wt, img: i };
-            document.getElementById('modal-img').src = i;
-            document.getElementById('modal-title').textContent = t;
-            document.getElementById('modal-desc').textContent = d;
-            document.getElementById('modal-rating-text').textContent = `${rating} (${reviews} verified)`;
-            document.getElementById('modal-review-text').textContent = `"${reviewTxt}"`;
-            document.getElementById('modal-price').textContent = `TZS ${p.toLocaleString()}`;
-            document.getElementById('modal-qty').value = 1;
-            
+        function openCategory(s) { const p = productDatabase['Foundation & Structural']; const container = document.getElementById('dynamic-home-content'); container.innerHTML = `<div class="flex items-center gap-3 mb-4 click-press cursor-pointer" onclick="renderHomeBase()"><span class="w-8 h-8 bg-white dark:bg-gray-800 rounded-full flex items-center justify-center font-bold border dark:border-gray-700">←</span><h2 class="text-xl font-bold">${s}</h2></div><div class="grid grid-cols-2 gap-4">${p.map((x, i) => generateProductCardHTML(x, i)).join('')}</div>`; }
+
+        function handleSearch() {
+            const q = document.getElementById('search-input').value.toLowerCase(); const container = document.getElementById('dynamic-home-content');
+            if(!q) { renderHomeBase(); return; }
+            let res = []; Object.values(productDatabase).forEach(cat => cat.forEach(p => { if(p.name.toLowerCase().includes(q)) res.push(p); }));
+            if(res.length === 0) { container.innerHTML = `<p class="text-center py-16 opacity-50">No results for "${q}"</p>`; return; }
+            container.innerHTML = `<h2 class="text-lg font-bold mb-4">Results</h2><div class="grid grid-cols-2 gap-4">${res.map((p, i) => generateProductCardHTML(p, i)).join('')}</div>`;
+        }
+
+        function openProduct(t, d, p, w, i, r, rv, rT) {
+            currentModalProduct = { name: t, desc: d, price: p, wt: w, img: i };
+            document.getElementById('modal-img').src = i; document.getElementById('modal-title').textContent = t; document.getElementById('modal-desc').textContent = d;
+            document.getElementById('modal-rating-text').textContent = `${r} (${rv})`; document.getElementById('modal-review-text').textContent = `"${rT}"`;
+            document.getElementById('modal-price').textContent = `TZS ${p.toLocaleString()}`; document.getElementById('modal-qty').value = 1;
             history.pushState({ modal: 'product' }, '', '#product');
-            
-            const fbtSection = document.getElementById('fbt-section');
-            fbtItem = productDatabase['Tools & Hardware'][0]; 
-            if(t.includes('Cement')) fbtItem = productDatabase['Foundation & Structural'][2]; 
-            
-            if(fbtItem && fbtItem.name !== t) {
-                document.getElementById('fbt-img').src = fbtItem.img;
-                document.getElementById('fbt-title').textContent = fbtItem.name;
-                document.getElementById('fbt-price').textContent = `+ TZS ${fbtItem.price.toLocaleString()}`;
-                document.getElementById('fbt-checkbox').checked = false;
-                fbtSection.classList.remove('hidden');
-            } else fbtSection.classList.add('hidden');
-
-            const modal = document.getElementById('product-modal');
-            modal.classList.remove('hidden');
-            setTimeout(() => document.getElementById('product-sheet').classList.add('open'), 10);
-            
+            const fSec = document.getElementById('fbt-section'); fbtItem = productDatabase['Foundation & Structural'][2];
+            if(fbtItem && fbtItem.name !== t) { document.getElementById('fbt-img').src = fbtItem.img; document.getElementById('fbt-title').textContent = fbtItem.name; document.getElementById('fbt-price').textContent = `+ TZS ${fbtItem.price.toLocaleString()}`; document.getElementById('fbt-checkbox').checked = false; fSec.classList.remove('hidden'); }
+            else fSec.classList.add('hidden');
+            document.getElementById('product-modal').classList.remove('hidden'); setTimeout(() => document.getElementById('product-sheet').classList.add('open'), 10);
             document.getElementById('add-to-cart-btn').onclick = () => {
-                const qty = parseInt(document.getElementById('modal-qty').value);
-                cart.push({ title: t, price: p, wt: wt, qty: qty });
-                if(fbtItem && document.getElementById('fbt-checkbox').checked) {
-                    cart.push({ title: fbtItem.name, price: fbtItem.price, wt: fbtItem.wt, qty: 1 });
-                }
+                const q = parseInt(document.getElementById('modal-qty').value); cart.push({ title: t, price: p, wt: w, qty: q });
+                if(fbtItem && document.getElementById('fbt-checkbox').checked) cart.push({ title: fbtItem.name, price: fbtItem.price, wt: fbtItem.wt, qty: 1 });
                 updateBadge(); closeProduct();
             };
         }
-
-        function closeProduct() { 
-            document.getElementById('product-sheet').classList.remove('open');
-            setTimeout(() => document.getElementById('product-modal').classList.add('hidden'), 300);
-            if(window.location.hash === '#product') history.back();
-        }
-
-        function changeQty(amt) {
-            const input = document.getElementById('modal-qty');
-            let v = parseInt(input.value) + amt;
-            if(v > 0) input.value = v;
-        }
-
-        function updateBadge() { 
-            const b = document.getElementById('cart-badge'); 
-            b.textContent = cart.length; 
-            b.classList.toggle('hidden', cart.length === 0); 
-        }
+        function closeProduct() { document.getElementById('product-sheet').classList.remove('open'); setTimeout(() => document.getElementById('product-modal').classList.add('hidden'), 300); if(window.location.hash === '#product') history.back(); }
+        function changeQty(a) { const i = document.getElementById('modal-qty'); let v = parseInt(i.value) + a; if(v > 0) i.value = v; }
+        function updateBadge() { const b = document.getElementById('cart-badge'); b.textContent = cart.length; b.classList.toggle('hidden', cart.length === 0); }
 
         let transportCost = 0;
         function calculateDelivery() {
-            const zone = parseFloat(document.getElementById('delivery-zone').value);
-            let tw = 0; cart.forEach(i => tw += (i.wt * i.qty));
+            const z = parseFloat(document.getElementById('delivery-zone').value); let tw = 0; cart.forEach(i => tw += (i.wt * i.qty));
             let br = 0; let n = "Store Pickup"; 
-            if(zone > 0) {
-                if(tw <= 50) { br = 10000; n = "Bodaboda"; }
-                else if(tw <= 400) { br = 25000; n = "Bajaji"; }
-                else if(tw <= 2500) { br = 60000; n = "Canter Truck"; }
-                else { br = 150000; n = "Fuso Truck"; }
-            }
-            const isGold = parseInt(localStorage.getItem('ujenzi_total_spend')||'0') >= 5000000;
-            transportCost = br * zone;
-            if(isGold && transportCost > 0) { transportCost *= 0.5; n += " (VIP 50%)"; }
-            
-            document.getElementById('vehicle-name').textContent = n;
-            document.getElementById('transport-cost-display').textContent = zone === 0 ? 'Free' : `TZS ${transportCost.toLocaleString()}`;
-            
+            if(z > 0) { if(tw <= 50) { br = 10000; n = "Bodaboda"; } else if(tw <= 400) { br = 25000; n = "Bajaji"; } else if(tw <= 2500) { br = 60000; n = "Canter"; } else { br = 150000; n = "Fuso"; } }
+            const gold = parseInt(localStorage.getItem('ujenzi_total_spend')||'0') >= 5000000; transportCost = br * z; if(gold && transportCost > 0) { transportCost *= 0.5; n += " (VIP 50%)"; }
+            document.getElementById('vehicle-name').textContent = n; document.getElementById('transport-cost-display').textContent = z === 0 ? 'Free' : `TZS ${transportCost.toLocaleString()}`;
             let sub = 0; cart.forEach(i => sub += (i.price * i.qty));
-            document.getElementById('cart-subtotal').textContent = `TZS ${sub.toLocaleString()}`;
-            document.getElementById('cart-transport').textContent = `TZS ${transportCost.toLocaleString()}`;
+            document.getElementById('cart-subtotal').textContent = `TZS ${sub.toLocaleString()}`; document.getElementById('cart-transport').textContent = `TZS ${transportCost.toLocaleString()}`;
             document.getElementById('cart-total-price').textContent = `TZS ${(sub + transportCost).toLocaleString()}`;
         }
-
         function renderCart() {
-            const c = document.getElementById('cart-items-container');
-            if(cart.length === 0) { c.innerHTML = '<p class="text-center text-gray-400 py-16 font-bold">Your basket is empty.</p>'; document.getElementById('cart-footer').classList.add('hidden'); return; }
-            c.innerHTML = cart.map((i, idx) => `
-                <div class="bg-white dark:bg-gray-800 p-4 rounded-2xl flex justify-between items-center shadow-sm border dark:border-gray-700 stagger-item" style="animation-delay: ${idx*0.05}s">
-                    <div><p class="font-bold text-xs uppercase">${i.title}</p><p class="text-xs text-gray-500 mt-1">${i.qty} units × TZS ${i.price.toLocaleString()}</p></div>
-                    <button onclick="cart.splice(${idx},1);renderCart();updateBadge();" class="w-8 h-8 flex items-center justify-center bg-red-50 dark:bg-red-900/20 text-red-500 rounded-full font-bold click-press">✕</button>
-                </div>`).join('');
-            document.getElementById('cart-footer').classList.remove('hidden');
-            calculateDelivery();
+            const c = document.getElementById('cart-items-container'); if(cart.length === 0) { c.innerHTML = '<p class="text-center py-16">Basket empty.</p>'; document.getElementById('cart-footer').classList.add('hidden'); return; }
+            c.innerHTML = cart.map((i, idx) => `<div class="bg-white dark:bg-gray-800 p-4 rounded-2xl flex justify-between items-center shadow-sm border dark:border-gray-700"><div><p class="font-bold text-xs uppercase">${i.title}</p><p class="text-xs text-gray-400 mt-1">${i.qty} units × ${i.price.toLocaleString()}</p></div><button onclick="cart.splice(${idx},1);renderCart();updateBadge();" class="text-red-500 font-bold px-3">✕</button></div>`).join('');
+            document.getElementById('cart-footer').classList.remove('hidden'); calculateDelivery();
         }
-
         function checkoutWhatsApp() {
-            const u = JSON.parse(localStorage.getItem('ujenzi_user'));
-            let sub = 0; let m = `Habari UjenziSmart! I am ${u.name}.\nI want to order:\n\n`;
-            cart.forEach(i => { m += `- ${i.title} (x${i.qty})\n`; sub += i.price * i.qty; });
-            const sel = document.getElementById('delivery-zone');
-            m += `\nSubtotal: TZS ${sub.toLocaleString()}\nZone: ${sel.options[sel.selectedIndex].text}\nTransport: TZS ${transportCost.toLocaleString()}\n*TOTAL: TZS ${(sub + transportCost).toLocaleString()}*`;
-            localStorage.setItem('ujenzi_total_spend', parseInt(localStorage.getItem('ujenzi_total_spend')||'0') + sub); 
+            const u = JSON.parse(localStorage.getItem('ujenzi_user')); let sub = 0, m = `Habari! I am ${u.name}.\n\n`; cart.forEach(i => { m += `- ${i.title} (x${i.qty})\n`; sub += i.price * i.qty; });
+            m += `\n*TOTAL: TZS ${(sub + transportCost).toLocaleString()}*`; localStorage.setItem('ujenzi_total_spend', parseInt(localStorage.getItem('ujenzi_total_spend')||'0') + sub); 
             window.open(`https://wa.me/${WHATSAPP_NUM}?text=${encodeURIComponent(m)}`, '_blank');
         }
 
         function saveToPhase() {
-            if(!currentModalProduct) return;
-            const phase = document.getElementById('phase-selector').value;
-            let list = JSON.parse(localStorage.getItem('ujenzi_wishlist') || '[]');
-            list.push({ ...currentModalProduct, phase: phase });
-            localStorage.setItem('ujenzi_wishlist', JSON.stringify(list));
-            alert(`Saved to Phase: ${phase}`);
-            closeProduct();
-            if(document.getElementById('view-profile').classList.contains('hidden') === false) updateWishlistCounts();
+            const p = document.getElementById('phase-selector').value; let list = JSON.parse(localStorage.getItem('ujenzi_wishlist') || '[]');
+            list.push({ ...currentModalProduct, phase: p }); localStorage.setItem('ujenzi_wishlist', JSON.stringify(list));
+            alert(`Saved!`); closeProduct(); if(!document.getElementById('view-profile').classList.contains('hidden')) updateWishlistCounts();
         }
-
-        function updateWishlistCounts() {
-            const list = JSON.parse(localStorage.getItem('ujenzi_wishlist') || '[]');
-            document.getElementById('count-foundation').textContent = `${list.filter(x => x.phase === 'Foundation').length} Items`;
-            document.getElementById('count-roofing').textContent = `${list.filter(x => x.phase === 'Roofing').length} Items`;
-            document.getElementById('count-finishing').textContent = `${list.filter(x => x.phase === 'Finishing').length} Items`;
-        }
-
-        function renderWishlistPhase(phase) {
-            const list = JSON.parse(localStorage.getItem('ujenzi_wishlist') || '[]');
-            const items = list.filter(x => x.phase === phase);
-            const container = document.getElementById('wishlist-render-area');
-            if(items.length === 0) { container.innerHTML = `<p class="text-xs text-gray-400 italic mb-6 text-center">No items saved in this phase yet.</p>`; container.classList.remove('hidden'); return; }
-            container.innerHTML = `<div class="mb-4 flex items-center justify-between"><h4 class="font-bold text-sm uppercase tracking-widest text-green-600">${phase} Items</h4><button onclick="document.getElementById('wishlist-render-area').classList.add('hidden')" class="text-xs text-gray-400 font-bold click-press">Close</button></div><div class="grid grid-cols-2 gap-4 mb-6">${items.map(p => `<div class="bg-white dark:bg-gray-800 p-3 rounded-2xl shadow-sm border dark:border-gray-700 animate-slideUpFade"><img src="${p.img}" class="w-full h-20 object-cover rounded-xl mb-2"><p class="text-[9px] font-bold h-6 overflow-hidden">${p.name}</p><p class="text-green-600 font-black text-[10px]">TZS ${p.price.toLocaleString()}</p></div>`).join('')}</div>`;
+        function updateWishlistCounts() { const l = JSON.parse(localStorage.getItem('ujenzi_wishlist') || '[]'); ['Foundation', 'Roofing', 'Finishing'].forEach(p => { document.getElementById(`count-${p.toLowerCase()}`).textContent = `${l.filter(x => x.phase === p).length} Items`; }); }
+        function renderWishlistPhase(p) {
+            const l = JSON.parse(localStorage.getItem('ujenzi_wishlist') || '[]'); const items = l.filter(x => x.phase === p);
+            const container = document.getElementById('wishlist-render-area'); if(items.length === 0) { container.innerHTML = `<p class="text-center py-4 text-xs opacity-50">Empty phase.</p>`; container.classList.remove('hidden'); return; }
+            container.innerHTML = `<div class="mb-4 flex items-center justify-between"><h4 class="font-bold text-sm text-green-600 uppercase">${p}</h4><button onclick="document.getElementById('wishlist-render-area').classList.add('hidden')" class="text-xs opacity-50">Close</button></div><div class="grid grid-cols-2 gap-4">${items.map(i => `<div class="bg-white dark:bg-gray-800 p-3 rounded-2xl shadow-sm border dark:border-gray-700 animate-slideUpFade"><img src="${i.img}" class="w-full h-20 object-cover rounded-xl mb-2"><p class="text-[9px] font-bold h-6 overflow-hidden">${i.name}</p><p class="text-green-600 font-black text-[10px]">TZS ${i.price.toLocaleString()}</p></div>`).join('')}</div>`;
             container.classList.remove('hidden');
         }
 
         function openCalculator() { document.getElementById('calc-modal').classList.remove('hidden'); }
         function closeCalculator() { document.getElementById('calc-modal').classList.add('hidden'); }
         function runCalculation() {
-            const type = document.getElementById('calc-type').value;
-            const L = parseFloat(document.getElementById('calc-l').value);
-            const W = parseFloat(document.getElementById('calc-w').value);
-            if(!L || !W) return;
-            const a = L * W; let r = "";
-            if(type === 'wall') r = `Area: <b>${a}m²</b><br><br>Estimate:<br>• <b>${Math.ceil(a * 12.5)}</b> Concrete Blocks<br>• <b>${Math.ceil((a*12.5) / 30)}</b> Bags of Cement`;
-            else if(type === 'floor') r = `Area: <b>${a}m²</b><br><br>Estimate:<br>• <b>${Math.ceil(a * 6.25)}</b> Tiles (40x40)<br>• <b>${Math.ceil(a/4)}</b> Bags of Tile Adhesive`;
-            else r = `Area: <b>${a}m²</b><br><br>Estimate:<br>• <b>${Math.ceil(a / 2.2)}</b> Iron Sheets (3m)`;
-            const res = document.getElementById('calc-results');
-            res.innerHTML = r; res.classList.remove('hidden');
+            const t = document.getElementById('calc-type').value, L = parseFloat(document.getElementById('calc-l').value), W = parseFloat(document.getElementById('calc-w').value);
+            if(!L || !W) return; const a = L * W; let r = "";
+            if(t === 'wall') r = `Area: ${a}m²\n• ${Math.ceil(a * 12.5)} Blocks\n• ${Math.ceil((a*12.5) / 30)} Cement Bags`;
+            else if(t === 'floor') r = `Area: ${a}m²\n• ${Math.ceil(a * 6.25)} Tiles\n• ${Math.ceil(a/4)} Adhesive Bags`;
+            else r = `Area: ${a}m²\n• ${Math.ceil(a / 2.2)} Sheets`;
+            const res = document.getElementById('calc-results'); res.innerText = r; res.classList.remove('hidden');
         }
 
-        const chatModal = document.getElementById('chat-modal'), chatBox = document.getElementById('chat-box');
-        document.getElementById('material-expert-btn').onclick = () => { 
-            history.pushState({ modal: 'chat' }, '', '#chat');
-            chatModal.classList.remove('hidden'); 
-            setTimeout(() => document.getElementById('chat-sheet').classList.add('open'), 10);
-        };
-        document.getElementById('close-chat').onclick = () => { 
-            document.getElementById('chat-sheet').classList.remove('open');
-            setTimeout(() => chatModal.classList.add('hidden'), 300);
-            if(window.location.hash === '#chat') history.back();
-        };
+        function openAiHub() { history.pushState({ modal: 'ai-hub' }, '', '#ai-hub'); document.getElementById('ai-hub-modal').classList.remove('hidden'); setTimeout(() => document.getElementById('ai-hub-sheet').classList.add('open'), 10); }
+        function closeAiHub() { document.getElementById('ai-hub-sheet').classList.remove('open'); setTimeout(() => document.getElementById('ai-hub-modal').classList.add('hidden'), 300); if(window.location.hash === '#ai-hub') history.back(); }
+        function switchAiTab(tab) {
+            document.getElementById('ai-content-chat').classList.add('hidden'); document.getElementById('ai-content-calc').classList.add('hidden');
+            document.getElementById('tab-chat').classList.replace('text-green-600','text-gray-500'); document.getElementById('tab-chat').classList.remove('border-green-600','border-b-2');
+            document.getElementById('tab-calc').classList.replace('text-green-600','text-gray-500'); document.getElementById('tab-calc').classList.remove('border-green-600','border-b-2');
+            document.getElementById(`ai-content-${tab}`).classList.remove('hidden'); document.getElementById(`tab-${tab}`).classList.replace('text-gray-500','text-green-600'); document.getElementById(`tab-${tab}`).classList.add('border-green-600','border-b-2');
+        }
+
+        const chatBox = document.getElementById('chat-box');
         async function sendMessage() {
-            const input = document.getElementById('chat-input');
-            const txt = input.value.trim(); if(!txt) return;
-            chatBox.innerHTML += `<div class="p-3 bg-green-600 text-white rounded-2xl rounded-tr-none ml-auto max-w-[85%] text-sm shadow-md animate-stagger-in">${txt}</div>`;
-            input.value = '';
-            const loaderId = 'ai-loader-' + Date.now();
-            chatBox.innerHTML += `<div id="${loaderId}" class="p-4 bg-white dark:bg-gray-800 border dark:border-gray-700 rounded-2xl rounded-tl-none mr-auto w-[60%] skeleton h-10"></div>`;
-            chatBox.scrollTop = chatBox.scrollHeight;
+            const input = document.getElementById('chat-input'), txt = input.value.trim(); if(!txt) return;
+            chatBox.innerHTML += `<div class="p-3 bg-green-600 text-white rounded-2xl rounded-tr-none ml-auto max-w-[85%] text-sm shadow-md animate-stagger-in">${txt}</div>`; input.value = '';
+            const loaderId = 'ai-loader-' + Date.now(); chatBox.innerHTML += `<div id="${loaderId}" class="p-4 bg-white dark:bg-gray-800 border dark:border-gray-700 rounded-2xl rounded-tl-none mr-auto w-[60%] skeleton h-10"></div>`; chatBox.scrollTop = chatBox.scrollHeight;
             try {
-                const res = await fetch(`${RENDER_URL}/api/chat`, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ message: txt }) });
-                const d = await res.json();
-                document.getElementById(loaderId).remove();
-                chatBox.innerHTML += `<div class="p-4 bg-white dark:bg-gray-800 border dark:border-gray-700 rounded-2xl rounded-tl-none mr-auto max-w-[85%] text-sm font-medium leading-relaxed animate-stagger-in">${d.reply || "Error connecting to AI."}</div>`;
-            } catch(e) { 
-                document.getElementById(loaderId).remove(); 
-                chatBox.innerHTML += `<div class="p-4 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 rounded-2xl rounded-tl-none mr-auto text-sm">Offline. Please use WhatsApp support.</div>`;
-            }
+                const res = await fetch(`${RENDER_URL}/api/chat`, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ message: txt }) }); const d = await res.json();
+                document.getElementById(loaderId).remove(); chatBox.innerHTML += `<div class="p-4 bg-white dark:bg-gray-800 border dark:border-gray-700 rounded-2xl rounded-tl-none mr-auto max-w-[85%] text-sm font-medium leading-relaxed">${d.reply || "Error."}</div>`;
+            } catch(e) { document.getElementById(loaderId).remove(); chatBox.innerHTML += `<div class="p-4 bg-red-50 text-red-600 rounded-2xl rounded-tl-none mr-auto text-xs">Offline.</div>`; }
             chatBox.scrollTop = chatBox.scrollHeight;
         }
-        document.getElementById('send-btn').onclick = sendMessage;
 
         checkAuth();
     </script>
@@ -907,85 +426,33 @@
         import { getAuth, GoogleAuthProvider, signInWithRedirect, getRedirectResult } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
         import { getMessaging, getToken } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-messaging.js";
         
-        const firebaseConfig = { 
-            apiKey: "AIzaSyCX2C1TXRb20nGtxEaYXGUo2KEH7gbZCY0", 
-            authDomain: "ujenzismart-878af.firebaseapp.com", 
-            projectId: "ujenzismart-878af", 
-            storageBucket: "ujenzismart-878af.firebasestorage.app", 
-            messagingSenderId: "626807014511", 
-            appId: "1:626807014511:web:844e137d32048d6460399a",
-            measurementId: "G-V8C9KKGKFY"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const provider = new GoogleAuthProvider();
-        const messaging = getMessaging(app);
-
-        // Handle Redirect Result (This is what catches the user when Google sends them back)
-        getRedirectResult(auth).then((result) => {
-            if (result) {
-                localStorage.setItem('ujenzi_user', JSON.stringify({ 
-                    name: result.user.displayName, 
-                    email: result.user.email,
-                    photoURL: result.user.photoURL // Crucial fix for Profile Picture
-                }));
+        const firebaseConfig = { apiKey: "AIzaSyCX2C1TXRb20nGtxEaYXGUo2KEH7gbZCY0", authDomain: "ujenzismart-878af.firebaseapp.com", projectId: "ujenzismart-878af", storageBucket: "ujenzismart-878af.firebasestorage.app", messagingSenderId: "626807014511", appId: "1:626807014511:web:844e137d32048d6460399a", measurementId: "G-V8C9KKGKFY" };
+        const app = initializeApp(firebaseConfig), auth = getAuth(app), provider = new GoogleAuthProvider(), messaging = getMessaging(app);
+        
+        getRedirectResult(auth).then((res) => { 
+            if (res) { 
+                localStorage.setItem('ujenzi_user', JSON.stringify({ name: res.user.displayName, email: res.user.email, photoURL: res.user.photoURL })); 
                 location.reload(); 
-            }
-        }).catch((error) => {
-            alert("Login Error: " + error.message);
-        });
+            } 
+        }).catch((e) => { console.error(e); });
 
-        // Trigger the safe redirect on button click
-        document.getElementById('google-signin-btn').onclick = () => {
-            const btn = document.getElementById('google-signin-btn');
-            btn.innerHTML = "⏳ Redirecting securely...";
-            signInWithRedirect(auth, provider);
+        document.getElementById('google-signin-btn').onclick = () => { 
+            document.getElementById('google-signin-btn').innerHTML = "⏳ Connecting..."; 
+            signInWithRedirect(auth, provider); 
         };
 
-        // --- PUSH NOTIFICATIONS LOGIC ---
         window.toggleNotifications = async function() {
             const toggle = document.getElementById('notif-toggle');
-            const userStr = localStorage.getItem('ujenzi_user');
-            
-            if (!userStr) {
-                alert("Please sign in first!");
-                toggle.checked = false;
-                return;
-            }
-            
             if (toggle.checked) {
                 try {
-                    const permission = await Notification.requestPermission();
-                    if (permission === 'granted') {
-                        // FIX: Tell Firebase exactly where the file is on GitHub Pages
-                        const registration = await navigator.serviceWorker.register('/UjenziSmart/firebase-messaging-sw.js');
-                        
-                        const token = await getToken(messaging, { 
-                            vapidKey: "BJJl5bm8iK4BOMzJ-OGkMELrR1ub_Z0HXQKsJ7pBa2oXtGlwzbBSPrGsnRoJEcLna9KfJ6vgNhvDejOfA02khro",
-                            serviceWorkerRegistration: registration
-                        });
-                        
-                        if (token) {
-                            console.log("FCM Token:", token);
-                            localStorage.setItem('ujenzi_notif', 'true');
-                            alert("Notifications enabled successfully!");
-                        } else {
-                            alert("Failed to get push token.");
-                            toggle.checked = false;
-                        }
-                    } else {
-                        alert("Permission denied by browser.");
-                        toggle.checked = false;
-                    }
-                } catch (error) {
-                    console.error("Error setting up notifications:", error);
-                    alert("Error: Make sure firebase-messaging-sw.js is uploaded to your GitHub repository.");
-                    toggle.checked = false;
-                }
-            } else {
-                localStorage.setItem('ujenzi_notif', 'false');
-            }
+                    const p = await Notification.requestPermission();
+                    if (p === 'granted') {
+                        const reg = await navigator.serviceWorker.register('/UjenziSmart/firebase-messaging-sw.js');
+                        const tok = await getToken(messaging, { vapidKey: "BJJl5bm8iK4BOMzJ-OGkMELrR1ub_Z0HXQKsJ7pBa2oXtGlwzbBSPrGsnRoJEcLna9KfJ6vgNhvDejOfA02khro", serviceWorkerRegistration: reg });
+                        if (tok) { localStorage.setItem('ujenzi_notif', 'true'); alert("Notifications Enabled!"); }
+                    } else { toggle.checked = false; }
+                } catch (e) { alert("Enable failed. Ensure SW file exists."); toggle.checked = false; }
+            } else { localStorage.setItem('ujenzi_notif', 'false'); }
         };
     </script>
 </body>
