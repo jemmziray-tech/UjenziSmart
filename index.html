@@ -37,9 +37,13 @@
         @keyframes growUp { from { transform: scaleY(0); } to { transform: scaleY(1); } }
         .bottom-sheet { transition: transform 0.3s cubic-bezier(0.32, 1.25, 0.32, 1); transform: translateY(100%); }
         .bottom-sheet.open { transform: translateY(0); }
+        .toggle-checkbox:checked { right: 0; border-color: #10b981; }
+        .toggle-checkbox:checked + .toggle-label { background-color: #10b981; }
+        .toggle-checkbox { right: 4px; z-index: 1; border-color: #e5e7eb; transition: all 0.3s; }
+        .toggle-label { width: 3rem; height: 1.5rem; background-color: #e5e7eb; border-radius: 9999px; transition: all 0.3s; }
     </style>
 </head>
-<body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 pb-20 transition-colors duration-300 relative">
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 pb-24 transition-colors duration-300 relative">
 
     <div id="auth-screen" class="fixed inset-0 z-[200] bg-gray-50 dark:bg-gray-900 flex flex-col justify-center px-6">
         <div class="max-w-md mx-auto w-full bg-white dark:bg-gray-800 p-8 rounded-[2.5rem] shadow-2xl border dark:border-gray-700 text-center animate-stagger-in">
@@ -87,7 +91,7 @@
                 </button>
             </div>
             <div class="relative stagger-item">
-                <input type="text" id="search-input" onkeyup="handleSearch()" placeholder="Search cement, tiles, iron sheets..." class="w-full bg-white dark:bg-gray-800 border dark:border-gray-700 rounded-2xl px-12 py-4 shadow-sm outline-none focus:ring-2 focus:ring-green-500 font-bold text-xs text-gray-700 dark:text-gray-100 placeholder-gray-400">
+                <input type="text" id="search-input" onkeyup="handleSearch()" placeholder="Search cement, tiles..." class="w-full bg-white dark:bg-gray-800 border dark:border-gray-700 rounded-2xl px-12 py-4 shadow-sm outline-none focus:ring-2 focus:ring-green-500 font-bold text-xs text-gray-700 dark:text-gray-100 placeholder-gray-400">
                 <span class="absolute left-4 top-[14px] text-lg opacity-50">🔍</span>
             </div>
             <div id="dynamic-home-content" class="flex flex-col gap-8"></div>
@@ -98,16 +102,25 @@
                 <h2 class="text-3xl font-black tracking-tighter">Market Watch</h2>
                 <span class="text-[10px] font-black text-red-500 uppercase tracking-widest mb-1 flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span> Live</span>
             </div>
-            <div onclick="openProduct('Simba Cement 50kg', 'Grade 42.5R high-strength.', 18500, 50, 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=600', 4.9, 342, 'Excellent quality.')" class="bg-white dark:bg-gray-800 rounded-[2.5rem] overflow-hidden shadow-xl border dark:border-gray-700 stagger-item click-press group">
-                <div class="relative h-48 overflow-hidden"><img src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=600" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"><div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
-                    <div class="absolute bottom-4 left-4 text-white"><span class="bg-green-500 text-white text-[9px] font-black px-2 py-1 rounded-md uppercase mb-2 inline-block shadow-lg">#1 Best Seller</span><h3 class="font-black text-xl leading-tight">Simba Cement 50kg</h3></div>
-                    <div class="absolute top-4 right-4 bg-white/90 glass text-gray-900 text-[10px] font-black px-3 py-1 rounded-full flex items-center gap-1 shadow-lg"><span class="text-green-600">▼</span> -2% this week</div>
+            <div onclick="openProduct('Simba Cement 50kg', 'Grade 42.5R high-strength cement.', 18500, 50, 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=600', 4.9, 342, 'Excellent quality.')" class="bg-white dark:bg-gray-800 rounded-[2.5rem] overflow-hidden shadow-xl border dark:border-gray-700 stagger-item click-press group">
+                <div class="relative h-48 overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=600" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
+                    <div class="absolute bottom-4 left-4 text-white">
+                        <span class="bg-green-500 text-white text-[9px] font-black px-2 py-1 rounded-md uppercase mb-2 inline-block shadow-lg">#1 Best Seller</span>
+                        <h3 class="font-black text-xl leading-tight">Simba Cement 50kg</h3>
+                    </div>
+                    <div class="absolute top-4 right-4 bg-white/90 glass text-gray-900 text-[10px] font-black px-3 py-1 rounded-full flex items-center gap-1 shadow-lg">
+                        <span class="text-green-600">▼</span> -2% this week
+                    </div>
                 </div>
                 <div class="p-5 flex justify-between items-end">
                     <div><p class="text-[10px] text-gray-400 font-bold uppercase mb-1">Current Price</p><p class="text-green-600 font-black text-xl">TZS 18,500</p></div>
                     <div class="flex items-end gap-1 h-8">
-                        <div class="w-2 bg-gray-200 dark:bg-gray-700 rounded-t-sm h-[60%] bar-grow"></div><div class="w-2 bg-gray-200 dark:bg-gray-700 rounded-t-sm h-[80%] bar-grow"></div>
-                        <div class="w-2 bg-gray-200 dark:bg-gray-700 rounded-t-sm h-[100%] bar-grow"></div><div class="w-2 bg-green-500 rounded-t-sm h-[70%] bar-grow"></div>
+                        <div class="w-2 bg-gray-200 dark:bg-gray-700 rounded-t-sm h-[60%] bar-grow"></div>
+                        <div class="w-2 bg-gray-200 dark:bg-gray-700 rounded-t-sm h-[80%] bar-grow"></div>
+                        <div class="w-2 bg-gray-200 dark:bg-gray-700 rounded-t-sm h-[100%] bar-grow"></div>
+                        <div class="w-2 bg-green-500 rounded-t-sm h-[70%] bar-grow"></div>
                     </div>
                 </div>
             </div>
@@ -119,14 +132,13 @@
             <div id="cart-footer" class="hidden">
                 <div class="bg-white dark:bg-gray-800 rounded-3xl p-5 border dark:border-gray-700 shadow-md mb-6 relative overflow-hidden">
                     <div class="absolute -right-4 -top-4 opacity-5 text-6xl">🚚</div>
-                    <h3 class="font-black text-sm mb-1">Smart Delivery Estimator</h3>
-                    <p class="text-[10px] text-gray-400 mb-4 font-bold">Dar Es Salaam Zone</p>
+                    <h3 class="font-black text-sm mb-1">Delivery Estimator</h3>
                     <select id="delivery-zone" onchange="calculateDelivery()" class="w-full bg-gray-50 dark:bg-gray-900 border dark:border-gray-700 rounded-xl px-4 py-3 outline-none font-bold text-xs mb-4">
-                        <option value="0">Self Pickup (Store Collection)</option><option value="1">Tegeta / Boko / Bunju</option>
+                        <option value="0">Self Pickup</option><option value="1">Tegeta / Boko / Bunju</option>
                         <option value="1.2">Mbezi / Kimara</option><option value="1.5">Kigamboni</option><option value="0.8">Kinondoni / Posta</option>
                     </select>
                     <div id="delivery-result-box" class="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-xl border border-blue-100 dark:border-blue-800 flex items-center justify-between">
-                        <div class="flex items-center gap-3"><span id="vehicle-icon" class="text-2xl">🏪</span><div><p class="text-[10px] font-black uppercase text-blue-800 dark:text-blue-300">Method</p><p class="text-sm font-black dark:text-white" id="vehicle-name">Store Pickup</p></div></div>
+                        <div class="flex items-center gap-3"><span id="vehicle-icon" class="text-2xl">🏪</span><p class="text-sm font-black dark:text-white" id="vehicle-name">Store Pickup</p></div>
                         <span class="text-lg font-black text-blue-900 dark:text-white" id="transport-cost-display">Free</span>
                     </div>
                 </div>
@@ -149,45 +161,45 @@
                 <h2 id="p-name" class="text-xl font-black dark:text-white">User</h2>
                 <div id="vip-badge" class="mt-2 px-3 py-1 rounded-full text-[10px] font-black uppercase bg-gray-200 text-gray-600">Standard Builder</div>
             </div>
-            <div id="tracker-card" class="bg-gray-900 text-white p-6 rounded-[2.5rem] shadow-2xl mb-8 relative overflow-hidden stagger-item">
+            <div id="tracker-card" class="bg-gray-900 text-white p-6 rounded-[2.5rem] shadow-2xl mb-8 relative overflow-hidden">
                 <div class="relative z-10"><p class="text-[10px] uppercase font-black opacity-60">Project Spend</p><h3 id="total-project-cost" class="text-3xl font-black mb-4">TZS 0</h3>
                     <div class="w-full bg-white/10 h-2 rounded-full overflow-hidden"><div id="cost-progress" class="bg-green-500 h-full transition-all duration-1000" style="width: 5%"></div></div>
                 </div>
                 <div class="absolute -right-4 -bottom-4 text-white/5 text-8xl font-black italic">COST</div>
             </div>
             <h3 class="font-black text-lg mb-4 px-2">Project Phases</h3>
-            <div class="grid grid-cols-3 gap-3 mb-8 stagger-item">
-                <div class="bg-white dark:bg-gray-800 p-4 rounded-[1.5rem] border dark:border-gray-700 shadow-sm click-press flex flex-col items-center text-center" onclick="renderWishlistPhase('Foundation')"><div class="text-2xl mb-1">🏗️</div><p class="font-black text-[10px]">Phase 1</p><p class="text-[9px] text-green-500 font-black mt-2" id="count-foundation">0 Items</p></div>
-                <div class="bg-white dark:bg-gray-800 p-4 rounded-[1.5rem] border dark:border-gray-700 shadow-sm click-press flex flex-col items-center text-center" onclick="renderWishlistPhase('Roofing')"><div class="text-2xl mb-1">🏠</div><p class="font-black text-[10px]">Phase 2</p><p class="text-[9px] text-green-500 font-black mt-2" id="count-roofing">0 Items</p></div>
-                <div class="bg-white dark:bg-gray-800 p-4 rounded-[1.5rem] border dark:border-gray-700 shadow-sm click-press flex flex-col items-center text-center" onclick="renderWishlistPhase('Finishing')"><div class="text-2xl mb-1">🎨</div><p class="font-black text-[10px]">Phase 3</p><p class="text-[9px] text-green-500 font-black mt-2" id="count-finishing">0 Items</p></div>
+            <div class="grid grid-cols-3 gap-3 mb-8">
+                <div class="bg-white dark:bg-gray-800 p-4 rounded-[1.5rem] border shadow-sm click-press flex flex-col items-center text-center" onclick="renderWishlistPhase('Foundation')"><div class="text-2xl mb-1">🏗️</div><p class="font-black text-[10px]">Phase 1</p><p class="text-[9px] text-green-500 font-black mt-1" id="count-foundation">0 Items</p></div>
+                <div class="bg-white dark:bg-gray-800 p-4 rounded-[1.5rem] border shadow-sm click-press flex flex-col items-center text-center" onclick="renderWishlistPhase('Roofing')"><div class="text-2xl mb-1">🏠</div><p class="font-black text-[10px]">Phase 2</p><p class="text-[9px] text-green-500 font-black mt-1" id="count-roofing">0 Items</p></div>
+                <div class="bg-white dark:bg-gray-800 p-4 rounded-[1.5rem] border shadow-sm click-press flex flex-col items-center text-center" onclick="renderWishlistPhase('Finishing')"><div class="text-2xl mb-1">🎨</div><p class="font-black text-[10px]">Phase 3</p><p class="text-[9px] text-green-500 font-black mt-1" id="count-finishing">0 Items</p></div>
             </div>
             <div id="wishlist-render-area" class="mb-8 hidden"></div>
-            <div class="bg-white dark:bg-gray-800 rounded-[2.5rem] p-1 border dark:border-gray-700 shadow-sm">
+            <div class="bg-white dark:bg-gray-800 rounded-[2.5rem] p-1 border shadow-sm">
                 <div class="flex items-center justify-between p-5 border-b dark:border-gray-700">
                     <div class="flex items-center gap-4"><span class="text-xl">🔔</span><span class="font-bold text-sm">Notifications</span></div>
-                    <div class="relative inline-block w-12 align-middle select-none transition duration-200 ease-in"><input type="checkbox" id="notif-toggle" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer" onclick="toggleNotifications()"/><label for="notif-toggle" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"></label></div>
+                    <div class="relative inline-block w-12 align-middle select-none transition duration-200 ease-in"><input type="checkbox" id="notif-toggle" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer" onclick="window.toggleNotifications()"/><label for="notif-toggle" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"></label></div>
                 </div>
-                <button onclick="navigateTo('cs')" class="w-full flex items-center justify-between p-5 border-b dark:border-gray-700"><div class="flex items-center gap-4"><span class="text-xl">🎧</span><span class="font-bold text-sm">Customer Support</span></div><span class="text-gray-400 text-xl">›</span></button>
-                <button onclick="navigateTo('legal')" class="w-full flex items-center justify-between p-5 border-b dark:border-gray-700"><div class="flex items-center gap-4"><span class="text-xl">📜</span><span class="font-bold text-sm">Legal & Policies</span></div><span class="text-gray-400 text-xl">›</span></button>
-                <button onclick="localStorage.removeItem('ujenzi_user'); location.reload();" class="w-full flex items-center gap-4 p-5 text-red-500 rounded-b-[2.5rem]"><span class="text-xl">🚪</span><span class="font-bold text-sm">Logout</span></button>
+                <button onclick="navigateTo('cs')" class="w-full flex items-center justify-between p-5 border-b dark:border-gray-700 text-left"><div class="flex items-center gap-4"><span class="text-xl">🎧</span><span class="font-bold text-sm">Customer Support</span></div><span class="text-gray-400 text-xl">›</span></button>
+                <button onclick="navigateTo('legal')" class="w-full flex items-center justify-between p-5 border-b dark:border-gray-700 text-left"><div class="flex items-center gap-4"><span class="text-xl">📜</span><span class="font-bold text-sm">Legal & Policies</span></div><span class="text-gray-400 text-xl">›</span></button>
+                <button onclick="localStorage.removeItem('ujenzi_user'); location.reload();" class="w-full flex items-center gap-4 p-5 text-red-500 text-left rounded-b-[2.5rem]"><span class="text-xl">🚪</span><span class="font-bold text-sm">Logout</span></button>
             </div>
         </div>
 
-        <div id="view-cs" class="view-content hidden"><div class="bg-white dark:bg-gray-800 p-8 rounded-[2.5rem] border shadow-xl text-center mt-4"><div class="text-6xl mb-4">🎧</div><h2 class="text-2xl font-black mb-2">Help Center</h2><p class="text-sm text-gray-500 mb-8 font-medium">Available Mon-Sat, 8AM-6PM (EAT).</p><a href="https://wa.me/255743924467" class="flex items-center justify-center gap-3 w-full py-5 bg-[#25D366] text-white rounded-2xl font-black mb-4 click-press shadow-md">Chat on WhatsApp</a></div></div>
-        <div id="view-legal" class="view-content hidden"><div class="bg-white dark:bg-gray-800 p-8 rounded-[2.5rem] border shadow-xl mt-4"><h3 class="font-black text-xl mb-3 text-green-600">Policies</h3><p class="text-sm text-gray-500 font-medium leading-relaxed">Prices are subject to market changes. Delivery is zone-based.</p></div></div>
+        <div id="view-cs" class="view-content hidden"><div class="bg-white dark:bg-gray-800 p-8 rounded-[2.5rem] border shadow-xl text-center"><div class="text-6xl mb-4">🎧</div><h2 class="text-2xl font-black mb-2">Help Center</h2><p class="text-sm text-gray-500 mb-8">Available Mon-Sat, 8AM-6PM (EAT).</p><a href="https://wa.me/255743924467" class="flex items-center justify-center gap-3 w-full py-5 bg-[#25D366] text-white rounded-2xl font-black shadow-md">Chat on WhatsApp</a></div></div>
+        <div id="view-legal" class="view-content hidden"><div class="bg-white dark:bg-gray-800 p-8 rounded-[2.5rem] border shadow-xl"><h3 class="font-black text-xl mb-3 text-green-600">Policies</h3><p class="text-sm text-gray-500 leading-relaxed font-medium">Prices are subject to change. Order confirmed upon WhatsApp manual verification.</p></div></div>
     </div>
 
     <div id="product-modal" class="fixed inset-0 z-[150] hidden bg-black/60 flex items-end justify-center transition-opacity backdrop-blur-sm">
         <div id="product-sheet" class="bg-white dark:bg-gray-900 w-full max-w-md rounded-t-[2.5rem] overflow-hidden shadow-2xl flex flex-col max-h-[92vh] bottom-sheet">
-            <div class="relative shrink-0"><img id="modal-img" src="" class="w-full h-48 object-cover"><button onclick="closeProduct()" class="absolute top-4 right-4 w-10 h-10 bg-black/40 text-white rounded-full flex items-center justify-center font-bold backdrop-blur-md">✕</button></div>
+            <div class="relative shrink-0"><img id="modal-img" src="" class="w-full h-48 object-cover"><button onclick="closeProduct()" class="absolute top-4 right-4 w-10 h-10 bg-black/40 text-white rounded-full flex items-center justify-center font-bold click-press">✕</button></div>
             <div class="p-6 overflow-y-auto shrink-1 hide-scrollbar">
                 <h3 id="modal-title" class="text-2xl font-black mb-1 leading-tight"></h3>
                 <div class="flex items-center gap-2 mb-3"><div class="flex text-amber-400 text-sm">★★★★★</div><span id="modal-rating-text" class="text-xs text-gray-500 font-bold"></span></div>
                 <p id="modal-desc" class="text-gray-500 dark:text-gray-400 text-xs mb-4 leading-relaxed"></p>
-                <div class="bg-gray-50 dark:bg-gray-800 p-4 rounded-2xl mb-4 border dark:border-gray-700 shadow-inner"><p class="text-[9px] text-green-600 font-black uppercase mb-1">✓ Verified Review</p><p id="modal-review-text" class="text-xs italic dark:text-gray-300 font-medium"></p></div>
-                <div id="fbt-section" class="mb-5 hidden"><p class="text-[10px] text-gray-400 font-black uppercase mb-2">Frequently Bought Together</p><div class="flex items-center gap-3 bg-blue-50 dark:bg-blue-900/20 p-3 rounded-2xl border border-blue-100 dark:border-blue-800"><img id="fbt-img" src="" class="w-12 h-12 rounded-xl object-cover border dark:border-gray-700"><div class="flex-grow"><p id="fbt-title" class="text-xs font-bold dark:text-white leading-tight"></p><p id="fbt-price" class="text-[10px] text-green-600 font-black mt-1"></p></div><input type="checkbox" id="fbt-checkbox" class="w-5 h-5 accent-green-500 rounded border-gray-300"></div></div>
-                <div class="flex justify-between items-center mb-5 border-t border-b dark:border-gray-700 py-5"><span id="modal-price" class="text-2xl font-black text-green-600"></span><div class="flex items-center bg-gray-100 dark:bg-gray-800 rounded-xl p-1 border dark:border-gray-700 shadow-inner"><button onclick="changeQty(-1)" class="w-10 h-10 flex items-center justify-center font-black text-gray-500 text-lg click-press">-</button><input type="number" id="modal-qty" value="1" min="1" class="w-12 bg-transparent text-center font-black outline-none pointer-events-none text-lg"><button onclick="changeQty(1)" class="w-10 h-10 flex items-center justify-center font-black text-gray-500 text-lg click-press">+</button></div></div>
-                <div class="flex gap-2 mb-6"><select id="phase-selector" class="flex-grow bg-gray-50 dark:bg-gray-800 border dark:border-gray-700 rounded-2xl px-3 outline-none text-[10px] font-bold"><option value="Foundation">Phase 1: Foundation</option><option value="Roofing">Phase 2: Roofing</option><option value="Finishing">Phase 3: Finishing</option></select><button onclick="saveToPhase()" class="px-4 py-3 bg-blue-50 dark:bg-blue-900/20 text-blue-600 rounded-2xl font-black text-[10px] uppercase">Save 📌</button></div>
+                <div class="bg-gray-50 dark:bg-gray-800 p-4 rounded-2xl mb-4 border shadow-inner"><p class="text-[9px] text-green-600 font-black uppercase mb-1">✓ Verified Review</p><p id="modal-review-text" class="text-xs italic font-medium"></p></div>
+                <div id="fbt-section" class="mb-5 hidden"><p class="text-[10px] text-gray-400 font-black uppercase mb-2">Frequently Bought Together</p><div class="flex items-center gap-3 bg-blue-50 dark:bg-blue-900/20 p-3 rounded-2xl border border-blue-100 dark:border-blue-800"><img id="fbt-img" src="" class="w-12 h-12 rounded-xl object-cover"><div class="flex-grow"><p id="fbt-title" class="text-xs font-bold leading-tight"></p><p id="fbt-price" class="text-[10px] text-green-600 font-black mt-1"></p></div><input type="checkbox" id="fbt-checkbox" class="w-5 h-5 accent-green-500 rounded"></div></div>
+                <div class="flex justify-between items-center mb-5 border-t border-b dark:border-gray-700 py-5"><span id="modal-price" class="text-2xl font-black text-green-600"></span><div class="flex items-center bg-gray-100 dark:bg-gray-800 rounded-xl p-1 border shadow-inner"><button onclick="changeQty(-1)" class="w-10 h-10 flex items-center justify-center font-black text-gray-500 text-lg click-press">-</button><input type="number" id="modal-qty" value="1" min="1" class="w-12 bg-transparent text-center font-black text-lg outline-none pointer-events-none"><button onclick="changeQty(1)" class="w-10 h-10 flex items-center justify-center font-black text-gray-500 text-lg click-press">+</button></div></div>
+                <div class="flex gap-2 mb-6"><select id="phase-selector" class="flex-grow bg-gray-50 dark:bg-gray-800 border rounded-2xl px-3 outline-none text-[10px] font-bold"><option value="Foundation">Phase 1: Foundation</option><option value="Roofing">Phase 2: Roofing</option><option value="Finishing">Phase 3: Finishing</option></select><button onclick="saveToPhase()" class="px-4 py-3 bg-blue-50 dark:bg-blue-900/20 text-blue-600 rounded-2xl font-black text-[10px] uppercase">Save 📌</button></div>
                 <button id="add-to-cart-btn" class="w-full py-5 bg-green-500 text-white rounded-[2rem] font-black text-sm uppercase shadow-lg click-press">Add to Basket</button>
             </div>
         </div>
@@ -195,13 +207,13 @@
 
     <div id="ai-hub-modal" class="fixed inset-0 z-[150] hidden bg-black/60 flex items-end justify-center transition-opacity backdrop-blur-sm">
         <div id="ai-hub-sheet" class="bg-white dark:bg-gray-900 w-full max-w-md h-[85vh] rounded-t-[2.5rem] flex flex-col overflow-hidden shadow-2xl bottom-sheet">
-            <div class="bg-gray-900 p-5 flex justify-between items-center text-white shrink-0"><div class="flex items-center gap-3"><div class="bg-gradient-to-tr from-green-400 to-blue-500 p-2 rounded-xl shadow-inner"><svg viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5"><path fill-rule="evenodd" d="M9 4.5a.75.75 0 0 1 .721.544l.813 2.846a3.75 3.75 0 0 0 2.576 2.576l2.846.813a.75.75 0 0 1 0 1.442l-2.846.813a3.75 3.75 0 0 0-2.576 2.576l-.813 2.846a.75.75 0 0 1-1.442 0l-.813-2.846a3.75 3.75 0 0 0-2.576-2.576l-2.846-.813a.75.75 0 0 1 0-1.442l2.846-.813A3.75 3.75 0 0 0 7.466 7.89l.813-2.846A.75.75 0 0 1 9 4.5ZM18 1.5a.75.75 0 0 1 .728.568l.258 1.036c.236.94.97 1.674 1.91 1.906l1.036.258a.75.75 0 0 1 0 1.45l-1.037.259a3.003 3.003 0 0 0-1.91 1.906l-.258 1.036a.75.75 0 0 1-1.455 0l-.258-1.036a3.003 3.003 0 0 0-1.91-1.906l-1.036-.259a.75.75 0 0 1 0-1.45l1.036-.258a3.003 3.003 0 0 0 1.91-1.906l.258-1.036A.75.75 0 0 1 18 1.5ZM16.5 15a.75.75 0 0 1 .712.513l.394 1.183c.15.447.5.799.948.948l1.183.395a.75.75 0 0 1 0 1.422l-1.183.395c-.447.15-.799.5-.948.948l-.395 1.183a.75.75 0 0 1-1.422 0l-.395-1.183a1.5 1.5 0 0 0-.948-.948l-1.183-.395a.75.75 0 0 1 0-1.422l1.183-.395c.447-.15.799-.5.948-.948l.395-1.183A.75.75 0 0 1 16.5 15Z" clip-rule="evenodd" /></svg></div><div><h2 class="font-black text-sm leading-tight">AI Construction Hub</h2><p class="text-[9px] text-gray-400 font-bold uppercase tracking-widest">Powered by Smart Tech</p></div></div><button onclick="closeAiHub()" class="w-8 h-8 flex items-center justify-center bg-white/10 rounded-full font-bold">✕</button></div>
-            <div class="flex border-b dark:border-gray-700 shrink-0 bg-white dark:bg-gray-900"><button onclick="switchAiTab('chat')" id="tab-chat" class="flex-1 py-3 text-xs font-bold text-green-600 border-b-2 border-green-600">Advisor</button><button onclick="switchAiTab('calc')" id="tab-calc" class="flex-1 py-3 text-xs font-bold text-gray-500 dark:text-gray-400">Estimator</button></div>
-            <div id="ai-content-chat" class="flex-grow flex flex-col overflow-hidden bg-gray-50 dark:bg-gray-900"><div id="chat-box" class="flex-grow p-5 overflow-y-auto flex flex-col gap-4"></div><div class="p-4 bg-white dark:bg-gray-800 border-t dark:border-gray-700 flex gap-2 shrink-0"><input type="text" id="chat-input" class="flex-grow bg-gray-100 dark:bg-gray-900 rounded-xl px-4 py-3 text-sm outline-none border dark:border-gray-600" placeholder="Ask a question..."><button onclick="sendMessage()" class="w-12 h-12 bg-green-600 text-white rounded-xl font-bold click-press shadow-md">→</button></div></div>
+            <div class="bg-gray-900 p-5 flex justify-between items-center text-white shrink-0"><div class="flex items-center gap-3"><div class="bg-gradient-to-tr from-green-400 to-blue-500 p-2 rounded-xl shadow-inner"><svg viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5"><path fill-rule="evenodd" d="M9 4.5a.75.75 0 0 1 .721.544l.813 2.846a3.75 3.75 0 0 0 2.576 2.576l2.846.813a.75.75 0 0 1 0 1.442l-2.846.813a3.75 3.75 0 0 0-2.576 2.576l-.813 2.846a.75.75 0 0 1-1.442 0l-.813-2.846a3.75 3.75 0 0 0-2.576-2.576l-2.846-.813a.75.75 0 0 1 0-1.442l2.846-.813A3.75 3.75 0 0 0 7.466 7.89l.813-2.846A.75.75 0 0 1 9 4.5ZM18 1.5a.75.75 0 0 1 .728.568l.258 1.036c.236.94.97 1.674 1.91 1.906l1.036.258a.75.75 0 0 1 0 1.45l-1.037.259a3.003 3.003 0 0 0-1.91 1.906l-.258 1.036a.75.75 0 0 1-1.455 0l-.258-1.036a3.003 3.003 0 0 0-1.91-1.906l-1.036-.259a.75.75 0 0 1 0-1.45l1.036-.258a3.003 3.003 0 0 0 1.91-1.906l.258-1.036A.75.75 0 0 1 18 1.5ZM16.5 15a.75.75 0 0 1 .712.513l.394 1.183c.15.447.5.799.948.948l1.183.395a.75.75 0 0 1 0 1.422l-1.183.395c-.447.15-.799.5-.948.948l-.395 1.183a.75.75 0 0 1-1.422 0l-.395-1.183a1.5 1.5 0 0 0-.948-.948l-1.183-.395a.75.75 0 0 1 0-1.422l1.183-.395c.447-.15.799-.5.948-.948l.395-1.183A.75.75 0 0 1 16.5 15Z" clip-rule="evenodd" /></svg></div><div><h2 class="font-black text-sm leading-tight">AI Construction Hub</h2><p class="text-[9px] text-gray-400 font-bold uppercase tracking-widest leading-none mt-1">Smart Advisor</p></div></div><button onclick="closeAiHub()" class="w-8 h-8 flex items-center justify-center bg-white/10 rounded-full font-bold">✕</button></div>
+            <div class="flex border-b dark:border-gray-700 shrink-0 bg-white dark:bg-gray-900"><button onclick="switchAiTab('chat')" id="tab-chat" class="flex-1 py-3 text-xs font-bold text-green-600 border-b-2 border-green-600">Advisor</button><button onclick="switchAiTab('calc')" id="tab-calc" class="flex-1 py-3 text-xs font-bold text-gray-500">Estimator</button></div>
+            <div id="ai-content-chat" class="flex-grow flex flex-col overflow-hidden bg-gray-50 dark:bg-gray-900"><div id="chat-box" class="flex-grow p-5 overflow-y-auto flex flex-col gap-4"></div><div class="p-4 bg-white dark:bg-gray-800 border-t flex gap-2 shrink-0"><input type="text" id="chat-input" class="flex-grow bg-gray-100 dark:bg-gray-900 rounded-xl px-4 py-3 text-sm outline-none border" placeholder="Ask anything..."><button onclick="sendMessage()" class="w-12 h-12 bg-green-600 text-white rounded-xl font-bold click-press">↗</button></div></div>
             <div id="ai-content-calc" class="flex-grow p-6 overflow-y-auto hidden bg-gray-50 dark:bg-gray-900">
-                <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl border dark:border-gray-700 shadow-sm"><p class="text-[10px] text-gray-400 font-bold uppercase mb-4 text-center">Material Calculator</p><select id="calc-type" class="w-full bg-gray-50 dark:bg-gray-900 p-4 rounded-xl mb-4 outline-none border dark:border-gray-700 font-bold text-sm"><option value="wall">Wall (Blocks & Cement)</option><option value="floor">Floor (Tiles 40x40)</option><option value="roof">Roof (Iron Sheets)</option></select>
-                    <div class="flex gap-3 mb-6"><input type="number" id="calc-l" placeholder="Length (m)" class="w-full bg-gray-50 dark:bg-gray-900 p-4 rounded-xl outline-none border dark:border-gray-700 font-bold text-sm"><input type="number" id="calc-w" placeholder="Width/Height" class="w-full bg-gray-50 dark:bg-gray-900 p-4 rounded-xl outline-none border dark:border-gray-700 font-bold text-sm"></div>
-                    <button onclick="runCalculation()" class="w-full py-4 bg-green-600 text-white rounded-xl font-black click-press shadow-md text-sm uppercase">Calculate</button><div id="calc-results" class="hidden mt-6 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-xl text-sm font-medium text-blue-900 dark:text-blue-100 border border-blue-100 dark:border-blue-800 leading-relaxed shadow-inner"></div>
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl border"><p class="text-[10px] text-gray-400 font-bold uppercase mb-4 text-center">Calculator</p><select id="calc-type" class="w-full bg-gray-50 dark:bg-gray-900 p-4 rounded-xl mb-4 border font-bold text-sm"><option value="wall">Wall Blocks</option><option value="floor">Floor Tiles</option><option value="roof">Iron Sheets</option></select>
+                    <div class="flex gap-3 mb-6"><input type="number" id="calc-l" placeholder="Length (m)" class="w-full bg-gray-50 dark:bg-gray-900 p-4 rounded-xl border font-bold text-sm"><input type="number" id="calc-w" placeholder="Width/Height" class="w-full bg-gray-50 dark:bg-gray-900 p-4 rounded-xl border font-bold text-sm"></div>
+                    <button onclick="runCalculation()" class="w-full py-4 bg-green-600 text-white rounded-xl font-black click-press shadow-md text-sm uppercase">Calculate</button><div id="calc-results" class="hidden mt-6 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-xl text-sm font-medium border leading-relaxed"></div>
                 </div>
             </div>
         </div>
@@ -211,6 +223,22 @@
         <svg viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 text-white mb-0.5"><path fill-rule="evenodd" d="M9 4.5a.75.75 0 0 1 .721.544l.813 2.846a3.75 3.75 0 0 0 2.576 2.576l2.846.813a.75.75 0 0 1 0 1.442l-2.846.813a3.75 3.75 0 0 0-2.576 2.576l-.813 2.846a.75.75 0 0 1-1.442 0l-.813-2.846a3.75 3.75 0 0 0-2.576-2.576l-2.846-.813a.75.75 0 0 1 0-1.442l2.846-.813A3.75 3.75 0 0 0 7.466 7.89l.813-2.846A.75.75 0 0 1 9 4.5ZM18 1.5a.75.75 0 0 1 .728.568l.258 1.036c.236.94.97 1.674 1.91 1.906l1.036.258a.75.75 0 0 1 0 1.45l-1.037.259a3.003 3.003 0 0 0-1.91 1.906l-.258 1.036a.75.75 0 0 1-1.455 0l-.258-1.036a3.003 3.003 0 0 0-1.91-1.906l-1.036-.259a.75.75 0 0 1 0-1.45l1.036-.258a3.003 3.003 0 0 0 1.91-1.906l.258-1.036A.75.75 0 0 1 18 1.5ZM16.5 15a.75.75 0 0 1 .712.513l.394 1.183c.15.447.5.799.948.948l1.183.395a.75.75 0 0 1 0 1.422l-1.183.395c-.447.15-.799.5-.948.948l-.395 1.183a.75.75 0 0 1-1.422 0l-.395-1.183a1.5 1.5 0 0 0-.948-.948l-1.183-.395a.75.75 0 0 1 0-1.422l1.183-.395c.447-.15.799-.5.948-.948l.395-1.183A.75.75 0 0 1 16.5 15Z" clip-rule="evenodd" /></svg>
         <span class="font-black text-[6px] uppercase tracking-widest text-white mt-0.5">Expert</span>
     </button>
+
+    <nav class="fixed bottom-0 w-full bg-white/95 dark:bg-gray-900/95 glass border-t dark:border-gray-800 px-6 py-3 flex justify-around items-center z-50">
+        <button onclick="navigateTo('home')" id="nav-home" class="nav-btn active-nav flex flex-col items-center gap-1 text-gray-400 text-[10px] font-bold transition-all p-2 click-press w-16 text-green-600">
+            <span class="text-xl mb-0.5">🏠</span><span>Home</span>
+        </button>
+        <button onclick="navigateTo('trending')" id="nav-trending" class="nav-btn flex flex-col items-center gap-1 text-gray-400 text-[10px] font-bold transition-all p-2 click-press w-16">
+            <span class="text-xl mb-0.5">📈</span><span>Watch</span>
+        </button>
+        <button onclick="navigateTo('cart')" id="nav-cart" class="nav-btn flex flex-col items-center gap-1 text-gray-400 text-[10px] font-bold transition-all p-2 relative click-press w-16">
+            <span class="text-xl mb-0.5">🛒</span><span>Cart</span>
+            <span id="cart-badge" class="hidden absolute top-1 right-2 bg-red-500 text-white text-[8px] px-1.5 rounded-full font-black ring-2 ring-white dark:ring-gray-900">0</span>
+        </button>
+        <button onclick="navigateTo('profile')" id="nav-profile" class="nav-btn flex flex-col items-center gap-1 text-gray-400 text-[10px] font-bold transition-all p-2 click-press w-16">
+            <span class="text-xl mb-0.5">👤</span><span>Profile</span>
+        </button>
+    </nav>
 
     <script>
         const RENDER_URL = 'https://ujenzismart-backend.onrender.com', WHATSAPP_NUM = '255743924467'; 
@@ -230,8 +258,7 @@
 
         const productDatabase = {
             'Foundation & Structural': [
-                { name: 'Simba Cement 50kg', price: 18500, wt: 50, desc: 'Grade 42.5R high-strength.', img: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=400', rating: 4.9, reviews: 342, reviewTxt: "Sets perfectly." },
-                { name: 'Twiga Cement 50kg', price: 18000, wt: 50, desc: 'Standard multipurpose.', img: 'https://images.unsplash.com/photo-1621360841013-c76831f1dbce?w=400', rating: 4.8, reviews: 215, reviewTxt: "Great for plastering." },
+                { name: 'Simba Cement 50kg', price: 18500, wt: 50, desc: 'Grade 42.5R high-strength.', img: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=400', rating: 4.9, reviews: 342, reviewTxt: "Always strong." },
                 { name: 'Deformed Bar 12mm', price: 24000, wt: 10, desc: 'TBS rebars.', img: 'https://images.unsplash.com/photo-1536882240095-0379873feb4e?w=400', rating: 4.8, reviews: 156, reviewTxt: "Accurate weight." }
             ]
         };
@@ -240,24 +267,24 @@
         function navigateTo(viewName, isBack = false) {
             document.querySelectorAll('.view-content').forEach(v => v.classList.add('hidden'));
             const target = document.getElementById(`view-${viewName}`); if(target) target.classList.remove('hidden');
-            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active-nav', 'text-green-600'));
+            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active-nav', 'text-green-600'));
             const activeBtn = document.getElementById(`nav-${viewName}`); if(activeBtn) activeBtn.classList.add('active-nav', 'text-green-600');
             const backBtn = document.getElementById('header-back-btn'), title = document.getElementById('header-title'), sub = document.getElementById('header-subtitle');
-            const tabs = ['home', 'trending', 'cart', 'profile'];
-            if (tabs.includes(viewName)) {
+            const mainTabs = ['home', 'trending', 'cart', 'profile'];
+            if (mainTabs.includes(viewName)) {
                 backBtn.classList.add('hidden');
                 if(viewName === 'home') setGreeting();
-                else if(viewName === 'trending') { title.textContent = "Market Watch"; sub.textContent = "Live Price Tracking"; }
-                else if(viewName === 'cart') { title.textContent = "Your Cart"; sub.textContent = "Secure Checkout"; }
-                else if(viewName === 'profile') { title.textContent = "Profile"; sub.textContent = "Manage account"; }
+                if(viewName === 'trending') { title.textContent = "Market Watch"; sub.textContent = "Live Price Tracking"; }
+                if(viewName === 'cart') { title.textContent = "Your Cart"; sub.textContent = "Secure Checkout"; }
+                if(viewName === 'profile') { title.textContent = "Profile"; sub.textContent = "Manage account"; }
             } else {
                 backBtn.classList.remove('hidden');
-                if(viewName === 'cs') { title.textContent = "Support"; sub.textContent = "We help builders"; }
-                else if(viewName === 'legal') { title.textContent = "Legal"; sub.textContent = "Terms & Policies"; }
+                if(viewName === 'cs') { title.textContent = "Support"; sub.textContent = "How can we help?"; }
+                if(viewName === 'legal') { title.textContent = "Legal"; sub.textContent = "Policies"; }
             }
             if(!isBack && viewHistory[viewHistory.length - 1] !== viewName) {
                 viewHistory.push(viewName);
-                if(tabs.includes(viewName)) history.replaceState({ view: viewName }, '', '#' + viewName);
+                if(mainTabs.includes(viewName)) history.replaceState({ view: viewName }, '', '#' + viewName);
                 else history.pushState({ view: viewName }, '', '#' + viewName);
             }
             if(viewName === 'home') renderHomeBase();
@@ -275,7 +302,6 @@
                 setGreeting();
                 document.getElementById('p-name').textContent = user.name;
                 document.getElementById('p-image').src = user.photoURL || `https://ui-avatars.com/api/?name=${user.name}&background=10b981&color=fff`;
-                document.getElementById('notif-toggle').checked = localStorage.getItem('ujenzi_notif') === 'true';
                 renderHomeBase();
             }
         }
@@ -287,12 +313,8 @@
             document.getElementById('header-subtitle').textContent = `Building tomorrow, today.`;
         }
 
-        window.switchTheme = function() {
-            const h = document.documentElement; h.classList.toggle('dark');
-            localStorage.setItem('theme', h.classList.contains('dark') ? 'dark' : 'light');
-            const icon = document.getElementById('theme-icon'); if(icon) icon.style.transform = h.classList.contains('dark') ? 'rotate(180deg)' : 'rotate(0deg)';
-        }
-
+        window.switchTheme = function() { const h = document.documentElement; h.classList.toggle('dark'); localStorage.setItem('theme', h.classList.contains('dark') ? 'dark' : 'light'); const icon = document.getElementById('theme-icon'); if(icon) icon.style.transform = h.classList.contains('dark') ? 'rotate(180deg)' : 'rotate(0deg)'; }
+        
         function handleProfileUpload(e) {
             const file = e.target.files[0]; if(file) {
                 const reader = new FileReader(); reader.onload = (ev) => {
@@ -303,22 +325,23 @@
         }
 
         function updateTrackerUI() {
-            const s = parseInt(localStorage.getItem('ujenzi_total_spend') || '0');
-            document.getElementById('total-project-cost').textContent = `TZS ${s.toLocaleString()}`;
-            document.getElementById('cost-progress').style.width = `${Math.min((s / 5000000) * 100, 100)}%`;
-            const gold = s >= 5000000;
-            document.getElementById('vip-badge').className = gold ? "mt-2 px-3 py-1 rounded-full text-[10px] font-black uppercase bg-gradient-to-r from-yellow-400 to-yellow-600 text-white" : "mt-2 px-3 py-1 rounded-full text-[10px] font-black uppercase bg-gray-200 text-gray-600";
-            document.getElementById('vip-badge').innerHTML = gold ? "👑 Gold Builder" : "Standard Builder";
-            if(gold) document.getElementById('vip-perk-text').classList.remove('hidden'); else document.getElementById('vip-perk-text').classList.add('hidden');
+            const spend = parseInt(localStorage.getItem('ujenzi_total_spend') || '0');
+            document.getElementById('total-project-cost').textContent = `TZS ${spend.toLocaleString()}`;
+            document.getElementById('cost-progress').style.width = `${Math.min((spend / 5000000) * 100, 100)}%`;
+            const badge = document.getElementById('vip-badge'), perk = document.getElementById('vip-perk-text');
+            const gold = spend >= 5000000;
+            badge.className = gold ? "mt-2 px-3 py-1 rounded-full text-[10px] font-black uppercase bg-gradient-to-r from-yellow-400 to-yellow-600 text-white" : "mt-2 px-3 py-1 rounded-full text-[10px] font-black uppercase bg-gray-200 text-gray-600";
+            badge.innerHTML = gold ? "👑 Gold Builder" : "Standard Builder";
+            if(gold) perk.classList.remove('hidden'); else perk.classList.add('hidden');
         }
 
         function renderHomeBase() {
             const container = document.getElementById('dynamic-home-content');
-            container.innerHTML = `<section><h2 class="text-lg font-bold mb-4">Categories</h2><div class="grid grid-cols-2 gap-4">${Object.keys(categoryImages).map((cat, i) => `<div onclick="openCategory('${cat}')" class="bg-white dark:bg-gray-800 rounded-3xl p-3 shadow-sm border dark:border-gray-700 flex flex-col click-press stagger-item" style="animation-delay: ${i*0.05}s"><img src="${categoryImages[cat]}" class="w-full h-24 object-cover rounded-2xl mb-3"><p class="font-bold text-sm px-1 mb-2">${cat}</p></div>`).join('')}</div></section><section class="mt-4"><h2 class="text-lg font-bold mb-4">Featured</h2><div class="grid grid-cols-2 gap-4">${generateProductCardHTML(productDatabase['Foundation & Structural'][0], 0)}${generateProductCardHTML(productDatabase['Foundation & Structural'][2], 1)}</div></section>`;
+            container.innerHTML = `<section><h2 class="text-lg font-bold mb-4">Categories</h2><div class="grid grid-cols-2 gap-4">${Object.keys(categoryImages).map((cat, i) => `<div onclick="openCategory('${cat}')" class="bg-white dark:bg-gray-800 rounded-3xl p-3 shadow-sm border dark:border-gray-700 flex flex-col click-press stagger-item" style="animation-delay: ${i*0.05}s"><img src="${categoryImages[cat]}" class="w-full h-24 object-cover rounded-2xl mb-3"><p class="font-bold text-sm px-1 mb-2">${cat}</p></div>`).join('')}</div></section><section class="mt-2"><h2 class="text-lg font-bold mb-4">Featured</h2><div class="grid grid-cols-2 gap-4">${generateProductCardHTML(productDatabase['Foundation & Structural'][0], 0)}${generateProductCardHTML(productDatabase['Foundation & Structural'][1], 1)}</div></section>`;
         }
 
         function generateProductCardHTML(p, i) {
-            return `<div onclick="openProduct('${p.name.replace(/'/g, "\\'")}', '${p.desc.replace(/'/g, "\\'")}', ${p.price}, ${p.wt}, '${p.img}', ${p.rating}, ${p.reviews}, '${p.reviewTxt.replace(/'/g, "\\'")}')" class="bg-white dark:bg-gray-800 rounded-3xl p-3 shadow-sm border dark:border-gray-700 flex flex-col click-press stagger-item" style="animation-delay: ${i*0.05}s"><div class="relative overflow-hidden rounded-2xl mb-3"><img src="${p.img}" loading="lazy" class="w-full h-32 object-cover"><div class="absolute top-2 left-2 bg-white/90 dark:bg-gray-900/90 px-2 py-0.5 rounded text-[9px] font-black"><span class="text-amber-400">★</span> ${p.rating}</div></div><p class="text-[11px] font-bold px-1 h-8 overflow-hidden">${p.name}</p><div class="flex justify-between items-center px-1 mt-auto pb-1"><p class="text-green-600 font-black text-[11px]">TZS ${p.price.toLocaleString()}</p><div class="w-7 h-7 bg-gray-100 dark:bg-gray-700 rounded-lg flex items-center justify-center font-bold text-lg">+</div></div></div>`;
+            return `<div onclick="openProduct('${p.name.replace(/'/g, "\\'")}', '${p.desc.replace(/'/g, "\\'")}', ${p.price}, ${p.wt}, '${p.img}', ${p.rating}, ${p.reviews}, '${p.reviewTxt.replace(/'/g, "\\'")}')" class="bg-white dark:bg-gray-800 rounded-3xl p-3 shadow-sm border dark:border-gray-700 flex flex-col click-press stagger-item" style="animation-delay: ${i*0.05}s"><div class="relative overflow-hidden rounded-2xl mb-3"><img src="${p.img}" loading="lazy" class="w-full h-32 object-cover"><div class="absolute top-2 left-2 bg-white/90 dark:bg-gray-900/90 px-2 py-0.5 rounded text-[9px] font-black"><span class="text-amber-400">★</span> ${p.rating}</div></div><p class="text-[11px] font-bold h-8 overflow-hidden">${p.name}</p><div class="flex justify-between items-center px-1 mt-auto pb-1"><p class="text-green-600 font-black text-[11px]">TZS ${p.price.toLocaleString()}</p><div class="w-7 h-7 bg-gray-100 dark:bg-gray-700 rounded-lg flex items-center justify-center font-bold text-lg">+</div></div></div>`;
         }
 
         function openCategory(s) { const p = productDatabase['Foundation & Structural']; const container = document.getElementById('dynamic-home-content'); container.innerHTML = `<div class="flex items-center gap-3 mb-4 click-press cursor-pointer" onclick="renderHomeBase()"><span class="w-8 h-8 bg-white dark:bg-gray-800 rounded-full flex items-center justify-center font-bold border dark:border-gray-700">←</span><h2 class="text-xl font-bold">${s}</h2></div><div class="grid grid-cols-2 gap-4">${p.map((x, i) => generateProductCardHTML(x, i)).join('')}</div>`; }
@@ -327,7 +350,7 @@
             const q = document.getElementById('search-input').value.toLowerCase(); const container = document.getElementById('dynamic-home-content');
             if(!q) { renderHomeBase(); return; }
             let res = []; Object.values(productDatabase).forEach(cat => cat.forEach(p => { if(p.name.toLowerCase().includes(q)) res.push(p); }));
-            if(res.length === 0) { container.innerHTML = `<p class="text-center py-16 opacity-50">No results for "${q}"</p>`; return; }
+            if(res.length === 0) { container.innerHTML = `<p class="text-center py-16 opacity-50">No results.</p>`; return; }
             container.innerHTML = `<h2 class="text-lg font-bold mb-4">Results</h2><div class="grid grid-cols-2 gap-4">${res.map((p, i) => generateProductCardHTML(p, i)).join('')}</div>`;
         }
 
@@ -337,13 +360,9 @@
             document.getElementById('modal-rating-text').textContent = `${r} (${rv})`; document.getElementById('modal-review-text').textContent = `"${rT}"`;
             document.getElementById('modal-price').textContent = `TZS ${p.toLocaleString()}`; document.getElementById('modal-qty').value = 1;
             history.pushState({ modal: 'product' }, '', '#product');
-            const fSec = document.getElementById('fbt-section'); fbtItem = productDatabase['Foundation & Structural'][2];
-            if(fbtItem && fbtItem.name !== t) { document.getElementById('fbt-img').src = fbtItem.img; document.getElementById('fbt-title').textContent = fbtItem.name; document.getElementById('fbt-price').textContent = `+ TZS ${fbtItem.price.toLocaleString()}`; document.getElementById('fbt-checkbox').checked = false; fSec.classList.remove('hidden'); }
-            else fSec.classList.add('hidden');
             document.getElementById('product-modal').classList.remove('hidden'); setTimeout(() => document.getElementById('product-sheet').classList.add('open'), 10);
             document.getElementById('add-to-cart-btn').onclick = () => {
                 const q = parseInt(document.getElementById('modal-qty').value); cart.push({ title: t, price: p, wt: w, qty: q });
-                if(fbtItem && document.getElementById('fbt-checkbox').checked) cart.push({ title: fbtItem.name, price: fbtItem.price, wt: fbtItem.wt, qty: 1 });
                 updateBadge(); closeProduct();
             };
         }
@@ -356,14 +375,14 @@
             const z = parseFloat(document.getElementById('delivery-zone').value); let tw = 0; cart.forEach(i => tw += (i.wt * i.qty));
             let br = 0; let n = "Store Pickup"; 
             if(z > 0) { if(tw <= 50) { br = 10000; n = "Bodaboda"; } else if(tw <= 400) { br = 25000; n = "Bajaji"; } else if(tw <= 2500) { br = 60000; n = "Canter"; } else { br = 150000; n = "Fuso"; } }
-            const gold = parseInt(localStorage.getItem('ujenzi_total_spend')||'0') >= 5000000; transportCost = br * z; if(gold && transportCost > 0) { transportCost *= 0.5; n += " (VIP 50%)"; }
+            const gold = parseInt(localStorage.getItem('ujenzi_total_spend')||'0') >= 5000000; transportCost = br * z; if(gold && transportCost > 0) { transportCost *= 0.5; n += " (VIP)"; }
             document.getElementById('vehicle-name').textContent = n; document.getElementById('transport-cost-display').textContent = z === 0 ? 'Free' : `TZS ${transportCost.toLocaleString()}`;
             let sub = 0; cart.forEach(i => sub += (i.price * i.qty));
             document.getElementById('cart-subtotal').textContent = `TZS ${sub.toLocaleString()}`; document.getElementById('cart-transport').textContent = `TZS ${transportCost.toLocaleString()}`;
             document.getElementById('cart-total-price').textContent = `TZS ${(sub + transportCost).toLocaleString()}`;
         }
         function renderCart() {
-            const c = document.getElementById('cart-items-container'); if(cart.length === 0) { c.innerHTML = '<p class="text-center py-16">Basket empty.</p>'; document.getElementById('cart-footer').classList.add('hidden'); return; }
+            const c = document.getElementById('cart-items-container'); if(cart.length === 0) { c.innerHTML = '<p class="text-center py-16 opacity-50">Basket empty.</p>'; document.getElementById('cart-footer').classList.add('hidden'); return; }
             c.innerHTML = cart.map((i, idx) => `<div class="bg-white dark:bg-gray-800 p-4 rounded-2xl flex justify-between items-center shadow-sm border dark:border-gray-700"><div><p class="font-bold text-xs uppercase">${i.title}</p><p class="text-xs text-gray-400 mt-1">${i.qty} units × ${i.price.toLocaleString()}</p></div><button onclick="cart.splice(${idx},1);renderCart();updateBadge();" class="text-red-500 font-bold px-3">✕</button></div>`).join('');
             document.getElementById('cart-footer').classList.remove('hidden'); calculateDelivery();
         }
@@ -382,7 +401,7 @@
         function renderWishlistPhase(p) {
             const l = JSON.parse(localStorage.getItem('ujenzi_wishlist') || '[]'); const items = l.filter(x => x.phase === p);
             const container = document.getElementById('wishlist-render-area'); if(items.length === 0) { container.innerHTML = `<p class="text-center py-4 text-xs opacity-50">Empty phase.</p>`; container.classList.remove('hidden'); return; }
-            container.innerHTML = `<div class="mb-4 flex items-center justify-between"><h4 class="font-bold text-sm text-green-600 uppercase">${p}</h4><button onclick="document.getElementById('wishlist-render-area').classList.add('hidden')" class="text-xs opacity-50">Close</button></div><div class="grid grid-cols-2 gap-4">${items.map(i => `<div class="bg-white dark:bg-gray-800 p-3 rounded-2xl shadow-sm border dark:border-gray-700 animate-slideUpFade"><img src="${i.img}" class="w-full h-20 object-cover rounded-xl mb-2"><p class="text-[9px] font-bold h-6 overflow-hidden">${i.name}</p><p class="text-green-600 font-black text-[10px]">TZS ${i.price.toLocaleString()}</p></div>`).join('')}</div>`;
+            container.innerHTML = `<div class="mb-4 flex items-center justify-between font-bold text-sm text-green-600 uppercase"><h4>${p}</h4><button onclick="document.getElementById('wishlist-render-area').classList.add('hidden')" class="text-xs opacity-50">Close</button></div><div class="grid grid-cols-2 gap-4">${items.map(i => `<div class="bg-white dark:bg-gray-800 p-3 rounded-2xl shadow-sm border"><img src="${i.img}" class="w-full h-20 object-cover rounded-xl mb-2"><p class="text-[9px] font-bold h-6 overflow-hidden">${i.name}</p><p class="text-green-600 font-black text-[10px]">TZS ${i.price.toLocaleString()}</p></div>`).join('')}</div>`;
             container.classList.remove('hidden');
         }
 
@@ -413,8 +432,8 @@
             const loaderId = 'ai-loader-' + Date.now(); chatBox.innerHTML += `<div id="${loaderId}" class="p-4 bg-white dark:bg-gray-800 border dark:border-gray-700 rounded-2xl rounded-tl-none mr-auto w-[60%] skeleton h-10"></div>`; chatBox.scrollTop = chatBox.scrollHeight;
             try {
                 const res = await fetch(`${RENDER_URL}/api/chat`, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ message: txt }) }); const d = await res.json();
-                document.getElementById(loaderId).remove(); chatBox.innerHTML += `<div class="p-4 bg-white dark:bg-gray-800 border dark:border-gray-700 rounded-2xl rounded-tl-none mr-auto max-w-[85%] text-sm font-medium leading-relaxed">${d.reply || "Error."}</div>`;
-            } catch(e) { document.getElementById(loaderId).remove(); chatBox.innerHTML += `<div class="p-4 bg-red-50 text-red-600 rounded-2xl rounded-tl-none mr-auto text-xs">Offline.</div>`; }
+                document.getElementById(loaderId).remove(); chatBox.innerHTML += `<div class="p-4 bg-white dark:bg-gray-700 border dark:border-gray-600 rounded-2xl rounded-tl-none mr-auto max-w-[85%] text-sm font-medium leading-relaxed">${d.reply || "Error."}</div>`;
+            } catch(e) { document.getElementById(loaderId).remove(); chatBox.innerHTML += `<div class="p-4 bg-red-50 text-red-600 rounded-2xl rounded-tl-none mr-auto text-xs font-bold">AI Offline.</div>`; }
             chatBox.scrollTop = chatBox.scrollHeight;
         }
 
@@ -425,25 +444,12 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
         import { getAuth, GoogleAuthProvider, signInWithRedirect, getRedirectResult } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
         import { getMessaging, getToken } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-messaging.js";
-        
         const firebaseConfig = { apiKey: "AIzaSyCX2C1TXRb20nGtxEaYXGUo2KEH7gbZCY0", authDomain: "ujenzismart-878af.firebaseapp.com", projectId: "ujenzismart-878af", storageBucket: "ujenzismart-878af.firebasestorage.app", messagingSenderId: "626807014511", appId: "1:626807014511:web:844e137d32048d6460399a", measurementId: "G-V8C9KKGKFY" };
         const app = initializeApp(firebaseConfig), auth = getAuth(app), provider = new GoogleAuthProvider(), messaging = getMessaging(app);
-        
-        getRedirectResult(auth).then((res) => { 
-            if (res) { 
-                localStorage.setItem('ujenzi_user', JSON.stringify({ name: res.user.displayName, email: res.user.email, photoURL: res.user.photoURL })); 
-                location.reload(); 
-            } 
-        }).catch((e) => { console.error(e); });
-
-        document.getElementById('google-signin-btn').onclick = () => { 
-            document.getElementById('google-signin-btn').innerHTML = "⏳ Connecting..."; 
-            signInWithRedirect(auth, provider); 
-        };
-
+        getRedirectResult(auth).then((res) => { if (res) { localStorage.setItem('ujenzi_user', JSON.stringify({ name: res.user.displayName, email: res.user.email, photoURL: res.user.photoURL })); location.reload(); } }).catch((e) => { console.error(e); });
+        document.getElementById('google-signin-btn').onclick = () => { document.getElementById('google-signin-btn').innerHTML = "⏳ Connecting..."; signInWithRedirect(auth, provider); };
         window.toggleNotifications = async function() {
-            const toggle = document.getElementById('notif-toggle');
-            if (toggle.checked) {
+            const toggle = document.getElementById('notif-toggle'); if (toggle.checked) {
                 try {
                     const p = await Notification.requestPermission();
                     if (p === 'granted') {
@@ -451,7 +457,7 @@
                         const tok = await getToken(messaging, { vapidKey: "BJJl5bm8iK4BOMzJ-OGkMELrR1ub_Z0HXQKsJ7pBa2oXtGlwzbBSPrGsnRoJEcLna9KfJ6vgNhvDejOfA02khro", serviceWorkerRegistration: reg });
                         if (tok) { localStorage.setItem('ujenzi_notif', 'true'); alert("Notifications Enabled!"); }
                     } else { toggle.checked = false; }
-                } catch (e) { alert("Enable failed. Ensure SW file exists."); toggle.checked = false; }
+                } catch (e) { alert("Error: Make sure firebase-messaging-sw.js exists in root."); toggle.checked = false; }
             } else { localStorage.setItem('ujenzi_notif', 'false'); }
         };
     </script>
