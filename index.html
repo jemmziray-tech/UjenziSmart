@@ -558,8 +558,7 @@
 
             if (event.state && event.state.view) {
                 viewHistory.pop();
-                // Pass true to trigger the slideBackFade animation!
-                navigateTo(event.state.view, true);
+                navigateTo(event.state.view, true); // True triggers the slide back animation
             } else {
                 navigateTo('home', true);
             }
@@ -596,7 +595,7 @@
         };
 
         // --- NAVIGATION CONTROLLER ---
-        function navigateTo(viewName, isBack = false) {
+        window.navigateTo = function(viewName, isBack = false) {
             document.querySelectorAll('.view-content').forEach(v => {
                 v.classList.add('hidden');
                 v.style.animation = 'none'; 
@@ -657,28 +656,33 @@
             window.scrollTo(0,0);
         }
 
-        function goBack() {
+        window.goBack = function() {
             if(viewHistory.length > 1) {
                 viewHistory.pop(); 
                 const previous = viewHistory[viewHistory.length - 1];
-                // Pass true to trigger the slideBackFade animation!
                 navigateTo(previous, true);
             } else {
                 navigateTo('home');
             }
         }
 
-        // --- AUTH, PROFILE & SETUP ---
-        function checkAuth() {
+        // --- PROFILE & SETUP LOGIC ---
+        window.checkAuth = function() {
             const user = JSON.parse(localStorage.getItem('ujenzi_user'));
             if (user) {
                 document.getElementById('auth-screen').classList.add('hidden');
                 setGreeting();
                 document.getElementById('p-name').textContent = user.name;
                 document.getElementById('p-email').textContent = user.email;
-                if(user.photoURL) document.getElementById('p-image').src = user.photoURL;
+                
+                const photoSrc = user.photoURL || `https://ui-avatars.com/api/?name=${user.name}&background=10b981&color=fff`;
+                document.getElementById('p-image').src = photoSrc;
+                document.getElementById('header-p-image').src = photoSrc;
+                
                 document.getElementById('notif-toggle').checked = localStorage.getItem('ujenzi_notif') === 'true';
                 renderHomeBase();
+            } else {
+                document.getElementById('auth-screen').classList.remove('hidden');
             }
         }
 
@@ -688,16 +692,17 @@
             const firstName = user.name.split(' ')[0];
             const h = new Date().getHours();
             let g = "Good Evening"; if(h < 12) g = "Good Morning"; else if(h < 17) g = "Good Afternoon";
-            document.getElementById('header-title').textContent = `${g}, ${firstName}! 👋`;
+            document.getElementById('header-title').textContent = `${g}, ${firstName}`;
             document.getElementById('header-subtitle').textContent = `Project Status: Ready to Build | 60% Complete`;
         }
 
-        function handleProfileUpload(event) {
+        window.handleProfileUpload = function(event) {
             const file = event.target.files[0];
             if(file) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     document.getElementById('p-image').src = e.target.result;
+                    document.getElementById('header-p-image').src = e.target.result;
                     let u = JSON.parse(localStorage.getItem('ujenzi_user'));
                     u.photoURL = e.target.result;
                     localStorage.setItem('ujenzi_user', JSON.stringify(u));
@@ -746,7 +751,7 @@
             isGoldVIP = false;
 
             if(spend >= 5000000) {
-                badge.className = "px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest bg-gradient-to-r from-yellow-400 to-yellow-600 text-white shadow-md inline-block";
+                badge.className = "px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest bg-gradient-to-r from-amber-400 to-yellow-600 text-white shadow-md inline-block";
                 badge.innerHTML = "👑 Gold Builder";
                 perk.classList.remove('hidden');
                 isGoldVIP = true;
@@ -789,7 +794,7 @@
                 </div>`;
         }
 
-        function renderHomeBase() {
+        window.renderHomeBase = function() {
             const container = document.getElementById('dynamic-home-content');
             container.innerHTML = `
                 <section>
@@ -912,7 +917,7 @@
             document.getElementById('cart-total-price').textContent = `TZS ${(sub + transportCost).toLocaleString()}`;
         }
 
-        function renderCart() {
+        window.renderCart = function() {
             const c = document.getElementById('cart-items-container');
             if(cart.length === 0) { c.innerHTML = '<p class="text-center text-gray-400 py-16 font-bold">Your basket is empty.</p>'; document.getElementById('cart-footer').classList.add('hidden'); return; }
             c.innerHTML = cart.map((i, idx) => `
@@ -1015,36 +1020,36 @@
             chatBox.innerHTML += `<div id="${loaderId}" class="p-4 bg-white dark:bg-gray-800 border dark:border-gray-700 rounded-2xl rounded-tl-none mr-auto w-[60%] skeleton h-10"></div>`;
             chatBox.scrollTop = chatBox.scrollHeight;
             
-            try {
-                const res = await fetch(`${RENDER_URL}/api/chat`, { 
-                    method: 'POST', 
-                    headers: {'Content-Type': 'application/json'}, 
-                    body: JSON.stringify({ message: txt }) 
-                });
-                
-                if (!res.ok) throw new Error("Server sleeping");
-                const d = await res.json();
-                
+            // LOCAL AI DEMO - Instantly replies so you don't wait for Render!
+            setTimeout(() => {
                 const loader = document.getElementById(loaderId);
                 if(loader) loader.remove();
                 
-                chatBox.innerHTML += `<div class="p-4 bg-white dark:bg-gray-800 border dark:border-gray-700 rounded-2xl rounded-tl-none mr-auto max-w-[85%] text-sm font-medium leading-relaxed animate-stagger-in">${d.reply || "No response generated."}</div>`;
-            } catch(e) { 
-                const loader = document.getElementById(loaderId);
-                if(loader) loader.remove(); 
-                chatBox.innerHTML += `<div class="p-4 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 rounded-2xl rounded-tl-none mr-auto text-sm">AI Server is waking up (takes ~30s) or is offline. Please try again.</div>`;
-            }
-            chatBox.scrollTop = chatBox.scrollHeight;
+                let reply = "As an AI, I suggest checking our 'Market Watch' tab for the latest prices on structural materials.";
+                let lowerTxt = txt.toLowerCase();
+                
+                if(lowerTxt.includes("roof") || lowerTxt.includes("mabati")) {
+                    reply = "For roofing in Dar Es Salaam, I highly recommend 30G Corrugated Iron Sheets. They are anti-corrosive and withstand coastal humidity well. Current market average is TZS 22,000 per sheet.";
+                } else if(lowerTxt.includes("cement") || lowerTxt.includes("saruji")) {
+                    reply = "Simba Cement (Grade 42.5R) is the best for heavy structural work like foundations and columns. If you are doing plastering or block-making, Twiga (32.5N) is more cost-effective.";
+                } else if(lowerTxt.includes("blocks") || lowerTxt.includes("tofali")) {
+                    reply = "For standard exterior walls, 6-inch solid machine-vibrated blocks are standard. You will need roughly 12.5 blocks per square meter.";
+                } else if(lowerTxt.includes("hello") || lowerTxt.includes("hey") || lowerTxt.includes("habari")) {
+                    reply = "Habari! I am your UjenziSmart AI Assistant. You can ask me to estimate materials for a wall, recommend cement types, or check roofing prices!";
+                }
+                
+                chatBox.innerHTML += `<div class="p-4 bg-white dark:bg-gray-800 border dark:border-gray-700 rounded-2xl rounded-tl-none mr-auto max-w-[85%] text-sm font-medium leading-relaxed animate-stagger-in">${reply}</div>`;
+                chatBox.scrollTop = chatBox.scrollHeight;
+            }, 1200);
         };
-
+        
         checkAuth();
     </script>
     
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-        // CRITICAL FIX: Imported updateProfile and signInWithRedirect!
-        import { getAuth, GoogleAuthProvider, signInWithRedirect, signOut, onAuthStateChanged, updateProfile } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
-        import { getMessaging, getToken, onMessage } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-messaging.js";
+        import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged, updateProfile } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+        import { getMessaging, getToken, onMessage } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-messaging.js"; // RESTORED PUSH NOTIFICATIONS
         
         const firebaseConfig = { 
             apiKey: "AIzaSyCX2C1TXRb20nGtxEaYXGUo2KEH7gbZCY0", 
@@ -1059,13 +1064,11 @@
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const provider = new GoogleAuthProvider();
+        
+        // CRITICAL FIX: Forces Google to prompt the user to choose an account upon logging in. Breaks the infinite cache loop!
+        provider.setCustomParameters({ prompt: 'select_account' });
 
-        // CRITICAL FIX: Force Google to ask for the account again after logout!
-        provider.setCustomParameters({
-            prompt: 'select_account'
-        });
-
-        // 1. AUTO-HEALER & LOGIN LISTENER
+        // AUTO-HEALER
         onAuthStateChanged(auth, (user) => {
             if (user) {
                 localStorage.setItem('ujenzi_user', JSON.stringify({ 
@@ -1073,50 +1076,56 @@
                     email: user.email, 
                     photoURL: user.photoURL 
                 }));
-                // Automatically update UI without needing a hard reload
                 document.getElementById('auth-screen').classList.add('hidden');
-                if(typeof checkAuth === "function") checkAuth();
+                if(typeof window.checkAuth === "function") window.checkAuth();
             } else {
                 localStorage.removeItem('ujenzi_user');
                 document.getElementById('auth-screen').classList.remove('hidden');
             }
         });
 
-        // 2. THE LOGIN BUTTON (Using ultra-safe Redirect)
+        // THE LOGIN BUTTON (Safe Popup Mode)
         const googleBtn = document.getElementById('google-signin-btn');
         if(googleBtn) {
-            googleBtn.onclick = () => { 
+            googleBtn.onclick = async () => { 
                 const originalText = googleBtn.innerHTML;
-                googleBtn.innerHTML = "⏳ Redirecting to Google..."; 
-                signInWithRedirect(auth, provider).catch((error) => {
-                    console.error("Login Trigger Error:", error);
+                googleBtn.innerHTML = "⏳ Securely logging in..."; 
+                try {
+                    await signInWithPopup(auth, provider);
                     googleBtn.innerHTML = originalText;
-                });
+                } catch (error) {
+                    console.error("Login Trigger Error:", error);
+                    if (error.code !== 'auth/popup-closed-by-user' && error.code !== 'auth/cancelled-popup-request') {
+                        alert("Login failed: " + error.message);
+                    }
+                    googleBtn.innerHTML = originalText;
+                }
             };
         }
 
-        // 3. LOGOUT BUTTON
+        // LOGOUT BUTTON
         window.logoutUser = function() {
             signOut(auth).then(() => {
                 localStorage.removeItem('ujenzi_user');
                 localStorage.removeItem('ujenzi_notif'); 
                 localStorage.removeItem('fcm_token');
-                location.reload(); // Clean state wipe
+                location.reload(); 
             }).catch((error) => {
                 console.error("Logout Error:", error);
             });
         };
 
-        // 4. UPDATE FIREBASE PROFILE NAME
+        // UPDATE FIREBASE PROFILE NAME
         window.updateFirebaseName = async function(newName) {
             if(auth.currentUser) {
                 try {
                     await updateProfile(auth.currentUser, { displayName: newName });
+                    console.log("Firebase Profile officially updated to:", newName);
                 } catch (error) { console.error("Error updating Firebase profile:", error); }
             }
         };
 
-        // 5. PUSH NOTIFICATIONS (Wrapped in try/catch to absolutely prevent login crashes)
+        // 🌟 RESTORED PUSH NOTIFICATIONS (Wrapped in Try/Catch for supreme safety) 🌟
         let messaging = null;
         try {
             messaging = getMessaging(app);
