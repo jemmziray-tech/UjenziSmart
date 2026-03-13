@@ -918,11 +918,11 @@
     
         <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-        import { getAuth, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
-        // Import Firebase Messaging SDK
-        import { getMessaging, getToken, onMessage } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-messaging.js"; // <--- ADD THIS LINE
+        // WE KEEP REDIRECT LOGIN SO IT DOESN'T BREAK
+        import { getAuth, GoogleAuthProvider, signInWithRedirect, getRedirectResult } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+        // WE ADDED onMessage FROM THE AI'S ADVICE
+        import { getMessaging, getToken, onMessage } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-messaging.js";
         
-        // ⚠️ YOUR ACTUAL FIREBASE KEYS - SAFE TO COPY VIA THE COPY BUTTON ⚠️
         const firebaseConfig = { 
             apiKey: "AIzaSyCX2C1TXRb20nGtxEaYXGUo2KEH7gbZCY0", 
             authDomain: "ujenzismart-878af.firebaseapp.com", 
@@ -930,102 +930,103 @@
             storageBucket: "ujenzismart-878af.firebasestorage.app", 
             messagingSenderId: "626807014511", 
             appId: "1:626807014511:web:844e137d32048d6460399a",
-            measurementId: "G-V8C9KKGKFY"
+            measurementId: "G-V8C9KKGKFY" 
         };
 
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const provider = new GoogleAuthProvider();
+        const messaging = getMessaging(app);
 
-        // --- Firebase Cloud Messaging (FCM) Setup ---
-        const messaging = getMessaging(app); // Get the messaging service
-
-        // ⚠️ IMPORTANT: Replace 'YOUR_PUBLIC_VAPID_KEY_HERE' with your actual VAPID key.
-        // You can find this in Firebase Console -> Project settings -> Cloud Messaging -> Web configuration
-        const VAPID_KEY = 'BJjI5bm8ik4BOMzJ-OGkMELrR1ub_Z0HXQKsJ7pBa2oXtGlwzbBSPrGsnRoJEcLna9KfJ6vgNhvDejOfA02khro'; 
-
-        // Request permission for notifications and get the FCM token
-        // This will prompt the user for notification permission if they haven't granted it yet.
-        getToken(messaging, { vapidKey: VAPID_KEY }).then((currentToken) => {
-            if (currentToken) {
-                console.log('FCM Registration Token:', currentToken);
-                // Send this token to your backend server if you plan to send targeted messages
-                // You can store it in localStorage or send it to your UjenziSmart backend.
-                localStorage.setItem('fcm_token', currentToken); // Store it for now
-                
-                // If you have a notification toggle, enable it here if a token is available
-                // document.getElementById('notif-toggle').checked = true; // Example
-            } else {
-                // User denied permission or browser doesn't support notifications
-                console.warn('No FCM registration token available. Request permission to generate one.');
-                // Optionally, disable your notification toggle if it exists
-                // document.getElementById('notif-toggle').checked = false; // Example
-            }
-        }).catch((err) => {
-            console.error('An error occurred while retrieving FCM token:', err);
-            // You might want to display a user-friendly message or log it
-        });
-
-        // Handle messages when the app is in the foreground
+        // --- FOREGROUND NOTIFICATIONS (The AI's great addition) ---
         onMessage(messaging, (payload) => {
-            console.log('Message received while app is in foreground:', payload);
-            // Display an in-app notification or update UI
-            alert(`UjenziSmart News: ${payload.notification.title} - ${payload.notification.body}`);
-            // You could also create a custom notification within your app's UI
-            // Example: showCustomInAppNotification(payload.notification.title, payload.notification.body);
+            console.log('Message received while app is open:', payload);
+            alert(`📢 UjenziSmart News: ${payload.notification.title}\n${payload.notification.body}`);
         });
 
-        // --- Existing Google Sign-In Logic ---
-        document.getElementById('google-signin-btn').onclick = async () => {
-            try {
-                const res = await signInWithPopup(auth, provider);
-                localStorage.setItem('ujenzi_user', JSON.stringify({ name: res.user.displayName, email: res.user.email, photoURL: res.user.photoURL }));
-                location.reload();
-            } catch (e) {
-                console.error("Authentication Failed:", e);
-                alert("Authentication Failed. Please try again.");
+        // --- GOOGLE LOGIN (Kept as Redirect so it works on mobile) ---
+        getRedirectResult(auth).then((result) => {
+            if (result) {
+                localStorage.setItem('ujenzi_user', JSON.stringify({ 
+                    name: result.user.displayName, 
+                    email: result.user.email,
+                    photoURL: result.user.photoURL
+                }));
+                location.reload(); 
             }
+        }).catch((error) => {
+            if (error.code !== 'auth/popup-closed-by-user') {
+                console.error("Login Error: ", error);
+            }
+        });
+
+        document.getElementById('google-signin-btn').onclick = () => {
+            const btn = document.getElementById('google-signin-btn');
+            btn.innerHTML = "⏳ Redirecting securely...";
+            signInWithRedirect(auth, provider);
         };
 
-        // If you have a notification toggle in your profile, link it up.
-        // For example, if 'notif-toggle' is your switch:
-        // You'll need to run the FCM token request again if the user enables it,
-        // or revoke it if they disable it.
-        window.toggleNotifications = function() {
-            const isChecked = document.getElementById('notif-toggle').checked;
-            localStorage.setItem('ujenzi_notif', isChecked);
-            if (isChecked) {
-                // Try to get token again if it was previously denied or not found
-                getToken(messaging, { vapidKey: VAPID_KEY }).then((currentToken) => {
-                    if (currentToken) {
-                        console.log('FCM Registration Token (after toggle):', currentToken);
-                        localStorage.setItem('fcm_token', currentToken);
+        // --- PUSH NOTIFICATIONS (With our GitHub Pages Sub-folder fix) ---
+        window.toggleNotifications = async function() {
+            const toggle = document.getElementById('notif-toggle');
+            const userStr = localStorage.getItem('ujenzi_user');
+            
+            if (!userStr) {
+                alert("Please sign in first to enable notifications!");
+                toggle.checked = false;
+                return;
+            }
+            
+            if (toggle.checked) {
+                try {
+                    const permission = await Notification.requestPermission();
+                    if (permission === 'granted') {
+                        
+                        // 1. Force the Service worker to the correct GitHub sub-folder
+                        const registration = await navigator.serviceWorker.register('/UjenziSmart/firebase-messaging-sw.js', {
+                            scope: '/UjenziSmart/'
+                        });
+                        
+                        // 2. Wait for it to be ready
+                        const readyReg = await navigator.serviceWorker.ready;
+                        
+                        // 3. Ask for the token using the precise registration
+                        const token = await getToken(messaging, { 
+                            vapidKey: "BJJl5bm8iK4BOMzJ-OGkMELrR1ub_Z0HXQKsJ7pBa2oXtGlwzbBSPrGsnRoJEcLna9KfJ6vgNhvDejOfA02khro",
+                            serviceWorkerRegistration: readyReg
+                        });
+                        
+                        if (token) {
+                            console.log("FCM Token:", token);
+                            localStorage.setItem('ujenzi_notif', 'true');
+                            localStorage.setItem('fcm_token', token);
+                            alert("Notifications enabled successfully!");
+                        } else {
+                            alert("Failed to get push token.");
+                            toggle.checked = false;
+                        }
                     } else {
-                        console.warn('Permission not granted after toggle.');
-                        alert("Please enable notifications in your browser settings to receive updates.");
-                        document.getElementById('notif-toggle').checked = false;
+                        alert("Permission denied by browser.");
+                        toggle.checked = false;
                     }
-                }).catch((err) => {
-                    console.error('Error getting token after toggle:', err);
-                    document.getElementById('notif-toggle').checked = false;
-                });
+                } catch (error) {
+                    console.error("Notification Setup Error:", error);
+                    alert("Error: Check developer console. Ensure firebase-messaging-sw.js is in the UjenziSmart repository.");
+                    toggle.checked = false;
+                }
             } else {
-                // Here you would typically revoke the token or unsubscribe from topics
-                // Revoking tokens can be complex and often involves your backend.
-                // For simplicity, we'll just log it.
-                console.log('User disabled notifications. Token will no longer be used.');
+                localStorage.setItem('ujenzi_notif', 'false');
                 localStorage.removeItem('fcm_token');
             }
         };
 
-        // Initialize the notification toggle state when the app loads
+        // Check if toggle should be ON when page loads
         document.addEventListener("DOMContentLoaded", () => {
             const notifToggle = document.getElementById('notif-toggle');
             if (notifToggle) {
-                notifToggle.checked = localStorage.getItem('ujenzi_notif') === 'true' && localStorage.getItem('fcm_token') !== null;
+                notifToggle.checked = localStorage.getItem('ujenzi_notif') === 'true';
             }
         });
-
     </script>
 
 </body>
