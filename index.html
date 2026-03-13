@@ -980,79 +980,60 @@
         // 🌟 NEW: SNIPPE PAYMENT GATEWAY LOGIC 🌟
         async function payWithSnippe() {
             const phone = document.getElementById('mobile-money-number').value.trim();
-            if(!phone) return alert("Please enter your mobile money number to pay.");
+            if(!phone) return alert("Please enter your mobile money number.");
 
             const u = JSON.parse(localStorage.getItem('ujenzi_user'));
-            if(!u) return alert("You must be signed in to pay securely.");
-
             let sub = 0; 
             cart.forEach(i => sub += i.price * i.qty);
             const transportCost = parseInt(document.getElementById('cart-transport').textContent.replace(/[^0-9]/g, '')) || 0;
             const totalCost = sub + transportCost;
             
-            if(totalCost === 0) return alert("Your cart is empty!");
-
             const btn = document.getElementById('snippe-pay-btn');
-            const originalText = btn.innerHTML;
-            btn.innerHTML = "⏳ Sending Prompt...";
+            btn.innerHTML = "⏳ Creating Secure Session...";
             btn.disabled = true;
 
             const orderId = 'US-' + Math.floor(1000 + Math.random() * 9000);
-            const idempotencyKey = 'idmp-' + Date.now(); 
             
             try {
-                const response = await fetch('https://corsproxy.io/?https://api.snippe.sh/v1/payments', {
+                // Using a more robust proxy to bypass the browser block
+                const proxyUrl = "https://cors-anywhere.herokuapp.com/"; 
+                const targetUrl = "https://api.snippe.sh/v1/checkout/sessions";
+
+                const response = await fetch(proxyUrl + targetUrl, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                         'Authorization': 'Bearer ' + SNIPPE_KEY,
-                        'Idempotency-Key': idempotencyKey
+                        'X-Requested-With': 'XMLHttpRequest'
                     },
                     body: JSON.stringify({
                         amount: totalCost,
                         currency: "TZS",
-                        type: "mobile",
-                        phone_number: phone,
-                        email: u.email || "customer@ujenzismart.com",
                         reference: orderId,
-                        description: "UjenziSmart Order " + orderId
+                        description: "UjenziSmart Order " + orderId,
+                        customer_email: u.email || "customer@ujenzismart.com",
+                        return_url: window.location.href 
                     })
                 });
 
                 const result = await response.json();
-                
-                if(response.ok || result.status === 'success') {
-                    alert("📲 Success! Check your phone (" + phone + "). A secure PIN prompt has been sent.");
-                    
-                    let itemsString = "";
-                    cart.forEach(i => itemsString += `${i.title} (x${i.qty}), `);
-                    
-                    const receipt = {
-                        orderId: orderId,
-                        dateString: new Date().toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' }),
-                        items: itemsString.slice(0, -2), 
-                        subtotal: sub,
-                        transport: transportCost,
-                        total: totalCost,
-                        type: 'Mobile Money (Snippe)',
-                        status: 'PENDING'
-                    };
 
-                    if(window.submitCloudOrder) {
-                        await window.submitCloudOrder(receipt);
-                    }
-                    
-                    cart = [];
-                    updateBadge();
-                    navigateTo('history', false, true);
+                if(result.status === 'success' && result.data.checkout_url) {
+                    // Redirects user to the official secure payment page
+                    window.location.href = result.data.checkout_url;
                 } else {
-                    alert("Gateway Message: " + (result.message || JSON.stringify(result)));
+                    if(response.status === 403) {
+                        alert("⚠️ Access Blocked. Click OK to open the proxy permission page, click the 'Request access' button, then come back and try again.");
+                        window.open("https://cors-anywhere.herokuapp.com/corsdemo", "_blank");
+                    } else {
+                        alert("Gateway Error: " + (result.message || "Could not create session"));
+                    }
                 }
             } catch (err) {
                 console.error(err);
-                alert("Network error communicating with payment gateway. Please check your connection.");
+                alert("Connection temporarily blocked. Please use the WhatsApp option while we calibrate the gateway.");
             } finally {
-                btn.innerHTML = originalText;
+                btn.innerHTML = "⚡ Pay Now Securely";
                 btn.disabled = false;
             }
         }
