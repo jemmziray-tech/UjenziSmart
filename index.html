@@ -39,6 +39,26 @@
         .bg-deep-tech { background: radial-gradient(circle at top right, #112347 0%, #030814 100%); }
         .pattern-overlay { background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.03' fill-rule='evenodd'%3E%3Ccircle cx='20' cy='20' r='1'/%3E%3C/g%3E%3C/svg%3E"); }
 
+        /* 🌟 NEW: Premium Floating Product Animations 🌟 */
+        @keyframes floatObj1 {
+            0%, 100% { transform: translateY(0px) rotate(-5deg); }
+            50% { transform: translateY(-15px) rotate(5deg); }
+        }
+        @keyframes floatObj2 {
+            0%, 100% { transform: translateY(0px) translateX(0px) rotate(10deg); }
+            50% { transform: translateY(12px) translateX(-8px) rotate(-5deg); }
+        }
+        @keyframes floatObj3 {
+            0%, 100% { transform: scale(1) rotate(0deg); }
+            50% { transform: scale(1.05) rotate(-5deg) translateY(-10px); }
+        }
+        .anim-prod {
+            position: absolute;
+            color: rgba(255, 255, 255, 0.06); /* Very subtle white texture */
+            pointer-events: none;
+            z-index: 1; 
+        }
+
         /* The Signature Green Gradient Pulse */
         .gradient-pulse {
             background: linear-gradient(-45deg, #059669, #10b981, #34d399, #059669);
@@ -52,6 +72,7 @@
         @keyframes skeleton-loading { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
         
         ::-webkit-scrollbar { width: 0px; background: transparent; }
+        
         .bar-grow { animation: growUp 1s ease-out forwards; transform-origin: bottom; }
         @keyframes growUp { from { transform: scaleY(0); } to { transform: scaleY(1); } }
 
@@ -91,6 +112,21 @@
         <div class="absolute inset-0 pattern-overlay pointer-events-none"></div>
         <div class="absolute top-0 right-0 w-64 h-64 bg-blue-500/20 rounded-full blur-[80px] pointer-events-none"></div>
         
+        <svg class="anim-prod w-24 h-24 top-6 right-4" style="animation: floatObj1 8s ease-in-out infinite;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <path stroke="currentColor" stroke-width="1.5" stroke-linecap="round" d="M3 4.5h18M3 9.5h18M3 14.5h18M3 19.5h18M8 4.5v5M16 4.5v5M5 9.5v5M13 9.5v5M21 9.5v5M9 14.5v5M17 14.5v5"/>
+        </svg>
+        
+        <svg class="anim-prod w-20 h-20 bottom-12 left-6" style="animation: floatObj2 10s ease-in-out infinite;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <path stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" d="M4 20h16L4 4v16zM8 20v-4M12 20v-4M16 20v-4M4 16h4M4 12h4M4 8h4"/>
+        </svg>
+
+        <svg class="anim-prod w-28 h-28 top-20 right-32" style="animation: floatObj3 12s ease-in-out infinite;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <path stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" d="M3 10l9-7 9 7v10a2 2 0 01-2 2H5a2 2 0 01-2-2V10z M9 21V12h6v9"/>
+        </svg>
+        
+        <svg class="anim-prod w-16 h-16 top-10 left-32" style="animation: floatObj1 9s ease-in-out infinite;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <path stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" d="M6 6c0-2 2-4 6-4s6 2 6 4v12c0 2-2 4-6 4s-6-2-6-4V6z M6 10h12 M6 14h12"/>
+        </svg>
         <div class="max-w-7xl mx-auto relative z-10">
             <div class="flex items-center justify-between mb-4 h-12">
                 <div class="flex items-center gap-3">
@@ -273,17 +309,17 @@
             <div class="grid grid-cols-3 gap-3 mb-8 stagger-item" style="animation-delay: 0.1s">
                 <div class="bg-white dark:bg-gray-800 p-4 rounded-[1.5rem] border dark:border-gray-700 shadow-sm click-press flex flex-col items-center text-center transition-shadow hover:shadow-md" onclick="renderWishlistPhase('Foundation')">
                     <div class="text-2xl mb-1">🏗️</div>
-                    <p class="font-black text-[10px] text-gray-800 dark:text-white">Foundation</p>
+                    <p class="font-black text-[10px] text-gray-800 dark:text-white">Phase 1</p>
                     <p class="text-[9px] text-green-500 font-black mt-2" id="count-foundation">0 Items</p>
                 </div>
                 <div class="bg-white dark:bg-gray-800 p-4 rounded-[1.5rem] border dark:border-gray-700 shadow-sm click-press flex flex-col items-center text-center transition-shadow hover:shadow-md" onclick="renderWishlistPhase('Roofing')">
                     <div class="text-2xl mb-1">🏠</div>
-                    <p class="font-black text-[10px] text-gray-800 dark:text-white">Roofing</p>
+                    <p class="font-black text-[10px] text-gray-800 dark:text-white">Phase 2</p>
                     <p class="text-[9px] text-green-500 font-black mt-2" id="count-roofing">0 Items</p>
                 </div>
                 <div class="bg-white dark:bg-gray-800 p-4 rounded-[1.5rem] border dark:border-gray-700 shadow-sm click-press flex flex-col items-center text-center transition-shadow hover:shadow-md" onclick="renderWishlistPhase('Finishing')">
                     <div class="text-2xl mb-1">🎨</div>
-                    <p class="font-black text-[10px] text-gray-800 dark:text-white">Finishing</p>
+                    <p class="font-black text-[10px] text-gray-800 dark:text-white">Phase 3</p>
                     <p class="text-[9px] text-green-500 font-black mt-2" id="count-finishing">0 Items</p>
                 </div>
             </div>
@@ -422,7 +458,7 @@
                 </div>
                 <div class="p-4 bg-white dark:bg-gray-800 border-t dark:border-gray-700 flex gap-2 shrink-0">
                     <input type="text" id="chat-input" class="flex-grow bg-gray-50 dark:bg-gray-800 rounded-full px-6 py-4 text-sm font-medium outline-none border dark:border-gray-700 focus:ring-2 focus:ring-green-500 transition-shadow" placeholder="Ask anything...">
-                    <button onclick="sendMessage()" class="w-14 h-14 bg-green-600 hover:bg-green-700 text-white rounded-full font-bold click-press shadow-lg flex items-center justify-center text-xl shrink-0">→</button>
+                    <button id="send-btn" class="w-14 h-14 bg-green-600 hover:bg-green-700 text-white rounded-full font-bold click-press shadow-lg flex items-center justify-center text-xl shrink-0">→</button>
                 </div>
             </div>
 
@@ -467,8 +503,12 @@
     </nav>
 
     <script>
-        const RENDER_URL = 'https://ujenzismart-backend.onrender.com', WHATSAPP_NUM = '255743924467'; 
-        let cart = [], currentModalProduct = null, fbtItem = null, viewHistory = ['home'];
+        const RENDER_URL = 'https://ujenzismart-backend.onrender.com';
+        const WHATSAPP_NUM = '255743924467'; 
+        let cart = [];
+        let currentModalProduct = null;
+        let fbtItem = null;
+        let viewHistory = ['home'];
 
         // --- THEME TOGGLE LOGIC ---
         function updateThemeIcon() {
@@ -520,8 +560,7 @@
 
             if (event.state && event.state.view) {
                 viewHistory.pop();
-                // Pass true to trigger the slideBackFade animation!
-                navigateTo(event.state.view, true);
+                navigateTo(event.state.view, true); // True triggers the slide back animation
             } else {
                 navigateTo('home', true);
             }
@@ -708,7 +747,7 @@
             isGoldVIP = false;
 
             if(spend >= 5000000) {
-                badge.className = "px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest bg-gradient-to-r from-amber-400 to-yellow-600 text-white shadow-md inline-block";
+                badge.className = "px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest bg-gradient-to-r from-yellow-400 to-yellow-600 text-white shadow-md inline-block";
                 badge.innerHTML = "👑 Gold Builder";
                 perk.classList.remove('hidden');
                 isGoldVIP = true;
@@ -986,6 +1025,9 @@
             }
             chatBox.scrollTop = chatBox.scrollHeight;
         }
+
+        const sendBtn = document.getElementById('send-btn');
+        if (sendBtn) sendBtn.onclick = sendMessage;
 
         checkAuth();
     </script>
