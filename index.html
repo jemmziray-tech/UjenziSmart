@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>UjenziSmart - Premium Pro</title>
+    <title>UjenziSmart - Premium Builder</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = { darkMode: 'class' }
@@ -17,25 +17,25 @@
         applyTheme();
     </script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
         body { font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; scroll-behavior: smooth; overscroll-behavior-y: none; }
         
         /* Smooth Native App Transitions */
         .view-content { animation: slideUpFade 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); }
         @keyframes slideUpFade { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* Smartphone Side-Slide Transition for "Back" actions */
+        
+        /* Smartphone Side-Slide Transition for Back Navigation */
         @keyframes slideBackFade { from { opacity: 0; transform: translateX(-30px); } to { opacity: 1; transform: translateX(0); } }
 
         .stagger-item { animation: staggerIn 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) both; }
         @keyframes staggerIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
 
         .click-press { transition: transform 0.1s ease; }
-        .click-press:active { transform: scale(0.95); }
+        .click-press:active { transform: scale(0.96); }
 
-        .glass { backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+        .glass { backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); }
         
-        /* Premium Blue Tech Background (For Header Only) */
+        /* Premium Blue Tech Background (Header Only) */
         .bg-deep-tech { background: radial-gradient(circle at top right, #112347 0%, #030814 100%); }
         .pattern-overlay { background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.03' fill-rule='evenodd'%3E%3Ccircle cx='20' cy='20' r='1'/%3E%3C/g%3E%3C/svg%3E"); }
 
@@ -52,11 +52,8 @@
         @keyframes skeleton-loading { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
         
         ::-webkit-scrollbar { width: 0px; background: transparent; }
-        
         .bar-grow { animation: growUp 1s ease-out forwards; transform-origin: bottom; }
         @keyframes growUp { from { transform: scaleY(0); } to { transform: scaleY(1); } }
-
-        /* Bottom Sheet Styles */
         .bottom-sheet { transition: transform 0.3s cubic-bezier(0.32, 1.25, 0.32, 1); transform: translateY(100%); }
         .bottom-sheet.open { transform: translateY(0); }
         
@@ -67,15 +64,15 @@
         .toggle-label { width: 3rem; height: 1.5rem; background-color: #e5e7eb; border-radius: 9999px; transition: all 0.3s; }
     </style>
 </head>
-<body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 pb-24 transition-colors duration-300 relative min-h-screen">
+<body class="bg-[#f4f6f9] dark:bg-gray-900 text-gray-800 dark:text-gray-100 pb-24 transition-colors duration-300 relative min-h-screen">
 
-    <div id="auth-screen" class="fixed inset-0 z-[200] bg-gray-50 dark:bg-gray-900 flex flex-col justify-center px-6 transition-opacity duration-300">
+    <div id="auth-screen" class="fixed inset-0 z-[200] bg-[#f4f6f9] dark:bg-gray-900 flex flex-col justify-center px-6 transition-opacity duration-300">
         <div class="max-w-md mx-auto w-full bg-white dark:bg-gray-800 p-8 rounded-[2.5rem] shadow-2xl border dark:border-gray-700 text-center animate-stagger-in">
-            <h1 class="text-4xl font-black text-green-600 dark:text-green-500 mb-2 tracking-tighter">UjenziSmart</h1>
+            <h1 class="text-4xl font-black text-green-600 mb-2 tracking-tighter">UjenziSmart</h1>
             <p class="text-gray-500 mb-8 text-sm font-medium">Your premium building partner.</p>
-            <form id="auth-form" class="flex flex-col gap-4 text-left">
-                <input type="email" id="auth-email" required placeholder="Email Address" class="w-full bg-gray-50 dark:bg-gray-900 border dark:border-gray-700 rounded-2xl px-5 py-4 outline-none focus:ring-2 focus:ring-green-500 transition-all">
-                <input type="password" id="auth-password" required placeholder="Password" class="w-full bg-gray-50 dark:bg-gray-900 border dark:border-gray-700 rounded-2xl px-5 py-4 outline-none focus:ring-2 focus:ring-green-500 transition-all">
+            <form id="auth-form" onsubmit="event.preventDefault();" class="flex flex-col gap-4 text-left">
+                <input type="email" id="auth-email" required placeholder="Email Address" class="w-full bg-gray-50 dark:bg-gray-900 border dark:border-gray-700 rounded-2xl px-5 py-4 outline-none focus:ring-2 focus:ring-green-500">
+                <input type="password" id="auth-password" required placeholder="Password" class="w-full bg-gray-50 dark:bg-gray-900 border dark:border-gray-700 rounded-2xl px-5 py-4 outline-none focus:ring-2 focus:ring-green-500">
                 <button type="submit" class="w-full py-4 bg-green-500 hover:bg-green-600 text-white rounded-2xl font-bold click-press shadow-lg transition-colors">Sign In</button>
             </form>
             <div class="relative flex items-center justify-center my-6">
@@ -100,11 +97,11 @@
                     <img id="header-p-image" src="https://ui-avatars.com/api/?name=User&background=10b981&color=fff" class="w-11 h-11 rounded-full border-[3px] border-white/20 shadow-lg object-cover click-press cursor-pointer transition-transform active:scale-95" onclick="navigateTo('profile')">
                 </div>
 
-                <button onclick="window.switchTheme()" class="w-11 h-11 bg-white/5 rounded-full border border-white/10 flex items-center justify-center click-press shadow-inner glass relative overflow-hidden group hover:bg-white/10 transition-colors">
-                    <svg id="icon-sun" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-[22px] h-[22px] text-amber-300 hidden dark:block transition-transform duration-500 group-hover:rotate-90 drop-shadow-[0_0_5px_rgba(252,211,77,0.5)]">
+                <button onclick="window.switchTheme()" class="w-11 h-11 bg-white/5 rounded-full border border-white/10 flex items-center justify-center click-press shadow-inner glass relative overflow-hidden transition-colors hover:bg-white/10">
+                    <svg id="icon-sun" style="display:none;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-[24px] h-[24px] text-amber-300 drop-shadow-[0_0_5px_rgba(252,211,77,0.5)]">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-2.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z" />
                     </svg>
-                    <svg id="icon-moon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-[20px] h-[20px] text-blue-100 block dark:hidden transition-transform duration-500 group-hover:-rotate-12">
+                    <svg id="icon-moon" style="display:none;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-[20px] h-[20px] text-blue-100">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998Z" />
                     </svg>
                 </button>
@@ -469,8 +466,12 @@
     </nav>
 
     <script>
-        const RENDER_URL = 'https://ujenzismart-backend.onrender.com', WHATSAPP_NUM = '255743924467'; 
-        let cart = [], currentModalProduct = null, fbtItem = null, viewHistory = ['home'];
+        const RENDER_URL = 'https://ujenzismart-backend.onrender.com';
+        const WHATSAPP_NUM = '255743924467'; 
+        let cart = [];
+        let currentModalProduct = null;
+        let fbtItem = null;
+        let viewHistory = ['home'];
 
         // --- THEME TOGGLE LOGIC ---
         function updateThemeIcon() {
@@ -478,13 +479,8 @@
             const sun = document.getElementById('icon-sun');
             const moon = document.getElementById('icon-moon');
             if(sun && moon) {
-                if(isDark) {
-                    sun.classList.remove('hidden');
-                    moon.classList.add('hidden');
-                } else {
-                    sun.classList.add('hidden');
-                    moon.classList.remove('hidden');
-                }
+                sun.style.display = isDark ? 'block' : 'none';
+                moon.style.display = isDark ? 'none' : 'block';
             }
         }
         
@@ -637,7 +633,7 @@
             }
         }
 
-        // --- AUTH, PROFILE & SETUP ---
+        // --- PROFILE & SETUP LOGIC ---
         function checkAuth() {
             const user = JSON.parse(localStorage.getItem('ujenzi_user'));
             if (user) {
@@ -657,8 +653,8 @@
             const firstName = user.name.split(' ')[0];
             const h = new Date().getHours();
             let g = "Good Evening"; if(h < 12) g = "Good Morning"; else if(h < 17) g = "Good Afternoon";
-            document.getElementById('header-title').textContent = `${g}, ${firstName}`;
-            document.getElementById('header-subtitle').textContent = `Project Status: Ready to Build | 60% Complete`;
+            document.getElementById('header-title').textContent = `${g}, ${firstName}! 👋`;
+            document.getElementById('header-subtitle').textContent = `Welcome back to UjenziSmart.`;
         }
 
         function handleProfileUpload(event) {
@@ -715,7 +711,7 @@
             isGoldVIP = false;
 
             if(spend >= 5000000) {
-                badge.className = "px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest bg-gradient-to-r from-amber-400 to-yellow-600 text-white shadow-md inline-block";
+                badge.className = "px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest bg-gradient-to-r from-yellow-400 to-yellow-600 text-white shadow-md inline-block";
                 badge.innerHTML = "👑 Gold Builder";
                 perk.classList.remove('hidden');
                 isGoldVIP = true;
@@ -753,7 +749,7 @@
                     <p class="text-[11px] font-bold px-1 leading-tight mb-1 h-8 overflow-hidden">${p.name}</p>
                     <div class="flex justify-between items-center px-1 mt-auto pb-1">
                         <p class="text-green-600 font-black text-[11px]">TZS ${p.price.toLocaleString()}</p>
-                        <div class="w-7 h-7 bg-green-50 dark:bg-green-900/30 text-green-600 dark:text-green-400 rounded-lg flex items-center justify-center font-bold text-lg">+</div>
+                        <div class="w-7 h-7 bg-gray-100 dark:bg-gray-700 rounded-lg flex items-center justify-center font-bold text-lg">+</div>
                     </div>
                 </div>`;
         }
@@ -1015,12 +1011,51 @@
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const provider = new GoogleAuthProvider();
-        const messaging = getMessaging(app);
         
-        // Listen for foreground notifications
-        onMessage(messaging, (payload) => {
-            alert(`📢 UjenziSmart News: ${payload.notification.title}\n${payload.notification.body}`);
-        });
+        // 🚨 CRITICAL FIX: Attach Login Button immediately so it never breaks!
+        const googleBtn = document.getElementById('google-signin-btn');
+        if (googleBtn) {
+            googleBtn.onclick = async () => { 
+                const originalText = googleBtn.innerHTML;
+                googleBtn.innerHTML = "⏳ Securely logging in..."; 
+                try {
+                    const result = await signInWithPopup(auth, provider);
+                    localStorage.setItem('ujenzi_user', JSON.stringify({ 
+                        name: result.user.displayName, 
+                        email: result.user.email, 
+                        photoURL: result.user.photoURL 
+                    }));
+                    location.reload(); 
+                } catch (error) {
+                    console.error("Login Error:", error);
+                    if (error.code !== 'auth/popup-closed-by-user') {
+                        alert("Login failed: " + error.message);
+                    }
+                    googleBtn.innerHTML = originalText;
+                }
+            };
+        }
+
+        // THE LOGOUT BUTTON
+        window.logoutUser = async function() {
+            try {
+                await signOut(auth);
+                localStorage.removeItem('ujenzi_user');
+                localStorage.removeItem('ujenzi_notif'); 
+                localStorage.removeItem('fcm_token');
+                location.reload(); 
+            } catch (error) { console.error("Logout Error:", error); }
+        };
+
+        // UPDATE FIREBASE PROFILE NAME
+        window.updateFirebaseName = async function(newName) {
+            if(auth.currentUser) {
+                try {
+                    await updateProfile(auth.currentUser, { displayName: newName });
+                    console.log("Firebase Profile updated to:", newName);
+                } catch (error) { console.error("Error updating Firebase profile:", error); }
+            }
+        };
 
         // AUTO-HEALER
         onAuthStateChanged(auth, (user) => {
@@ -1034,58 +1069,26 @@
             }
         });
 
-        // UPDATE FIREBASE PROFILE NAME
-        window.updateFirebaseName = async function(newName) {
-            if(auth.currentUser) {
-                try {
-                    await updateProfile(auth.currentUser, { displayName: newName });
-                    console.log("Firebase Profile updated to:", newName);
-                } catch (error) {
-                    console.error("Error updating Firebase profile:", error);
-                }
-            }
-        };
-
-        // THE LOGIN BUTTON
-        document.getElementById('google-signin-btn').onclick = async () => { 
-            const btn = document.getElementById('google-signin-btn');
-            const originalText = btn.innerHTML;
-            btn.innerHTML = "⏳ Securely logging in..."; 
-            
-            try {
-                const result = await signInWithPopup(auth, provider);
-                localStorage.setItem('ujenzi_user', JSON.stringify({ 
-                    name: result.user.displayName, 
-                    email: result.user.email, 
-                    photoURL: result.user.photoURL 
-                }));
-                location.reload(); 
-            } catch (error) {
-                console.error("Login Error:", error);
-                if (error.code !== 'auth/popup-closed-by-user') {
-                    alert("Login failed. Please try again.");
-                }
-                btn.innerHTML = originalText;
-            }
-        };
-
-        // THE LOGOUT BUTTON
-        window.logoutUser = async function() {
-            try {
-                await signOut(auth);
-                localStorage.removeItem('ujenzi_user');
-                localStorage.removeItem('ujenzi_notif'); 
-                localStorage.removeItem('fcm_token');
-                location.reload(); 
-            } catch (error) {
-                console.error("Logout Error:", error);
-            }
-        };
+        // 🚨 CRITICAL FIX: Safe messaging initialization
+        let messaging = null;
+        try {
+            messaging = getMessaging(app);
+            onMessage(messaging, (payload) => {
+                alert(`📢 UjenziSmart News: ${payload.notification.title}\n${payload.notification.body}`);
+            });
+        } catch (e) {
+            console.warn("Firebase Messaging blocked or unsupported by browser.", e);
+        }
 
         // PUSH NOTIFICATIONS
         window.toggleNotifications = async function() {
             const toggle = document.getElementById('notif-toggle');
             if (toggle.checked) {
+                if(!messaging) {
+                    alert("Push notifications are not supported in your current browser setup.");
+                    toggle.checked = false;
+                    return;
+                }
                 try {
                     const p = await Notification.requestPermission();
                     if (p === 'granted') {
@@ -1100,20 +1103,15 @@
                         if (tok) { 
                             localStorage.setItem('ujenzi_notif', 'true'); 
                             localStorage.setItem('fcm_token', tok);
-                            console.log("FCM Token:", tok);
                             alert("Notifications Enabled Successfully!"); 
                         }
-                    } else { 
-                        toggle.checked = false; 
-                    }
+                    } else { toggle.checked = false; }
                 } catch (e) { 
                     console.error("FCM Error:", e);
                     alert("Error authorizing notifications. See console."); 
                     toggle.checked = false; 
                 }
-            } else { 
-                localStorage.setItem('ujenzi_notif', 'false'); 
-            }
+            } else { localStorage.setItem('ujenzi_notif', 'false'); }
         };
     </script>
 </body>
