@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>UjenziSmart - Premium Builder</title>
+    <title>UjenziSmart - Premium Pro</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = { darkMode: 'class' }
@@ -17,37 +17,27 @@
         applyTheme();
     </script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap');
         body { font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; scroll-behavior: smooth; overscroll-behavior-y: none; }
         
         /* Smooth Native App Transitions */
         .view-content { animation: slideUpFade 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); }
-        
-        @keyframes slideUpFade { 
-            from { opacity: 0; transform: translateY(20px); } 
-            to { opacity: 1; transform: translateY(0); } 
-        }
-        
-        @keyframes slideBackFade { 
-            from { opacity: 0; transform: translateX(-30px); } 
-            to { opacity: 1; transform: translateX(0); } 
-        }
+        @keyframes slideUpFade { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Smartphone Side-Slide Transition */
+        @keyframes slideBackFade { from { opacity: 0; transform: translateX(-30px); } to { opacity: 1; transform: translateX(0); } }
 
         .stagger-item { animation: staggerIn 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) both; }
         @keyframes staggerIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
 
         .click-press { transition: transform 0.1s ease; }
-        .click-press:active { transform: scale(0.96); }
+        .click-press:active { transform: scale(0.95); }
 
-        .glass { backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); }
+        .glass { backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
         
         /* Premium Blue Tech Background */
-        .bg-deep-tech {
-            background: radial-gradient(circle at top right, #112347 0%, #030814 100%);
-        }
-        .pattern-overlay {
-            background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.03' fill-rule='evenodd'%3E%3Ccircle cx='20' cy='20' r='1'/%3E%3C/g%3E%3C/svg%3E");
-        }
+        .bg-deep-tech { background: radial-gradient(circle at top right, #112347 0%, #030814 100%); }
+        .pattern-overlay { background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.03' fill-rule='evenodd'%3E%3Ccircle cx='20' cy='20' r='1'/%3E%3C/g%3E%3C/svg%3E"); }
 
         .skeleton { background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%); background-size: 200% 100%; animation: skeleton-loading 1.5s infinite; }
         .dark .skeleton { background: linear-gradient(90deg, #1f2937 25%, #374151 50%, #1f2937 75%); }
@@ -58,11 +48,13 @@
         .bar-grow { animation: growUp 1s ease-out forwards; transform-origin: bottom; }
         @keyframes growUp { from { transform: scaleY(0); } to { transform: scaleY(1); } }
 
+        /* Bottom Sheet Styles */
         .bottom-sheet { transition: transform 0.3s cubic-bezier(0.32, 1.25, 0.32, 1); transform: translateY(100%); }
         .bottom-sheet.open { transform: translateY(0); }
         
-        .toggle-checkbox:checked { right: 0; border-color: #10b981; }
-        .toggle-checkbox:checked + .toggle-label { background-color: #10b981; }
+        /* Toggle Switch */
+        .toggle-checkbox:checked { right: 0; border-color: #3b82f6; }
+        .toggle-checkbox:checked + .toggle-label { background-color: #3b82f6; }
         .toggle-checkbox { right: 4px; z-index: 1; border-color: #e5e7eb; transition: all 0.3s; }
         .toggle-label { width: 3rem; height: 1.5rem; background-color: #e5e7eb; border-radius: 9999px; transition: all 0.3s; }
     </style>
@@ -74,9 +66,9 @@
             <h1 class="text-4xl font-black text-blue-600 dark:text-blue-400 mb-2 tracking-tighter">UjenziSmart</h1>
             <p class="text-gray-500 mb-8 text-sm font-medium">Your premium building partner.</p>
             <form id="auth-form" class="flex flex-col gap-4 text-left">
-                <input type="email" id="auth-email" required placeholder="Email Address" class="w-full bg-gray-50 dark:bg-gray-900 border dark:border-gray-700 rounded-2xl px-5 py-4 outline-none focus:ring-2 focus:ring-blue-500">
-                <input type="password" id="auth-password" required placeholder="Password" class="w-full bg-gray-50 dark:bg-gray-900 border dark:border-gray-700 rounded-2xl px-5 py-4 outline-none focus:ring-2 focus:ring-blue-500">
-                <button type="submit" class="w-full py-4 bg-blue-600 text-white rounded-2xl font-bold click-press shadow-lg">Sign In</button>
+                <input type="email" id="auth-email" required placeholder="Email Address" class="w-full bg-gray-50 dark:bg-gray-900 border dark:border-gray-700 rounded-2xl px-5 py-4 outline-none focus:ring-2 focus:ring-blue-500 transition-all">
+                <input type="password" id="auth-password" required placeholder="Password" class="w-full bg-gray-50 dark:bg-gray-900 border dark:border-gray-700 rounded-2xl px-5 py-4 outline-none focus:ring-2 focus:ring-blue-500 transition-all">
+                <button type="submit" class="w-full py-4 bg-blue-600 text-white rounded-2xl font-bold shadow-lg click-press">Sign In</button>
             </form>
             <div class="relative flex items-center justify-center my-6">
                 <div class="border-t w-full absolute border-gray-200 dark:border-gray-700"></div>
@@ -117,27 +109,11 @@
         </div>
     </header>
 
-    <div class="px-5 pt-[230px] relative z-10 max-w-7xl mx-auto pb-24">
+    <div class="px-5 pt-[160px] relative z-10 max-w-7xl mx-auto pb-24">
         
         <div id="view-home" class="view-content flex flex-col gap-6">
             
-            <div id="home-tools" class="-mt-16 relative z-50">
-                <button onclick="openCalculator()" class="w-full bg-[#162444]/90 backdrop-blur-2xl border border-white/10 p-5 rounded-[1.8rem] shadow-[0_20px_40px_rgba(0,0,0,0.3)] flex items-center justify-between click-press stagger-item relative overflow-hidden group">
-                    <div class="absolute left-0 top-0 bottom-0 w-1.5 bg-gradient-to-b from-blue-400 to-indigo-600"></div>
-                    <div class="absolute -right-8 -top-8 w-32 h-32 bg-blue-500/20 rounded-full blur-[30px] group-hover:bg-blue-400/30 transition-all duration-500 pointer-events-none"></div>
-                    
-                    <div class="flex items-center gap-4 ml-2 relative z-10">
-                        <div class="w-12 h-12 bg-gradient-to-tr from-amber-100 to-yellow-500 rounded-xl flex items-center justify-center text-2xl shadow-lg border border-white/20">📐</div>
-                        <div class="text-left">
-                            <span class="font-black text-[17px] text-white block drop-shadow-md tracking-tight">Site Estimator</span>
-                            <span class="text-[9px] text-blue-200/80 font-bold uppercase tracking-widest mt-0.5 block">Calculate Materials</span>
-                        </div>
-                    </div>
-                    <span class="text-white/40 font-bold text-2xl relative z-10 group-hover:translate-x-1 transition-transform">›</span>
-                </button>
-            </div>
-
-            <div class="relative stagger-item -mt-2 shadow-[0_5px_15px_rgba(0,0,0,0.05)] rounded-[2rem] bg-white dark:bg-gray-800 border border-transparent dark:border-gray-700">
+            <div class="relative stagger-item shadow-[0_5px_15px_rgba(0,0,0,0.05)] rounded-[2rem] bg-white dark:bg-gray-800 border border-transparent dark:border-gray-700">
                 <input type="text" id="search-input" onkeyup="handleSearch()" placeholder="Search cement, tiles, rebars..." class="w-full bg-transparent rounded-[2rem] px-14 py-[18px] outline-none font-bold text-[13px] text-gray-800 dark:text-gray-100 placeholder-gray-400">
                 <span class="absolute left-5 top-[17px] text-lg opacity-40">🔍</span>
             </div>
@@ -252,15 +228,21 @@
             </div>
         </div>
 
-        <div id="view-profile" class="view-content hidden">
-            <div class="bg-white dark:bg-gray-800 rounded-[2.5rem] p-6 shadow-xl border border-transparent dark:border-gray-700 text-center relative mb-8 mt-2 flex flex-col items-center">
+        <div id="view-profile" class="view-content hidden mt-10">
+            <div class="bg-white dark:bg-gray-800 rounded-[2.5rem] p-6 shadow-xl border border-transparent dark:border-gray-700 text-center relative mb-8 flex flex-col items-center">
                 <div class="relative -mt-16 mb-4 group cursor-pointer z-10" onclick="document.getElementById('profile-upload').click()">
-                    <img id="p-image" src="https://ui-avatars.com/api/?name=User&background=0D1B2A&color=fff&size=128" class="w-28 h-28 rounded-full object-cover border-[6px] border-white dark:border-gray-800 shadow-xl click-press transition-transform bg-white dark:bg-gray-800">
+                    <img id="p-image" src="https://ui-avatars.com/api/?name=User&background=0D1B2A&color=fff&size=128" class="w-28 h-28 rounded-full object-cover border-[6px] border-white dark:border-gray-800 shadow-xl bg-blue-600 transition-transform click-press">
                     <div class="absolute bottom-1 right-1 bg-blue-600 text-white w-8 h-8 rounded-full shadow-md border-2 border-white dark:border-gray-800 flex items-center justify-center text-xs">📷</div>
                     <input type="file" id="profile-upload" class="hidden" accept="image/*" onchange="handleProfileUpload(event)">
                 </div>
                 
-                <h2 id="p-name" class="text-2xl font-black text-gray-800 dark:text-white leading-tight">User</h2>
+                <div class="flex items-center justify-center gap-3 mb-1">
+                    <h2 id="p-name" class="text-2xl font-black text-gray-800 dark:text-white leading-tight">User</h2>
+                    <button onclick="openEditNameModal()" class="w-8 h-8 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center text-gray-400 hover:text-blue-600 transition-colors click-press shadow-sm">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4"><path d="m2.695 14.762-1.262 3.155a.5.5 0 0 0 .65.65l3.155-1.262a4 4 0 0 0 1.343-.886L17.5 5.501a2.121 2.121 0 0 0-3-3L3.58 13.419a4 4 0 0 0-.885 1.343Z" /></svg>
+                    </button>
+                </div>
+                
                 <p id="p-email" class="text-xs text-gray-400 font-medium mb-4">user@email.com</p>
                 <div id="vip-badge" class="px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest bg-gray-200 text-gray-600 shadow-sm inline-block">Standard Builder</div>
             </div>
@@ -284,17 +266,17 @@
             <div class="grid grid-cols-3 gap-3 mb-8 stagger-item" style="animation-delay: 0.1s">
                 <div class="bg-white dark:bg-gray-800 p-4 rounded-[1.5rem] border dark:border-gray-700 shadow-sm click-press flex flex-col items-center text-center transition-shadow hover:shadow-md" onclick="renderWishlistPhase('Foundation')">
                     <div class="text-2xl mb-1">🏗️</div>
-                    <p class="font-black text-[10px] text-gray-800 dark:text-white">Foundation</p>
+                    <p class="font-black text-[10px] text-gray-800 dark:text-white">Phase 1</p>
                     <p class="text-[9px] text-blue-500 font-black mt-2" id="count-foundation">0 Items</p>
                 </div>
                 <div class="bg-white dark:bg-gray-800 p-4 rounded-[1.5rem] border dark:border-gray-700 shadow-sm click-press flex flex-col items-center text-center transition-shadow hover:shadow-md" onclick="renderWishlistPhase('Roofing')">
                     <div class="text-2xl mb-1">🏠</div>
-                    <p class="font-black text-[10px] text-gray-800 dark:text-white">Roofing</p>
+                    <p class="font-black text-[10px] text-gray-800 dark:text-white">Phase 2</p>
                     <p class="text-[9px] text-blue-500 font-black mt-2" id="count-roofing">0 Items</p>
                 </div>
                 <div class="bg-white dark:bg-gray-800 p-4 rounded-[1.5rem] border dark:border-gray-700 shadow-sm click-press flex flex-col items-center text-center transition-shadow hover:shadow-md" onclick="renderWishlistPhase('Finishing')">
                     <div class="text-2xl mb-1">🎨</div>
-                    <p class="font-black text-[10px] text-gray-800 dark:text-white">Finishing</p>
+                    <p class="font-black text-[10px] text-gray-800 dark:text-white">Phase 3</p>
                     <p class="text-[9px] text-blue-500 font-black mt-2" id="count-finishing">0 Items</p>
                 </div>
             </div>
@@ -303,6 +285,7 @@
 
             <h3 class="font-black text-lg mb-4 px-2 mt-4 tracking-tight">Settings & Support</h3>
             <div class="bg-white dark:bg-gray-800 rounded-[2.5rem] p-1 border dark:border-gray-700 shadow-sm mb-6 stagger-item" style="animation-delay: 0.2s">
+                
                 <div class="flex items-center justify-between p-5 border-b dark:border-gray-700">
                     <div class="flex items-center gap-4">
                         <span class="text-xl">🔔</span>
@@ -347,6 +330,18 @@
                 <p class="text-sm text-gray-500 dark:text-gray-400 mb-8 leading-relaxed font-medium">UjenziSmart provides a platform for estimating and ordering construction materials in Tanzania. Prices are indicative and subject to market changes.</p>
                 <h3 class="font-black text-xl mb-3 text-blue-600">Privacy Policy</h3>
                 <p class="text-sm text-gray-500 dark:text-gray-400 leading-relaxed font-medium">We collect your data solely to fulfill orders and provide accurate AI estimations. Your data is encrypted and never sold.</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="edit-name-modal" class="fixed inset-0 z-[150] hidden bg-black/60 flex items-center justify-center transition-opacity backdrop-blur-sm px-4">
+        <div class="bg-white dark:bg-gray-900 w-full max-w-sm rounded-[2.5rem] p-6 shadow-2xl animate-stagger-in border border-transparent dark:border-gray-700">
+            <h3 class="text-xl font-black mb-1 text-center dark:text-white">Edit Profile</h3>
+            <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest text-center mb-5">Update your display name</p>
+            <input type="text" id="edit-name-input" class="w-full bg-gray-50 dark:bg-gray-800 p-4 rounded-2xl outline-none border dark:border-gray-700 font-bold text-sm text-gray-800 dark:text-gray-100 mb-5 focus:ring-2 focus:ring-blue-500 transition-shadow">
+            <div class="flex gap-3">
+                <button onclick="closeEditNameModal()" class="flex-1 py-3.5 bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 rounded-2xl font-black click-press text-xs uppercase tracking-widest">Cancel</button>
+                <button onclick="saveNewName()" class="flex-1 py-3.5 bg-blue-600 text-white rounded-2xl font-black click-press shadow-md text-xs uppercase tracking-widest">Save</button>
             </div>
         </div>
     </div>
@@ -464,20 +459,55 @@
         const RENDER_URL = 'https://ujenzismart-backend.onrender.com', WHATSAPP_NUM = '255743924467'; 
         let cart = [], currentModalProduct = null, fbtItem = null, viewHistory = ['home'];
 
+        // --- THEME TOGGLE LOGIC ---
+        function updateThemeIcon() {
+            const isDark = document.documentElement.classList.contains('dark');
+            const sun = document.getElementById('icon-sun');
+            const moon = document.getElementById('icon-moon');
+            if(sun && moon) {
+                if(isDark) {
+                    sun.classList.remove('hidden');
+                    moon.classList.add('hidden');
+                } else {
+                    sun.classList.add('hidden');
+                    moon.classList.remove('hidden');
+                }
+            }
+        }
+        
+        window.switchTheme = function() {
+            const html = document.documentElement;
+            html.classList.toggle('dark');
+            localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+            updateThemeIcon();
+        }
+        document.addEventListener("DOMContentLoaded", updateThemeIcon);
+
         // --- MOBILE BACK BUTTON LOGIC ---
         window.addEventListener('popstate', (e) => {
-            const pSheet = document.getElementById('product-sheet'), aiSheet = document.getElementById('ai-hub-sheet');
+            const pSheet = document.getElementById('product-sheet');
+            const aiHubSheet = document.getElementById('ai-hub-sheet');
+            const editModal = document.getElementById('edit-name-modal');
+            
             let closed = false;
-            if (pSheet.classList.contains('open')) { closeProduct(); closed = true; }
-            if (aiSheet.classList.contains('open')) { closeAiHub(); closed = true; }
-            if (!document.getElementById('calc-modal').classList.contains('hidden')) { closeCalculator(); closed = true; }
+            if (pSheet && pSheet.classList.contains('open')) { closeProduct(); closed = true; }
+            if (aiHubSheet && aiHubSheet.classList.contains('open')) { closeAiHub(); closed = true; }
+            if (editModal && !editModal.classList.contains('hidden')) { closeEditNameModal(); closed = true; }
+            
             if (closed) return;
-            if (e.state && e.state.view) { viewHistory.pop(); navigateTo(e.state.view, true); }
-            else { navigateTo('home', true); }
+            
+            if (e.state && e.state.view) { 
+                viewHistory.pop(); 
+                navigateTo(e.state.view, true); 
+            } else { 
+                navigateTo('home', true); 
+            }
         });
         history.replaceState({ view: 'home' }, '', '#home');
 
         // --- PRODUCT DATABASE ---
+        const categoryImages = { 'Foundation': 'https://images.unsplash.com/photo-1590060417941-2f34888463f1?w=400', 'Roofing': 'https://images.unsplash.com/photo-1635424710928-0544e8512eae?w=400', 'Plumbing': 'https://images.unsplash.com/photo-1581244277943-fe4a9c777189?w=400', 'Electrical': 'https://images.unsplash.com/photo-1550009158-9ebf69173e03?w=400', 'Finishing': 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=400', 'Tools': 'https://images.unsplash.com/photo-1530124560677-bdaea02c9a9d?w=400' };
+
         const productDatabase = {
             'Foundation & Structural': [
                 { name: 'Simba Cement 50kg', price: 18500, wt: 50, desc: 'Grade 42.5R high-strength structural cement.', img: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=400', rating: 4.9, reviews: 342, reviewTxt: "Always strong, sets perfectly." },
@@ -496,31 +526,6 @@
                 { name: 'Wheelbarrow', price: 110000, wt: 15, desc: 'Thick steel tray construction wheelbarrow.', img: 'https://images.unsplash.com/photo-1530124560677-bdaea02c9a9d?w=400', rating: 4.8, reviews: 312, reviewTxt: "Very tough." }
             ]
         };
-        const categoryImages = { 'Foundation': 'https://images.unsplash.com/photo-1590060417941-2f34888463f1?w=400', 'Roofing': 'https://images.unsplash.com/photo-1635424710928-0544e8512eae?w=400', 'Plumbing': 'https://images.unsplash.com/photo-1581244277943-fe4a9c777189?w=400', 'Electrical': 'https://images.unsplash.com/photo-1550009158-9ebf69173e03?w=400', 'Finishing': 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=400', 'Tools': 'https://images.unsplash.com/photo-1530124560677-bdaea02c9a9d?w=400' };
-
-        // --- THEME TOGGLE LOGIC ---
-        function updateThemeIcon() {
-            const isDark = document.documentElement.classList.contains('dark');
-            const sun = document.getElementById('icon-sun');
-            const moon = document.getElementById('icon-moon');
-            if(sun && moon) {
-                if(isDark) {
-                    sun.classList.remove('hidden');
-                    moon.classList.add('hidden');
-                } else {
-                    sun.classList.add('hidden');
-                    moon.classList.remove('hidden');
-                }
-            }
-        }
-
-        window.switchTheme = function() {
-            const html = document.documentElement;
-            html.classList.toggle('dark');
-            localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
-            updateThemeIcon(); 
-        }
-        document.addEventListener("DOMContentLoaded", updateThemeIcon);
 
         // --- NAVIGATION ENGINE ---
         function navigateTo(viewName, isBack = false) {
@@ -558,14 +563,12 @@
             
             if (mainTabs.includes(viewName)) {
                 backBtn.classList.add('hidden');
-                document.getElementById('home-tools').classList.toggle('hidden', viewName !== 'home');
                 if(viewName === 'home') setGreeting();
                 if(viewName === 'trending') { headerTitle.textContent = "Market Watch"; headerSub.textContent = "Live Price Tracking"; }
                 if(viewName === 'cart') { headerTitle.textContent = "Your Cart"; headerSub.textContent = "Secure Checkout"; }
                 if(viewName === 'profile') { headerTitle.textContent = "Profile"; headerSub.textContent = "Manage your account"; }
             } else {
                 backBtn.classList.remove('hidden');
-                document.getElementById('home-tools').classList.add('hidden');
                 if(viewName === 'cs') { headerTitle.textContent = "Support"; headerSub.textContent = "We are here to help"; }
                 if(viewName === 'legal') { headerTitle.textContent = "Legal"; headerSub.textContent = "Policies & Terms"; }
             }
@@ -586,6 +589,16 @@
             if(viewName === 'profile') { updateTrackerUI(); updateWishlistCounts(); }
             
             window.scrollTo(0,0);
+        }
+
+        function goBack() {
+            if(viewHistory.length > 1) {
+                viewHistory.pop(); 
+                const previous = viewHistory[viewHistory.length - 1];
+                navigateTo(previous, true);
+            } else {
+                navigateTo('home');
+            }
         }
 
         // --- AUTH & SETUP ---
@@ -619,6 +632,35 @@
                     document.getElementById('header-p-image').src = ev.target.result;
                     let u = JSON.parse(localStorage.getItem('ujenzi_user')); u.photoURL = ev.target.result; localStorage.setItem('ujenzi_user', JSON.stringify(u));
                 }; reader.readAsDataURL(file);
+            }
+        }
+
+        // --- EDIT NAME LOGIC ---
+        function openEditNameModal() {
+            const user = JSON.parse(localStorage.getItem('ujenzi_user'));
+            if(user) document.getElementById('edit-name-input').value = user.name;
+            document.getElementById('edit-name-modal').classList.remove('hidden');
+            history.pushState({ modal: 'edit-name' }, '', '#edit-name');
+        }
+
+        function closeEditNameModal() {
+            document.getElementById('edit-name-modal').classList.add('hidden');
+            if(window.location.hash === '#edit-name') history.back();
+        }
+
+        window.saveNewName = function() {
+            const newName = document.getElementById('edit-name-input').value.trim();
+            if(!newName) return;
+            
+            let user = JSON.parse(localStorage.getItem('ujenzi_user'));
+            if(user) {
+                user.name = newName;
+                localStorage.setItem('ujenzi_user', JSON.stringify(user));
+                document.getElementById('p-name').textContent = newName;
+                setGreeting(); 
+                closeEditNameModal();
+                
+                if(window.updateFirebaseName) window.updateFirebaseName(newName);
             }
         }
 
@@ -733,9 +775,34 @@
             container.classList.remove('hidden');
         }
 
-        // --- ESTIMATOR & AI HUB ---
-        function openCalculator() { document.getElementById('calc-modal').classList.remove('hidden'); }
-        function closeCalculator() { document.getElementById('calc-modal').classList.add('hidden'); }
+        // --- AI HUB (Tabbed: Chat & Estimator) ---
+        function openAiHub() { 
+            history.pushState({ modal: 'ai-hub' }, '', '#ai-hub'); 
+            document.getElementById('ai-hub-modal').classList.remove('hidden'); 
+            setTimeout(() => document.getElementById('ai-hub-sheet').classList.add('open'), 10); 
+        }
+        
+        function closeAiHub() { 
+            document.getElementById('ai-hub-sheet').classList.remove('open'); 
+            setTimeout(() => document.getElementById('ai-hub-modal').classList.add('hidden'), 300); 
+            if(window.location.hash === '#ai-hub') history.back(); 
+        }
+
+        function switchAiTab(tab) {
+            document.getElementById('ai-content-chat').classList.add('hidden'); 
+            document.getElementById('ai-content-calc').classList.add('hidden');
+            
+            document.getElementById('tab-chat').classList.replace('text-blue-600','text-gray-400');
+            document.getElementById('tab-chat').classList.replace('border-blue-600','border-transparent');
+            
+            document.getElementById('tab-calc').classList.replace('text-blue-600','text-gray-400');
+            document.getElementById('tab-calc').classList.replace('border-blue-600','border-transparent');
+            
+            document.getElementById(`ai-content-${tab}`).classList.remove('hidden'); 
+            document.getElementById(`tab-${tab}`).classList.replace('text-gray-400','text-blue-600');
+            document.getElementById(`tab-${tab}`).classList.replace('border-transparent','border-blue-600');
+        }
+
         function runCalculation() {
             const t = document.getElementById('calc-type').value, L = parseFloat(document.getElementById('calc-l').value), W = parseFloat(document.getElementById('calc-w').value);
             if(!L || !W) return; const a = L * W; let r = "";
@@ -743,15 +810,6 @@
             else if(t === 'floor') r = `Area: <b>${a}m²</b><br><br>Estimate:<br>• <b>${Math.ceil(a * 6.25)}</b> Tiles (40x40)<br>• <b>${Math.ceil(a/4)}</b> Bags of Tile Adhesive`;
             else r = `Area: <b>${a}m²</b><br><br>Estimate:<br>• <b>${Math.ceil(a / 2.2)}</b> Iron Sheets (3m)`;
             const res = document.getElementById('calc-results'); res.innerHTML = r; res.classList.remove('hidden');
-        }
-
-        function openAiHub() { history.pushState({ modal: 'ai-hub' }, '', '#ai-hub'); document.getElementById('ai-hub-modal').classList.remove('hidden'); setTimeout(() => document.getElementById('ai-hub-sheet').classList.add('open'), 10); }
-        function closeAiHub() { document.getElementById('ai-hub-sheet').classList.remove('open'); setTimeout(() => document.getElementById('ai-hub-modal').classList.add('hidden'), 300); if(window.location.hash === '#ai-hub') history.back(); }
-        function switchAiTab(tab) {
-            document.getElementById('ai-content-chat').classList.add('hidden'); document.getElementById('ai-content-calc').classList.add('hidden');
-            document.getElementById('tab-chat').classList.replace('text-blue-600','text-gray-400'); document.getElementById('tab-chat').classList.replace('border-blue-600','border-transparent');
-            document.getElementById('tab-calc').classList.replace('text-blue-600','text-gray-400'); document.getElementById('tab-calc').classList.replace('border-blue-600','border-transparent');
-            document.getElementById(`ai-content-${tab}`).classList.remove('hidden'); document.getElementById(`tab-${tab}`).classList.replace('text-gray-400','text-blue-600'); document.getElementById(`tab-${tab}`).classList.replace('border-transparent','border-blue-600');
         }
 
         const chatBox = document.getElementById('chat-box');
@@ -771,7 +829,7 @@
     
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-        import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+        import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged, updateProfile } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
         import { getMessaging, getToken, onMessage } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-messaging.js";
         
         const firebaseConfig = { 
@@ -794,7 +852,7 @@
             alert(`📢 UjenziSmart News: ${payload.notification.title}\n${payload.notification.body}`);
         });
 
-        // AUTO-HEALER: If Firebase remembers you, log in instantly without reloading the page
+        // AUTO-HEALER
         onAuthStateChanged(auth, (user) => {
             if (user && !localStorage.getItem('ujenzi_user')) {
                 localStorage.setItem('ujenzi_user', JSON.stringify({ 
@@ -802,12 +860,23 @@
                     email: user.email, 
                     photoURL: user.photoURL 
                 }));
-                // Force a hard reload to ensure all app state mounts cleanly
-                location.reload();
+                if(typeof checkAuth === "function") checkAuth();
             }
         });
 
-        // LOGIN BUTTON (Popup for GitHub Pages)
+        // UPDATE FIREBASE PROFILE NAME
+        window.updateFirebaseName = async function(newName) {
+            if(auth.currentUser) {
+                try {
+                    await updateProfile(auth.currentUser, { displayName: newName });
+                    console.log("Firebase Profile updated to:", newName);
+                } catch (error) {
+                    console.error("Error updating Firebase profile:", error);
+                }
+            }
+        };
+
+        // THE LOGIN BUTTON
         document.getElementById('google-signin-btn').onclick = async () => { 
             const btn = document.getElementById('google-signin-btn');
             const originalText = btn.innerHTML;
@@ -830,14 +899,14 @@
             }
         };
 
-        // PROPER LOGOUT BUTTON
+        // THE LOGOUT BUTTON
         window.logoutUser = async function() {
             try {
-                await signOut(auth); // Tell Firebase to forget the user
-                localStorage.removeItem('ujenzi_user'); // Tell our app to forget the user
+                await signOut(auth);
+                localStorage.removeItem('ujenzi_user');
                 localStorage.removeItem('ujenzi_notif'); 
                 localStorage.removeItem('fcm_token');
-                location.reload(); // Refresh the page to show the login screen again
+                location.reload(); 
             } catch (error) {
                 console.error("Logout Error:", error);
             }
