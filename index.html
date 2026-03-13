@@ -448,7 +448,6 @@
             if(viewName === 'profile') { updateTrackerUI(); updateWishlistCounts(); }
         }
 
-        // --- GREETING LOGIC ---
         function checkAuth() {
             const user = JSON.parse(localStorage.getItem('ujenzi_user'));
             if (user) {
@@ -464,7 +463,6 @@
             }
         }
 
-        // --- FLAWLESS THEME ANIMATION LOGIC ---
         function updateThemeIcon() {
             const isDark = document.documentElement.classList.contains('dark');
             const icon = document.getElementById('theme-icon');
@@ -486,7 +484,6 @@
         }
         document.addEventListener("DOMContentLoaded", updateThemeIcon);
 
-        // VIP GAMIFICATION
         let isGoldVIP = false;
         function updateTrackerUI() {
             const spend = parseInt(localStorage.getItem('ujenzi_total_spend') || '0');
@@ -514,7 +511,6 @@
             }
         }
 
-        // SMART SEARCH
         function handleSearch() {
             const query = document.getElementById('search-input').value.toLowerCase();
             const container = document.getElementById('dynamic-home-content');
@@ -594,7 +590,6 @@
             document.getElementById('modal-review-text').textContent = `"${reviewTxt}"`;
             document.getElementById('modal-price').textContent = `TZS ${p.toLocaleString()}`;
             
-            // AMAZON-STYLE FBT LOGIC
             const fbtSection = document.getElementById('fbt-section');
             fbtItem = null;
             if(t.includes('Cement')) fbtItem = productDatabase['Foundation & Structural'].find(x => x.name.includes('Bar'));
@@ -762,13 +757,26 @@
 
         checkAuth();
     </script>
+    
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
         import { getAuth, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
-        const firebaseConfig = { apiKey: "AIzaSyCX2C1TXRb20nGtxEaYXGUo2KEH7gbZCY0", authDomain: "ujenzismart-878af.firebaseapp.com", projectId: "ujenzismart-878af", storageBucket: "ujenzismart-878af.firebasestorage.app", messagingSenderId: "626807014511", appId: "1:626807014511:web:844e137d32048d6460399a" };
+        
+        // YOUR REAL FIREBASE KEYS (FROM YOUR SCREENSHOT)
+        const firebaseConfig = { 
+            apiKey: "AIzaSyCX2C1TXRb20nGtxEaYXGUo2KEH7gbZCY0", 
+            authDomain: "ujenzismart-878af.firebaseapp.com", 
+            projectId: "ujenzismart-878af", 
+            storageBucket: "ujenzismart-878af.firebasestorage.app", 
+            messagingSenderId: "626807014511", 
+            appId: "1:626807014511:web:844e137d32048d6460399a",
+            measurementId: "G-V8C9KKGKFY"
+        };
+
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const provider = new GoogleAuthProvider();
+        
         document.getElementById('google-signin-btn').onclick = async () => {
             try {
                 const res = await signInWithPopup(auth, provider);
