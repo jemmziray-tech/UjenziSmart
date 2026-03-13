@@ -2,12 +2,11 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>UjenziSmart - Premium Pro</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = { darkMode: 'class' }
-        // Pre-loads theme to prevent white-flash on reload
         function applyTheme() {
             if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
                 document.documentElement.classList.add('dark');
@@ -19,7 +18,7 @@
     </script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap');
-        body { font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; scroll-behavior: smooth; }
+        body { font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; scroll-behavior: smooth; overscroll-behavior-y: none; }
         
         .view-content { animation: slideUpFade 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); }
         @keyframes slideUpFade { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
@@ -47,6 +46,16 @@
         
         .bar-grow { animation: growUp 1s ease-out forwards; transform-origin: bottom; }
         @keyframes growUp { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+
+        /* Bottom Sheet Styles */
+        .bottom-sheet { transition: transform 0.3s cubic-bezier(0.32, 1.25, 0.32, 1); transform: translateY(100%); }
+        .bottom-sheet.open { transform: translateY(0); }
+        
+        /* Toggle Switch */
+        .toggle-checkbox:checked { right: 0; border-color: #10b981; }
+        .toggle-checkbox:checked + .toggle-label { background-color: #10b981; }
+        .toggle-checkbox { right: 4px; z-index: 1; border-color: #e5e7eb; transition: all 0.3s; }
+        .toggle-label { width: 3rem; height: 1.5rem; background-color: #e5e7eb; border-radius: 9999px; transition: all 0.3s; }
     </style>
 </head>
 <body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 pb-24 transition-colors duration-300 relative">
@@ -71,38 +80,37 @@
         </div>
     </div>
 
-    <header id="main-header" class="gradient-pulse pt-10 pb-24 px-6 rounded-b-[3rem] shadow-xl relative transition-all">
-        <div class="flex justify-between items-center text-white max-w-7xl mx-auto">
-            <div>
-                <h1 id="smart-greeting" class="text-3xl font-black tracking-tighter mb-1">Habari! 👋</h1>
-                <p id="welcome-subtitle" class="text-green-50 text-xs font-medium opacity-90">Welcome back to UjenziSmart.</p>
+    <header class="gradient-pulse pt-10 pb-6 px-6 shadow-md fixed top-0 w-full z-40 transition-all text-white rounded-b-[2rem]">
+        <div class="max-w-7xl mx-auto flex items-center justify-between h-12">
+            <button id="header-back-btn" onclick="goBack()" class="hidden w-10 h-10 bg-white/20 rounded-full flex items-center justify-center font-bold text-xl click-press mr-4 backdrop-blur-sm">←</button>
+            <div id="header-title-container" class="flex-grow">
+                <h1 id="header-title" class="text-2xl font-black tracking-tight leading-tight">Habari! 👋</h1>
+                <p id="header-subtitle" class="text-green-50 text-xs font-medium opacity-90">Welcome back to UjenziSmart.</p>
             </div>
-            
-            <button id="theme-toggle" onclick="switchTheme()" class="w-12 h-12 bg-white/20 rounded-full glass flex items-center justify-center transition-all active:scale-90 click-press shadow-sm relative overflow-hidden">
+            <button id="theme-toggle" onclick="switchTheme()" class="w-12 h-12 bg-white/20 rounded-full glass flex items-center justify-center transition-all active:scale-90 click-press shadow-sm relative overflow-hidden flex-shrink-0">
                 <div id="theme-icon" class="w-[24px] h-[24px] rounded-full border-2 border-white/60 transition-transform duration-500 shadow-inner" style="background: linear-gradient(135deg, #4c1d95 50%, #fcd34d 50%);"></div>
             </button>
         </div>
     </header>
 
-    <div class="px-5 -mt-12 relative z-10 max-w-7xl mx-auto pb-24">
+    <div class="px-5 pt-[130px] relative z-10 max-w-7xl mx-auto pb-24">
         
-        <div id="home-tools" class="grid grid-cols-1 gap-4 mb-8">
-            <button onclick="openCalculator()" class="bg-white dark:bg-gray-800 p-5 rounded-3xl shadow-lg border dark:border-gray-700 flex items-center justify-between px-6 click-press stagger-item">
-                <div class="flex items-center gap-4">
-                    <div class="w-12 h-12 bg-amber-100 rounded-2xl flex items-center justify-center text-2xl shadow-inner">📐</div>
-                    <div class="text-left">
-                        <span class="font-black text-sm text-gray-800 dark:text-white block">Site Estimator</span>
-                        <span class="text-[10px] text-gray-500 font-bold uppercase tracking-widest">Calculate Materials</span>
+        <div id="view-home" class="view-content flex flex-col gap-6">
+            <div id="home-tools" class="grid grid-cols-1 gap-4">
+                <button onclick="openCalculator()" class="bg-white dark:bg-gray-800 p-5 rounded-3xl shadow-lg border dark:border-gray-700 flex items-center justify-between px-6 click-press stagger-item">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 bg-amber-100 rounded-2xl flex items-center justify-center text-2xl shadow-inner">📐</div>
+                        <div class="text-left">
+                            <span class="font-black text-sm text-gray-800 dark:text-white block">Site Estimator</span>
+                            <span class="text-[10px] text-gray-500 font-bold uppercase tracking-widest">Calculate Materials</span>
+                        </div>
                     </div>
-                </div>
-                <span class="text-gray-300 font-bold text-xl">›</span>
-            </button>
-        </div>
+                    <span class="text-gray-300 font-bold text-xl">›</span>
+                </button>
+            </div>
 
-        <div id="view-home" class="view-content flex flex-col gap-8">
-            
             <div class="relative stagger-item" style="animation-delay: 0.1s">
-                <input type="text" id="search-input" onkeyup="handleSearch()" placeholder="Search for cement, tiles, iron sheets..." class="w-full bg-white dark:bg-gray-800 border dark:border-gray-700 rounded-2xl px-12 py-4 shadow-sm outline-none focus:ring-2 focus:ring-green-500 transition-all font-bold text-xs text-gray-700 dark:text-gray-100 placeholder-gray-400">
+                <input type="text" id="search-input" onkeyup="handleSearch()" placeholder="Search cement, tiles, iron sheets..." class="w-full bg-white dark:bg-gray-800 border dark:border-gray-700 rounded-2xl px-12 py-4 shadow-sm outline-none focus:ring-2 focus:ring-green-500 transition-all font-bold text-xs text-gray-700 dark:text-gray-100 placeholder-gray-400">
                 <span class="absolute left-4 top-[14px] text-lg opacity-50">🔍</span>
             </div>
 
@@ -175,7 +183,6 @@
         </div>
 
         <div id="view-cart" class="view-content hidden">
-            <h2 class="text-3xl font-black tracking-tighter mb-6 text-center">My Cart 🛒</h2>
             <div id="cart-items-container" class="flex flex-col gap-4 mb-6"></div>
             
             <div id="cart-footer" class="hidden">
@@ -223,11 +230,14 @@
 
         <div id="view-profile" class="view-content hidden">
             <div class="flex flex-col items-center mb-6">
-                <div id="p-initial-box" class="w-20 h-20 bg-gradient-to-tr from-green-500 to-emerald-400 rounded-full flex items-center justify-center text-white text-3xl font-black shadow-xl mb-3 border-4 border-white dark:border-gray-800">
-                    <span id="p-initial">U</span>
+                <div class="relative mb-3 group cursor-pointer" onclick="document.getElementById('profile-upload').click()">
+                    <img id="p-image" src="https://ui-avatars.com/api/?name=User&background=10b981&color=fff&size=128" class="w-24 h-24 rounded-full object-cover border-4 border-white dark:border-gray-800 shadow-xl bg-green-500 transition-transform click-press">
+                    <div class="absolute bottom-0 right-0 bg-white dark:bg-gray-700 p-1.5 rounded-full shadow-md border dark:border-gray-600 text-xs">📷</div>
+                    <input type="file" id="profile-upload" class="hidden" accept="image/*" onchange="handleProfileUpload(event)">
                 </div>
                 <h2 id="p-name" class="text-xl font-black text-gray-800 dark:text-white">User</h2>
-                <div id="vip-badge" class="mt-2 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest bg-gray-200 text-gray-600 shadow-sm">Standard Builder</div>
+                <p id="p-email" class="text-xs text-gray-400 font-medium mb-2">user@email.com</p>
+                <div id="vip-badge" class="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest bg-gray-200 text-gray-600 shadow-sm">Standard Builder</div>
             </div>
 
             <div id="tracker-card" class="bg-gray-900 text-white p-6 rounded-[2.5rem] shadow-2xl mb-8 relative overflow-hidden stagger-item">
@@ -268,27 +278,71 @@
             
             <div id="wishlist-render-area" class="mb-8 hidden"></div>
 
+            <h3 class="font-black text-lg mb-4 px-2 mt-4">Settings & Support</h3>
             <div class="space-y-4 stagger-item" style="animation-delay: 0.2s">
                 <div class="bg-white dark:bg-gray-800 rounded-[2.5rem] p-1 border dark:border-gray-700 shadow-sm">
-                    <button onclick="alert('Online payment service will be available soon.')" class="w-full flex items-center gap-4 p-5 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-[2.5rem] transition click-press">
-                        <span class="text-xl">💳</span>
-                        <span class="font-bold text-sm flex-grow text-left">Payment Methods</span>
+                    
+                    <div class="flex items-center justify-between p-5 border-b dark:border-gray-700">
+                        <div class="flex items-center gap-4">
+                            <span class="text-xl">🔔</span><span class="font-bold text-sm">Notifications</span>
+                        </div>
+                        <div class="relative inline-block w-12 align-middle select-none transition duration-200 ease-in">
+                            <input type="checkbox" id="notif-toggle" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer" onclick="toggleNotifications()"/>
+                            <label for="notif-toggle" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"></label>
+                        </div>
+                    </div>
+
+                    <button onclick="navigateTo('cs')" class="w-full flex items-center justify-between p-5 hover:bg-gray-50 dark:hover:bg-gray-700 transition click-press border-b dark:border-gray-700">
+                        <div class="flex items-center gap-4"><span class="text-xl">🎧</span><span class="font-bold text-sm">Customer Support</span></div>
+                        <span class="text-gray-400 font-bold text-xl">›</span>
+                    </button>
+
+                    <button onclick="navigateTo('legal')" class="w-full flex items-center justify-between p-5 hover:bg-gray-50 dark:hover:bg-gray-700 transition click-press border-b dark:border-gray-700">
+                        <div class="flex items-center gap-4"><span class="text-xl">📜</span><span class="font-bold text-sm">Legal & Policies</span></div>
+                        <span class="text-gray-400 font-bold text-xl">›</span>
+                    </button>
+
+                    <button onclick="alert('Online payment service will be available soon.')" class="w-full flex items-center justify-between p-5 hover:bg-gray-50 dark:hover:bg-gray-700 transition click-press border-b dark:border-gray-700">
+                        <div class="flex items-center gap-4"><span class="text-xl">💳</span><span class="font-bold text-sm">Payment Methods</span></div>
                         <span class="text-[9px] bg-amber-100 text-amber-700 px-2 py-1 rounded-md font-bold uppercase tracking-widest">Soon</span>
                     </button>
-                    <button onclick="localStorage.removeItem('ujenzi_user'); location.reload();" class="w-full flex items-center gap-4 p-5 hover:bg-red-50 dark:hover:bg-red-900/10 transition click-press border-t dark:border-gray-700">
+                    
+                    <button onclick="localStorage.removeItem('ujenzi_user'); location.reload();" class="w-full flex items-center gap-4 p-5 hover:bg-red-50 dark:hover:bg-red-900/10 transition click-press text-red-500 rounded-b-[2.5rem]">
                         <span class="text-xl">🚪</span>
-                        <span class="font-bold text-sm flex-grow text-left text-red-500">Logout from Account</span>
+                        <span class="font-bold text-sm text-left">Logout from Account</span>
                     </button>
                 </div>
             </div>
         </div>
+
+        <div id="view-cs" class="view-content hidden">
+            <div class="bg-white dark:bg-gray-800 p-8 rounded-[2.5rem] border dark:border-gray-700 shadow-xl text-center mt-4">
+                <div class="text-6xl mb-4">🎧</div>
+                <h2 class="text-2xl font-black mb-2">We're here to help</h2>
+                <p class="text-sm text-gray-500 dark:text-gray-400 mb-8 font-medium leading-relaxed">Our construction experts are available Monday to Saturday, 8:00 AM to 6:00 PM (EAT).</p>
+                <a href="https://wa.me/255743924467" target="_blank" class="flex items-center justify-center gap-3 w-full py-5 bg-[#25D366] text-white rounded-2xl font-black mb-4 click-press shadow-md">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.305-.885-.653-1.482-1.459-1.656-1.756-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                    Chat on WhatsApp
+                </a>
+                <a href="tel:+255743924467" class="block w-full py-5 bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-white rounded-2xl font-black click-press">Call +255 743 924 467</a>
+            </div>
+        </div>
+
+        <div id="view-legal" class="view-content hidden">
+            <div class="bg-white dark:bg-gray-800 p-8 rounded-[2.5rem] border dark:border-gray-700 shadow-xl mt-4">
+                <h3 class="font-black text-xl mb-3 text-green-600">Terms of Service</h3>
+                <p class="text-sm text-gray-500 dark:text-gray-400 mb-8 leading-relaxed font-medium">UjenziSmart provides a platform for estimating and ordering construction materials in Tanzania. Prices are indicative and subject to market changes. Delivery times depend strictly on the selected zone.</p>
+                <h3 class="font-black text-xl mb-3 text-green-600">Privacy Policy</h3>
+                <p class="text-sm text-gray-500 dark:text-gray-400 leading-relaxed font-medium">We collect your phone number, email, and project data solely to fulfill orders and provide accurate AI estimations. Your data is encrypted and never sold to third parties.</p>
+            </div>
+        </div>
     </div>
 
-    <div id="product-modal" class="fixed inset-0 z-[150] hidden bg-black/50 glass flex items-end justify-center p-3">
-        <div class="bg-white dark:bg-gray-900 w-full max-w-md rounded-[3rem] overflow-hidden shadow-2xl animate-slide-up flex flex-col max-h-[92vh]">
+    <div id="product-modal" class="fixed inset-0 z-[150] hidden bg-black/60 flex items-end justify-center transition-opacity backdrop-blur-sm">
+        <div id="product-sheet" class="bg-white dark:bg-gray-900 w-full max-w-md rounded-t-[2.5rem] overflow-hidden shadow-2xl flex flex-col max-h-[92vh] bottom-sheet">
             <div class="relative flex-shrink-0">
                 <img id="modal-img" src="" class="w-full h-48 object-cover">
-                <button onclick="closeProduct()" class="absolute top-4 right-4 w-10 h-10 bg-black/40 text-white rounded-full flex items-center justify-center font-bold backdrop-blur-md">✕</button>
+                <button onclick="closeProduct()" class="absolute top-4 right-4 w-10 h-10 bg-black/40 text-white rounded-full flex items-center justify-center font-bold backdrop-blur-md click-press">✕</button>
             </div>
             <div class="p-6 overflow-y-auto flex-grow hide-scrollbar">
                 <h3 id="modal-title" class="text-2xl font-black mb-1 text-gray-900 dark:text-white leading-tight"></h3>
@@ -298,10 +352,10 @@
                     <span id="modal-rating-text" class="text-xs text-gray-500 font-bold"></span>
                 </div>
 
-                <p id="modal-desc" class="text-gray-500 dark:text-gray-400 text-xs mb-4 leading-relaxed font-medium"></p>
+                <p id="modal-desc" class="text-gray-500 dark:text-gray-400 text-sm mb-4 leading-relaxed font-medium"></p>
                 
                 <div class="bg-gray-50 dark:bg-gray-800 p-4 rounded-2xl mb-4 border dark:border-gray-700 shadow-inner">
-                    <p class="text-[9px] text-gray-400 font-black uppercase tracking-widest mb-1 flex items-center gap-1"><span class="text-green-500">✓</span> Verified Review</p>
+                    <p class="text-[9px] text-green-600 font-black uppercase tracking-widest mb-1 flex items-center gap-1">✓ Verified Review</p>
                     <p id="modal-review-text" class="text-xs italic text-gray-700 dark:text-gray-300 font-medium"></p>
                 </div>
 
@@ -311,30 +365,34 @@
                         <img id="fbt-img" src="" class="w-12 h-12 rounded-xl object-cover border dark:border-gray-700">
                         <div class="flex-grow">
                             <p id="fbt-title" class="text-xs font-bold dark:text-white leading-tight"></p>
-                            <p id="fbt-price" class="text-[10px] text-green-500 font-black mt-1"></p>
+                            <p id="fbt-price" class="text-[10px] text-green-600 font-black mt-1"></p>
                         </div>
-                        <input type="checkbox" id="fbt-checkbox" class="w-5 h-5 accent-green-500 rounded border-gray-300">
+                        <input type="checkbox" id="fbt-checkbox" class="w-6 h-6 accent-green-500 rounded border-gray-300">
                     </div>
                 </div>
 
-                <div class="flex justify-between items-center mb-4 border-t dark:border-gray-700 pt-4">
+                <div class="flex justify-between items-center mb-5 border-t border-b dark:border-gray-700 py-5">
                     <span id="modal-price" class="text-2xl font-black text-green-600"></span>
                     <div class="flex flex-col items-end">
-                        <span class="text-[9px] text-gray-400 font-black uppercase tracking-widest mb-1">Quantity</span>
-                        <input type="number" id="modal-qty" value="1" min="1" class="w-20 bg-gray-100 dark:bg-gray-800 p-3 rounded-2xl text-center font-black outline-none border dark:border-gray-700">
+                        <span class="text-[9px] text-gray-400 font-black uppercase tracking-widest mb-2">Quantity</span>
+                        <div class="flex items-center bg-gray-100 dark:bg-gray-800 rounded-xl p-1 border dark:border-gray-700 shadow-inner">
+                            <button onclick="changeQty(-1)" class="w-10 h-10 flex items-center justify-center font-black text-gray-500 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-lg text-lg click-press">-</button>
+                            <input type="number" id="modal-qty" value="1" min="1" class="w-12 bg-transparent text-center font-black outline-none pointer-events-none text-lg">
+                            <button onclick="changeQty(1)" class="w-10 h-10 flex items-center justify-center font-black text-gray-500 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-lg text-lg click-press">+</button>
+                        </div>
                     </div>
                 </div>
 
                 <div class="flex gap-2 mb-6">
-                    <select id="phase-selector" class="flex-grow bg-gray-50 dark:bg-gray-800 border dark:border-gray-700 rounded-2xl px-3 outline-none text-[10px] font-bold text-gray-600 dark:text-gray-300">
+                    <select id="phase-selector" class="flex-grow bg-gray-50 dark:bg-gray-800 border dark:border-gray-700 rounded-2xl px-4 outline-none text-xs font-bold text-gray-700 dark:text-gray-200 shadow-sm">
                         <option value="Foundation">Phase 1: Foundation</option>
                         <option value="Roofing">Phase 2: Roofing</option>
                         <option value="Finishing">Phase 3: Finishing</option>
                     </select>
-                    <button onclick="saveToPhase()" class="px-4 py-3 bg-blue-50 dark:bg-blue-900/20 text-blue-600 rounded-2xl font-black text-[10px] uppercase tracking-widest click-press">Save 📌</button>
+                    <button onclick="saveToPhase()" class="px-5 py-4 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-2xl font-black text-[10px] uppercase tracking-widest click-press shadow-sm">Save 📌</button>
                 </div>
                 
-                <button id="add-to-cart-btn" class="w-full py-5 bg-green-500 text-white rounded-[2rem] font-black text-xs uppercase tracking-widest shadow-lg click-press">Add to Basket</button>
+                <button id="add-to-cart-btn" class="w-full py-5 bg-green-600 text-white rounded-[2rem] font-black text-sm uppercase tracking-widest shadow-lg click-press">Add to Basket</button>
             </div>
         </div>
     </div>
@@ -355,25 +413,27 @@
                 <input type="number" id="calc-w" placeholder="Width/Height" class="w-full bg-gray-50 dark:bg-gray-800 p-4 rounded-2xl outline-none border dark:border-gray-700 font-bold text-sm">
             </div>
 
-            <button onclick="runCalculation()" class="w-full py-4 bg-green-500 text-white rounded-[2rem] font-black click-press shadow-lg uppercase text-[10px] tracking-widest">Calculate Now</button>
-            <div id="calc-results" class="hidden mt-6 p-5 bg-green-50 dark:bg-green-900/20 rounded-2xl text-xs font-medium text-green-800 dark:text-green-300 leading-relaxed border border-green-100 dark:border-green-800"></div>
+            <button onclick="runCalculation()" class="w-full py-4 bg-green-600 text-white rounded-[2rem] font-black click-press shadow-lg uppercase text-[10px] tracking-widest">Calculate Now</button>
+            <div id="calc-results" class="hidden mt-6 p-5 bg-green-50 dark:bg-green-900/20 rounded-2xl text-sm font-medium text-green-800 dark:text-green-300 leading-relaxed border border-green-100 dark:border-green-800"></div>
             <button onclick="closeCalculator()" class="w-full mt-5 text-[10px] font-black text-gray-400 uppercase tracking-widest click-press">Close Window</button>
         </div>
     </div>
 
-    <div id="chat-modal" class="fixed inset-0 z-[150] hidden bg-black/50 glass flex items-end justify-center p-0">
-        <div class="bg-white dark:bg-gray-900 w-full max-w-md h-[85vh] rounded-t-[3rem] flex flex-col overflow-hidden shadow-2xl animate-slide-up" id="chat-container">
-            <div class="bg-green-600 p-6 flex justify-between items-center text-white">
+    <div id="chat-modal" class="fixed inset-0 z-[150] hidden bg-black/60 flex items-end justify-center transition-opacity backdrop-blur-sm">
+        <div id="chat-sheet" class="bg-white dark:bg-gray-900 w-full max-w-md h-[85vh] rounded-t-[2.5rem] flex flex-col overflow-hidden shadow-2xl bottom-sheet">
+            <div class="bg-green-600 p-6 flex justify-between items-center text-white shrink-0">
                 <div class="flex items-center gap-2">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 text-white"><path fill-rule="evenodd" d="M9 4.5a.75.75 0 0 1 .721.544l.813 2.846a3.75 3.75 0 0 0 2.576 2.576l2.846.813a.75.75 0 0 1 0 1.442l-2.846.813a3.75 3.75 0 0 0-2.576 2.576l-.813 2.846a.75.75 0 0 1-1.442 0l-.813-2.846a3.75 3.75 0 0 0-2.576-2.576l-2.846-.813a.75.75 0 0 1 0-1.442l2.846-.813A3.75 3.75 0 0 0 7.466 7.89l.813-2.846A.75.75 0 0 1 9 4.5ZM18 1.5a.75.75 0 0 1 .728.568l.258 1.036c.236.94.97 1.674 1.91 1.906l1.036.258a.75.75 0 0 1 0 1.45l-1.037.259a3.003 3.003 0 0 0-1.91 1.906l-.258 1.036a.75.75 0 0 1-1.455 0l-.258-1.036a3.003 3.003 0 0 0-1.91-1.906l-1.036-.259a.75.75 0 0 1 0-1.45l1.036-.258a3.003 3.003 0 0 0 1.91-1.906l.258-1.036A.75.75 0 0 1 18 1.5ZM16.5 15a.75.75 0 0 1 .712.513l.394 1.183c.15.447.5.799.948.948l1.183.395a.75.75 0 0 1 0 1.422l-1.183.395c-.447.15-.799.5-.948.948l-.395 1.183a.75.75 0 0 1-1.422 0l-.395-1.183a1.5 1.5 0 0 0-.948-.948l-1.183-.395a.75.75 0 0 1 0-1.422l1.183-.395c.447-.15.799-.5.948-.948l.395-1.183A.75.75 0 0 1 16.5 15Z" clip-rule="evenodd" /></svg>
                     <span class="font-black uppercase tracking-widest text-[10px]">Material Expert AI</span>
                 </div>
-                <button id="close-chat" class="text-xl w-8 h-8 flex items-center justify-center bg-black/20 rounded-full">✕</button>
+                <button id="close-chat" class="text-xl w-8 h-8 flex items-center justify-center bg-black/20 rounded-full click-press">✕</button>
             </div>
-            <div id="chat-box" class="flex-grow p-6 overflow-y-auto bg-gray-50 dark:bg-gray-800 flex flex-col gap-4"></div>
-            <div class="p-4 flex gap-3 border-t dark:border-gray-700 bg-white dark:bg-gray-900">
-                <input type="text" id="chat-input" class="flex-grow bg-gray-50 dark:bg-gray-800 rounded-full px-6 py-4 text-sm font-medium outline-none border dark:border-gray-700" placeholder="Ask about materials, costs...">
-                <button id="send-btn" class="w-14 h-14 bg-green-500 text-white rounded-full font-bold click-press shadow-lg flex items-center justify-center text-xl">→</button>
+            <div id="chat-box" class="flex-grow p-6 overflow-y-auto bg-gray-50 dark:bg-gray-800 flex flex-col gap-4">
+                <div class="p-4 bg-white dark:bg-gray-700 border dark:border-gray-600 rounded-[2rem] rounded-tl-none mr-auto mb-2 text-sm font-medium shadow-sm">Habari! Ask me any construction question.</div>
+            </div>
+            <div class="p-4 flex gap-3 border-t dark:border-gray-700 bg-white dark:bg-gray-900 shrink-0">
+                <input type="text" id="chat-input" class="flex-grow bg-gray-50 dark:bg-gray-800 rounded-full px-6 py-4 text-sm font-medium outline-none border dark:border-gray-700 focus:ring-2 focus:ring-green-500" placeholder="Ask about materials...">
+                <button id="send-btn" class="w-14 h-14 bg-green-600 text-white rounded-full font-bold click-press shadow-lg flex items-center justify-center text-xl shrink-0">→</button>
             </div>
         </div>
     </div>
@@ -384,10 +444,19 @@
     </button>
 
     <nav class="fixed bottom-0 w-full bg-white/95 dark:bg-gray-900/95 glass border-t dark:border-gray-800 px-6 py-2 flex justify-around items-center z-50">
-        <button onclick="switchView('home')" id="nav-home" class="nav-btn active-nav flex flex-col items-center gap-1 text-gray-400 text-[10px] font-bold transition-all p-2 click-press">🏠<span>Home</span></button>
-        <button onclick="switchView('trending')" id="nav-trending" class="nav-btn flex flex-col items-center gap-1 text-gray-400 text-[10px] font-bold transition-all p-2 click-press">📈<span>Watch</span></button>
-        <button onclick="switchView('cart')" id="nav-cart" class="nav-btn flex flex-col items-center gap-1 text-gray-400 text-[10px] font-bold transition-all p-2 relative click-press">🛒<span>Cart</span><span id="cart-badge" class="hidden absolute top-1 right-2 bg-green-500 text-white text-[8px] px-1.5 rounded-full ring-2 ring-white dark:ring-gray-900">0</span></button>
-        <button onclick="switchView('profile')" id="nav-profile" class="nav-btn flex flex-col items-center gap-1 text-gray-400 text-[10px] font-bold transition-all p-2 click-press">👤<span>Profile</span></button>
+        <button onclick="navigateTo('home')" id="nav-home" class="nav-btn active-nav flex flex-col items-center gap-1 text-gray-400 text-[10px] font-bold transition-all p-2 click-press w-16 text-green-600">
+            <span class="text-xl mb-0.5">🏠</span><span>Home</span>
+        </button>
+        <button onclick="navigateTo('trending')" id="nav-trending" class="nav-btn flex flex-col items-center gap-1 text-gray-400 text-[10px] font-bold transition-all p-2 click-press w-16">
+            <span class="text-xl mb-0.5">📈</span><span>Watch</span>
+        </button>
+        <button onclick="navigateTo('cart')" id="nav-cart" class="nav-btn flex flex-col items-center gap-1 text-gray-400 text-[10px] font-bold transition-all p-2 relative click-press w-16">
+            <span class="text-xl mb-0.5">🛒</span><span>Cart</span>
+            <span id="cart-badge" class="hidden absolute top-1 right-2 bg-red-500 text-white text-[8px] px-1.5 rounded-full ring-2 ring-white dark:ring-gray-900">0</span>
+        </button>
+        <button onclick="navigateTo('profile')" id="nav-profile" class="nav-btn flex flex-col items-center gap-1 text-gray-400 text-[10px] font-bold transition-all p-2 click-press w-16">
+            <span class="text-xl mb-0.5">👤</span><span>Profile</span>
+        </button>
     </nav>
 
     <script>
@@ -396,6 +465,31 @@
         let cart = [];
         let currentModalProduct = null;
         let fbtItem = null;
+        let viewHistory = ['home'];
+
+        // HISTORY API FOR NATIVE MOBILE BACK BUTTON
+        window.addEventListener('popstate', (event) => {
+            // First check if any bottom sheet is open, close it instead of navigating
+            const productSheet = document.getElementById('product-sheet');
+            const chatSheet = document.getElementById('chat-sheet');
+            
+            let sheetClosed = false;
+            if (productSheet && productSheet.classList.contains('open')) { closeProduct(); sheetClosed = true; }
+            if (chatSheet && chatSheet.classList.contains('open')) { document.getElementById('close-chat').click(); sheetClosed = true; }
+            if (!document.getElementById('calc-modal').classList.contains('hidden')) { closeCalculator(); sheetClosed = true; }
+            
+            if (sheetClosed) return; // Stop here
+
+            if (event.state && event.state.view) {
+                viewHistory.pop();
+                navigateTo(event.state.view, true);
+            } else {
+                navigateTo('home', true);
+            }
+        });
+
+        // Initialize state
+        history.replaceState({ view: 'home' }, '', '#home');
 
         const categoryImages = {
             'Foundation': 'https://images.unsplash.com/photo-1590060417941-2f34888463f1?w=400',
@@ -408,88 +502,143 @@
 
         const productDatabase = {
             'Foundation & Structural': [
-                { name: 'Simba Cement 50kg', price: 18500, wt: 50, desc: 'Grade 42.5R high-strength cement. Ideal for heavy structural concrete.', img: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=400', rating: 4.9, reviews: 342, reviewTxt: "Always strong, sets perfectly. My go-to brand." },
-                { name: 'Twiga Cement 50kg', price: 18000, wt: 50, desc: 'Standard 32.5N multipurpose cement. Excellent for block making.', img: 'https://images.unsplash.com/photo-1621360841013-c76831f1dbce?w=400', rating: 4.8, reviews: 215, reviewTxt: "Great for plastering walls smoothly." },
-                { name: 'Deformed Bar 12mm', price: 24000, wt: 10, desc: 'TBS approved Grade 500 steel rebars. 12 meters length.', img: 'https://images.unsplash.com/photo-1536882240095-0379873feb4e?w=400', rating: 4.8, reviews: 156, reviewTxt: "Accurate weight and length. Fast delivery." },
-                { name: 'Blocks 6-inch', price: 1200, wt: 15, desc: 'Machine-vibrated, solid load-bearing concrete blocks.', img: 'https://images.unsplash.com/photo-1589939705384-5185138a047a?w=400', rating: 4.6, reviews: 89, reviewTxt: "Minimal breakages during transport. Very solid." }
+                { name: 'Simba Cement 50kg', price: 18500, wt: 50, desc: 'Grade 42.5R high-strength cement.', img: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=400', rating: 4.9, reviews: 342, reviewTxt: "Always strong, sets perfectly." },
+                { name: 'Twiga Cement 50kg', price: 18000, wt: 50, desc: 'Standard 32.5N multipurpose cement.', img: 'https://images.unsplash.com/photo-1621360841013-c76831f1dbce?w=400', rating: 4.8, reviews: 215, reviewTxt: "Great for plastering walls." },
+                { name: 'Deformed Bar 12mm', price: 24000, wt: 10, desc: 'TBS approved Grade 500 steel rebars.', img: 'https://images.unsplash.com/photo-1536882240095-0379873feb4e?w=400', rating: 4.8, reviews: 156, reviewTxt: "Accurate weight." },
+                { name: 'Blocks 6-inch', price: 1200, wt: 15, desc: 'Machine-vibrated, solid concrete blocks.', img: 'https://images.unsplash.com/photo-1589939705384-5185138a047a?w=400', rating: 4.6, reviews: 89, reviewTxt: "Minimal breakages." }
             ],
             'Roofing Materials': [
-                { name: 'Iron Sheet 30G', price: 22000, wt: 4, desc: 'Corrugated premium anti-corrosive roofing sheets. 3 meters.', img: 'https://images.unsplash.com/photo-1635424710928-0544e8512eae?w=400', rating: 4.7, reviews: 210, reviewTxt: "Color doesn't fade under the hot Dar sun." },
-                { name: 'Timber 2x4 (12ft)', price: 14000, wt: 8, desc: 'Treated structural softwood timber. Termite resistant.', img: 'https://images.unsplash.com/photo-1533090481720-856c6e3c1fdc?w=400', rating: 4.5, reviews: 67, reviewTxt: "Straight cuts, thoroughly treated." }
-            ],
-            'Plumbing & Water': [
-                { name: 'PVC Pipe 110mm', price: 38000, wt: 3, desc: 'Heavy duty PN10 PVC pipe for sewage. 6 meters.', img: 'https://images.unsplash.com/photo-1581244277943-fe4a9c777189?w=400', rating: 4.8, reviews: 94, reviewTxt: "Thick walls, doesn't crack under pressure." },
-                { name: 'Simba Tank 1000L', price: 215000, wt: 35, desc: 'Food-grade, UV resistant HDPE vertical water storage tank.', img: 'https://images.unsplash.com/photo-1542332213-31f87348057f?w=400', rating: 4.9, reviews: 405, reviewTxt: "Best tank in the market. Keeps water cool." }
-            ],
-            'Electrical & Lighting': [
-                { name: 'Cable 1.5mm (Roll)', price: 78000, wt: 5, desc: 'Pure copper Twin & Earth cable. 90m roll.', img: 'https://images.unsplash.com/photo-1550009158-9ebf69173e03?w=400', rating: 4.9, reviews: 112, reviewTxt: "True copper, very easy to pull through conduits." },
-                { name: 'LED Panel 12W', price: 14000, wt: 0.5, desc: 'Recessed ultra-thin cool white ceiling panel.', img: 'https://images.unsplash.com/photo-1565814329452-e1efa11c5b89?w=400', rating: 4.6, reviews: 230, reviewTxt: "Very bright and low power consumption." }
+                { name: 'Iron Sheet 30G', price: 22000, wt: 4, desc: 'Corrugated premium anti-corrosive roofing sheets.', img: 'https://images.unsplash.com/photo-1635424710928-0544e8512eae?w=400', rating: 4.7, reviews: 210, reviewTxt: "Color doesn't fade." }
             ],
             'Finishing & Painting': [
-                { name: 'Silk Paint 20L', price: 145000, wt: 25, desc: 'Premium washable interior silk emulsion paint.', img: 'https://images.unsplash.com/photo-1562591970-254bc62245c0?w=400', rating: 4.8, reviews: 178, reviewTxt: "Coverage is excellent. Only needed two coats." },
-                { name: 'Floor Tiles Box', price: 32000, wt: 20, desc: 'Glossy ceramic 40x40cm floor tiles. Anti-slip.', img: 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=400', rating: 4.7, reviews: 88, reviewTxt: "Beautiful finish, completely transformed the room." },
-                { name: 'Tile Adhesive 25kg', price: 14000, wt: 25, desc: 'High-bond strength cementitious tile adhesive.', img: 'https://images.unsplash.com/photo-1589939705384-5185138a047a?w=400', rating: 4.5, reviews: 90, reviewTxt: "Bonds perfectly. Easy to mix." }
+                { name: 'Floor Tiles Box', price: 32000, wt: 20, desc: 'Glossy ceramic 40x40cm floor tiles.', img: 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=400', rating: 4.7, reviews: 88, reviewTxt: "Beautiful finish." },
+                { name: 'Tile Adhesive 25kg', price: 14000, wt: 25, desc: 'High-bond strength cementitious tile adhesive.', img: 'https://images.unsplash.com/photo-1589939705384-5185138a047a?w=400', rating: 4.5, reviews: 90, reviewTxt: "Bonds perfectly." }
             ],
             'Tools & Hardware': [
-                { name: 'Wheelbarrow', price: 110000, wt: 15, desc: 'Thick steel tray construction wheelbarrow. Pneumatic tire.', img: 'https://images.unsplash.com/photo-1530124560677-bdaea02c9a9d?w=400', rating: 4.8, reviews: 312, reviewTxt: "Very tough. Can carry heavy wet concrete easily." }
+                { name: 'Wheelbarrow', price: 110000, wt: 15, desc: 'Thick steel tray construction wheelbarrow.', img: 'https://images.unsplash.com/photo-1530124560677-bdaea02c9a9d?w=400', rating: 4.8, reviews: 312, reviewTxt: "Very tough." }
             ]
         };
 
-        function switchView(viewName) {
+        // --- NAVIGATION CONTROLLER ---
+        function navigateTo(viewName, isBack = false) {
             document.querySelectorAll('.view-content').forEach(v => v.classList.add('hidden'));
-            document.getElementById(`view-${viewName}`).classList.remove('hidden');
-            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active-nav'));
-            document.getElementById(`nav-${viewName}`).classList.add('active-nav');
-            document.getElementById('main-header').classList.toggle('hidden', viewName === 'cart' || viewName === 'trending');
-            document.getElementById('home-tools').classList.toggle('hidden', viewName !== 'home');
+            const targetView = document.getElementById(`view-${viewName}`);
+            if(targetView) targetView.classList.remove('hidden');
+
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('active-nav', 'text-green-600');
+            });
+            const activeBtn = document.getElementById(`nav-${viewName}`);
+            if(activeBtn) {
+                activeBtn.classList.add('active-nav', 'text-green-600');
+            }
+
+            const backBtn = document.getElementById('header-back-btn');
+            const headerTitle = document.getElementById('header-title');
+            const headerSub = document.getElementById('header-subtitle');
             
+            const mainTabs = ['home', 'trending', 'cart', 'profile'];
+            
+            if (mainTabs.includes(viewName)) {
+                backBtn.classList.add('hidden');
+                document.getElementById('home-tools').classList.toggle('hidden', viewName !== 'home');
+                if(viewName === 'home') setGreeting();
+                if(viewName === 'trending') { headerTitle.textContent = "Market Watch"; headerSub.textContent = "Live Price Tracking"; }
+                if(viewName === 'cart') { headerTitle.textContent = "Your Cart"; headerSub.textContent = "Secure Checkout"; }
+                if(viewName === 'profile') { headerTitle.textContent = "Profile"; headerSub.textContent = "Manage your account"; }
+            } else {
+                backBtn.classList.remove('hidden');
+                document.getElementById('home-tools').classList.add('hidden');
+                if(viewName === 'cs') { headerTitle.textContent = "Support"; headerSub.textContent = "We are here to help"; }
+                if(viewName === 'legal') { headerTitle.textContent = "Legal"; headerSub.textContent = "Policies & Terms"; }
+            }
+
+            if(!isBack) {
+                if(viewHistory[viewHistory.length - 1] !== viewName) {
+                    viewHistory.push(viewName);
+                    history.pushState({ view: viewName }, '', '#' + viewName);
+                }
+            }
+
             if(viewName === 'home') { document.getElementById('search-input').value = ''; renderHomeBase(); }
             if(viewName === 'cart') renderCart();
             if(viewName === 'profile') { updateTrackerUI(); updateWishlistCounts(); }
+            
+            window.scrollTo(0,0);
         }
 
+        function goBack() {
+            if(viewHistory.length > 1) {
+                viewHistory.pop(); 
+                const previous = viewHistory[viewHistory.length - 1];
+                navigateTo(previous, true);
+            } else {
+                navigateTo('home');
+            }
+        }
+
+        // --- AUTH & SETUP ---
         function checkAuth() {
             const user = JSON.parse(localStorage.getItem('ujenzi_user'));
             if (user) {
                 document.getElementById('auth-screen').classList.add('hidden');
-                const firstName = user.name.split(' ')[0];
-                const h = new Date().getHours();
-                let g = "Good Evening"; if(h < 12) g = "Good Morning"; else if(h < 17) g = "Good Afternoon";
-                document.getElementById('smart-greeting').textContent = `${g}, ${firstName}! 👋`;
+                setGreeting();
                 document.getElementById('p-name').textContent = user.name;
                 document.getElementById('p-email').textContent = user.email;
-                document.getElementById('p-initial').textContent = firstName[0].toUpperCase();
+                if(user.photoURL) document.getElementById('p-image').src = user.photoURL;
+                document.getElementById('notif-toggle').checked = localStorage.getItem('ujenzi_notif') === 'true';
                 renderHomeBase();
             }
+        }
+
+        function setGreeting() {
+            const user = JSON.parse(localStorage.getItem('ujenzi_user'));
+            if(!user) return;
+            const firstName = user.name.split(' ')[0];
+            const h = new Date().getHours();
+            let g = "Good Evening"; if(h < 12) g = "Good Morning"; else if(h < 17) g = "Good Afternoon";
+            document.getElementById('header-title').textContent = `${g}, ${firstName}! 👋`;
+            document.getElementById('header-subtitle').textContent = `Welcome back to UjenziSmart.`;
         }
 
         function updateThemeIcon() {
             const isDark = document.documentElement.classList.contains('dark');
             const icon = document.getElementById('theme-icon');
-            if(icon) { 
-                icon.style.transform = isDark ? 'rotate(180deg)' : 'rotate(0deg)'; 
-            }
+            if(icon) icon.style.transform = isDark ? 'rotate(180deg)' : 'rotate(0deg)'; 
         }
         
-        function switchTheme() {
+        // This is correctly attached via onclick in the HTML
+        window.switchTheme = function() {
             const html = document.documentElement;
-            if (html.classList.contains('dark')) {
-                html.classList.remove('dark');
-                localStorage.setItem('theme', 'light');
-            } else {
-                html.classList.add('dark');
-                localStorage.setItem('theme', 'dark');
-            }
+            html.classList.toggle('dark');
+            localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
             updateThemeIcon();
         }
         document.addEventListener("DOMContentLoaded", updateThemeIcon);
+
+        // --- PROFILE INTERACTIONS ---
+        function handleProfileUpload(event) {
+            const file = event.target.files[0];
+            if(file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('p-image').src = e.target.result;
+                    let u = JSON.parse(localStorage.getItem('ujenzi_user'));
+                    u.photoURL = e.target.result;
+                    localStorage.setItem('ujenzi_user', JSON.stringify(u));
+                }
+                reader.readAsDataURL(file);
+            }
+        }
+        function toggleNotifications() {
+            localStorage.setItem('ujenzi_notif', document.getElementById('notif-toggle').checked);
+        }
 
         let isGoldVIP = false;
         function updateTrackerUI() {
             const spend = parseInt(localStorage.getItem('ujenzi_total_spend') || '0');
             document.getElementById('total-project-cost').textContent = `TZS ${spend.toLocaleString()}`;
-            const progress = Math.min((spend / 5000000) * 100, 100);
-            document.getElementById('cost-progress').style.width = `${Math.max(progress, 5)}%`;
+            document.getElementById('cost-progress').style.width = `${Math.min((spend / 5000000) * 100, 100)}%`;
 
             const badge = document.getElementById('vip-badge');
             const perk = document.getElementById('vip-perk-text');
@@ -511,31 +660,30 @@
             }
         }
 
+        // --- HOME SEARCH & GRID ---
         function handleSearch() {
             const query = document.getElementById('search-input').value.toLowerCase();
             const container = document.getElementById('dynamic-home-content');
             if(!query) { renderHomeBase(); return; }
-            
             let results = [];
             for(let cat in productDatabase) {
                 productDatabase[cat].forEach(p => { if(p.name.toLowerCase().includes(query) || p.desc.toLowerCase().includes(query)) results.push(p); });
             }
-            
-            if(results.length === 0) { container.innerHTML = `<div class="text-center py-16 text-gray-400 font-bold">No matches found for "${query}".</div>`; return; }
-            container.innerHTML = `<div class="flex items-center gap-3 mb-2 click-press cursor-pointer" onclick="document.getElementById('search-input').value=''; renderHomeBase();"><span class="w-8 h-8 bg-white dark:bg-gray-800 rounded-full flex items-center justify-center shadow-sm text-gray-600 font-bold border dark:border-gray-700">←</span><h2 class="text-lg font-bold">Search Results</h2></div><div class="grid grid-cols-2 gap-4">${results.map((p, i) => generateProductCardHTML(p, i)).join('')}</div>`;
+            if(results.length === 0) { container.innerHTML = `<div class="text-center py-16 text-gray-400 font-bold">No results found.</div>`; return; }
+            container.innerHTML = `<div class="flex items-center gap-3 mb-2 click-press cursor-pointer" onclick="document.getElementById('search-input').value=''; renderHomeBase();"><span class="w-8 h-8 bg-white dark:bg-gray-800 rounded-full flex items-center justify-center shadow-sm font-bold border dark:border-gray-700">←</span><h2 class="text-lg font-bold">Search Results</h2></div><div class="grid grid-cols-2 gap-4">${results.map((p, i) => generateProductCardHTML(p, i)).join('')}</div>`;
         }
 
         function generateProductCardHTML(p, i) {
             return `
-                <div onclick="openProduct('${p.name.replace(/'/g, "\\'")}', '${p.desc.replace(/'/g, "\\'")}', ${p.price}, ${p.wt}, '${p.img}', ${p.rating}, ${p.reviews}, '${p.reviewTxt.replace(/'/g, "\\'")}')" class="stagger-item bg-white dark:bg-gray-800 rounded-3xl p-3 shadow-sm hover:shadow-xl border dark:border-gray-700 flex flex-col relative click-press group transition-all duration-300" style="animation-delay: ${i*0.05}s">
-                    <div class="relative overflow-hidden rounded-2xl mb-3">
-                        <img src="${p.img}" class="w-full h-36 object-cover group-hover:scale-110 transition-transform duration-500">
-                        <div class="absolute top-2 left-2 bg-white/90 dark:bg-gray-900/90 backdrop-blur-sm px-2 py-1 rounded-lg text-[9px] font-black flex items-center gap-1 shadow-sm"><span class="text-amber-400">★</span> ${p.rating}</div>
+                <div onclick="openProduct('${p.name.replace(/'/g, "\\'")}', '${p.desc.replace(/'/g, "\\'")}', ${p.price}, ${p.wt}, '${p.img}', ${p.rating}, ${p.reviews}, '${p.reviewTxt.replace(/'/g, "\\'")}')" class="bg-white dark:bg-gray-800 rounded-3xl p-3 shadow-sm border dark:border-gray-700 flex flex-col relative click-press group stagger-item" style="animation-delay: ${i*0.05}s">
+                    <div class="relative overflow-hidden rounded-2xl mb-3 bg-gray-100 dark:bg-gray-700">
+                        <img src="${p.img}" loading="lazy" class="w-full h-32 object-cover group-hover:scale-105 transition-transform duration-500">
+                        <div class="absolute top-2 left-2 bg-white/90 dark:bg-gray-900/90 backdrop-blur px-2 py-0.5 rounded text-[9px] font-black flex items-center gap-1 shadow-sm"><span class="text-amber-400">★</span> ${p.rating}</div>
                     </div>
-                    <p class="text-[11px] font-bold text-gray-800 dark:text-gray-100 px-1 leading-tight mb-1 h-8 overflow-hidden group-hover:text-green-600 transition-colors">${p.name}</p>
+                    <p class="text-[11px] font-bold px-1 leading-tight mb-1 h-8 overflow-hidden">${p.name}</p>
                     <div class="flex justify-between items-center px-1 mt-auto pb-1">
-                        <p class="text-green-500 font-black text-[11px]">TZS ${p.price.toLocaleString()}</p>
-                        <div class="w-7 h-7 bg-gray-50 dark:bg-gray-700 group-hover:bg-green-500 group-hover:text-white transition-colors rounded-xl flex items-center justify-center text-gray-500 font-medium text-lg shadow-sm">+</div>
+                        <p class="text-green-600 font-black text-[11px]">TZS ${p.price.toLocaleString()}</p>
+                        <div class="w-7 h-7 bg-gray-100 dark:bg-gray-700 rounded-lg flex items-center justify-center font-bold text-lg">+</div>
                     </div>
                 </div>`;
         }
@@ -544,10 +692,10 @@
             const container = document.getElementById('dynamic-home-content');
             container.innerHTML = `
                 <section>
-                    <h2 class="text-lg font-bold mb-4 px-1 text-gray-800 dark:text-white">Product Categories</h2>
+                    <h2 class="text-lg font-bold mb-4 px-1">Categories</h2>
                     <div class="grid grid-cols-2 gap-4">
                         ${Object.keys(categoryImages).map((cat, i) => `
-                            <div onclick="openCategory('${cat}')" class="stagger-item bg-white dark:bg-gray-800 rounded-3xl p-3 shadow-sm border dark:border-gray-700 flex flex-col click-press transition-all hover:shadow-md" style="animation-delay: ${i*0.05}s">
+                            <div onclick="openCategory('${cat}')" class="bg-white dark:bg-gray-800 rounded-3xl p-3 shadow-sm border dark:border-gray-700 flex flex-col click-press transition-all stagger-item" style="animation-delay: ${i*0.05}s">
                                 <img src="${categoryImages[cat]}" class="w-full h-24 object-cover rounded-2xl mb-3">
                                 <p class="font-bold text-sm px-1 mb-2">${cat}</p>
                                 <button class="w-full py-2 bg-green-50 dark:bg-green-900/30 text-green-600 dark:text-green-400 rounded-xl text-xs font-bold mt-auto">Explore</button>
@@ -555,8 +703,8 @@
                         `).join('')}
                     </div>
                 </section>
-                <section class="mt-2">
-                    <h2 class="text-lg font-bold mb-4 px-1 text-gray-800 dark:text-white">Featured Materials</h2>
+                <section class="mt-4">
+                    <h2 class="text-lg font-bold mb-4 px-1">Featured</h2>
                     <div class="grid grid-cols-2 gap-4">
                         ${generateProductCardHTML(productDatabase['Foundation & Structural'][0], 0)}
                         ${generateProductCardHTML(productDatabase['Roofing Materials'][0], 1)}
@@ -568,11 +716,11 @@
 
         function openCategory(shortCatName) {
             const fullCatName = catMap[shortCatName] || shortCatName;
-            const products = productDatabase[fullCatName];
+            const products = productDatabase[fullCatName] || [];
             const container = document.getElementById('dynamic-home-content');
             container.innerHTML = `
                 <div class="flex items-center gap-3 mb-4 click-press cursor-pointer" onclick="renderHomeBase()">
-                    <span class="w-8 h-8 bg-white dark:bg-gray-800 rounded-full flex items-center justify-center shadow-sm text-gray-600 font-bold border dark:border-gray-700">←</span>
+                    <span class="w-8 h-8 bg-white dark:bg-gray-800 rounded-full flex items-center justify-center shadow-sm font-bold border dark:border-gray-700">←</span>
                     <h2 class="text-xl font-bold">${shortCatName}</h2>
                 </div>
                 <div class="grid grid-cols-2 gap-4">
@@ -581,32 +729,36 @@
             window.scrollTo(0, 0);
         }
 
+        // --- PRODUCT BOTTOM SHEET LOGIC ---
         function openProduct(t, d, p, wt, i, rating, reviews, reviewTxt) {
             currentModalProduct = { name: t, desc: d, price: p, wt: wt, img: i };
             document.getElementById('modal-img').src = i;
             document.getElementById('modal-title').textContent = t;
             document.getElementById('modal-desc').textContent = d;
-            document.getElementById('modal-rating-text').textContent = `${rating} (${reviews} reviews)`;
+            document.getElementById('modal-rating-text').textContent = `${rating} (${reviews} verified)`;
             document.getElementById('modal-review-text').textContent = `"${reviewTxt}"`;
             document.getElementById('modal-price').textContent = `TZS ${p.toLocaleString()}`;
+            document.getElementById('modal-qty').value = 1;
             
+            // Push State for Android Back Button dismiss
+            history.pushState({ modal: 'product' }, '', '#product');
+            
+            // FBT Logic
             const fbtSection = document.getElementById('fbt-section');
-            fbtItem = null;
-            if(t.includes('Cement')) fbtItem = productDatabase['Foundation & Structural'].find(x => x.name.includes('Bar'));
-            else if(t.includes('Tiles')) fbtItem = productDatabase['Finishing & Painting'].find(x => x.name.includes('Adhesive'));
-            else fbtItem = productDatabase['Tools & Hardware'][0];
-
+            fbtItem = productDatabase['Tools & Hardware'][0]; 
+            if(t.includes('Cement')) fbtItem = productDatabase['Foundation & Structural'][2]; // Rebars
+            
             if(fbtItem && fbtItem.name !== t) {
                 document.getElementById('fbt-img').src = fbtItem.img;
                 document.getElementById('fbt-title').textContent = fbtItem.name;
                 document.getElementById('fbt-price').textContent = `+ TZS ${fbtItem.price.toLocaleString()}`;
                 document.getElementById('fbt-checkbox').checked = false;
                 fbtSection.classList.remove('hidden');
-            } else {
-                fbtSection.classList.add('hidden');
-            }
+            } else fbtSection.classList.add('hidden');
 
-            document.getElementById('product-modal').classList.remove('hidden');
+            const modal = document.getElementById('product-modal');
+            modal.classList.remove('hidden');
+            setTimeout(() => document.getElementById('product-sheet').classList.add('open'), 10);
             
             document.getElementById('add-to-cart-btn').onclick = () => {
                 const qty = parseInt(document.getElementById('modal-qty').value);
@@ -617,53 +769,59 @@
                 updateBadge(); closeProduct();
             };
         }
-        function closeProduct() { document.getElementById('product-modal').classList.add('hidden'); }
-        function updateBadge() { const b = document.getElementById('cart-badge'); b.textContent = cart.length; b.classList.toggle('hidden', cart.length === 0); }
-        
-        let transportCost = 0;
-        function calculateDelivery() {
-            const zoneMultiplier = parseFloat(document.getElementById('delivery-zone').value);
-            const resBox = document.getElementById('delivery-result-box');
-            if(zoneMultiplier === 0 || cart.length === 0) { transportCost = 0; resBox.classList.add('hidden'); updateCartTotals(); return; }
 
-            let totalWeight = 0; cart.forEach(item => { totalWeight += (item.wt * item.qty); });
-            let baseRate = 0; let vName = "Store Pickup"; let vIcon = "🏪";
-
-            if (zoneMultiplier > 0) {
-                if(totalWeight <= 50) { baseRate = 10000; vName = "Bodaboda (Courier)"; vIcon = "🏍️"; }
-                else if(totalWeight <= 400) { baseRate = 25000; vName = "Bajaji / Guta"; vIcon = "🛺"; }
-                else if(totalWeight <= 2500) { baseRate = 60000; vName = "Canter (Light Truck)"; vIcon = "🚚"; }
-                else { baseRate = 150000; vName = "Fuso (Heavy Duty)"; vIcon = "🚛"; }
-            }
-
-            transportCost = baseRate * zoneMultiplier;
-            if(isGoldVIP && transportCost > 0) { transportCost = transportCost * 0.5; vName += " (VIP 50% Off)"; }
-
-            document.getElementById('vehicle-icon').textContent = vIcon;
-            document.getElementById('vehicle-name').textContent = vName;
-            document.getElementById('transport-cost-display').textContent = zoneMultiplier === 0 ? 'Free' : `TZS ${transportCost.toLocaleString()}`;
-            resBox.classList.remove('hidden');
-            updateCartTotals();
+        function closeProduct() { 
+            document.getElementById('product-sheet').classList.remove('open');
+            setTimeout(() => document.getElementById('product-modal').classList.add('hidden'), 300);
+            // If the hash is #product, remove it so history is clean
+            if(window.location.hash === '#product') history.back();
         }
 
-        function updateCartTotals() {
-            let subtotal = 0; cart.forEach(i => subtotal += (i.price * i.qty));
-            document.getElementById('cart-subtotal').textContent = `TZS ${subtotal.toLocaleString()}`;
+        function changeQty(amt) {
+            const input = document.getElementById('modal-qty');
+            let v = parseInt(input.value) + amt;
+            if(v > 0) input.value = v;
+        }
+
+        function updateBadge() { 
+            const b = document.getElementById('cart-badge'); 
+            b.textContent = cart.length; 
+            b.classList.toggle('hidden', cart.length === 0); 
+        }
+
+        // --- CART & DELIVERY ---
+        let transportCost = 0;
+        function calculateDelivery() {
+            const zone = parseFloat(document.getElementById('delivery-zone').value);
+            let tw = 0; cart.forEach(i => tw += (i.wt * i.qty));
+            let br = 0; let n = "Store Pickup"; 
+            if(zone > 0) {
+                if(tw <= 50) { br = 10000; n = "Bodaboda"; }
+                else if(tw <= 400) { br = 25000; n = "Bajaji"; }
+                else if(tw <= 2500) { br = 60000; n = "Canter Truck"; }
+                else { br = 150000; n = "Fuso Truck"; }
+            }
+            const isGold = parseInt(localStorage.getItem('ujenzi_total_spend')||'0') >= 5000000;
+            transportCost = br * zone;
+            if(isGold && transportCost > 0) { transportCost *= 0.5; n += " (VIP 50%)"; }
+            
+            document.getElementById('vehicle-name').textContent = n;
+            document.getElementById('transport-cost-display').textContent = zone === 0 ? 'Free' : `TZS ${transportCost.toLocaleString()}`;
+            
+            let sub = 0; cart.forEach(i => sub += (i.price * i.qty));
+            document.getElementById('cart-subtotal').textContent = `TZS ${sub.toLocaleString()}`;
             document.getElementById('cart-transport').textContent = `TZS ${transportCost.toLocaleString()}`;
-            document.getElementById('cart-total-price').textContent = `TZS ${(subtotal + transportCost).toLocaleString()}`;
+            document.getElementById('cart-total-price').textContent = `TZS ${(sub + transportCost).toLocaleString()}`;
         }
 
         function renderCart() {
             const c = document.getElementById('cart-items-container');
-            if(cart.length === 0) { c.innerHTML = '<p class="text-center text-gray-400 py-16 font-medium">Basket is empty.</p>'; document.getElementById('cart-footer').classList.add('hidden'); return; }
-            
-            c.innerHTML = cart.map((i, idx) => {
-                return `<div class="bg-white dark:bg-gray-800 p-5 rounded-[2rem] flex justify-between items-center shadow-sm border dark:border-gray-700 stagger-item">
-                    <div><p class="font-bold text-xs uppercase">${i.title}</p><p class="text-[10px] text-gray-400 font-bold mt-1">${i.qty} units × TZS ${i.price.toLocaleString()}</p></div>
-                    <button onclick="cart.splice(${idx},1);renderCart();updateBadge();" class="text-red-500 font-bold px-3 text-lg">✕</button>
-                </div>`;
-            }).join('');
-            
+            if(cart.length === 0) { c.innerHTML = '<p class="text-center text-gray-400 py-16 font-bold">Your basket is empty.</p>'; document.getElementById('cart-footer').classList.add('hidden'); return; }
+            c.innerHTML = cart.map((i, idx) => `
+                <div class="bg-white dark:bg-gray-800 p-4 rounded-2xl flex justify-between items-center shadow-sm border dark:border-gray-700 stagger-item" style="animation-delay: ${idx*0.05}s">
+                    <div><p class="font-bold text-xs uppercase">${i.title}</p><p class="text-xs text-gray-500 mt-1">${i.qty} units × TZS ${i.price.toLocaleString()}</p></div>
+                    <button onclick="cart.splice(${idx},1);renderCart();updateBadge();" class="w-8 h-8 flex items-center justify-center bg-red-50 dark:bg-red-900/20 text-red-500 rounded-full font-bold click-press">✕</button>
+                </div>`).join('');
             document.getElementById('cart-footer').classList.remove('hidden');
             calculateDelivery();
         }
@@ -672,20 +830,13 @@
             const u = JSON.parse(localStorage.getItem('ujenzi_user'));
             let sub = 0; let m = `Habari UjenziSmart! I am ${u.name}.\nI want to order:\n\n`;
             cart.forEach(i => { m += `- ${i.title} (x${i.qty})\n`; sub += i.price * i.qty; });
-            const zoneText = document.getElementById('delivery-zone').options[document.getElementById('delivery-zone').selectedIndex].text;
-            const transMethod = document.getElementById('vehicle-name').textContent;
-            
-            m += `\nSubtotal: TZS ${sub.toLocaleString()}`;
-            m += `\nDelivery Zone: ${zoneText}`;
-            m += `\nTransport Method: ${transMethod}`;
-            m += `\nTransport Est: TZS ${transportCost.toLocaleString()}`;
-            m += `\n*TOTAL: TZS ${(sub + transportCost).toLocaleString()}*\n\nPlease confirm my order.`;
-            
-            const oldSpend = parseInt(localStorage.getItem('ujenzi_total_spend') || '0');
-            localStorage.setItem('ujenzi_total_spend', oldSpend + sub); 
+            const sel = document.getElementById('delivery-zone');
+            m += `\nSubtotal: TZS ${sub.toLocaleString()}\nZone: ${sel.options[sel.selectedIndex].text}\nTransport: TZS ${transportCost.toLocaleString()}\n*TOTAL: TZS ${(sub + transportCost).toLocaleString()}*`;
+            localStorage.setItem('ujenzi_total_spend', parseInt(localStorage.getItem('ujenzi_total_spend')||'0') + sub); 
             window.open(`https://wa.me/${WHATSAPP_NUM}?text=${encodeURIComponent(m)}`, '_blank');
         }
 
+        // --- WISHLIST PHASE ---
         function saveToPhase() {
             if(!currentModalProduct) return;
             const phase = document.getElementById('phase-selector').value;
@@ -709,10 +860,11 @@
             const items = list.filter(x => x.phase === phase);
             const container = document.getElementById('wishlist-render-area');
             if(items.length === 0) { container.innerHTML = `<p class="text-xs text-gray-400 italic mb-6 text-center">No items saved in this phase yet.</p>`; container.classList.remove('hidden'); return; }
-            container.innerHTML = `<div class="mb-4 flex items-center justify-between"><h4 class="font-bold text-sm uppercase tracking-widest text-green-600">${phase} Items</h4><button onclick="document.getElementById('wishlist-render-area').classList.add('hidden')" class="text-xs text-gray-400 font-bold click-press">Close</button></div><div class="grid grid-cols-2 gap-4 mb-6">${items.map(p => `<div class="bg-white dark:bg-gray-800 p-3 rounded-2xl shadow-sm border dark:border-gray-700 animate-slide-up"><img src="${p.img}" class="w-full h-20 object-cover rounded-xl mb-2"><p class="text-[9px] font-bold h-6 overflow-hidden">${p.name}</p><p class="text-green-600 font-black text-[10px]">TZS ${p.price.toLocaleString()}</p></div>`).join('')}</div>`;
+            container.innerHTML = `<div class="mb-4 flex items-center justify-between"><h4 class="font-bold text-sm uppercase tracking-widest text-green-600">${phase} Items</h4><button onclick="document.getElementById('wishlist-render-area').classList.add('hidden')" class="text-xs text-gray-400 font-bold click-press">Close</button></div><div class="grid grid-cols-2 gap-4 mb-6">${items.map(p => `<div class="bg-white dark:bg-gray-800 p-3 rounded-2xl shadow-sm border dark:border-gray-700 animate-slideUpFade"><img src="${p.img}" class="w-full h-20 object-cover rounded-xl mb-2"><p class="text-[9px] font-bold h-6 overflow-hidden">${p.name}</p><p class="text-green-600 font-black text-[10px]">TZS ${p.price.toLocaleString()}</p></div>`).join('')}</div>`;
             container.classList.remove('hidden');
         }
 
+        // --- ESTIMATOR ---
         function openCalculator() { document.getElementById('calc-modal').classList.remove('hidden'); }
         function closeCalculator() { document.getElementById('calc-modal').classList.add('hidden'); }
         function runCalculation() {
@@ -720,37 +872,43 @@
             const L = parseFloat(document.getElementById('calc-l').value);
             const W = parseFloat(document.getElementById('calc-w').value);
             if(!L || !W) return;
-            const area = L * W; let resultHtml = "";
-            if(type === 'wall') {
-                const blocks = Math.ceil(area * 12.5); const cement = Math.ceil(blocks / 30);
-                resultHtml = `Wall Area: <b>${area}m²</b><br><br>Required Estimate:<br>• <b>${blocks}</b> Concrete Blocks<br>• <b>${cement}</b> Bags of Cement`;
-            } else if(type === 'floor') {
-                const tiles = Math.ceil(area * 6.25);
-                resultHtml = `Floor Area: <b>${area}m²</b><br><br>Required Estimate:<br>• <b>${tiles}</b> Tiles (40x40)<br>• <b>${Math.ceil(area/4)}</b> Bags of Tile Adhesive`;
-            } else if(type === 'roof') {
-                const sheets = Math.ceil(area / 2.2);
-                resultHtml = `Roof Area: <b>${area}m²</b><br><br>Required Estimate:<br>• <b>${sheets}</b> Iron Sheets (3m)`;
-            }
-            document.getElementById('calc-results').innerHTML = resultHtml;
-            document.getElementById('calc-results').classList.remove('hidden');
+            const a = L * W; let r = "";
+            if(type === 'wall') r = `Area: <b>${a}m²</b><br><br>Estimate:<br>• <b>${Math.ceil(a * 12.5)}</b> Concrete Blocks<br>• <b>${Math.ceil((a*12.5) / 30)}</b> Bags of Cement`;
+            else if(type === 'floor') r = `Area: <b>${a}m²</b><br><br>Estimate:<br>• <b>${Math.ceil(a * 6.25)}</b> Tiles (40x40)<br>• <b>${Math.ceil(a/4)}</b> Bags of Tile Adhesive`;
+            else r = `Area: <b>${a}m²</b><br><br>Estimate:<br>• <b>${Math.ceil(a / 2.2)}</b> Iron Sheets (3m)`;
+            const res = document.getElementById('calc-results');
+            res.innerHTML = r; res.classList.remove('hidden');
         }
 
-        const chatModal = document.getElementById('chat-modal'), chatBox = document.getElementById('chat-box'), chatInput = document.getElementById('chat-input');
-        document.getElementById('material-expert-btn').onclick = () => { chatModal.classList.remove('hidden'); };
-        document.getElementById('close-chat').onclick = () => { chatModal.classList.add('hidden'); };
+        // --- AI HUB ---
+        const chatModal = document.getElementById('chat-modal'), chatBox = document.getElementById('chat-box');
+        document.getElementById('material-expert-btn').onclick = () => { 
+            history.pushState({ modal: 'chat' }, '', '#chat');
+            chatModal.classList.remove('hidden'); 
+            setTimeout(() => document.getElementById('chat-sheet').classList.add('open'), 10);
+        };
+        document.getElementById('close-chat').onclick = () => { 
+            document.getElementById('chat-sheet').classList.remove('open');
+            setTimeout(() => chatModal.classList.add('hidden'), 300);
+            if(window.location.hash === '#chat') history.back();
+        };
         async function sendMessage() {
-            const txt = chatInput.value.trim(); if(!txt) return;
-            chatBox.innerHTML += `<div class="p-4 bg-gray-800 text-white rounded-[2rem] rounded-tr-none ml-auto mb-2 text-sm font-medium shadow-md animate-stagger-in">${txt}</div>`;
-            chatInput.value = '';
+            const input = document.getElementById('chat-input');
+            const txt = input.value.trim(); if(!txt) return;
+            chatBox.innerHTML += `<div class="p-3 bg-green-600 text-white rounded-2xl rounded-tr-none ml-auto max-w-[85%] text-sm shadow-md animate-stagger-in">${txt}</div>`;
+            input.value = '';
             const loaderId = 'ai-loader-' + Date.now();
-            chatBox.innerHTML += `<div id="${loaderId}" class="mr-auto mb-2 w-[60%] flex flex-col gap-2"><div class="h-10 w-full skeleton rounded-2xl rounded-tl-none"></div></div>`;
+            chatBox.innerHTML += `<div id="${loaderId}" class="p-4 bg-white dark:bg-gray-800 border dark:border-gray-700 rounded-2xl rounded-tl-none mr-auto w-[60%] skeleton h-10"></div>`;
             chatBox.scrollTop = chatBox.scrollHeight;
             try {
                 const res = await fetch(`${RENDER_URL}/api/chat`, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ message: txt }) });
                 const d = await res.json();
                 document.getElementById(loaderId).remove();
-                chatBox.innerHTML += `<div class="p-5 bg-white dark:bg-gray-700 border dark:border-gray-600 rounded-[2rem] rounded-tl-none mr-auto mb-2 text-sm font-medium shadow-sm leading-relaxed animate-stagger-in">${d.reply || "Error."}</div>`;
-            } catch(e) { document.getElementById(loaderId).remove(); }
+                chatBox.innerHTML += `<div class="p-4 bg-white dark:bg-gray-800 border dark:border-gray-700 rounded-2xl rounded-tl-none mr-auto max-w-[85%] text-sm font-medium leading-relaxed animate-stagger-in">${d.reply || "Error connecting to AI."}</div>`;
+            } catch(e) { 
+                document.getElementById(loaderId).remove(); 
+                chatBox.innerHTML += `<div class="p-4 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 rounded-2xl rounded-tl-none mr-auto text-sm">Offline. Please use WhatsApp support.</div>`;
+            }
             chatBox.scrollTop = chatBox.scrollHeight;
         }
         document.getElementById('send-btn').onclick = sendMessage;
@@ -762,7 +920,7 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
         import { getAuth, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
         
-        // YOUR REAL FIREBASE KEYS (FROM YOUR SCREENSHOT)
+        // ⚠️ YOUR ACTUAL FIREBASE KEYS - SAFE TO COPY VIA THE COPY BUTTON ⚠️
         const firebaseConfig = { 
             apiKey: "AIzaSyCX2C1TXRb20nGtxEaYXGUo2KEH7gbZCY0", 
             authDomain: "ujenzismart-878af.firebaseapp.com", 
@@ -782,7 +940,7 @@
                 const res = await signInWithPopup(auth, provider);
                 localStorage.setItem('ujenzi_user', JSON.stringify({ name: res.user.displayName, email: res.user.email }));
                 location.reload();
-            } catch (e) { alert("Failed."); }
+            } catch (e) { alert("Authentication Failed."); }
         };
     </script>
 </body>
