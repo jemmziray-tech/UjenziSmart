@@ -24,7 +24,7 @@
         .view-content { animation: slideUpFade 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); }
         @keyframes slideUpFade { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         
-        /* Smartphone Side-Slide Transition for Back Navigation */
+        /* Smartphone Side-Slide Transition */
         @keyframes slideBackFade { from { opacity: 0; transform: translateX(-30px); } to { opacity: 1; transform: translateX(0); } }
 
         .stagger-item { animation: staggerIn 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) both; }
@@ -35,7 +35,7 @@
 
         .glass { backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); }
         
-        /* Premium Blue Tech Background (Header Only) */
+        /* Premium Blue Tech Background (For Header Only) */
         .bg-deep-tech { background: radial-gradient(circle at top right, #112347 0%, #030814 100%); }
         .pattern-overlay { background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.03' fill-rule='evenodd'%3E%3Ccircle cx='20' cy='20' r='1'/%3E%3C/g%3E%3C/svg%3E"); }
 
@@ -52,8 +52,10 @@
         @keyframes skeleton-loading { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
         
         ::-webkit-scrollbar { width: 0px; background: transparent; }
+        
         .bar-grow { animation: growUp 1s ease-out forwards; transform-origin: bottom; }
         @keyframes growUp { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+
         .bottom-sheet { transition: transform 0.3s cubic-bezier(0.32, 1.25, 0.32, 1); transform: translateY(100%); }
         .bottom-sheet.open { transform: translateY(0); }
         
@@ -68,11 +70,11 @@
 
     <div id="auth-screen" class="fixed inset-0 z-[200] bg-[#f4f6f9] dark:bg-gray-900 flex flex-col justify-center px-6 transition-opacity duration-300">
         <div class="max-w-md mx-auto w-full bg-white dark:bg-gray-800 p-8 rounded-[2.5rem] shadow-2xl border dark:border-gray-700 text-center animate-stagger-in">
-            <h1 class="text-4xl font-black text-green-600 mb-2 tracking-tighter">UjenziSmart</h1>
+            <h1 class="text-4xl font-black text-green-600 dark:text-green-500 mb-2 tracking-tighter">UjenziSmart</h1>
             <p class="text-gray-500 mb-8 text-sm font-medium">Your premium building partner.</p>
             <form id="auth-form" onsubmit="event.preventDefault();" class="flex flex-col gap-4 text-left">
-                <input type="email" id="auth-email" required placeholder="Email Address" class="w-full bg-gray-50 dark:bg-gray-900 border dark:border-gray-700 rounded-2xl px-5 py-4 outline-none focus:ring-2 focus:ring-green-500">
-                <input type="password" id="auth-password" required placeholder="Password" class="w-full bg-gray-50 dark:bg-gray-900 border dark:border-gray-700 rounded-2xl px-5 py-4 outline-none focus:ring-2 focus:ring-green-500">
+                <input type="email" id="auth-email" required placeholder="Email Address" class="w-full bg-gray-50 dark:bg-gray-900 border dark:border-gray-700 rounded-2xl px-5 py-4 outline-none focus:ring-2 focus:ring-green-500 transition-all">
+                <input type="password" id="auth-password" required placeholder="Password" class="w-full bg-gray-50 dark:bg-gray-900 border dark:border-gray-700 rounded-2xl px-5 py-4 outline-none focus:ring-2 focus:ring-green-500 transition-all">
                 <button type="submit" class="w-full py-4 bg-green-500 hover:bg-green-600 text-white rounded-2xl font-bold click-press shadow-lg transition-colors">Sign In</button>
             </form>
             <div class="relative flex items-center justify-center my-6">
@@ -409,22 +411,19 @@
                 </div>
                 <button onclick="closeAiHub()" class="w-8 h-8 flex items-center justify-center bg-black/20 hover:bg-black/30 rounded-full font-bold transition-colors">✕</button>
             </div>
-            
             <div class="flex border-b dark:border-gray-700 shrink-0 bg-white dark:bg-gray-900">
                 <button onclick="switchAiTab('chat')" id="tab-chat" class="flex-1 py-4 text-xs font-black text-green-600 border-b-[3px] border-green-600 uppercase tracking-widest transition-colors">Advisor</button>
                 <button onclick="switchAiTab('calc')" id="tab-calc" class="flex-1 py-4 text-xs font-black text-gray-400 border-b-[3px] border-transparent uppercase tracking-widest transition-colors">Estimator</button>
             </div>
-
-            <div id="ai-content-chat" class="flex-grow flex flex-col overflow-hidden bg-gray-50 dark:bg-gray-800">
-                <div id="chat-box" class="flex-grow p-6 overflow-y-auto flex flex-col gap-4">
-                    <div class="p-4 bg-white dark:bg-gray-700 border dark:border-gray-600 rounded-[2rem] rounded-tl-none mr-auto mb-2 text-sm font-medium shadow-sm">Habari! Ask me any construction question.</div>
+            <div id="ai-content-chat" class="flex-grow flex flex-col overflow-hidden bg-gray-50 dark:bg-gray-900">
+                <div id="chat-box" class="flex-grow p-5 overflow-y-auto flex flex-col gap-4">
+                    <div class="p-4 bg-white dark:bg-gray-700 border dark:border-gray-600 rounded-[2rem] rounded-tl-none mr-auto text-sm font-medium shadow-sm">Habari! Ask me any construction question.</div>
                 </div>
-                <div class="p-4 flex gap-3 border-t dark:border-gray-700 bg-white dark:bg-gray-900 shrink-0">
-                    <input type="text" id="chat-input" class="flex-grow bg-gray-50 dark:bg-gray-800 rounded-full px-6 py-4 text-sm font-medium outline-none border dark:border-gray-700 focus:ring-2 focus:ring-green-500" placeholder="Ask about materials...">
-                    <button id="send-btn" class="w-14 h-14 bg-green-600 text-white rounded-full font-bold click-press shadow-lg flex items-center justify-center text-xl shrink-0">→</button>
+                <div class="p-4 bg-white dark:bg-gray-800 border-t dark:border-gray-700 flex gap-2 shrink-0">
+                    <input type="text" id="chat-input" class="flex-grow bg-gray-100 dark:bg-gray-900 rounded-xl px-5 py-4 text-sm font-medium outline-none border dark:border-gray-600 focus:ring-2 focus:ring-green-500 transition-shadow" placeholder="Ask anything...">
+                    <button onclick="sendMessage()" class="w-14 h-14 bg-green-600 hover:bg-green-700 text-white rounded-xl font-bold click-press shadow-md transition-colors flex items-center justify-center text-xl">→</button>
                 </div>
             </div>
-
             <div id="ai-content-calc" class="flex-grow p-6 overflow-y-auto hidden bg-gray-50 dark:bg-gray-900">
                 <div class="bg-white dark:bg-gray-800 p-6 rounded-3xl border dark:border-gray-700 shadow-sm">
                     <p class="text-[10px] text-gray-400 font-bold uppercase mb-4 text-center tracking-widest">Material Calculator</p>
@@ -466,12 +465,8 @@
     </nav>
 
     <script>
-        const RENDER_URL = 'https://ujenzismart-backend.onrender.com';
-        const WHATSAPP_NUM = '255743924467'; 
-        let cart = [];
-        let currentModalProduct = null;
-        let fbtItem = null;
-        let viewHistory = ['home'];
+        const RENDER_URL = 'https://ujenzismart-backend.onrender.com', WHATSAPP_NUM = '255743924467'; 
+        let cart = [], currentModalProduct = null, fbtItem = null, viewHistory = ['home'];
 
         // --- THEME TOGGLE LOGIC ---
         function updateThemeIcon() {
@@ -523,8 +518,7 @@
 
             if (event.state && event.state.view) {
                 viewHistory.pop();
-                // Pass true to trigger the slideBackFade animation!
-                navigateTo(event.state.view, true);
+                navigateTo(event.state.view, true); // True triggers the slide back animation
             } else {
                 navigateTo('home', true);
             }
@@ -626,14 +620,13 @@
             if(viewHistory.length > 1) {
                 viewHistory.pop(); 
                 const previous = viewHistory[viewHistory.length - 1];
-                // Pass true to trigger the slideBackFade animation!
                 navigateTo(previous, true);
             } else {
                 navigateTo('home');
             }
         }
 
-        // --- PROFILE & SETUP LOGIC ---
+        // --- AUTH, PROFILE & SETUP ---
         function checkAuth() {
             const user = JSON.parse(localStorage.getItem('ujenzi_user'));
             if (user) {
@@ -653,8 +646,8 @@
             const firstName = user.name.split(' ')[0];
             const h = new Date().getHours();
             let g = "Good Evening"; if(h < 12) g = "Good Morning"; else if(h < 17) g = "Good Afternoon";
-            document.getElementById('header-title').textContent = `${g}, ${firstName}! 👋`;
-            document.getElementById('header-subtitle').textContent = `Welcome back to UjenziSmart.`;
+            document.getElementById('header-title').textContent = `${g}, ${firstName}`;
+            document.getElementById('header-subtitle').textContent = `Project Status: Ready to Build | 60% Complete`;
         }
 
         function handleProfileUpload(event) {
@@ -711,7 +704,7 @@
             isGoldVIP = false;
 
             if(spend >= 5000000) {
-                badge.className = "px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest bg-gradient-to-r from-yellow-400 to-yellow-600 text-white shadow-md inline-block";
+                badge.className = "px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest bg-gradient-to-r from-amber-400 to-yellow-600 text-white shadow-md inline-block";
                 badge.innerHTML = "👑 Gold Builder";
                 perk.classList.remove('hidden');
                 isGoldVIP = true;
@@ -995,7 +988,7 @@
     
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-        import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged, updateProfile } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+        import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithRedirect, getRedirectResult, signOut, onAuthStateChanged, updateProfile } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
         import { getMessaging, getToken, onMessage } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-messaging.js";
         
         const firebaseConfig = { 
@@ -1011,14 +1004,31 @@
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const provider = new GoogleAuthProvider();
-        
-        // 🚨 CRITICAL FIX: Attach Login Button immediately so it never breaks!
+
+        // 1. SILENT FALLBACK CATCHER: If a mobile browser forced a redirect instead of a popup
+        getRedirectResult(auth).then((result) => {
+            if (result) {
+                localStorage.setItem('ujenzi_user', JSON.stringify({ 
+                    name: result.user.displayName, 
+                    email: result.user.email, 
+                    photoURL: result.user.photoURL 
+                }));
+                location.reload();
+            }
+        }).catch((error) => {
+            console.error("Redirect Login Error:", error);
+            alert("Login Failed: " + error.message);
+        });
+
+        // 2. THE BULLETPROOF LOGIN BUTTON
         const googleBtn = document.getElementById('google-signin-btn');
-        if (googleBtn) {
+        if(googleBtn) {
             googleBtn.onclick = async () => { 
                 const originalText = googleBtn.innerHTML;
                 googleBtn.innerHTML = "⏳ Securely logging in..."; 
+                
                 try {
+                    // Try the clean popup first
                     const result = await signInWithPopup(auth, provider);
                     localStorage.setItem('ujenzi_user', JSON.stringify({ 
                         name: result.user.displayName, 
@@ -1027,37 +1037,30 @@
                     }));
                     location.reload(); 
                 } catch (error) {
-                    console.error("Login Error:", error);
-                    if (error.code !== 'auth/popup-closed-by-user') {
+                    console.error("Login Error Details:", error);
+                    
+                    // If the phone strictly blocks popups, automatically fall back to redirect
+                    if (error.code === 'auth/popup-blocked') {
+                        googleBtn.innerHTML = "🔄 Redirecting to Google...";
+                        signInWithRedirect(auth, provider);
+                    } 
+                    // If the domain isn't authorized in Firebase, tell you exactly how to fix it!
+                    else if (error.code === 'auth/unauthorized-domain') {
+                        alert("🚨 DEVELOPER ALERT: You must add 'jemmziray-tech.github.io' to your Firebase Console under Authentication > Settings > Authorized Domains.");
+                        googleBtn.innerHTML = originalText;
+                    } 
+                    // Ignore if they just closed the window manually
+                    else if (error.code !== 'auth/popup-closed-by-user' && error.code !== 'auth/cancelled-popup-request') {
                         alert("Login failed: " + error.message);
+                        googleBtn.innerHTML = originalText;
+                    } else {
+                        googleBtn.innerHTML = originalText;
                     }
-                    googleBtn.innerHTML = originalText;
                 }
             };
         }
 
-        // THE LOGOUT BUTTON
-        window.logoutUser = async function() {
-            try {
-                await signOut(auth);
-                localStorage.removeItem('ujenzi_user');
-                localStorage.removeItem('ujenzi_notif'); 
-                localStorage.removeItem('fcm_token');
-                location.reload(); 
-            } catch (error) { console.error("Logout Error:", error); }
-        };
-
-        // UPDATE FIREBASE PROFILE NAME
-        window.updateFirebaseName = async function(newName) {
-            if(auth.currentUser) {
-                try {
-                    await updateProfile(auth.currentUser, { displayName: newName });
-                    console.log("Firebase Profile updated to:", newName);
-                } catch (error) { console.error("Error updating Firebase profile:", error); }
-            }
-        };
-
-        // AUTO-HEALER
+        // 3. AUTO-HEALER
         onAuthStateChanged(auth, (user) => {
             if (user && !localStorage.getItem('ujenzi_user')) {
                 localStorage.setItem('ujenzi_user', JSON.stringify({ 
@@ -1069,7 +1072,26 @@
             }
         });
 
-        // 🚨 CRITICAL FIX: Safe messaging initialization
+        // 4. LOGOUT & PROFILE EDITING
+        window.logoutUser = async function() {
+            try {
+                await signOut(auth);
+                localStorage.removeItem('ujenzi_user');
+                localStorage.removeItem('ujenzi_notif'); 
+                localStorage.removeItem('fcm_token');
+                location.reload(); 
+            } catch (error) { console.error("Logout Error:", error); }
+        };
+
+        window.updateFirebaseName = async function(newName) {
+            if(auth.currentUser) {
+                try {
+                    await updateProfile(auth.currentUser, { displayName: newName });
+                } catch (error) { console.error("Error updating Firebase profile:", error); }
+            }
+        };
+
+        // 5. PUSH NOTIFICATIONS (Wrapped securely so it never crashes the auth)
         let messaging = null;
         try {
             messaging = getMessaging(app);
@@ -1077,15 +1099,14 @@
                 alert(`📢 UjenziSmart News: ${payload.notification.title}\n${payload.notification.body}`);
             });
         } catch (e) {
-            console.warn("Firebase Messaging blocked or unsupported by browser.", e);
+            console.warn("Firebase Messaging is blocked or unsupported in this browser.", e);
         }
 
-        // PUSH NOTIFICATIONS
         window.toggleNotifications = async function() {
             const toggle = document.getElementById('notif-toggle');
             if (toggle.checked) {
                 if(!messaging) {
-                    alert("Push notifications are not supported in your current browser setup.");
+                    alert("Push notifications are blocked or not supported by your current browser.");
                     toggle.checked = false;
                     return;
                 }
