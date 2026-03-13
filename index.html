@@ -39,36 +39,18 @@
 
         .glass { backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); }
         
-        /* Premium Blue Tech Background (Header Only) */
+        /* Premium Blue Tech Background */
         .bg-deep-tech { background: radial-gradient(circle at top right, #112347 0%, #030814 100%); }
         .pattern-overlay { background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.03' fill-rule='evenodd'%3E%3Ccircle cx='20' cy='20' r='1'/%3E%3C/g%3E%3C/svg%3E"); }
 
         /* Animated Floating Products */
-        @keyframes floatObj1 {
-            0%, 100% { transform: translateY(0px) rotate(-5deg); }
-            50% { transform: translateY(-15px) rotate(5deg); }
-        }
-        @keyframes floatObj2 {
-            0%, 100% { transform: translateY(0px) translateX(0px) rotate(10deg); }
-            50% { transform: translateY(12px) translateX(-8px) rotate(-5deg); }
-        }
-        @keyframes floatObj3 {
-            0%, 100% { transform: scale(1) rotate(0deg); }
-            50% { transform: scale(1.05) rotate(-5deg) translateY(-10px); }
-        }
-        .anim-prod {
-            position: absolute;
-            color: rgba(255, 255, 255, 0.06);
-            pointer-events: none;
-            z-index: 1; 
-        }
+        @keyframes floatObj1 { 0%, 100% { transform: translateY(0px) rotate(-5deg); } 50% { transform: translateY(-15px) rotate(5deg); } }
+        @keyframes floatObj2 { 0%, 100% { transform: translateY(0px) translateX(0px) rotate(10deg); } 50% { transform: translateY(12px) translateX(-8px) rotate(-5deg); } }
+        @keyframes floatObj3 { 0%, 100% { transform: scale(1) rotate(0deg); } 50% { transform: scale(1.05) rotate(-5deg) translateY(-10px); } }
+        .anim-prod { position: absolute; color: rgba(255, 255, 255, 0.06); pointer-events: none; z-index: 1; }
 
         /* The Signature Green Gradient Pulse */
-        .gradient-pulse {
-            background: linear-gradient(-45deg, #059669, #10b981, #34d399, #059669);
-            background-size: 400% 400%;
-            animation: gradientMove 10s ease infinite;
-        }
+        .gradient-pulse { background: linear-gradient(-45deg, #059669, #10b981, #34d399, #059669); background-size: 400% 400%; animation: gradientMove 10s ease infinite; }
         @keyframes gradientMove { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
 
         .skeleton { background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%); background-size: 200% 100%; animation: skeleton-loading 1.5s infinite; }
@@ -76,14 +58,11 @@
         @keyframes skeleton-loading { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
         
         ::-webkit-scrollbar { width: 0px; background: transparent; }
-        
         .bar-grow { animation: growUp 1s ease-out forwards; transform-origin: bottom; }
         @keyframes growUp { from { transform: scaleY(0); } to { transform: scaleY(1); } }
-
         .bottom-sheet { transition: transform 0.3s cubic-bezier(0.32, 1.25, 0.32, 1); transform: translateY(100%); }
         .bottom-sheet.open { transform: translateY(0); }
         
-        /* Custom Green Toggle Switch */
         .toggle-checkbox:checked { right: 0; border-color: #10b981; }
         .toggle-checkbox:checked + .toggle-label { background-color: #10b981; }
         .toggle-checkbox { right: 4px; z-index: 1; border-color: #e5e7eb; transition: all 0.3s; }
@@ -116,18 +95,10 @@
         <div class="absolute inset-0 pattern-overlay pointer-events-none"></div>
         <div class="absolute top-0 right-0 w-64 h-64 bg-blue-500/20 rounded-full blur-[80px] pointer-events-none"></div>
         
-        <svg class="anim-prod w-24 h-24 top-6 right-4" style="animation: floatObj1 8s ease-in-out infinite;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-            <path stroke="currentColor" stroke-width="1.5" stroke-linecap="round" d="M3 4.5h18M3 9.5h18M3 14.5h18M3 19.5h18M8 4.5v5M16 4.5v5M5 9.5v5M13 9.5v5M21 9.5v5M9 14.5v5M17 14.5v5"/>
-        </svg>
-        <svg class="anim-prod w-20 h-20 bottom-12 left-6" style="animation: floatObj2 10s ease-in-out infinite;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-            <path stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" d="M4 20h16L4 4v16zM8 20v-4M12 20v-4M16 20v-4M4 16h4M4 12h4M4 8h4"/>
-        </svg>
-        <svg class="anim-prod w-28 h-28 top-20 right-32" style="animation: floatObj3 12s ease-in-out infinite;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-            <path stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" d="M3 10l9-7 9 7v10a2 2 0 01-2 2H5a2 2 0 01-2-2V10z M9 21V12h6v9"/>
-        </svg>
-        <svg class="anim-prod w-16 h-16 top-10 left-32" style="animation: floatObj1 9s ease-in-out infinite;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-            <path stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" d="M6 6c0-2 2-4 6-4s6 2 6 4v12c0 2-2 4-6 4s-6-2-6-4V6z M6 10h12 M6 14h12"/>
-        </svg>
+        <svg class="anim-prod w-24 h-24 top-6 right-4" style="animation: floatObj1 8s ease-in-out infinite;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-width="1.5" stroke-linecap="round" d="M3 4.5h18M3 9.5h18M3 14.5h18M3 19.5h18M8 4.5v5M16 4.5v5M5 9.5v5M13 9.5v5M21 9.5v5M9 14.5v5M17 14.5v5"/></svg>
+        <svg class="anim-prod w-20 h-20 bottom-12 left-6" style="animation: floatObj2 10s ease-in-out infinite;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" d="M4 20h16L4 4v16zM8 20v-4M12 20v-4M16 20v-4M4 16h4M4 12h4M4 8h4"/></svg>
+        <svg class="anim-prod w-28 h-28 top-20 right-32" style="animation: floatObj3 12s ease-in-out infinite;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" d="M3 10l9-7 9 7v10a2 2 0 01-2 2H5a2 2 0 01-2-2V10z M9 21V12h6v9"/></svg>
+        <svg class="anim-prod w-16 h-16 top-10 left-32" style="animation: floatObj1 9s ease-in-out infinite;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" d="M6 6c0-2 2-4 6-4s6 2 6 4v12c0 2-2 4-6 4s-6-2-6-4V6z M6 10h12 M6 14h12"/></svg>
 
         <div class="max-w-7xl mx-auto relative z-10">
             <div class="flex items-center justify-between mb-4 h-12">
@@ -135,17 +106,11 @@
                     <button id="header-back-btn" onclick="goBack()" class="hidden w-11 h-11 bg-white/10 rounded-full border border-white/20 flex items-center justify-center font-bold text-xl click-press glass hover:bg-white/20 transition-colors">←</button>
                     <img id="header-p-image" src="https://ui-avatars.com/api/?name=User&background=10b981&color=fff" class="w-11 h-11 rounded-full border-[3px] border-white/20 shadow-lg object-cover click-press cursor-pointer transition-transform active:scale-95" onclick="navigateTo('profile', false, true)">
                 </div>
-
                 <button onclick="switchTheme()" class="w-11 h-11 bg-white/5 rounded-full border border-white/10 flex items-center justify-center click-press shadow-inner glass relative overflow-hidden transition-colors hover:bg-white/10">
-                    <svg id="icon-sun" style="display:none;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-[24px] h-[24px] text-amber-300 drop-shadow-[0_0_5px_rgba(252,211,77,0.5)]">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-2.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z" />
-                    </svg>
-                    <svg id="icon-moon" style="display:none;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-[20px] h-[20px] text-blue-100">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998Z" />
-                    </svg>
+                    <svg id="icon-sun" style="display:none;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-[24px] h-[24px] text-amber-300 drop-shadow-[0_0_5px_rgba(252,211,77,0.5)]"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-2.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z" /></svg>
+                    <svg id="icon-moon" style="display:none;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-[20px] h-[20px] text-blue-100"><path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998Z" /></svg>
                 </button>
             </div>
-
             <div id="header-text-container" class="transition-all duration-300">
                 <h1 id="header-title" class="text-[28px] font-black tracking-tight leading-tight text-white drop-shadow-md">Good morning</h1>
                 <p id="header-subtitle" class="text-blue-200/80 text-[11px] font-semibold mt-1 tracking-wider uppercase opacity-90">Project Status: Ready to Build | 60% Complete</p>
@@ -162,7 +127,6 @@
                     <span class="absolute left-5 top-[17px] text-lg opacity-40">🔍</span>
                 </div>
             </div>
-
             <div id="dynamic-home-content" class="flex flex-col gap-8"></div>
         </div>
 
@@ -317,17 +281,17 @@
 
             <h3 class="font-black text-lg mb-4 px-2 tracking-tight">My Project Phases</h3>
             <div class="grid grid-cols-3 gap-3 mb-8 stagger-item" style="animation-delay: 0.1s">
-                <div class="bg-white dark:bg-gray-800 p-4 rounded-[1.5rem] border dark:border-gray-700 shadow-sm click-press flex flex-col items-center text-center transition-shadow hover:shadow-md" onclick="window.renderWishlistPhase('Foundation')">
+                <div class="bg-white dark:bg-gray-800 p-4 rounded-[1.5rem] border dark:border-gray-700 shadow-sm click-press flex flex-col items-center text-center transition-shadow hover:shadow-md" onclick="renderWishlistPhase('Foundation')">
                     <div class="text-2xl mb-1">🏗️</div>
                     <p class="font-black text-[10px] text-gray-800 dark:text-white">Phase 1</p>
                     <p class="text-[9px] text-green-500 font-black mt-2" id="count-foundation">0 Items</p>
                 </div>
-                <div class="bg-white dark:bg-gray-800 p-4 rounded-[1.5rem] border dark:border-gray-700 shadow-sm click-press flex flex-col items-center text-center transition-shadow hover:shadow-md" onclick="window.renderWishlistPhase('Roofing')">
+                <div class="bg-white dark:bg-gray-800 p-4 rounded-[1.5rem] border dark:border-gray-700 shadow-sm click-press flex flex-col items-center text-center transition-shadow hover:shadow-md" onclick="renderWishlistPhase('Roofing')">
                     <div class="text-2xl mb-1">🏠</div>
                     <p class="font-black text-[10px] text-gray-800 dark:text-white">Phase 2</p>
                     <p class="text-[9px] text-green-500 font-black mt-2" id="count-roofing">0 Items</p>
                 </div>
-                <div class="bg-white dark:bg-gray-800 p-4 rounded-[1.5rem] border dark:border-gray-700 shadow-sm click-press flex flex-col items-center text-center transition-shadow hover:shadow-md" onclick="window.renderWishlistPhase('Finishing')">
+                <div class="bg-white dark:bg-gray-800 p-4 rounded-[1.5rem] border dark:border-gray-700 shadow-sm click-press flex flex-col items-center text-center transition-shadow hover:shadow-md" onclick="renderWishlistPhase('Finishing')">
                     <div class="text-2xl mb-1">🎨</div>
                     <p class="font-black text-[10px] text-gray-800 dark:text-white">Phase 3</p>
                     <p class="text-[9px] text-green-500 font-black mt-2" id="count-finishing">0 Items</p>
@@ -359,7 +323,7 @@
                     <span class="text-gray-400 font-bold text-xl">›</span>
                 </button>
 
-                <button onclick="window.logoutUser()" class="w-full flex items-center gap-4 p-5 hover:bg-red-50 dark:hover:bg-red-900/10 transition click-press text-red-500 rounded-b-[2.5rem]">
+                <button onclick="logoutUser()" class="w-full flex items-center gap-4 p-5 hover:bg-red-50 dark:hover:bg-red-900/10 transition click-press text-red-500 rounded-b-[2.5rem]">
                     <span class="text-xl">🚪</span>
                     <span class="font-bold text-sm text-left">Logout from Account</span>
                 </button>
@@ -562,6 +526,7 @@
     </nav>
 
     <script>
+        const RENDER_URL = 'https://ujenzismart-backend.onrender.com';
         const WHATSAPP_NUM = '255743924467'; 
         let cart = [];
         let currentModalProduct = null;
@@ -572,7 +537,89 @@
         window.appHistory = [];
         window.appSpend = 0;
 
-        window.navigateTo = function(viewName, isBack = false, isTab = false) {
+        function updateThemeIcon() {
+            const isDark = document.documentElement.classList.contains('dark');
+            const sun = document.getElementById('icon-sun');
+            const moon = document.getElementById('icon-moon');
+            if(sun && moon) {
+                sun.style.display = isDark ? 'block' : 'none';
+                moon.style.display = isDark ? 'none' : 'block';
+            }
+        }
+        
+        function switchTheme() {
+            const html = document.documentElement;
+            html.classList.toggle('dark');
+            localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+            updateThemeIcon();
+        }
+        document.addEventListener("DOMContentLoaded", updateThemeIcon);
+
+        window.addEventListener('scroll', () => {
+            const sw = document.getElementById('search-sticky-wrapper');
+            if(sw) {
+                if(window.scrollY > 40) {
+                    sw.classList.add('bg-[#f4f6f9]/95', 'dark:bg-gray-900/95', 'backdrop-blur-md', 'border-b', 'border-gray-200', 'dark:border-gray-800');
+                    sw.classList.remove('py-3');
+                    sw.classList.add('py-4');
+                } else {
+                    sw.classList.remove('bg-[#f4f6f9]/95', 'dark:bg-gray-900/95', 'backdrop-blur-md', 'border-b', 'border-gray-200', 'dark:border-gray-800');
+                    sw.classList.remove('py-4');
+                    sw.classList.add('py-3');
+                }
+            }
+        });
+
+        window.addEventListener('popstate', (event) => {
+            const productSheet = document.getElementById('product-sheet');
+            const aiHubSheet = document.getElementById('ai-hub-sheet');
+            const editModal = document.getElementById('edit-name-modal');
+            
+            let sheetClosed = false;
+            if (productSheet && productSheet.classList.contains('open')) { closeProduct(); sheetClosed = true; }
+            if (aiHubSheet && aiHubSheet.classList.contains('open')) { closeAiHub(); sheetClosed = true; }
+            if (editModal && !editModal.classList.contains('hidden')) { closeEditNameModal(); sheetClosed = true; }
+            
+            if (sheetClosed) return;
+
+            if (event.state && event.state.view) {
+                viewHistory.pop();
+                navigateTo(event.state.view, true);
+            } else {
+                navigateTo('home', true);
+            }
+        });
+        history.replaceState({ view: 'home' }, '', '#home');
+
+        const categoryImages = {
+            'Foundation': 'https://images.unsplash.com/photo-1590060417941-2f34888463f1?w=400',
+            'Roofing': 'https://images.unsplash.com/photo-1635424710928-0544e8512eae?w=400',
+            'Plumbing': 'https://images.unsplash.com/photo-1581244277943-fe4a9c777189?w=400',
+            'Electrical': 'https://images.unsplash.com/photo-1550009158-9ebf69173e03?w=400',
+            'Finishing': 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=400',
+            'Tools': 'https://images.unsplash.com/photo-1530124560677-bdaea02c9a9d?w=400'
+        };
+
+        const productDatabase = {
+            'Foundation & Structural': [
+                { name: 'Simba Cement 50kg', price: 18500, wt: 50, desc: 'Grade 42.5R high-strength cement.', img: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=400', rating: 4.9, reviews: 342, reviewTxt: "Always strong, sets perfectly." },
+                { name: 'Twiga Cement 50kg', price: 18000, wt: 50, desc: 'Standard 32.5N multipurpose cement.', img: 'https://images.unsplash.com/photo-1621360841013-c76831f1dbce?w=400', rating: 4.8, reviews: 215, reviewTxt: "Great for plastering walls." },
+                { name: 'Deformed Bar 12mm', price: 24000, wt: 10, desc: 'TBS approved Grade 500 steel rebars.', img: 'https://images.unsplash.com/photo-1536882240095-0379873feb4e?w=400', rating: 4.8, reviews: 156, reviewTxt: "Accurate weight." },
+                { name: 'Blocks 6-inch', price: 1200, wt: 15, desc: 'Machine-vibrated, solid concrete blocks.', img: 'https://images.unsplash.com/photo-1589939705384-5185138a047a?w=400', rating: 4.6, reviews: 89, reviewTxt: "Minimal breakages." }
+            ],
+            'Roofing Materials': [
+                { name: 'Iron Sheet 30G', price: 22000, wt: 4, desc: 'Corrugated premium anti-corrosive roofing sheets.', img: 'https://images.unsplash.com/photo-1635424710928-0544e8512eae?w=400', rating: 4.7, reviews: 210, reviewTxt: "Color doesn't fade." }
+            ],
+            'Finishing & Painting': [
+                { name: 'Floor Tiles Box', price: 32000, wt: 20, desc: 'Glossy ceramic 40x40cm floor tiles.', img: 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=400', rating: 4.7, reviews: 88, reviewTxt: "Beautiful finish." },
+                { name: 'Tile Adhesive 25kg', price: 14000, wt: 25, desc: 'High-bond strength cementitious tile adhesive.', img: 'https://images.unsplash.com/photo-1589939705384-5185138a047a?w=400', rating: 4.5, reviews: 90, reviewTxt: "Bonds perfectly." }
+            ],
+            'Tools & Hardware': [
+                { name: 'Wheelbarrow', price: 110000, wt: 15, desc: 'Thick steel tray construction wheelbarrow.', img: 'https://images.unsplash.com/photo-1530124560677-bdaea02c9a9d?w=400', rating: 4.8, reviews: 312, reviewTxt: "Very tough." }
+            ]
+        };
+
+        function navigateTo(viewName, isBack = false, isTab = false) {
             document.querySelectorAll('.view-content').forEach(v => {
                 v.classList.add('hidden');
                 v.style.animation = 'none'; 
@@ -631,12 +678,12 @@
 
             if(viewName === 'home') { document.getElementById('search-input').value = ''; renderHomeBase(); }
             if(viewName === 'cart') renderCart();
-            if(viewName === 'profile') { updateTrackerUI(); window.updateWishlistCounts(); }
+            if(viewName === 'profile') { updateTrackerUI(); updateWishlistCounts(); }
             
             window.scrollTo(0,0);
         }
 
-        window.goBack = function() {
+        function goBack() {
             if(viewHistory.length > 1) {
                 viewHistory.pop(); 
                 const previous = viewHistory[viewHistory.length - 1];
@@ -646,7 +693,7 @@
             }
         }
 
-        window.checkAuth = function() {
+        function checkAuth() {
             const user = JSON.parse(localStorage.getItem('ujenzi_user'));
             if (user) {
                 document.getElementById('auth-screen').classList.add('hidden');
@@ -675,7 +722,7 @@
             document.getElementById('header-subtitle').textContent = `Project Status: Ready to Build | 60% Complete`;
         }
 
-        window.handleProfileUpload = function(event) {
+        function handleProfileUpload(event) {
             const file = event.target.files[0];
             if(file) {
                 const reader = new FileReader();
@@ -690,19 +737,19 @@
             }
         }
         
-        window.openEditNameModal = function() {
+        function openEditNameModal() {
             const user = JSON.parse(localStorage.getItem('ujenzi_user'));
             if(user) document.getElementById('edit-name-input').value = user.name;
             document.getElementById('edit-name-modal').classList.remove('hidden');
             history.pushState({ modal: 'edit-name' }, '', '#edit-name');
         };
 
-        window.closeEditNameModal = function() {
+        function closeEditNameModal() {
             document.getElementById('edit-name-modal').classList.add('hidden');
             if(window.location.hash === '#edit-name') history.back();
         };
 
-        window.saveNewName = function() {
+        function saveNewName() {
             const newName = document.getElementById('edit-name-input').value.trim();
             if(!newName) return;
             
@@ -744,7 +791,7 @@
             }
         }
 
-        window.handleSearch = function() {
+        function handleSearch() {
             const query = document.getElementById('search-input').value.toLowerCase();
             const container = document.getElementById('dynamic-home-content');
             if(!query) { renderHomeBase(); return; }
@@ -771,7 +818,7 @@
                 </div>`;
         }
 
-        window.renderHomeBase = function() {
+        function renderHomeBase() {
             const container = document.getElementById('dynamic-home-content');
             container.innerHTML = `
                 <section>
@@ -795,7 +842,7 @@
                 </section>`;
         }
 
-        window.openCategory = function(shortCatName) {
+        function openCategory(shortCatName) {
             const fullCatName = catMap[shortCatName] || shortCatName;
             const products = productDatabase[fullCatName] || [];
             const container = document.getElementById('dynamic-home-content');
@@ -810,7 +857,7 @@
             window.scrollTo(0, 0);
         }
 
-        window.openProduct = function(t, d, p, wt, i, rating, reviews, reviewTxt) {
+        function openProduct(t, d, p, wt, i, rating, reviews, reviewTxt) {
             currentModalProduct = { name: t, desc: d, price: p, wt: wt, img: i };
             document.getElementById('modal-img').src = i;
             document.getElementById('modal-title').textContent = t;
@@ -845,18 +892,17 @@
                 if(fbtItem && document.getElementById('fbt-checkbox').checked) {
                     cart.push({ title: fbtItem.name, price: fbtItem.price, wt: fbtItem.wt, qty: 1 });
                 }
-                updateBadge(); 
-                closeProduct();
+                updateBadge(); closeProduct();
             };
         }
 
-        window.closeProduct = function() { 
+        function closeProduct() { 
             document.getElementById('product-sheet').classList.remove('open');
             setTimeout(() => document.getElementById('product-modal').classList.add('hidden'), 300);
             if(window.location.hash === '#product') history.back();
         }
 
-        window.changeQty = function(amt) {
+        function changeQty(amt) {
             const input = document.getElementById('modal-qty');
             let current = parseInt(input.value);
             if (isNaN(current)) current = 0; 
@@ -865,7 +911,7 @@
             else input.value = 1;
         }
 
-        window.validateQty = function() {
+        function validateQty() {
             const input = document.getElementById('modal-qty');
             let v = parseInt(input.value);
             if(isNaN(v) || v < 1) {
@@ -880,7 +926,7 @@
         }
 
         let transportCost = 0;
-        window.calculateDelivery = function() {
+        function calculateDelivery() {
             const zone = parseFloat(document.getElementById('delivery-zone').value);
             let tw = 0; cart.forEach(i => tw += (i.wt * i.qty));
             let br = 0; let n = "Store Pickup"; 
@@ -903,7 +949,7 @@
             document.getElementById('cart-total-price').textContent = `TZS ${(sub + transportCost).toLocaleString()}`;
         }
 
-        window.renderCart = function() {
+        function renderCart() {
             const c = document.getElementById('cart-items-container');
             if(cart.length === 0) { c.innerHTML = '<p class="text-center text-gray-400 py-16 font-bold">Your basket is empty.</p>'; document.getElementById('cart-footer').classList.add('hidden'); return; }
             c.innerHTML = cart.map((i, idx) => `
@@ -915,7 +961,8 @@
             calculateDelivery();
         }
 
-        window.checkoutWhatsApp = function() {
+        // 🌟 CLOUD CHECKOUT 🌟
+        function checkoutWhatsApp() {
             const u = JSON.parse(localStorage.getItem('ujenzi_user'));
             let sub = 0; 
             let m = `Habari UjenziSmart! I am ${u ? u.name : 'Guest'}.\nI want to order:\n\n`;
@@ -946,7 +993,6 @@
                 status: 'PENDING'
             };
 
-            // Call the secure cloud function if it exists
             if(window.submitCloudOrder) {
                 window.submitCloudOrder(receipt);
             }
@@ -959,7 +1005,8 @@
             navigateTo('history', false, true); 
         }
 
-        window.renderHistory = function() {
+        // 🌟 FINANCIAL DASHBOARD 🌟
+        function renderHistory() {
             const history = window.appHistory;
             const spend = window.appSpend;
             
@@ -1010,13 +1057,13 @@
                     </div>
                 </div>`;
             }).join('');
-        };
+        }
 
-        window.clearHistory = function() {
+        function clearHistory() {
             alert("For financial security, official cloud receipts cannot be deleted. Please contact Support to cancel an order.");
-        };
+        }
 
-        window.shareStatement = function() {
+        function shareStatement() {
             const u = JSON.parse(localStorage.getItem('ujenzi_user'));
             const h = window.appHistory; 
             const spend = window.appSpend;
@@ -1028,9 +1075,9 @@
                 m += `🗓️ ${r.dateString}\n📦 ${r.items}\n🚚 Transport: TZS ${r.transport.toLocaleString()}\n💰 Total: TZS ${r.total.toLocaleString()}\nStatus: ${r.status}\n\n`;
             });
             window.open(`https://wa.me/?text=${encodeURIComponent(m)}`, '_blank');
-        };
+        }
 
-        window.downloadStatement = function() {
+        function downloadStatement() {
             const h = window.appHistory;
             if(h.length === 0) return alert("No transactions to download yet.");
 
@@ -1064,9 +1111,10 @@
                 styles: { fontSize: 9 }
             });
             doc.save("UjenziSmart_Financial_Statement.pdf");
-        };
+        }
 
-        window.saveToPhase = function() {
+        // --- WISHLIST PHASE MANAGEMENT ---
+        function saveToPhase() {
             if(!currentModalProduct) return;
             const phase = document.getElementById('phase-selector').value;
             let list = JSON.parse(localStorage.getItem('ujenzi_wishlist') || '[]');
@@ -1077,23 +1125,23 @@
             if(document.getElementById('view-profile').classList.contains('hidden') === false) updateWishlistCounts();
         }
 
-        window.removeFromPhase = function(phase, originalIndex) {
+        function removeFromPhase(phase, originalIndex) {
             let list = JSON.parse(localStorage.getItem('ujenzi_wishlist') || '[]');
             list.splice(originalIndex, 1);
             localStorage.setItem('ujenzi_wishlist', JSON.stringify(list));
             updateWishlistCounts();
-            window.renderWishlistPhase(phase); 
-        };
+            renderWishlistPhase(phase); 
+        }
 
-        window.clearPhase = function(phase) {
+        function clearPhase(phase) {
             if(confirm(`Are you sure you want to remove all items from ${phase}?`)) {
                 let list = JSON.parse(localStorage.getItem('ujenzi_wishlist') || '[]');
                 list = list.filter(x => x.phase !== phase); 
                 localStorage.setItem('ujenzi_wishlist', JSON.stringify(list));
                 updateWishlistCounts();
-                window.renderWishlistPhase(phase); 
+                renderWishlistPhase(phase); 
             }
-        };
+        }
 
         function updateWishlistCounts() {
             const list = JSON.parse(localStorage.getItem('ujenzi_wishlist') || '[]');
@@ -1102,7 +1150,7 @@
             document.getElementById('count-finishing').textContent = `${list.filter(x => x.phase === 'Finishing').length} Items`;
         }
 
-        window.renderWishlistPhase = function(phase) {
+        function renderWishlistPhase(phase) {
             const list = JSON.parse(localStorage.getItem('ujenzi_wishlist') || '[]');
             const items = list.map((item, index) => ({...item, originalIndex: index})).filter(x => x.phase === phase);
             const container = document.getElementById('wishlist-render-area');
@@ -1138,7 +1186,7 @@
             container.classList.remove('hidden');
         }
 
-        window.switchAiTab = function(tab) {
+        function switchAiTab(tab) {
             document.getElementById('ai-content-chat').classList.add('hidden'); 
             document.getElementById('ai-content-calc').classList.add('hidden');
             
@@ -1153,7 +1201,7 @@
             document.getElementById(`tab-${tab}`).classList.add('text-green-600', 'border-green-600');
         }
 
-        window.runCalculation = function() {
+        function runCalculation() {
             const type = document.getElementById('calc-type').value;
             const L = parseFloat(document.getElementById('calc-l').value);
             const W = parseFloat(document.getElementById('calc-w').value);
@@ -1166,19 +1214,19 @@
             res.innerHTML = r; res.classList.remove('hidden');
         }
 
-        window.openAiHub = function() { 
+        function openAiHub() { 
             history.pushState({ modal: 'ai-hub' }, '', '#ai-hub'); 
             document.getElementById('ai-hub-modal').classList.remove('hidden'); 
             setTimeout(() => document.getElementById('ai-hub-sheet').classList.add('open'), 10);
         };
         
-        window.closeAiHub = function() { 
+        function closeAiHub() { 
             document.getElementById('ai-hub-sheet').classList.remove('open');
             setTimeout(() => document.getElementById('ai-hub-modal').classList.add('hidden'), 300);
             if(window.location.hash === '#ai-hub') history.back();
         }
 
-        window.sendMessage = async function() {
+        async function sendMessage() {
             const input = document.getElementById('chat-input');
             const chatBox = document.getElementById('chat-box');
             const txt = input.value.trim(); if(!txt) return;
@@ -1235,37 +1283,43 @@
         const provider = new GoogleAuthProvider();
         provider.setCustomParameters({ prompt: 'select_account' });
 
-        // --- REAL-TIME CLOUD LISTENER FOR EXPENSES ---
         let unsubscribeOrders = null;
 
         function listenToUserOrders(uid) {
             const q = query(collection(db, "orders"), where("userId", "==", uid), orderBy("createdAt", "desc"));
-            unsubscribeOrders = onSnapshot(q, (snapshot) => {
-                let history = [];
-                let approvedSpend = 0;
+            
+            // Try-catch block in case Firestore requires an index creation first
+            try {
+                unsubscribeOrders = onSnapshot(q, (snapshot) => {
+                    let history = [];
+                    let approvedSpend = 0;
 
-                snapshot.forEach((doc) => {
-                    const data = doc.data();
-                    history.push({ id: doc.id, ...data });
-                    if(data.status === 'PAID') {
-                        approvedSpend += data.total;
+                    snapshot.forEach((doc) => {
+                        const data = doc.data();
+                        history.push({ id: doc.id, ...data });
+                        if(data.status === 'PAID') {
+                            approvedSpend += data.total;
+                        }
+                    });
+
+                    window.appHistory = history;
+                    window.appSpend = approvedSpend;
+                    window.localStorage.setItem('ujenzi_total_spend', approvedSpend.toString());
+
+                    if(!document.getElementById('view-history').classList.contains('hidden')) {
+                        window.renderHistory();
                     }
+                    if(!document.getElementById('view-profile').classList.contains('hidden')) {
+                        window.updateTrackerUI();
+                    }
+                }, (error) => {
+                    console.error("Firestore Listen Error. Please check console for Index link:", error);
                 });
-
-                window.appHistory = history;
-                window.appSpend = approvedSpend;
-                window.localStorage.setItem('ujenzi_total_spend', approvedSpend.toString());
-
-                if(!document.getElementById('view-history').classList.contains('hidden')) {
-                    window.renderHistory();
-                }
-                if(!document.getElementById('view-profile').classList.contains('hidden')) {
-                    window.updateTrackerUI();
-                }
-            });
+            } catch (err) {
+                console.error("Query Error:", err);
+            }
         }
 
-        // --- CLOUD ORDER SUBMISSION CALLED BY CHECKOUT ---
         window.submitCloudOrder = async function(receipt) {
             const user = auth.currentUser;
             if(!user) return alert("You must be signed in to place a secure order.");
@@ -1290,9 +1344,6 @@
             }
         }).catch((error) => {
             console.error("Redirect Login Error:", error);
-            if (error.code === 'auth/unauthorized-domain') {
-                 alert("🚨 DEVELOPER ALERT: Add 'jemmziray-tech.github.io' to your Firebase Authorized Domains.");
-            }
         });
 
         const googleBtn = document.getElementById('google-signin-btn');
