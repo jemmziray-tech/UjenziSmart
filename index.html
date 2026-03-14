@@ -981,6 +981,10 @@
 
         // 🌟 NEW TEMBOPLUS SECURE PAYMENT FUNCTION 🌟
         async function payWithTembo() {
+            if(!window.firebaseFunctions) {
+                return alert("Connecting to secure server... please wait a second and click again.");
+            }
+
             const phone = document.getElementById('mobile-money-number').value.trim(); 
             if(!phone) return alert("Please enter your mobile money number.");
             
