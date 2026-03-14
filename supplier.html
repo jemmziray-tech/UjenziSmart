@@ -116,9 +116,23 @@
         const dashboardScreen = document.getElementById('dashboard-screen');
         const submitBtn = document.getElementById('submit-btn');
 
+        // 🚨 THE VIP GUEST LIST: Only these emails can access the portal!
+        const APPROVED_SUPPLIERS = [
+            "jemmziray@gmail.com", // Make sure this is your real Google email!
+            "mzirayjohn4@gmail.com" // Add future suppliers here
+        ];
+
         // AUTHENTICATION
-        onAuthStateChanged(auth, (user) => {
+        onAuthStateChanged(auth, async (user) => {
             if (user) {
+                // 🛑 THE BOUNCER: Check if their email is on the list
+                if (!APPROVED_SUPPLIERS.includes(user.email)) {
+                    alert("⛔ Unauthorized Access! You are not an approved UjenziSmart supplier.");
+                    await signOut(auth); // Kick them out instantly
+                    return; // Stop the code right here
+                }
+
+                // If they are on the list, let them in!
                 loginScreen.classList.add('hidden');
                 dashboardScreen.classList.remove('hidden');
                 document.getElementById('supplier-name').textContent = "Supplier: " + user.displayName;
