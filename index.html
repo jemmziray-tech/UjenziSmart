@@ -226,8 +226,8 @@
                         
                         <input type="tel" id="mobile-money-number" placeholder="Enter Phone (e.g. 0754...)" class="w-full bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-xl px-4 py-3 outline-none font-bold text-xs mb-3 focus:ring-2 focus:ring-green-500 transition-all relative z-10">
                         
-                        <button onclick="payWithSnippe()" id="snippe-pay-btn" class="w-full py-4 bg-green-600 hover:bg-green-700 text-white rounded-[1.5rem] font-black shadow-[0_10px_20px_rgba(22,163,74,0.3)] click-press uppercase text-xs tracking-widest flex items-center justify-center gap-2 transition-all relative z-10">
-                            ⚡ Send Payment Prompt
+                        <button onclick="payWithTembo()" id="tembo-pay-btn" class="w-full py-4 bg-green-600 hover:bg-green-700 text-white rounded-[1.5rem] font-black shadow-[0_10px_20px_rgba(22,163,74,0.3)] click-press uppercase text-xs tracking-widest flex items-center justify-center gap-2 transition-all relative z-10">
+                            ⚡ Secure Checkout
                         </button>
                         
                         <div class="flex justify-center items-center gap-3 grayscale opacity-40 mt-4 pt-4 border-t border-gray-200 dark:border-gray-700 relative z-10">
@@ -538,9 +538,6 @@
         
         window.appHistory = [];
         window.appSpend = 0;
-
-        // 🚨 PASTE YOUR FULL SNIPPE API KEY HERE 🚨
-        const SNIPPE_KEY = "snp_14a22d782dce5764866395a2539b198e849cede189f1ccd6967b8e8084654031";
 
         // 🟢 CLOUD DATABASE
         window.productDatabase = {}; 
@@ -982,60 +979,44 @@
             calculateDelivery();
         }
 
-        async function payWithSnippe() {
-            const phone = document.getElementById('mobile-money-number').value.trim();
+        // 🌟 NEW TEMBOPLUS SECURE PAYMENT FUNCTION 🌟
+        async function payWithTembo() {
+            const phone = document.getElementById('mobile-money-number').value.trim(); 
             if(!phone) return alert("Please enter your mobile money number.");
+            
+            const u = JSON.parse(localStorage.getItem('ujenzi_user')); 
+            if(!u) return alert("Please log in to make secure payments.");
 
-            const u = JSON.parse(localStorage.getItem('ujenzi_user'));
-            let sub = 0; 
-            cart.forEach(i => sub += i.price * i.qty);
+            let sub = 0; cart.forEach(i => sub += i.price * i.qty);
             const totalCost = sub + transportCost;
             
-            const btn = document.getElementById('snippe-pay-btn');
-            btn.innerHTML = "⏳ Creating Secure Session...";
+            const btn = document.getElementById('tembo-pay-btn'); 
+            btn.innerHTML = "⏳ Connecting to Secure Server..."; 
             btn.disabled = true;
-
+            
             const orderId = 'US-' + Math.floor(1000 + Math.random() * 9000);
             
             try {
-                const proxyUrl = "https://cors-anywhere.herokuapp.com/"; 
-                const targetUrl = "https://api.snippe.sh/v1/checkout/sessions";
-
-                const response = await fetch(proxyUrl + targetUrl, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': 'Bearer ' + SNIPPE_KEY,
-                        'X-Requested-With': 'XMLHttpRequest'
-                    },
-                    body: JSON.stringify({
-                        amount: totalCost,
-                        currency: "TZS",
-                        reference: orderId,
-                        description: "UjenziSmart Order " + orderId,
-                        customer_email: u ? u.email : "customer@ujenzismart.com",
-                        return_url: window.location.href 
-                    })
+                // 📞 Call your new Secure Firebase Server!
+                const initiateTembo = window.firebaseHttpsCallable(window.firebaseFunctions, 'initiateTemboPayment');
+                const result = await initiateTembo({
+                    amount: totalCost,
+                    phoneNumber: phone,
+                    orderId: orderId
                 });
-
-                const result = await response.json();
-
-                if(result.status === 'success' && result.data.checkout_url) {
-                    window.location.href = result.data.checkout_url;
+                
+                // 💸 The server replies with the secure checkout URL! Redirect the user there:
+                if(result.data && result.data.checkoutUrl) {
+                    window.location.href = result.data.checkoutUrl;
                 } else {
-                    if(response.status === 403) {
-                        alert("⚠️ Access Blocked. Click OK to open the proxy permission page, click the 'Request access' button, then come back and try again.");
-                        window.open("https://cors-anywhere.herokuapp.com/corsdemo", "_blank");
-                    } else {
-                        alert("Gateway Error: " + (result.message || "Could not create session"));
-                    }
+                    alert("Gateway Error: Could not get secure checkout link.");
                 }
-            } catch (err) {
-                console.error(err);
-                alert("Connection temporarily blocked. Please use the WhatsApp option while we calibrate the gateway.");
-            } finally {
-                btn.innerHTML = "⚡ Send Payment Prompt";
-                btn.disabled = false;
+            } catch (err) { 
+                console.error("Payment Error: ", err);
+                alert("Server connection failed. Please use the WhatsApp option for now.");
+            } finally { 
+                btn.innerHTML = "⚡ Secure Checkout"; 
+                btn.disabled = false; 
             }
         }
 
@@ -1339,6 +1320,8 @@
         import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithRedirect, getRedirectResult, signOut, onAuthStateChanged, updateProfile } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
         import { getFirestore, collection, addDoc, query, where, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
         import { getMessaging, getToken, onMessage } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-messaging.js";
+        // 🌟 IMPORTING THE SECURE CLOUD FUNCTIONS 🌟
+        import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-functions.js";
         
         const firebaseConfig = { 
             apiKey: "AIzaSyCX2C1TXRb20nGtxEaYXGUo2KEH7gbZCY0", 
@@ -1353,6 +1336,12 @@
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
+        
+        // 🌟 INITIALIZING CLOUD FUNCTIONS 🌟
+        const functions = getFunctions(app);
+        window.firebaseHttpsCallable = httpsCallable;
+        window.firebaseFunctions = functions;
+
         const provider = new GoogleAuthProvider();
         provider.setCustomParameters({ prompt: 'select_account' });
 
