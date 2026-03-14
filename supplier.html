@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UjenziSmart - Supplier Portal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap');
+        body { font-family: 'Inter', sans-serif; background-color: #f4f6f9; color: #1f2937; }
+        .glass-panel { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(12px); border: 1px solid rgba(0,0,0,0.05); }
+    </style>
+</head>
+<body class="min-h-screen p-6 flex flex-col items-center">
+
+    <div id="login-screen" class="w-full max-w-md mt-20 glass-panel p-8 rounded-3xl shadow-xl text-center">
+        <h1 class="text-3xl font-black text-green-600 mb-2">Supplier Portal</h1>
+        <p class="text-gray-500 mb-8 text-sm font-medium">Authorized vendors only.</p>
+        <button id="google-login-btn" class="w-full py-4 bg-white text-gray-700 border border-gray-300 rounded-2xl font-bold flex items-center justify-center gap-3 shadow-sm hover:bg-gray-50 transition-colors">
+            <svg viewBox="0 0 24 24" width="18" height="18"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+            Sign In with Google
+        </button>
+    </div>
+
+    <div id="dashboard-screen" class="hidden w-full max-w-2xl">
+        <header class="flex justify-between items-center mb-8 bg-white p-6 rounded-3xl shadow-sm">
+            <div>
+                <h1 class="text-2xl font-black text-gray-800">Inventory Manager</h1>
+                <p id="supplier-name" class="text-sm font-bold text-green-600 mt-1"></p>
+            </div>
+            <button id="logout-btn" class="text-sm font-bold text-red-500 hover:bg-red-50 px-4 py-2 rounded-xl transition-colors">Logout</button>
+        </header>
+
+        <div class="bg-white p-8 rounded-3xl shadow-md mb-8">
+            <h2 class="text-lg font-black mb-6 border-b pb-2">➕ Add New Product</h2>
+            
+            <form id="add-product-form" class="space-y-4">
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-[10px] font-bold text-gray-400 uppercase mb-1">Product Name</label>
+                        <input type="text" id="prod-name" required class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm font-bold outline-none focus:ring-2 focus:ring-green-500" placeholder="e.g. Simba Cement 50kg">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-bold text-gray-400 uppercase mb-1">Category</label>
+                        <select id="prod-category" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm font-bold outline-none focus:ring-2 focus:ring-green-500">
+                            <option value="Foundation & Structural">Foundation & Structural</option>
+                            <option value="Roofing Materials">Roofing Materials</option>
+                            <option value="Finishing & Painting">Finishing & Painting</option>
+                            <option value="Tools & Hardware">Tools & Hardware</option>
+                            <option value="Plumbing">Plumbing</option>
+                            <option value="Electrical">Electrical</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-[10px] font-bold text-gray-400 uppercase mb-1">Price (TZS)</label>
+                        <input type="number" id="prod-price" required class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm font-bold outline-none focus:ring-2 focus:ring-green-500" placeholder="18500">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-bold text-gray-400 uppercase mb-1">Weight per unit (KG)</label>
+                        <input type="number" id="prod-weight" required class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm font-bold outline-none focus:ring-2 focus:ring-green-500" placeholder="50">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-[10px] font-bold text-gray-400 uppercase mb-1">Short Description</label>
+                    <input type="text" id="prod-desc" required class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm font-bold outline-none focus:ring-2 focus:ring-green-500" placeholder="Grade 42.5R high-strength cement.">
+                </div>
+
+                <div>
+                    <label class="block text-[10px] font-bold text-gray-400 uppercase mb-1">Product Image</label>
+                    <input type="file" id="prod-image" accept="image/*" required class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-bold file:bg-green-50 file:text-green-700 hover:file:bg-green-100">
+                </div>
+
+                <button type="submit" id="submit-btn" class="w-full py-4 mt-4 bg-green-600 hover:bg-green-700 text-white rounded-2xl font-black shadow-lg transition-colors flex items-center justify-center gap-2">
+                    ☁️ Upload to Cloud
+                </button>
+            </form>
+        </div>
+
+        <div class="bg-white p-8 rounded-3xl shadow-md">
+            <h2 class="text-lg font-black mb-4 flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span> My Live Products</h2>
+            <div id="inventory-list" class="space-y-4">
+                <p class="text-sm text-gray-400 italic">Loading inventory...</p>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+        import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+        import { getFirestore, collection, addDoc, query, where, onSnapshot, deleteDoc, doc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+        // IMPORT STORAGE
+        import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-storage.js";
+
+        // EXACT SAME CONFIG AS YOUR APP
+        const firebaseConfig = { 
+            apiKey: "AIzaSyCX2C1TXRb20nGtxEaYXGUo2KEH7gbZCY0", 
+            authDomain: "ujenzismart-878af.firebaseapp.com", 
+            projectId: "ujenzismart-878af", 
+            storageBucket: "ujenzismart-878af.firebasestorage.app", 
+            messagingSenderId: "626807014511", 
+            appId: "1:626807014511:web:844e137d32048d6460399a",
+            measurementId: "G-V8C9KKGKFY" 
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const storage = getStorage(app); 
+        const provider = new GoogleAuthProvider();
+
+        const loginScreen = document.getElementById('login-screen');
+        const dashboardScreen = document.getElementById('dashboard-screen');
+        const submitBtn = document.getElementById('submit-btn');
+
+        // AUTHENTICATION
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                loginScreen.classList.add('hidden');
+                dashboardScreen.classList.remove('hidden');
+                document.getElementById('supplier-name').textContent = "Supplier: " + user.displayName;
+                listenToInventory(user.uid);
+            } else {
+                loginScreen.classList.remove('hidden');
+                dashboardScreen.classList.add('hidden');
+            }
+        });
+
+        document.getElementById('google-login-btn').onclick = () => signInWithPopup(auth, provider);
+        document.getElementById('logout-btn').onclick = () => signOut(auth);
+
+        // UPLOAD NEW PRODUCT
+        document.getElementById('add-product-form').onsubmit = async (e) => {
+            e.preventDefault();
+            const user = auth.currentUser;
+            if(!user) return alert("Please sign in first.");
+
+            const file = document.getElementById('prod-image').files[0];
+            if(!file) return alert("Please select an image.");
+
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = "⏳ Uploading Image...";
+            submitBtn.disabled = true;
+
+            try {
+                // 1. Upload Image to Storage
+                const storageRef = ref(storage, 'products/' + user.uid + '_' + Date.now() + '_' + file.name);
+                await uploadBytes(storageRef, file);
+                
+                submitBtn.innerHTML = "⏳ Generating Link...";
+                // 2. Get the public URL
+                const downloadURL = await getDownloadURL(storageRef);
+
+                submitBtn.innerHTML = "⏳ Saving to Database...";
+                // 3. Save Product details + Image URL to Firestore
+                await addDoc(collection(db, "products"), {
+                    supplierId: user.uid,
+                    supplierName: user.displayName,
+                    name: document.getElementById('prod-name').value,
+                    category: document.getElementById('prod-category').value,
+                    price: Number(document.getElementById('prod-price').value),
+                    weight: Number(document.getElementById('prod-weight').value),
+                    desc: document.getElementById('prod-desc').value,
+                    img: downloadURL, // The magic link!
+                    rating: 5.0, // Default rating for new products
+                    reviews: 0,
+                    reviewTxt: "New product.",
+                    createdAt: serverTimestamp()
+                });
+
+                alert("✅ Product uploaded successfully!");
+                document.getElementById('add-product-form').reset();
+            } catch (error) {
+                console.error("Upload Error:", error);
+                alert("Failed to upload. Check console.");
+            } finally {
+                submitBtn.innerHTML = "☁️ Upload to Cloud";
+                submitBtn.disabled = false;
+            }
+        };
+
+        // LISTEN TO INVENTORY (Only show this supplier's products)
+        function listenToInventory(uid) {
+            const q = query(collection(db, "products"), where("supplierId", "==", uid));
+            
+            onSnapshot(q, (snapshot) => {
+                const list = document.getElementById('inventory-list');
+                let items = [];
+                snapshot.forEach((doc) => {
+                    items.push({ id: doc.id, ...doc.data() });
+                });
+
+                if(items.length === 0) {
+                    list.innerHTML = `<p class="text-sm text-gray-400 italic">No products live yet.</p>`;
+                    return;
+                }
+
+                list.innerHTML = items.map(p => `
+                    <div class="flex items-center gap-4 p-4 border border-gray-100 rounded-2xl bg-gray-50">
+                        <img src="${p.img}" class="w-16 h-16 object-cover rounded-xl border border-gray-200">
+                        <div class="flex-grow">
+                            <p class="font-black text-sm">${p.name}</p>
+                            <p class="text-[10px] font-bold text-gray-400 uppercase">${p.category}</p>
+                            <p class="text-green-600 font-black text-sm mt-1">TZS ${p.price.toLocaleString()}</p>
+                        </div>
+                        <button onclick="deleteProduct('${p.id}')" class="text-red-500 hover:bg-red-100 p-2 rounded-lg transition-colors" title="Remove Product">🗑️</button>
+                    </div>
+                `).join('');
+            });
+        }
+
+        // DELETE PRODUCT
+        window.deleteProduct = async function(docId) {
+            if(confirm("Are you sure you want to remove this product from the live store?")) {
+                try {
+                    await deleteDoc(doc(db, "products", docId));
+                } catch(e) {
+                    console.error("Delete error:", e);
+                    alert("Failed to delete.");
+                }
+            }
+        };
+    </script>
+</body>
+</html>
