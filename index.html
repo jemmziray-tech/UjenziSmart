@@ -979,51 +979,65 @@
             calculateDelivery();
         }
 
-        // 🌟 NEW TEMBOPLUS SECURE PAYMENT FUNCTION 🌟
-        async function payWithTembo() {
-            if(!window.firebaseFunctions) {
-                return alert("Connecting to secure server... please wait a second and click again.");
-            }
+        // 🌟 NEW TEMBOPLUS SECURE PAYMENT FUNCTION (PROXY BYPASS) 🌟
+async function payWithTembo() {
+    const phone = document.getElementById('mobile-money-number').value.trim(); 
+    if(!phone) return alert("Please enter your mobile money number.");
+    
+    const u = JSON.parse(localStorage.getItem('ujenzi_user')); 
+    if(!u) return alert("Please log in to make secure payments.");
 
-            const phone = document.getElementById('mobile-money-number').value.trim(); 
-            if(!phone) return alert("Please enter your mobile money number.");
-            
-            const u = JSON.parse(localStorage.getItem('ujenzi_user')); 
-            if(!u) return alert("Please log in to make secure payments.");
+    let sub = 0; cart.forEach(i => sub += i.price * i.qty);
+    const totalCost = sub + transportCost;
+    
+    const btn = document.getElementById('tembo-pay-btn'); 
+    btn.innerHTML = "⏳ Bypassing Network Block..."; 
+    btn.disabled = true;
+    
+    const orderId = 'US-' + Math.floor(1000 + Math.random() * 9000);
+    
+    try {
+        // 🛡️ We use the proxy to sneak past Vodacom's firewall!
+        const proxyUrl = "https://cors-anywhere.herokuapp.com/"; 
+        const targetUrl = "https://us-central1-ujenzismart-878af.cloudfunctions.net/initiateTemboPayment";
 
-            let sub = 0; cart.forEach(i => sub += i.price * i.qty);
-            const totalCost = sub + transportCost;
-            
-            const btn = document.getElementById('tembo-pay-btn'); 
-            btn.innerHTML = "⏳ Connecting to Secure Server..."; 
-            btn.disabled = true;
-            
-            const orderId = 'US-' + Math.floor(1000 + Math.random() * 9000);
-            
-            try {
-                // 📞 Call your new Secure Firebase Server!
-                const initiateTembo = window.firebaseHttpsCallable(window.firebaseFunctions, 'initiateTemboPayment');
-                const result = await initiateTembo({
+        const response = await fetch(proxyUrl + targetUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            // Firebase expects the data wrapped in a "data" object
+            body: JSON.stringify({
+                data: {
                     amount: totalCost,
                     phoneNumber: phone,
                     orderId: orderId
-                });
-                
-                // 💸 The server replies with the secure checkout URL! Redirect the user there:
-                if(result.data && result.data.checkoutUrl) {
-                    window.location.href = result.data.checkoutUrl;
-                } else {
-                    alert("Gateway Error: Could not get secure checkout link.");
                 }
-            } catch (err) { 
-                console.error("Payment Error: ", err);
-                alert("Server connection failed. Please use the WhatsApp option for now.");
-            } finally { 
-                btn.innerHTML = "⚡ Secure Checkout"; 
-                btn.disabled = false; 
+            })
+        });
+
+        const result = await response.json();
+        
+        // 💸 Firebase returns the URL inside a "result" object
+        if(result.result && result.result.checkoutUrl) {
+            window.location.href = result.result.checkoutUrl;
+        } else {
+            if(response.status === 403) {
+                alert("⚠️ Proxy needs permission. Click OK, then click the 'Request access' button on the next page.");
+                window.open("https://cors-anywhere.herokuapp.com/corsdemo", "_blank");
+            } else {
+                alert("Gateway Error: Could not get secure checkout link.");
             }
         }
-
+    } catch (err) { 
+        console.error("Payment Error: ", err);
+        alert("Server connection failed. Please use the WhatsApp option for now.");
+    } finally { 
+        btn.innerHTML = "⚡ Secure Checkout"; 
+        btn.disabled = false; 
+    }
+}
         function checkoutWhatsApp() {
             const u = JSON.parse(localStorage.getItem('ujenzi_user'));
             let sub = 0; 
