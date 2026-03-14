@@ -980,6 +980,7 @@
         }
 
         // 🌟 NEW TEMBOPLUS SECURE PAYMENT FUNCTION (PROXY BYPASS) 🌟
+// 🌟 NEW TEMBOPLUS SECURE PAYMENT FUNCTION (PROXY BYPASS) 🌟
 async function payWithTembo() {
     const phone = document.getElementById('mobile-money-number').value.trim(); 
     if(!phone) return alert("Please enter your mobile money number.");
@@ -1017,22 +1018,28 @@ async function payWithTembo() {
             })
         });
 
+        // 🚨 THE FIX: Check if the proxy is locked BEFORE trying to read the data!
+        if (response.status === 403) {
+            alert("⚠️ Security Lock! Click OK, then click the 'Request temporary access' button on the page that opens. Then come back and try again.");
+            window.open("https://cors-anywhere.herokuapp.com/corsdemo", "_blank");
+            btn.innerHTML = "⚡ Secure Checkout"; 
+            btn.disabled = false;
+            return; // Stop the code here so it doesn't crash!
+        }
+
+        // If not locked, read the secure response from Google
         const result = await response.json();
         
         // 💸 Firebase returns the URL inside a "result" object
         if(result.result && result.result.checkoutUrl) {
             window.location.href = result.result.checkoutUrl;
         } else {
-            if(response.status === 403) {
-                alert("⚠️ Proxy needs permission. Click OK, then click the 'Request access' button on the next page.");
-                window.open("https://cors-anywhere.herokuapp.com/corsdemo", "_blank");
-            } else {
-                alert("Gateway Error: Could not get secure checkout link.");
-            }
+            alert("Gateway Error: Could not get secure checkout link.");
         }
+        
     } catch (err) { 
         console.error("Payment Error: ", err);
-        alert("Server connection failed. Please use the WhatsApp option for now.");
+        alert("Network block detected. Check the Console (F12) for details.");
     } finally { 
         btn.innerHTML = "⚡ Secure Checkout"; 
         btn.disabled = false; 
