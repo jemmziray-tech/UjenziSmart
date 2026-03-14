@@ -89,7 +89,6 @@
         <svg class="anim-prod w-24 h-24 top-6 right-4" style="animation: floatObj1 8s ease-in-out infinite;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-width="1.5" stroke-linecap="round" d="M3 4.5h18M3 9.5h18M3 14.5h18M3 19.5h18M8 4.5v5M16 4.5v5M5 9.5v5M13 9.5v5M21 9.5v5M9 14.5v5M17 14.5v5"/></svg>
         <svg class="anim-prod w-20 h-20 bottom-12 left-6" style="animation: floatObj2 10s ease-in-out infinite;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" d="M4 20h16L4 4v16zM8 20v-4M12 20v-4M16 20v-4M4 16h4M4 12h4M4 8h4"/></svg>
         <svg class="anim-prod w-28 h-28 top-20 right-32" style="animation: floatObj3 12s ease-in-out infinite;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" d="M3 10l9-7 9 7v10a2 2 0 01-2 2H5a2 2 0 01-2-2V10z M9 21V12h6v9"/></svg>
-        <svg class="anim-prod w-16 h-16 top-10 left-32" style="animation: floatObj1 9s ease-in-out infinite;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" d="M6 6c0-2 2-4 6-4s6 2 6 4v12c0 2-2 4-6 4s-6-2-6-4V6z M6 10h12 M6 14h12"/></svg>
 
         <div class="max-w-7xl mx-auto relative z-10">
             <div class="flex items-center justify-between mb-4 h-12">
@@ -104,7 +103,7 @@
             </div>
             <div id="header-text-container" class="transition-all duration-300">
                 <h1 id="header-title" class="text-[28px] font-black tracking-tight leading-tight text-white drop-shadow-md">Good morning</h1>
-                <p id="header-subtitle" class="text-blue-200/80 text-[11px] font-semibold mt-1 tracking-wider uppercase opacity-90">Project Status: Ready to Build</p>
+                <p id="header-subtitle" class="text-blue-200/80 text-[11px] font-semibold mt-1 tracking-wider uppercase opacity-90">Project Status: Ready to Build | 60% Complete</p>
             </div>
         </div>
     </header>
@@ -135,11 +134,46 @@
                         <span class="bg-green-500 text-white text-[9px] font-black px-2 py-1 rounded-md uppercase tracking-widest mb-2 inline-block shadow-lg">#1 Best Seller</span>
                         <h3 class="font-black text-xl leading-tight">Simba Cement 50kg</h3>
                     </div>
+                    <div class="absolute top-4 right-4 bg-white/90 glass text-gray-900 text-[10px] font-black px-3 py-1 rounded-full flex items-center gap-1 shadow-lg">
+                        <span class="text-green-600">▼</span> -2% this week
+                    </div>
                 </div>
                 <div class="p-5 flex justify-between items-end">
                     <div>
                         <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-1">Current Market Price</p>
                         <p class="text-green-600 dark:text-green-400 font-black text-xl">TZS 18,500</p>
+                    </div>
+                    <div class="flex items-end gap-1 h-8">
+                        <div class="w-2 bg-gray-200 dark:bg-gray-700 rounded-t-sm h-[60%] bar-grow"></div>
+                        <div class="w-2 bg-gray-200 dark:bg-gray-700 rounded-t-sm h-[80%] bar-grow"></div>
+                        <div class="w-2 bg-gray-200 dark:bg-gray-700 rounded-t-sm h-[100%] bar-grow"></div>
+                        <div class="w-2 bg-green-500 rounded-t-sm h-[70%] bar-grow"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div onclick="openProduct('Deformed Bar 12mm', 'TBS approved Grade 500 steel rebars.', 24000, 10, 'https://images.unsplash.com/photo-1536882240095-0379873feb4e?w=600', 4.8, 156, 'Accurate weight.')" class="bg-white dark:bg-gray-800 rounded-[2.5rem] overflow-hidden shadow-xl border dark:border-gray-700 stagger-item click-press group" style="animation-delay: 0.1s">
+                <div class="relative h-48 overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1536882240095-0379873feb4e?w=600" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
+                    <div class="absolute bottom-4 left-4 text-white">
+                        <span class="bg-red-500 text-white text-[9px] font-black px-2 py-1 rounded-md uppercase tracking-widest mb-2 inline-block shadow-lg">High Demand</span>
+                        <h3 class="font-black text-xl leading-tight">Y12 Steel Rebars</h3>
+                    </div>
+                    <div class="absolute top-4 right-4 bg-white/90 glass text-gray-900 text-[10px] font-black px-3 py-1 rounded-full flex items-center gap-1 shadow-lg">
+                        <span class="text-red-500">▲</span> +3% this week
+                    </div>
+                </div>
+                <div class="p-5 flex justify-between items-end">
+                    <div>
+                        <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-1">Current Market Price</p>
+                        <p class="text-green-600 dark:text-green-400 font-black text-xl">TZS 24,000</p>
+                    </div>
+                    <div class="flex items-end gap-1 h-8">
+                        <div class="w-2 bg-gray-200 dark:bg-gray-700 rounded-t-sm h-[50%] bar-grow"></div>
+                        <div class="w-2 bg-gray-200 dark:bg-gray-700 rounded-t-sm h-[70%] bar-grow"></div>
+                        <div class="w-2 bg-gray-200 dark:bg-gray-700 rounded-t-sm h-[85%] bar-grow"></div>
+                        <div class="w-2 bg-red-500 rounded-t-sm h-[100%] bar-grow"></div>
                     </div>
                 </div>
             </div>
@@ -502,15 +536,14 @@
         let fbtItem = null;
         let viewHistory = ['home'];
         
-        // Used by Firestore later
         window.appHistory = [];
         window.appSpend = 0;
 
-        // 🚨 YOUR SNIPPE API KEY 🚨
+        // 🚨 PASTE YOUR FULL SNIPPE API KEY HERE 🚨
         const SNIPPE_KEY = "snp_14a22d782dce5764866395a2539b198e849cede189f1ccd6967b8e8084654031";
 
-        // 🟢 NEW: THIS IS THE CLOUD-SYNCED DATABASE! No more hardcoded items.
-        window.productDatabase = {};
+        // 🟢 CLOUD DATABASE
+        window.productDatabase = {}; 
 
         function updateThemeIcon() {
             const isDark = document.documentElement.classList.contains('dark');
@@ -545,6 +578,7 @@
             }
         });
 
+        // --- SMART ROUTER FOR PHONE NAVIGATION ---
         window.addEventListener('popstate', (event) => {
             const productSheet = document.getElementById('product-sheet');
             const aiHubSheet = document.getElementById('ai-hub-sheet');
@@ -557,14 +591,22 @@
             
             if (sheetClosed) return;
 
-            if (event.state && event.state.view) {
-                viewHistory.pop();
-                navigateTo(event.state.view, true);
+            if (event.state) {
+                if (event.state.category) {
+                    window.openCategory(event.state.category, true);
+                } else if (event.state.view) {
+                    navigateTo(event.state.view, true);
+                } else {
+                    navigateTo('home', true);
+                }
             } else {
                 navigateTo('home', true);
             }
         });
-        history.replaceState({ view: 'home' }, '', '#home');
+        
+        if (!history.state) {
+            history.replaceState({ view: 'home' }, '', '#home');
+        }
 
         const categoryImages = {
             'Foundation': 'https://images.unsplash.com/photo-1590060417941-2f34888463f1?w=400',
@@ -575,7 +617,6 @@
             'Tools': 'https://images.unsplash.com/photo-1530124560677-bdaea02c9a9d?w=400'
         };
 
-        // 🟢 THIS CONNECTS THE FRONTEND NAMES TO THE CLOUD CATEGORY NAMES
         const catMap = {
             'Foundation': 'Foundation & Structural',
             'Roofing': 'Roofing Materials',
@@ -585,7 +626,7 @@
             'Electrical': 'Electrical'
         };
 
-        function navigateTo(viewName, isBack = false, isTab = false) {
+        function navigateTo(viewName, isHistoryBack = false, isTab = false) {
             document.querySelectorAll('.view-content').forEach(v => {
                 v.classList.add('hidden');
                 v.style.animation = 'none'; 
@@ -597,7 +638,7 @@
                 
                 if (isTab) {
                     targetView.style.animation = 'tabFadeScale 0.35s cubic-bezier(0.22, 1, 0.36, 1) forwards';
-                } else if (isBack) {
+                } else if (isHistoryBack) {
                     targetView.style.animation = 'slideInLeftNative 0.35s cubic-bezier(0.22, 1, 0.36, 1) forwards';
                 } else {
                     targetView.style.animation = 'slideInRightNative 0.35s cubic-bezier(0.22, 1, 0.36, 1) forwards';
@@ -631,15 +672,8 @@
                 if(viewName === 'history') { headerTitle.textContent = "My Expenses"; headerSub.textContent = "Transaction History & Receipts"; renderHistory(); }
             }
 
-            if(!isBack) {
-                if(viewHistory[viewHistory.length - 1] !== viewName) {
-                    viewHistory.push(viewName);
-                    if(mainTabs.includes(viewName)) {
-                        history.replaceState({ view: viewName }, '', '#' + viewName);
-                    } else {
-                        history.pushState({ view: viewName }, '', '#' + viewName);
-                    }
-                }
+            if(!isHistoryBack) {
+                history.pushState({ view: viewName }, '', '#' + viewName);
             }
 
             if(viewName === 'home') { document.getElementById('search-input').value = ''; window.renderHomeBase(); }
@@ -650,13 +684,7 @@
         }
 
         function goBack() {
-            if(viewHistory.length > 1) {
-                viewHistory.pop(); 
-                const previous = viewHistory[viewHistory.length - 1];
-                navigateTo(previous, true, false);
-            } else {
-                navigateTo('home', false, true);
-            }
+            history.back();
         }
 
         function checkAuth() {
@@ -712,7 +740,6 @@
 
         function closeEditNameModal() {
             document.getElementById('edit-name-modal').classList.add('hidden');
-            if(window.location.hash === '#edit-name') history.back();
         };
 
         function saveNewName() {
@@ -726,6 +753,7 @@
                 document.getElementById('p-name').textContent = newName;
                 setGreeting(); 
                 closeEditNameModal();
+                history.back();
                 
                 if(window.updateFirebaseName) window.updateFirebaseName(newName);
             }
@@ -763,17 +791,26 @@
             if(!query) { window.renderHomeBase(); return; }
             let results = [];
             for(let cat in window.productDatabase) {
-                window.productDatabase[cat].forEach(p => { if(p.name.toLowerCase().includes(query) || p.desc.toLowerCase().includes(query)) results.push(p); });
+                window.productDatabase[cat].forEach(p => { 
+                    if(p.name.toLowerCase().includes(query) || p.desc.toLowerCase().includes(query)) results.push(p); 
+                });
             }
-            if(results.length === 0) { container.innerHTML = `<div class="text-center py-16 text-gray-400 font-bold">No results found.</div>`; return; }
-            container.innerHTML = `<div class="flex items-center gap-3 mb-2 click-press cursor-pointer" onclick="document.getElementById('search-input').value=''; window.renderHomeBase();"><span class="w-8 h-8 bg-white dark:bg-gray-800 rounded-full flex items-center justify-center shadow-sm font-bold border dark:border-gray-700">←</span><h2 class="text-lg font-bold">Search Results</h2></div><div class="grid grid-cols-2 gap-4">${results.map((p, i) => generateProductCardHTML(p, i)).join('')}</div>`;
+            if(results.length === 0) { 
+                container.innerHTML = `<div class="text-center py-16 text-gray-400 font-bold">No results found.</div>`; 
+                return; 
+            }
+            container.innerHTML = `
+                <div class="flex items-center gap-3 mb-2 click-press cursor-pointer" onclick="document.getElementById('search-input').value=''; window.renderHomeBase();">
+                    <span class="w-8 h-8 bg-white dark:bg-gray-800 rounded-full flex items-center justify-center shadow-sm font-bold border dark:border-gray-700">←</span>
+                    <h2 class="text-lg font-bold">Search Results</h2>
+                </div>
+                <div class="grid grid-cols-2 gap-4">${results.map((p, i) => generateProductCardHTML(p, i)).join('')}</div>`;
         }
 
         function generateProductCardHTML(p, i) {
-            // Guard clause to ensure p exists before rendering
             if(!p) return '';
             return `
-                <div onclick="openProduct('${p.name.replace(/'/g, "\\'")}', '${p.desc.replace(/'/g, "\\'")}', ${p.price}, ${p.wt}, '${p.img}', ${p.rating}, ${p.reviews}, '${p.reviewTxt.replace(/'/g, "\\'")}')" class="bg-white dark:bg-gray-800 rounded-3xl p-3 shadow-sm border dark:border-gray-700 flex flex-col relative click-press group stagger-item" style="animation-delay: ${i*0.05}s">
+                <div onclick="window.openProduct('${p.name.replace(/'/g, "\\'")}', '${p.desc.replace(/'/g, "\\'")}', ${p.price}, ${p.wt}, '${p.img}', ${p.rating}, ${p.reviews}, '${p.reviewTxt.replace(/'/g, "\\'")}')" class="bg-white dark:bg-gray-800 rounded-3xl p-3 shadow-sm border dark:border-gray-700 flex flex-col relative click-press group stagger-item" style="animation-delay: ${i*0.05}s">
                     <div class="relative overflow-hidden rounded-2xl mb-3 bg-gray-100 dark:bg-gray-700">
                         <img src="${p.img}" loading="lazy" class="w-full h-32 object-cover group-hover:scale-105 transition-transform duration-500">
                         <div class="absolute top-2 left-2 bg-white/90 dark:bg-gray-900/90 backdrop-blur px-2 py-0.5 rounded text-[9px] font-black flex items-center gap-1 shadow-sm"><span class="text-amber-400">★</span> ${p.rating}</div>
@@ -786,19 +823,9 @@
                 </div>`;
         }
 
+        // 🌟 FEATURED SECTION REMOVED TO PREVENT DUPLICATION 🌟
         window.renderHomeBase = function() {
             const container = document.getElementById('dynamic-home-content');
-            
-            // Get sample products from the cloud database to show in "Featured"
-            let sampleMat = null;
-            let sampleRoof = null;
-            if(window.productDatabase['Foundation & Structural'] && window.productDatabase['Foundation & Structural'].length > 0) {
-                sampleMat = window.productDatabase['Foundation & Structural'][0];
-            }
-            if(window.productDatabase['Electrical'] && window.productDatabase['Electrical'].length > 0) {
-                sampleRoof = window.productDatabase['Electrical'][0];
-            }
-
             container.innerHTML = `
                 <section>
                     <h2 class="text-lg font-bold mb-4 px-1">Categories</h2>
@@ -811,23 +838,16 @@
                             </div>
                         `).join('')}
                     </div>
-                </section>
-                <section class="mt-4">
-                    <h2 class="text-lg font-bold mb-4 px-1">Cloud Featured</h2>
-                    <div class="grid grid-cols-2 gap-4">
-                        ${sampleMat ? generateProductCardHTML(sampleMat, 0) : '<p class="text-xs text-gray-400 p-2">Upload products to see them here.</p>'}
-                        ${sampleRoof ? generateProductCardHTML(sampleRoof, 1) : ''}
-                    </div>
                 </section>`;
         }
 
-        window.openCategory = function(shortCatName) {
+        window.openCategory = function(shortCatName, isHistoryNav = false) {
             const fullCatName = catMap[shortCatName] || shortCatName;
             const products = window.productDatabase[fullCatName] || [];
             const container = document.getElementById('dynamic-home-content');
             
             let html = `
-                <div class="flex items-center gap-3 mb-4 click-press cursor-pointer" onclick="window.renderHomeBase()">
+                <div class="flex items-center gap-3 mb-4 click-press cursor-pointer" onclick="history.back()">
                     <span class="w-8 h-8 bg-white dark:bg-gray-800 rounded-full flex items-center justify-center shadow-sm font-bold border dark:border-gray-700">←</span>
                     <h2 class="text-xl font-bold">${shortCatName}</h2>
                 </div>`;
@@ -840,6 +860,10 @@
             
             container.innerHTML = html;
             window.scrollTo(0, 0);
+
+            if(!isHistoryNav) {
+                history.pushState({ view: 'home', category: shortCatName }, '', '#category-' + shortCatName.replace(/\s+/g,''));
+            }
         }
 
         window.openProduct = function(t, d, p, wt, i, rating, reviews, reviewTxt) {
@@ -855,8 +879,6 @@
             history.pushState({ modal: 'product' }, '', '#product');
             
             const fbtSection = document.getElementById('fbt-section');
-            
-            // FBT Logic fallback for dynamic db
             fbtItem = null;
             if(window.productDatabase['Tools & Hardware'] && window.productDatabase['Tools & Hardware'].length > 0) {
                 fbtItem = window.productDatabase['Tools & Hardware'][0]; 
@@ -883,14 +905,15 @@
                 if(fbtItem && document.getElementById('fbt-checkbox').checked) {
                     cart.push({ title: fbtItem.name, price: fbtItem.price, wt: fbtItem.wt, qty: 1 });
                 }
-                updateBadge(); closeProduct();
+                updateBadge(); 
+                closeProduct();
+                history.back();
             };
         }
 
         function closeProduct() { 
             document.getElementById('product-sheet').classList.remove('open');
             setTimeout(() => document.getElementById('product-modal').classList.add('hidden'), 300);
-            if(window.location.hash === '#product') history.back();
         }
 
         function changeQty(amt) {
@@ -942,10 +965,17 @@
 
         function renderCart() {
             const c = document.getElementById('cart-items-container');
-            if(cart.length === 0) { c.innerHTML = '<p class="text-center text-gray-400 py-16 font-bold">Your basket is empty.</p>'; document.getElementById('cart-footer').classList.add('hidden'); return; }
+            if(cart.length === 0) { 
+                c.innerHTML = '<p class="text-center text-gray-400 py-16 font-bold">Your basket is empty.</p>'; 
+                document.getElementById('cart-footer').classList.add('hidden'); 
+                return; 
+            }
             c.innerHTML = cart.map((i, idx) => `
                 <div class="bg-white dark:bg-gray-800 p-4 rounded-2xl flex justify-between items-center shadow-sm border dark:border-gray-700 stagger-item" style="animation-delay: ${idx*0.05}s">
-                    <div><p class="font-bold text-xs uppercase">${i.title}</p><p class="text-xs text-gray-500 mt-1">${i.qty} units × TZS ${i.price.toLocaleString()}</p></div>
+                    <div>
+                        <p class="font-bold text-xs uppercase">${i.title}</p>
+                        <p class="text-xs text-gray-500 mt-1">${i.qty} units × TZS ${i.price.toLocaleString()}</p>
+                    </div>
                     <button onclick="cart.splice(${idx},1);renderCart();updateBadge();" class="w-8 h-8 flex items-center justify-center bg-red-50 dark:bg-red-900/20 text-red-500 rounded-full font-bold click-press">✕</button>
                 </div>`).join('');
             document.getElementById('cart-footer').classList.remove('hidden');
@@ -959,7 +989,6 @@
             const u = JSON.parse(localStorage.getItem('ujenzi_user'));
             let sub = 0; 
             cart.forEach(i => sub += i.price * i.qty);
-            const transportCost = parseInt(document.getElementById('cart-transport').textContent.replace(/[^0-9]/g, '')) || 0;
             const totalCost = sub + transportCost;
             
             const btn = document.getElementById('snippe-pay-btn');
@@ -1005,7 +1034,7 @@
                 console.error(err);
                 alert("Connection temporarily blocked. Please use the WhatsApp option while we calibrate the gateway.");
             } finally {
-                btn.innerHTML = "⚡ Pay Now Securely";
+                btn.innerHTML = "⚡ Send Payment Prompt";
                 btn.disabled = false;
             }
         }
@@ -1168,6 +1197,7 @@
             localStorage.setItem('ujenzi_wishlist', JSON.stringify(list));
             alert(`Saved to Phase: ${phase}`);
             closeProduct();
+            history.back();
             if(document.getElementById('view-profile').classList.contains('hidden') === false) updateWishlistCounts();
         }
 
@@ -1269,7 +1299,6 @@
         function closeAiHub() { 
             document.getElementById('ai-hub-sheet').classList.remove('open');
             setTimeout(() => document.getElementById('ai-hub-modal').classList.add('hidden'), 300);
-            if(window.location.hash === '#ai-hub') history.back();
         }
 
         async function sendMessage() {
@@ -1288,17 +1317,15 @@
                 const loader = document.getElementById(loaderId);
                 if(loader) loader.remove();
                 
-                let reply = "As an AI, I suggest checking our 'Market Watch' tab for the latest prices on structural materials.";
+                let reply = "As an AI, I suggest checking our Categories tab for the latest prices on structural materials.";
                 let lowerTxt = txt.toLowerCase();
                 
                 if(lowerTxt.includes("roof") || lowerTxt.includes("mabati")) {
-                    reply = "For roofing in Dar Es Salaam, I highly recommend 30G Corrugated Iron Sheets. They are anti-corrosive and withstand coastal humidity well. Current market average is TZS 22,000 per sheet.";
+                    reply = "For roofing in Dar Es Salaam, I highly recommend 30G Corrugated Iron Sheets. They withstand coastal humidity well.";
                 } else if(lowerTxt.includes("cement") || lowerTxt.includes("saruji")) {
-                    reply = "Simba Cement (Grade 42.5R) is the best for heavy structural work like foundations and columns. If you are doing plastering or block-making, Twiga (32.5N) is more cost-effective.";
+                    reply = "Simba Cement (Grade 42.5R) is the best for heavy structural work. For plastering, Twiga (32.5N) is more cost-effective.";
                 } else if(lowerTxt.includes("blocks") || lowerTxt.includes("tofali")) {
-                    reply = "For standard exterior walls, 6-inch solid machine-vibrated blocks are standard. You will need roughly 12.5 blocks per square meter.";
-                } else if(lowerTxt.includes("hello") || lowerTxt.includes("hey") || lowerTxt.includes("habari")) {
-                    reply = "Habari! I am your UjenziSmart AI Assistant. You can ask me to estimate materials for a wall, recommend cement types, or check roofing prices!";
+                    reply = "For standard exterior walls, 6-inch solid blocks are best. You will need roughly 12.5 blocks per square meter.";
                 }
                 
                 chatBox.innerHTML += `<div class="p-4 bg-white dark:bg-gray-800 border dark:border-gray-700 rounded-2xl rounded-tl-none mr-auto max-w-[85%] text-sm font-medium leading-relaxed animate-stagger-in">${reply}</div>`;
@@ -1329,96 +1356,65 @@
         const provider = new GoogleAuthProvider();
         provider.setCustomParameters({ prompt: 'select_account' });
 
-        // 🟢 THE MAGIC CLOUD LISTENER: This downloads products from the Supplier Portal!
+        // 🟢 THE CLOUD LISTENER (Products)
         onSnapshot(collection(db, "products"), (snapshot) => {
-            window.productDatabase = {}; // Clear old data
+            window.productDatabase = {}; 
             
             snapshot.forEach(doc => {
                 const p = doc.data();
                 const formattedProduct = {
-                    name: p.name, 
-                    price: p.price, 
-                    wt: p.weight, 
-                    desc: p.desc, 
-                    img: p.img,
-                    rating: p.rating || 5.0,
-                    reviews: p.reviews || 0,
-                    reviewTxt: p.reviewTxt || "Verified Product."
+                    name: p.name, price: p.price, wt: p.weight, desc: p.desc, img: p.img,
+                    rating: p.rating || 5.0, reviews: p.reviews || 0, reviewTxt: p.reviewTxt || "Verified Product."
                 };
                 
                 if(!window.productDatabase[p.category]) window.productDatabase[p.category] = [];
                 window.productDatabase[p.category].push(formattedProduct);
             });
 
-            // Auto-refresh the screen so the user sees new products instantly!
             if(!document.getElementById('view-home').classList.contains('hidden')) {
                 if(document.getElementById('search-input').value) {
                     window.handleSearch();
                 } else if (document.getElementById('dynamic-home-content').innerHTML.includes('←')) {
                     const currentCat = document.querySelector('h2.text-xl.font-bold').textContent;
-                    window.openCategory(currentCat);
+                    window.openCategory(currentCat, true);
                 } else {
-                    window.renderHomeBase();
+                    window.renderHomeBase(true);
                 }
             }
         });
 
         let unsubscribeOrders = null;
-
         function listenToUserOrders(uid) {
             const q = query(collection(db, "orders"), where("userId", "==", uid));
             try {
                 unsubscribeOrders = onSnapshot(q, (snapshot) => {
-                    let history = [];
-                    let approvedSpend = 0;
-
+                    let history = []; let approvedSpend = 0;
                     snapshot.forEach((doc) => {
                         const data = doc.data();
                         history.push({ id: doc.id, ...data });
-                        if(data.status === 'PAID') {
-                            approvedSpend += data.total;
-                        }
+                        if(data.status === 'PAID') approvedSpend += data.total;
                     });
-
                     history.sort((a, b) => {
                         const timeA = a.createdAt ? a.createdAt.toMillis() : 0;
                         const timeB = b.createdAt ? b.createdAt.toMillis() : 0;
                         return timeB - timeA;
                     });
 
-                    window.appHistory = history;
-                    window.appSpend = approvedSpend;
+                    window.appHistory = history; window.appSpend = approvedSpend;
                     window.localStorage.setItem('ujenzi_total_spend', approvedSpend.toString());
 
-                    if(!document.getElementById('view-history').classList.contains('hidden')) {
-                        window.renderHistory();
-                    }
-                    if(!document.getElementById('view-profile').classList.contains('hidden')) {
-                        window.updateTrackerUI();
-                    }
-                }, (error) => {
-                    console.error("Firestore Listen Error:", error);
+                    if(!document.getElementById('view-history').classList.contains('hidden')) window.renderHistory();
+                    if(!document.getElementById('view-profile').classList.contains('hidden')) window.updateTrackerUI();
                 });
-            } catch (err) {
-                console.error("Query Error:", err);
-            }
+            } catch (err) {}
         }
 
         window.submitCloudOrder = async function(receipt) {
             const user = auth.currentUser;
             if(!user) return alert("You must be signed in to place a secure order.");
             try {
-                await addDoc(collection(db, "orders"), {
-                    ...receipt,
-                    userId: user.uid,
-                    userName: user.displayName || 'Customer',
-                    userEmail: user.email,
-                    createdAt: serverTimestamp()
-                });
-            } catch (error) {
-                console.error("Error saving order to cloud:", error);
-                alert("Failed to sync secure order. Check connection.");
-            }
+                await addDoc(collection(db, "orders"), { ...receipt, userId: user.uid, userName: user.displayName || 'Customer', userEmail: user.email, createdAt: serverTimestamp() });
+            } catch (error) { alert("Failed to sync secure order. Check connection."); }
         };
 
         getRedirectResult(auth).then((result) => {
@@ -1426,18 +1422,13 @@
                 localStorage.setItem('ujenzi_user', JSON.stringify({ name: result.user.displayName, email: result.user.email, photoURL: result.user.photoURL }));
                 location.reload();
             }
-        }).catch((error) => {
-            console.error("Redirect Login Error:", error);
         });
 
         const googleBtn = document.getElementById('google-signin-btn');
         if(googleBtn) {
             googleBtn.onclick = async () => { 
-                const originalText = googleBtn.innerHTML;
-                googleBtn.innerHTML = "⏳ Securely logging in..."; 
-                try {
-                    await signInWithPopup(auth, provider);
-                } catch (error) {
+                const originalText = googleBtn.innerHTML; googleBtn.innerHTML = "⏳ Securely logging in..."; 
+                try { await signInWithPopup(auth, provider); } catch (error) {
                     if (error.code === 'auth/popup-blocked') await signInWithRedirect(auth, provider);
                     else if (error.code !== 'auth/popup-closed-by-user' && error.code !== 'auth/cancelled-popup-request') alert("Login failed: " + error.message);
                     googleBtn.innerHTML = originalText;
@@ -1453,62 +1444,33 @@
                 if(typeof window.checkAuth === "function") window.checkAuth();
             } else {
                 if(unsubscribeOrders) unsubscribeOrders(); 
-                localStorage.removeItem('ujenzi_user');
-                window.appHistory = []; window.appSpend = 0;
+                localStorage.removeItem('ujenzi_user'); window.appHistory = []; window.appSpend = 0;
                 document.getElementById('auth-screen').classList.remove('hidden');
             }
         });
 
-        window.logoutUser = async function() {
-            try { await signOut(auth); localStorage.removeItem('ujenzi_user'); location.reload(); } catch (error) { console.error("Logout Error:", error); }
-        };
+        window.logoutUser = async function() { try { await signOut(auth); localStorage.removeItem('ujenzi_user'); location.reload(); } catch (error) {} };
 
         window.updateFirebaseName = async function(newName) {
-            if(auth.currentUser) {
-                try { await updateProfile(auth.currentUser, { displayName: newName }); } catch (error) { console.error("Update profile error", error); }
-            }
+            if(auth.currentUser) { try { await updateProfile(auth.currentUser, { displayName: newName }); } catch (error) {} }
         };
 
         let messaging = null;
-        try {
-            messaging = getMessaging(app);
-            onMessage(messaging, (payload) => {
-                alert(`📢 UjenziSmart News: ${payload.notification.title}\n${payload.notification.body}`);
-            });
-        } catch (e) {
-            console.warn("Firebase Messaging is blocked or unsupported in this browser.", e);
-        }
+        try { messaging = getMessaging(app); onMessage(messaging, (payload) => { alert(`📢 UjenziSmart News: ${payload.notification.title}\n${payload.notification.body}`); }); } catch (e) {}
 
         window.toggleNotifications = async function() {
             const toggle = document.getElementById('notif-toggle');
             if (toggle.checked) {
-                if(!messaging) {
-                    alert("Push notifications are blocked or not supported by your current browser.");
-                    toggle.checked = false;
-                    return;
-                }
+                if(!messaging) { alert("Push notifications are blocked or not supported by your current browser."); toggle.checked = false; return; }
                 try {
                     const p = await Notification.requestPermission();
                     if (p === 'granted') {
                         const reg = await navigator.serviceWorker.register('/UjenziSmart/firebase-messaging-sw.js', { scope: '/UjenziSmart/' });
                         const readyReg = await navigator.serviceWorker.ready;
-                        
-                        const tok = await getToken(messaging, { 
-                            vapidKey: "BJjI5bm8ik4BOMzJ-OGkMELrR1ub_Z0HXQKsJ7pBa2oXtGlwzbBSPrGsnRoJEcLna9KfJ6vgNhvDejOfA02khro", 
-                            serviceWorkerRegistration: readyReg 
-                        });
-
-                        if (tok) { 
-                            localStorage.setItem('ujenzi_notif', 'true'); 
-                            localStorage.setItem('fcm_token', tok);
-                            alert("Notifications Enabled Successfully!"); 
-                        }
+                        const tok = await getToken(messaging, { vapidKey: "BJjI5bm8ik4BOMzJ-OGkMELrR1ub_Z0HXQKsJ7pBa2oXtGlwzbBSPrGsnRoJEcLna9KfJ6vgNhvDejOfA02khro", serviceWorkerRegistration: readyReg });
+                        if (tok) { localStorage.setItem('ujenzi_notif', 'true'); localStorage.setItem('fcm_token', tok); alert("Notifications Enabled Successfully!"); }
                     } else { toggle.checked = false; }
-                } catch (e) { 
-                    console.error("FCM Error:", e);
-                    alert("Error authorizing notifications. See console."); 
-                    toggle.checked = false; 
-                }
+                } catch (e) { toggle.checked = false; }
             } else { localStorage.setItem('ujenzi_notif', 'false'); }
         };
     </script>
