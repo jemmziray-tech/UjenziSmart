@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>UjenziSmart - Supplier Portal</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <script>
         tailwind.config = { darkMode: 'class' }
         function applyTheme() {
@@ -20,14 +23,12 @@
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800;900&display=swap');
         body { font-family: 'Inter', sans-serif; }
         
-        /* Premium Tech Background for Login */
         .bg-deep-tech { background: radial-gradient(circle at top right, #112347 0%, #030814 100%); }
         .glass-panel { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.1); }
         
         .click-press { transition: transform 0.1s ease; }
         .click-press:active { transform: scale(0.96); }
         
-        /* Subtle pulse for the secure lock icon */
         @keyframes subtlePulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.8; transform: scale(0.95); } }
         .animate-secure { animation: subtlePulse 3s ease-in-out infinite; }
 
@@ -47,15 +48,12 @@
             <div class="w-20 h-20 bg-gradient-to-br from-green-400 to-green-600 rounded-full mx-auto flex items-center justify-center shadow-lg mb-6 animate-secure border-4 border-white/10">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-10 h-10 text-white"><path fill-rule="evenodd" d="M12 1.5a5.25 5.25 0 0 0-5.25 5.25v3a3 3 0 0 0-3 3v6.75a3 3 0 0 0 3 3h10.5a3 3 0 0 0 3-3v-6.75a3 3 0 0 0-3-3v-3c0-2.9-2.35-5.25-5.25-5.25Zm3.75 8.25v-3a3.75 3.75 0 1 0-7.5 0v3h7.5Z" clip-rule="evenodd" /></svg>
             </div>
-            
             <h1 class="text-3xl font-black mb-2 tracking-tight">Vendor Portal</h1>
             <p class="text-blue-100/70 mb-10 text-sm font-medium">Secure access for authorized UjenziSmart suppliers.</p>
-            
             <button id="google-login-btn" class="w-full py-4 bg-white hover:bg-gray-50 text-gray-800 rounded-2xl font-black flex items-center justify-center gap-3 click-press shadow-[0_10px_25px_rgba(0,0,0,0.2)] transition-all">
                 <svg viewBox="0 0 24 24" width="20" height="20"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
                 Authenticate with Google
             </button>
-            
             <p class="text-[10px] text-gray-400 mt-8 uppercase tracking-widest font-bold">Encrypted Connection</p>
         </div>
     </div>
@@ -63,10 +61,9 @@
     <div id="dashboard-screen" class="hidden w-full max-w-3xl py-8 px-4 relative z-10">
         
         <header class="flex justify-between items-center mb-8 bg-white dark:bg-gray-800 p-6 rounded-[2rem] shadow-sm border border-gray-100 dark:border-gray-700 transition-colors">
-            
             <div class="flex items-center gap-4 cursor-pointer group click-press" onclick="openProfileSettings()">
                 <div class="relative">
-                    <img id="header-avatar" src="https://ui-avatars.com/api/?name=Vendor&background=10b981&color=fff" class="w-14 h-14 rounded-full object-cover border-2 border-gray-100 dark:border-gray-700 shadow-sm transition-transform group-hover:scale-105 group-hover:border-green-500">
+                    <img id="header-avatar" src="" class="w-14 h-14 rounded-full object-cover border-2 border-gray-100 dark:border-gray-700 shadow-sm transition-transform group-hover:scale-105 group-hover:border-green-500">
                     <div class="absolute bottom-0 right-0 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-full w-5 h-5 flex items-center justify-center text-[10px] shadow-sm text-gray-800 dark:text-gray-300 group-hover:text-green-500">⚙️</div>
                 </div>
                 <div>
@@ -74,7 +71,6 @@
                     <p id="supplier-name" class="text-xs font-bold text-gray-500 dark:text-gray-400 mt-0.5 group-hover:text-green-500 transition-colors">Loading...</p>
                 </div>
             </div>
-
             <div class="flex items-center gap-3">
                 <button onclick="switchTheme()" class="w-11 h-11 bg-gray-50 dark:bg-gray-900 rounded-full flex items-center justify-center click-press shadow-inner transition-colors border border-gray-200 dark:border-gray-700">
                     <svg id="icon-sun" style="display:none;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-5 h-5 text-amber-500"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-2.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z" /></svg>
@@ -84,29 +80,47 @@
             </div>
         </header>
 
-        <div class="mb-8 space-y-4 stagger-item">
+        <div class="bg-gray-900 dark:bg-green-900/20 p-8 rounded-[2.5rem] shadow-xl text-white mb-8 relative overflow-hidden stagger-item border border-gray-800 dark:border-green-800">
+            <div class="absolute top-0 right-0 w-48 h-48 bg-green-500/20 rounded-full blur-[50px] pointer-events-none"></div>
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center relative z-10 gap-6">
+                <div>
+                    <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-1 flex items-center gap-2">
+                        <span class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span> Available Wallet Balance
+                    </p>
+                    <h3 id="wallet-balance" class="text-4xl font-black tracking-tight">TZS 0</h3>
+                </div>
+                <button onclick="requestPayout()" class="w-full md:w-auto bg-green-500 hover:bg-green-600 text-white px-8 py-4 rounded-[1.5rem] font-black text-xs uppercase tracking-widest transition-colors shadow-[0_10px_20px_rgba(34,197,94,0.3)] click-press flex items-center justify-center gap-2">
+                    💳 Request Payout
+                </button>
+            </div>
+        </div>
+
+        <div class="mb-8 space-y-4 stagger-item" style="animation-delay: 0.1s;">
             <h2 class="text-lg font-black flex items-center gap-2 px-2 text-gray-900 dark:text-white"><span class="text-green-500">📊</span> Performance Overview</h2>
             
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <div class="bg-white dark:bg-gray-800 p-5 rounded-[2rem] shadow-sm border border-gray-100 dark:border-gray-700 flex flex-col justify-center relative overflow-hidden group hover:shadow-md transition-all">
-                    <div class="absolute -right-4 -top-4 w-16 h-16 bg-green-50 dark:bg-green-900/20 rounded-full group-hover:scale-150 transition-transform duration-500"></div>
                     <p class="text-[9px] text-gray-400 font-bold uppercase tracking-widest mb-1 relative z-10">Total Revenue</p>
                     <h3 id="stat-revenue" class="text-xl font-black text-gray-900 dark:text-white relative z-10 transition-colors">TZS 0</h3>
                 </div>
                 <div class="bg-white dark:bg-gray-800 p-5 rounded-[2rem] shadow-sm border border-gray-100 dark:border-gray-700 flex flex-col justify-center relative overflow-hidden group hover:shadow-md transition-all">
-                    <div class="absolute -right-4 -top-4 w-16 h-16 bg-blue-50 dark:bg-blue-900/20 rounded-full group-hover:scale-150 transition-transform duration-500"></div>
                     <p class="text-[9px] text-gray-400 font-bold uppercase tracking-widest mb-1 relative z-10">Units Sold</p>
                     <h3 id="stat-units" class="text-2xl font-black text-gray-900 dark:text-white relative z-10 transition-colors">0</h3>
                 </div>
                 <div class="bg-white dark:bg-gray-800 p-5 rounded-[2rem] shadow-sm border border-gray-100 dark:border-gray-700 flex flex-col justify-center relative overflow-hidden group hover:shadow-md transition-all">
-                    <div class="absolute -right-4 -top-4 w-16 h-16 bg-amber-50 dark:bg-amber-900/20 rounded-full group-hover:scale-150 transition-transform duration-500"></div>
                     <p class="text-[9px] text-gray-400 font-bold uppercase tracking-widest mb-1 relative z-10">Live Products</p>
                     <h3 id="stat-active" class="text-2xl font-black text-gray-900 dark:text-white relative z-10 transition-colors">0</h3>
                 </div>
                 <div class="bg-white dark:bg-gray-800 p-5 rounded-[2rem] shadow-sm border border-gray-100 dark:border-gray-700 flex flex-col justify-center relative overflow-hidden group hover:shadow-md transition-all">
-                    <div class="absolute -right-4 -top-4 w-16 h-16 bg-purple-50 dark:bg-purple-900/20 rounded-full group-hover:scale-150 transition-transform duration-500"></div>
                     <p class="text-[9px] text-gray-400 font-bold uppercase tracking-widest mb-1 relative z-10">Top Product</p>
                     <h3 id="stat-top-product" class="text-xs font-black text-gray-900 dark:text-white relative z-10 truncate transition-colors">-</h3>
+                </div>
+            </div>
+
+            <div class="bg-white dark:bg-gray-800 p-6 rounded-[2rem] shadow-sm border border-gray-100 dark:border-gray-700 mt-4 transition-colors">
+                <h3 class="text-[10px] font-black mb-4 uppercase tracking-widest text-gray-400">📈 7-Day Revenue Trend</h3>
+                <div class="relative h-56 w-full">
+                    <canvas id="revenueChart"></canvas>
                 </div>
             </div>
 
@@ -118,7 +132,7 @@
             </div>
         </div>
 
-        <div class="bg-white dark:bg-gray-800 p-8 rounded-[2rem] shadow-sm border border-gray-100 dark:border-gray-700 mb-8 relative overflow-hidden stagger-item transition-colors" style="animation-delay: 0.1s;">
+        <div class="bg-white dark:bg-gray-800 p-8 rounded-[2rem] shadow-sm border border-gray-100 dark:border-gray-700 mb-8 relative overflow-hidden stagger-item transition-colors" style="animation-delay: 0.2s;">
             <div class="absolute top-0 right-0 w-32 h-32 bg-green-50 dark:bg-green-900/10 rounded-full blur-[40px] pointer-events-none"></div>
             <h2 class="text-lg font-black mb-6 flex items-center gap-2 relative z-10 text-gray-900 dark:text-white"><span class="text-green-500">➕</span> Add New Product</h2>
             
@@ -170,7 +184,7 @@
             </form>
         </div>
 
-        <div class="bg-white dark:bg-gray-800 p-8 rounded-[2rem] shadow-sm border border-gray-100 dark:border-gray-700 stagger-item transition-colors" style="animation-delay: 0.2s;">
+        <div class="bg-white dark:bg-gray-800 p-8 rounded-[2rem] shadow-sm border border-gray-100 dark:border-gray-700 stagger-item transition-colors" style="animation-delay: 0.3s;">
             <h2 class="text-lg font-black mb-6 flex items-center gap-2 text-gray-900 dark:text-white"><span class="w-2.5 h-2.5 rounded-full bg-green-500 animate-pulse"></span> My Live Inventory</h2>
             <div id="inventory-list" class="space-y-4">
                 <div class="text-center py-10">
@@ -209,6 +223,38 @@
         </div>
     </div>
 
+    <div id="edit-product-modal" class="fixed inset-0 z-[200] hidden bg-black/60 flex items-center justify-center transition-opacity backdrop-blur-sm px-4">
+        <div class="bg-white dark:bg-gray-900 w-full max-w-md rounded-[2.5rem] p-8 shadow-2xl animate-stagger-in border border-transparent dark:border-gray-700 relative">
+            <button onclick="closeEditModal()" class="absolute top-4 right-4 w-8 h-8 bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 rounded-full flex items-center justify-center font-bold transition-colors hover:bg-gray-200 dark:hover:bg-gray-700 click-press">✕</button>
+            
+            <h3 class="text-xl font-black mb-1 text-gray-900 dark:text-white">Quick Edit</h3>
+            <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-6">Update live product details</p>
+            
+            <input type="hidden" id="edit-doc-id">
+            
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Product Name</label>
+                    <input type="text" id="quick-edit-name" class="w-full bg-gray-50 dark:bg-gray-800 p-4 rounded-xl outline-none border border-gray-200 dark:border-gray-700 font-bold text-sm text-gray-800 dark:text-gray-100 focus:ring-2 focus:ring-green-500 transition-colors">
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Price (TZS)</label>
+                        <input type="number" id="quick-edit-price" class="w-full bg-gray-50 dark:bg-gray-800 p-4 rounded-xl outline-none border border-gray-200 dark:border-gray-700 font-bold text-sm text-gray-800 dark:text-gray-100 focus:ring-2 focus:ring-green-500 transition-colors">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Weight (KG)</label>
+                        <input type="number" id="quick-edit-weight" class="w-full bg-gray-50 dark:bg-gray-800 p-4 rounded-xl outline-none border border-gray-200 dark:border-gray-700 font-bold text-sm text-gray-800 dark:text-gray-100 focus:ring-2 focus:ring-green-500 transition-colors">
+                    </div>
+                </div>
+            </div>
+
+            <button id="save-edit-btn" onclick="saveEditedProduct()" class="w-full py-4 mt-6 bg-blue-600 hover:bg-blue-700 text-white rounded-2xl font-black click-press shadow-[0_8px_15px_rgba(37,99,235,0.3)] text-xs uppercase tracking-widest transition-colors flex justify-center items-center gap-2">
+                🔄 Update Product
+            </button>
+        </div>
+    </div>
+
     <script>
         function updateThemeIcon() {
             const isDark = document.documentElement.classList.contains('dark');
@@ -217,6 +263,14 @@
             if(sun && moon) {
                 sun.style.display = isDark ? 'block' : 'none';
                 moon.style.display = isDark ? 'none' : 'block';
+            }
+            // Update Chart theme if it exists
+            if(window.revenueChartInstance) {
+                window.revenueChartInstance.options.scales.x.ticks.color = isDark ? '#9ca3af' : '#6b7280';
+                window.revenueChartInstance.options.scales.y.ticks.color = isDark ? '#9ca3af' : '#6b7280';
+                window.revenueChartInstance.options.scales.x.grid.color = isDark ? '#374151' : '#f3f4f6';
+                window.revenueChartInstance.options.scales.y.grid.color = isDark ? '#374151' : '#f3f4f6';
+                window.revenueChartInstance.update();
             }
         }
         
@@ -228,13 +282,8 @@
         }
         document.addEventListener("DOMContentLoaded", updateThemeIcon);
 
-        function openProfileSettings() {
-            document.getElementById('profile-modal').classList.remove('hidden');
-        }
-
-        function closeProfileSettings() {
-            document.getElementById('profile-modal').classList.add('hidden');
-        }
+        function openProfileSettings() { document.getElementById('profile-modal').classList.remove('hidden'); }
+        function closeProfileSettings() { document.getElementById('profile-modal').classList.add('hidden'); }
 
         let newProfileImageFile = null;
         function previewProfileImage(event) {
@@ -242,18 +291,31 @@
             if(file) {
                 newProfileImageFile = file;
                 const reader = new FileReader();
-                reader.onload = function(e) {
-                    document.getElementById('modal-avatar-preview').src = e.target.result;
-                }
+                reader.onload = function(e) { document.getElementById('modal-avatar-preview').src = e.target.result; }
                 reader.readAsDataURL(file);
             }
         }
+
+        // Quick Edit Modal Logic
+        function openEditModal(id, name, price, weight) {
+            document.getElementById('edit-doc-id').value = id;
+            document.getElementById('quick-edit-name').value = name;
+            document.getElementById('quick-edit-price').value = price;
+            document.getElementById('quick-edit-weight').value = weight;
+            document.getElementById('edit-product-modal').classList.remove('hidden');
+        }
+        function closeEditModal() { document.getElementById('edit-product-modal').classList.add('hidden'); }
+        
+        // Expose to global window so HTML onclick works
+        window.openEditModal = openEditModal;
+        window.closeEditModal = closeEditModal;
+
     </script>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
         import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut, updateProfile } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
-        import { getFirestore, collection, addDoc, query, where, onSnapshot, deleteDoc, doc, serverTimestamp, getDocs } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, query, where, onSnapshot, deleteDoc, doc, updateDoc, serverTimestamp, getDocs } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
         import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-storage.js";
 
         const firebaseConfig = { 
@@ -298,10 +360,8 @@
                     await signOut(auth);
                     return; 
                 }
-
                 loginScreen.classList.add('hidden');
                 dashboardScreen.classList.remove('hidden');
-                
                 updateHeaderUI(user);
                 listenToInventory(user.uid);
             } else {
@@ -311,19 +371,42 @@
         });
 
         document.getElementById('google-login-btn').onclick = async () => {
-            try { await signInWithPopup(auth, provider); } 
-            catch (error) { alert("Login failed: " + error.message); }
+            try { await signInWithPopup(auth, provider); } catch (error) { alert("Login failed: " + error.message); }
         };
         
-        document.getElementById('logout-btn').onclick = async () => {
-            await signOut(auth);
-        };
+        document.getElementById('logout-btn').onclick = async () => { await signOut(auth); };
+
+        // 💳 REQUEST PAYOUT LOGIC
+        window.requestPayout = async function() {
+            const user = auth.currentUser;
+            if(!user) return;
+            
+            const currentBalText = document.getElementById('wallet-balance').textContent.replace(/[^0-9]/g, '');
+            if(parseInt(currentBalText) === 0) return alert("Your wallet balance is currently zero.");
+
+            const amount = prompt("Enter amount to withdraw (TZS):");
+            if(!amount || isNaN(amount) || amount <= 0) return;
+            
+            const details = prompt("Enter your Mobile Money Number or Bank Account for the transfer:");
+            if(!details) return;
+            
+            try {
+                await addDoc(collection(db, "payouts"), {
+                    supplierId: user.uid,
+                    supplierName: user.displayName,
+                    amount: Number(amount),
+                    accountDetails: details,
+                    status: "PENDING",
+                    createdAt: serverTimestamp()
+                });
+                alert("✅ Payout request submitted! Admin will process it shortly.");
+            } catch(e) { alert("Failed to request payout. Try again later."); }
+        }
 
         // 🟢 SAVE PROFILE SETTINGS 🟢
         window.saveProfileSettings = async function() {
             const user = auth.currentUser;
             if(!user) return;
-
             const saveBtn = document.getElementById('save-profile-btn');
             const newName = document.getElementById('edit-name-input').value.trim();
             if(!newName) return alert("Display name cannot be empty.");
@@ -333,34 +416,46 @@
 
             try {
                 let newPhotoURL = user.photoURL;
-
-                // If user selected a new image, upload it to Storage first
                 if(newProfileImageFile) {
                     const storageRef = ref(storage, 'avatars/' + user.uid);
                     await uploadBytes(storageRef, newProfileImageFile);
                     newPhotoURL = await getDownloadURL(storageRef);
                 }
-
-                // Update Firebase Auth Profile
-                await updateProfile(user, {
-                    displayName: newName,
-                    photoURL: newPhotoURL
-                });
-
-                // Update UI Instantly
+                await updateProfile(user, { displayName: newName, photoURL: newPhotoURL });
                 updateHeaderUI(auth.currentUser);
                 alert("✅ Profile updated securely.");
                 closeProfileSettings();
-                newProfileImageFile = null; // Reset
-            } catch (error) {
-                console.error(error);
-                alert("Failed to update profile.");
+                newProfileImageFile = null; 
+            } catch (error) { alert("Failed to update profile."); } 
+            finally { saveBtn.innerHTML = "💾 Save Changes"; saveBtn.disabled = false; }
+        }
+
+        // ✏️ SAVE EDITED PRODUCT 🟢
+        window.saveEditedProduct = async function() {
+            const docId = document.getElementById('edit-doc-id').value;
+            const newName = document.getElementById('quick-edit-name').value;
+            const newPrice = Number(document.getElementById('quick-edit-price').value);
+            const newWeight = Number(document.getElementById('quick-edit-weight').value);
+            
+            const btn = document.getElementById('save-edit-btn');
+            btn.innerHTML = "⏳ Updating..."; btn.disabled = true;
+
+            try {
+                await updateDoc(doc(db, "products", docId), {
+                    name: newName,
+                    price: newPrice,
+                    weight: newWeight
+                });
+                closeEditModal();
+            } catch(e) {
+                console.error(e);
+                alert("Failed to update product.");
             } finally {
-                saveBtn.innerHTML = "💾 Save Changes";
-                saveBtn.disabled = false;
+                btn.innerHTML = "🔄 Update Product"; btn.disabled = false;
             }
         }
 
+        // UPLOAD PRODUCT
         document.getElementById('add-product-form').onsubmit = async (e) => {
             e.preventDefault();
             const user = auth.currentUser;
@@ -369,8 +464,7 @@
             const file = document.getElementById('prod-image').files[0];
             if(!file) return alert("Please select an image.");
 
-            submitBtn.innerHTML = "⏳ Uploading Image...";
-            submitBtn.disabled = true;
+            submitBtn.innerHTML = "⏳ Uploading Image..."; submitBtn.disabled = true;
 
             try {
                 const storageRef = ref(storage, 'products/' + user.uid + '_' + Date.now() + '_' + file.name);
@@ -397,14 +491,62 @@
 
                 alert("✅ Product published successfully!");
                 document.getElementById('add-product-form').reset();
-            } catch (error) {
-                console.error("Upload Error:", error);
-                alert("Failed to upload. Check console.");
-            } finally {
-                submitBtn.innerHTML = "☁️ Publish to Live Store";
-                submitBtn.disabled = false;
-            }
+            } catch (error) { alert("Failed to upload. Check console."); } 
+            finally { submitBtn.innerHTML = "☁️ Publish to Live Store"; submitBtn.disabled = false; }
         };
+
+        // 📈 CHART.JS LOGIC
+        window.revenueChartInstance = null;
+        function renderChart(dailyData) {
+            const ctx = document.getElementById('revenueChart').getContext('2d');
+            const isDark = document.documentElement.classList.contains('dark');
+            
+            if (window.revenueChartInstance) window.revenueChartInstance.destroy();
+            
+            const gradient = ctx.createLinearGradient(0, 0, 0, 400);
+            gradient.addColorStop(0, 'rgba(16, 185, 129, 0.5)'); // Green
+            gradient.addColorStop(1, 'rgba(16, 185, 129, 0.0)');
+
+            window.revenueChartInstance = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: dailyData.map(d => d.date),
+                    datasets: [{
+                        label: 'Revenue (TZS)',
+                        data: dailyData.map(d => d.amount),
+                        borderColor: '#10b981',
+                        backgroundColor: gradient,
+                        borderWidth: 3,
+                        pointBackgroundColor: '#fff',
+                        pointBorderColor: '#10b981',
+                        pointBorderWidth: 2,
+                        pointRadius: 4,
+                        fill: true,
+                        tension: 0.4 // Smooth curves
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        x: { 
+                            grid: { display: false, color: isDark ? '#374151' : '#f3f4f6' },
+                            ticks: { color: isDark ? '#9ca3af' : '#6b7280', font: { family: 'Inter', size: 10 } }
+                        },
+                        y: { 
+                            border: { display: false },
+                            grid: { color: isDark ? '#374151' : '#f3f4f6' },
+                            ticks: { 
+                                color: isDark ? '#9ca3af' : '#6b7280', 
+                                font: { family: 'Inter', size: 10 },
+                                callback: function(value) { return value >= 1000 ? (value/1000) + 'k' : value; }
+                            }
+                        }
+                    }
+                }
+            });
+        }
 
         async function fetchAndCalculateStats(supplierProducts) {
             try {
@@ -413,6 +555,13 @@
                 let totalRevenue = 0;
                 let totalUnits = 0;
                 let productStats = {}; 
+                
+                // For the chart: create last 7 days array
+                let dailyStats = {};
+                for(let i=6; i>=0; i--) {
+                    const d = new Date(); d.setDate(d.getDate() - i);
+                    dailyStats[d.toLocaleDateString('en-US', {weekday:'short'})] = 0;
+                }
 
                 supplierProducts.forEach(p => {
                     productStats[p.name] = { name: p.name, sold: 0, rev: 0, img: p.img, price: p.price };
@@ -421,6 +570,8 @@
                 querySnapshot.forEach((doc) => {
                     const order = doc.data();
                     if (order.status === "SUCCESS" || order.status === "PAID") {
+                        let orderTotalForSupplier = 0;
+                        
                         supplierProducts.forEach(p => {
                             const escapedName = p.name.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
                             const regex = new RegExp(`${escapedName}\\s*\\(x(\\d+)\\)`, 'i');
@@ -428,34 +579,46 @@
                             
                             if (match) {
                                 const qty = parseInt(match[1]);
+                                const rev = (qty * p.price);
                                 productStats[p.name].sold += qty;
-                                productStats[p.name].rev += (qty * p.price);
+                                productStats[p.name].rev += rev;
                                 totalUnits += qty;
-                                totalRevenue += (qty * p.price);
+                                totalRevenue += rev;
+                                orderTotalForSupplier += rev;
                             }
                         });
+
+                        // Add to Chart Daily Data if order has a timestamp
+                        if(orderTotalForSupplier > 0 && order.createdAt) {
+                            const orderDate = order.createdAt.toDate();
+                            const dayName = orderDate.toLocaleDateString('en-US', {weekday:'short'});
+                            if(dailyStats[dayName] !== undefined) {
+                                dailyStats[dayName] += orderTotalForSupplier;
+                            }
+                        }
                     }
                 });
 
+                // Update the Dashboard KPI Cards
                 document.getElementById('stat-revenue').textContent = `TZS ${totalRevenue.toLocaleString()}`;
+                document.getElementById('wallet-balance').textContent = `TZS ${totalRevenue.toLocaleString()}`;
                 document.getElementById('stat-units').textContent = totalUnits;
 
+                // Render Chart
+                const chartDataArray = Object.keys(dailyStats).map(key => ({ date: key, amount: dailyStats[key] }));
+                renderChart(chartDataArray);
+
+                // Find Top Product
                 let topProd = { name: "-", sold: -1 };
                 let sortedPerformers = [];
-                
                 for (let key in productStats) {
                     sortedPerformers.push(productStats[key]);
-                    if(productStats[key].sold > topProd.sold) {
-                        topProd = productStats[key];
-                    }
+                    if(productStats[key].sold > topProd.sold) topProd = productStats[key];
                 }
                 
-                if(topProd.sold > 0) {
-                    document.getElementById('stat-top-product').textContent = topProd.name;
-                } else {
-                    document.getElementById('stat-top-product').textContent = "No sales yet";
-                }
+                document.getElementById('stat-top-product').textContent = topProd.sold > 0 ? topProd.name : "No sales yet";
 
+                // Render Top Performers List
                 sortedPerformers.sort((a, b) => b.sold - a.sold); 
                 const performersList = document.getElementById('top-performers-list');
                 
@@ -482,15 +645,14 @@
             }
         }
 
+        // LISTEN TO INVENTORY
         function listenToInventory(uid) {
             const q = query(collection(db, "products"), where("supplierId", "==", uid));
             
             onSnapshot(q, (snapshot) => {
                 const list = document.getElementById('inventory-list');
                 let items = [];
-                snapshot.forEach((doc) => {
-                    items.push({ id: doc.id, ...doc.data() });
-                });
+                snapshot.forEach((doc) => { items.push({ id: doc.id, ...doc.data() }); });
 
                 document.getElementById('stat-active').textContent = items.length;
                 fetchAndCalculateStats(items);
@@ -512,7 +674,10 @@
                             <p class="text-[9px] font-bold text-gray-400 uppercase tracking-widest mt-0.5">${p.category}</p>
                             <p class="text-green-600 dark:text-green-400 font-black text-sm mt-1">TZS ${p.price.toLocaleString()}</p>
                         </div>
-                        <button onclick="deleteProduct('${p.id}')" class="text-red-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 p-3 rounded-xl transition-colors" title="Remove Product">🗑️</button>
+                        <div class="flex gap-1">
+                            <button onclick="openEditModal('${p.id}', '${p.name.replace(/'/g, "\\'")}', ${p.price}, ${p.weight})" class="text-blue-400 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20 p-3 rounded-xl transition-colors click-press" title="Edit Product">✏️</button>
+                            <button onclick="deleteProduct('${p.id}')" class="text-red-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 p-3 rounded-xl transition-colors click-press" title="Remove Product">🗑️</button>
+                        </div>
                     </div>
                 `).join('');
             });
