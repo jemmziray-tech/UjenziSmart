@@ -1348,6 +1348,7 @@
 
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
+        window.firebaseAuth = auth;
         const db = getFirestore(app);
         
         // 🌟 INITIALIZING CLOUD FUNCTIONS 🌟
