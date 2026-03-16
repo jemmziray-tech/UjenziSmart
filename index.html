@@ -226,7 +226,7 @@
                         
                         <input type="tel" id="mobile-money-number" placeholder="Enter Phone (e.g. 0754...)" class="w-full bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-xl px-4 py-3 outline-none font-bold text-xs mb-3 focus:ring-2 focus:ring-green-500 transition-all relative z-10">
                         
-                        <button onclick="()" id="tembo-pay-btn" class="w-full py-4 bg-green-600 hover:bg-green-700 text-white rounded-[1.5rem] font-black shadow-[0_10px_20px_rgba(22,163,74,0.3)] click-press uppercase text-xs tracking-widest flex items-center justify-center gap-2 transition-all relative z-10">
+                        <button onclick="payWithTembo()" id="tembo-pay-btn" class="w-full py-4 bg-green-600 hover:bg-green-700 text-white rounded-[1.5rem] font-black shadow-[0_10px_20px_rgba(22,163,74,0.3)] click-press uppercase text-xs tracking-widest flex items-center justify-center gap-2 transition-all relative z-10">
                             ⚡ Secure Checkout
                         </button>
                         
@@ -820,7 +820,6 @@
                 </div>`;
         }
 
-        // 🌟 FEATURED SECTION REMOVED TO PREVENT DUPLICATION 🌟
         window.renderHomeBase = function() {
             const container = document.getElementById('dynamic-home-content');
             container.innerHTML = `
@@ -979,81 +978,61 @@
             calculateDelivery();
         }
 
-        // 🌟 NEW TEMBOPLUS SECURE PAYMENT FUNCTION (PROXY BYPASS) 🌟
-// 🌟 NEW TEMBOPLUS SECURE PAYMENT FUNCTION (PROXY BYPASS) 🌟
-// 🌟 OFFICIAL TEMBOPLUS SECURE PAYMENT FUNCTION (EUROPE) 🌟
-async function payWithTembo() {
-    const phone = document.getElementById('mobile-money-number').value.trim(); 
-    if(!phone) return alert("Please enter your mobile money number.");
-    
-    // 1. Grab the secure Google ID Badge
-    if (!window.firebaseAuth || !window.firebaseAuth.currentUser) {
-        return alert("Please log in with Google to make secure payments.");
-    }
+        // 🌟 OFFICIAL TEMBOPLUS SECURE PAYMENT FUNCTION (EUROPE) 🌟
+        async function payWithTembo() {
+            const phone = document.getElementById('mobile-money-number').value.trim(); 
+            if(!phone) return alert("Please enter your mobile money number.");
+            
+            // 1. Grab the secure Google ID Badge
+            if (!window.firebaseAuth || !window.firebaseAuth.currentUser) {
+                return alert("Please log in with Google to make secure payments.");
+            }
 
-    let sub = 0; cart.forEach(i => sub += i.price * i.qty);
-    const totalCost = sub + transportCost;
-    const orderId = 'US-' + Math.floor(1000 + Math.random() * 9000);
-    
-    const btn = document.getElementById('tembo-pay-btn'); 
-    btn.innerHTML = "⏳ Initializing TemboPlus..."; 
-    btn.disabled = true;
-    
-    try {
-        const token = await window.firebaseAuth.currentUser.getIdToken();
+            let sub = 0; cart.forEach(i => sub += i.price * i.qty);
+            const totalCost = sub + transportCost;
+            const orderId = 'US-' + Math.floor(1000 + Math.random() * 9000);
+            
+            const btn = document.getElementById('tembo-pay-btn'); 
+            btn.innerHTML = "⏳ Initializing TemboPlus..."; 
+            btn.disabled = true;
+            
+            try {
+                const token = await window.firebaseAuth.currentUser.getIdToken();
 
-        // 🌍 Direct connection to our NEW European Vault! (NO PROXY!)
-        const serverUrl = "https://europe-west1-ujenzismart-878af.cloudfunctions.net/initiateTemboPayment";
+                // 🌍 Direct connection to our NEW European Vault! (NO PROXY!)
+                const serverUrl = "https://europe-west1-ujenzismart-878af.cloudfunctions.net/initiateTemboPayment";
 
-        const response = await fetch(serverUrl, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + token
-            },
-            body: JSON.stringify({
-                amount: totalCost,
-                phoneNumber: phone,
-                orderId: orderId
-            })
-        });
+                const response = await fetch(serverUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + token
+                    },
+                    body: JSON.stringify({
+                        amount: totalCost,
+                        phoneNumber: phone,
+                        orderId: orderId
+                    })
+                });
 
-        const result = await response.json();
-        
-        if (result.success && result.checkoutUrl) {
-            // 💸 Success! Redirect to TemboPlus
-            window.location.href = result.checkoutUrl;
-        } else {
-            alert("TemboPlus Error: " + (result.error || "Could not generate checkout link."));
+                const result = await response.json();
+                
+                if (result.success && result.checkoutUrl) {
+                    // 💸 Success! Redirect to TemboPlus
+                    window.location.href = result.checkoutUrl;
+                } else {
+                    alert("TemboPlus Error: " + (result.error || "Could not generate checkout link."));
+                }
+                
+            } catch (err) { 
+                console.error("Payment Error: ", err);
+                alert("Network Error: Please check your internet connection and try again.");
+            } finally { 
+                btn.innerHTML = "⚡ Secure Checkout"; 
+                btn.disabled = false; 
+            }
         }
-        
-    } catch (err) { 
-        console.error("Payment Error: ", err);
-        alert("Network Error: Please check your internet connection and try again.");
-    } finally { 
-        btn.innerHTML = "⚡ Secure Checkout"; 
-        btn.disabled = false; 
-    }
-}
 
-        // If not locked, read the secure response from Google
-        const result = await response.json();
-        
-        // 💸 Firebase returns the URL inside a "result" object
-        if(result.result && result.result.checkoutUrl) {
-            window.location.href = result.result.checkoutUrl;
-        } else {
-            alert("Gateway Error: Could not get secure checkout link.");
-        }
-        
-    } catch (err) { 
-        console.error("Payment Error: ", err);
-        alert("Network block detected. Check the Console (F12) for details.");
-    } finally { 
-        btn.innerHTML = "⚡ Secure Checkout"; 
-        btn.disabled = false; 
-    }
-}
         function checkoutWhatsApp() {
             const u = JSON.parse(localStorage.getItem('ujenzi_user'));
             let sub = 0; 
