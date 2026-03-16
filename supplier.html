@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>UjenziSmart - Supplier Portal</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <script>
@@ -54,7 +53,6 @@
                 <svg viewBox="0 0 24 24" width="20" height="20"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
                 Authenticate with Google
             </button>
-            <p class="text-[10px] text-gray-400 mt-8 uppercase tracking-widest font-bold">Encrypted Connection</p>
         </div>
     </div>
 
@@ -121,13 +119,6 @@
                 <h3 class="text-[10px] font-black mb-4 uppercase tracking-widest text-gray-400">📈 7-Day Revenue Trend</h3>
                 <div class="relative h-56 w-full">
                     <canvas id="revenueChart"></canvas>
-                </div>
-            </div>
-
-            <div class="bg-white dark:bg-gray-800 p-6 rounded-[2rem] shadow-sm border border-gray-100 dark:border-gray-700 mt-4 transition-colors">
-                <h3 class="text-[10px] font-black mb-4 uppercase tracking-widest text-gray-400">🏆 Top Performers</h3>
-                <div id="top-performers-list" class="space-y-3">
-                    <p class="text-xs text-gray-400 font-bold text-center py-4 animate-pulse">Calculating secure sales data...</p>
                 </div>
             </div>
         </div>
@@ -264,7 +255,6 @@
                 sun.style.display = isDark ? 'block' : 'none';
                 moon.style.display = isDark ? 'none' : 'block';
             }
-            // Update Chart theme if it exists
             if(window.revenueChartInstance) {
                 window.revenueChartInstance.options.scales.x.ticks.color = isDark ? '#9ca3af' : '#6b7280';
                 window.revenueChartInstance.options.scales.y.ticks.color = isDark ? '#9ca3af' : '#6b7280';
@@ -309,7 +299,6 @@
         // Expose to global window so HTML onclick works
         window.openEditModal = openEditModal;
         window.closeEditModal = closeEditModal;
-
     </script>
 
     <script type="module">
@@ -430,7 +419,7 @@
             finally { saveBtn.innerHTML = "💾 Save Changes"; saveBtn.disabled = false; }
         }
 
-        // ✏️ SAVE EDITED PRODUCT 🟢
+        // ✏️ SAVE EDITED PRODUCT
         window.saveEditedProduct = async function() {
             const docId = document.getElementById('edit-doc-id').value;
             const newName = document.getElementById('quick-edit-name').value;
@@ -504,7 +493,7 @@
             if (window.revenueChartInstance) window.revenueChartInstance.destroy();
             
             const gradient = ctx.createLinearGradient(0, 0, 0, 400);
-            gradient.addColorStop(0, 'rgba(16, 185, 129, 0.5)'); // Green
+            gradient.addColorStop(0, 'rgba(16, 185, 129, 0.5)'); 
             gradient.addColorStop(1, 'rgba(16, 185, 129, 0.0)');
 
             window.revenueChartInstance = new Chart(ctx, {
@@ -522,7 +511,7 @@
                         pointBorderWidth: 2,
                         pointRadius: 4,
                         fill: true,
-                        tension: 0.4 // Smooth curves
+                        tension: 0.4 
                     }]
                 },
                 options: {
@@ -556,7 +545,6 @@
                 let totalUnits = 0;
                 let productStats = {}; 
                 
-                // For the chart: create last 7 days array
                 let dailyStats = {};
                 for(let i=6; i>=0; i--) {
                     const d = new Date(); d.setDate(d.getDate() - i);
@@ -588,7 +576,6 @@
                             }
                         });
 
-                        // Add to Chart Daily Data if order has a timestamp
                         if(orderTotalForSupplier > 0 && order.createdAt) {
                             const orderDate = order.createdAt.toDate();
                             const dayName = orderDate.toLocaleDateString('en-US', {weekday:'short'});
@@ -599,16 +586,13 @@
                     }
                 });
 
-                // Update the Dashboard KPI Cards
                 document.getElementById('stat-revenue').textContent = `TZS ${totalRevenue.toLocaleString()}`;
                 document.getElementById('wallet-balance').textContent = `TZS ${totalRevenue.toLocaleString()}`;
                 document.getElementById('stat-units').textContent = totalUnits;
 
-                // Render Chart
                 const chartDataArray = Object.keys(dailyStats).map(key => ({ date: key, amount: dailyStats[key] }));
                 renderChart(chartDataArray);
 
-                // Find Top Product
                 let topProd = { name: "-", sold: -1 };
                 let sortedPerformers = [];
                 for (let key in productStats) {
@@ -618,7 +602,6 @@
                 
                 document.getElementById('stat-top-product').textContent = topProd.sold > 0 ? topProd.name : "No sales yet";
 
-                // Render Top Performers List
                 sortedPerformers.sort((a, b) => b.sold - a.sold); 
                 const performersList = document.getElementById('top-performers-list');
                 
@@ -645,7 +628,7 @@
             }
         }
 
-        // LISTEN TO INVENTORY
+        // LISTEN TO INVENTORY (NOW WITH SLEEK SVG ICONS)
         function listenToInventory(uid) {
             const q = query(collection(db, "products"), where("supplierId", "==", uid));
             
@@ -675,8 +658,12 @@
                             <p class="text-green-600 dark:text-green-400 font-black text-sm mt-1">TZS ${p.price.toLocaleString()}</p>
                         </div>
                         <div class="flex gap-1">
-                            <button onclick="openEditModal('${p.id}', '${p.name.replace(/'/g, "\\'")}', ${p.price}, ${p.weight})" class="text-blue-400 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20 p-3 rounded-xl transition-colors click-press" title="Edit Product">✏️</button>
-                            <button onclick="deleteProduct('${p.id}')" class="text-red-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 p-3 rounded-xl transition-colors click-press" title="Remove Product">🗑️</button>
+                            <button onclick="openEditModal('${p.id}', '${p.name.replace(/'/g, "\\'")}', ${p.price}, ${p.weight})" class="text-blue-500 hover:text-blue-700 hover:bg-blue-50 dark:text-blue-400 dark:hover:text-blue-300 dark:hover:bg-blue-900/30 p-2.5 rounded-xl transition-all click-press" title="Edit Product">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" /></svg>
+                            </button>
+                            <button onclick="deleteProduct('${p.id}')" class="text-red-500 hover:text-red-700 hover:bg-red-50 dark:text-red-400 dark:hover:text-red-300 dark:hover:bg-red-900/30 p-2.5 rounded-xl transition-all click-press" title="Remove Product">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" /></svg>
+                            </button>
                         </div>
                     </div>
                 `).join('');
