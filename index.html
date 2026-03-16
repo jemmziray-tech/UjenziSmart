@@ -224,9 +224,9 @@
                         </div>
                         <p class="text-xs text-gray-500 dark:text-gray-400 mb-4 font-medium relative z-10">A secure payment prompt will be sent directly to your phone screen.</p>
                         
-                        <input type="tel" id="mobile-money-number" placeholder="Enter Phone (e.g. 0754...)" class="w-full bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-xl px-4 py-3 outline-none font-bold text-xs mb-3 focus:ring-2 focus:ring-green-500 transition-all relative z-10">
+                        <input type="tel" id="phone-number" placeholder="Enter Phone (e.g. 0754...)" class="w-full bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-xl px-4 py-3 outline-none font-bold text-xs mb-3 focus:ring-2 focus:ring-green-500 transition-all relative z-10">
                         
-                        <button onclick="()" id="tembo-pay-btn" class="w-full py-4 bg-green-600 hover:bg-green-700 text-white rounded-[1.5rem] font-black shadow-[0_10px_20px_rgba(22,163,74,0.3)] click-press uppercase text-xs tracking-widest flex items-center justify-center gap-2 transition-all relative z-10">
+                        <button onclick="processCheckout()" id="pay-btn" class="w-full py-4 bg-green-600 hover:bg-green-700 text-white rounded-[1.5rem] font-black shadow-[0_10px_20px_rgba(22,163,74,0.3)] click-press uppercase text-xs tracking-widest flex items-center justify-center gap-2 transition-all relative z-10">
                             ⚡ Secure Checkout
                         </button>
                         
@@ -267,7 +267,7 @@
                             <p id="vip-perk-text" class="text-[8px] text-amber-400 font-bold hidden mt-1">★ 50% Off Transport Active</p>
                         </div>
                         <div class="bg-white/10 p-2 rounded-xl shadow-inner backdrop-blur-md">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 text-green-400"><path fill-rule="evenodd" d="M2.25 13.5a8.25 8.25 0 0 1 8.25-8.25.75.75 0 0 1 .75.75v6.75H18a.75.75 0 0 1 .75.75 8.25 8.25 0 0 1-16.5 0Z" clip-rule="evenodd" /><path fill-rule="evenodd" d="M12.75 3a.75.75 0 0 1 .75-.75 8.25 8.25 0 0 1 8.25 8.25.75.75 0 0 1-.75.75h-7.5a.75.75 0 0 1-.75-.75V3Z" clip-rule="evenodd" /></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 text-green-400"><path fill-rule="evenodd" d="M2.25 13.5a8.25 8.25 0 0 1 8.25-8.25.75.75 0 0 1 .75.75v6.75H18a.75.75 0 0 1 .75.75 8.25 8.25 0 0 1-16.5 0Z" clip-rule="evenodd" /><path fill-rule="evenodd" d="M12.75 3a.75.75 0 0 1 .75-.75 8.25 8.25 0 0 1-.75.75h-7.5a.75.75 0 0 1-.75-.75V3Z" clip-rule="evenodd" /></svg>
                         </div>
                     </div>
                     <h3 id="total-project-cost" class="text-3xl font-black mb-4">TZS 0</h3>
@@ -980,53 +980,81 @@
 
         // 🌟 OFFICIAL SNIPPE SECURE PAYMENT FUNCTION (EUROPE) 🌟
         async function processCheckout() {
-    const phoneInput = document.getElementById("phone-number").value.trim(); // Your phone input ID
-    const totalAmount = 18500; // The cart total from your screenshot!
-    
-    // Generate a unique Order ID for this transaction
-    const orderId = "ORD-" + Math.floor(Math.random() * 1000000); 
+            const phoneInput = document.getElementById("phone-number").value.trim(); 
+            
+            if (!phoneInput) {
+                return alert("Please enter your mobile money number.");
+            }
 
-    const btn = document.getElementById("pay-btn"); // Your button ID
-    btn.innerText = "⏳ Redirecting to Secure Checkout...";
-    btn.disabled = true;
+            if (cart.length === 0) {
+                return alert("Your basket is empty!");
+            }
+            
+            let subtotal = 0;
+            let itemsString = "";
+            cart.forEach(item => {
+                subtotal += (item.price * item.qty);
+                itemsString += `${item.title} (x${item.qty}), `;
+            });
+            const totalAmount = subtotal + transportCost; 
 
-    try {
-        // 🔗 YOUR NEW SNIPPE FIREBASE LINK
-        const functionUrl = "https://europe-west1-ujenzismart-878af.cloudfunctions.net/createSnippePayment";
-        
-        // 1. Send the data to your secure Firebase Vault
-        const response = await fetch(functionUrl, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-                // Add Authorization header here if you are passing the Firebase ID token
-            },
-            body: JSON.stringify({
-                amount: totalAmount,
-                phoneNumber: phoneInput,
-                orderId: orderId
-            })
-        });
+            // Generate a unique Order ID for this transaction
+            const orderId = "ORD-" + Math.floor(Math.random() * 1000000); 
 
-        const data = await response.json();
+            // 🛑 NEW: Build the receipt so it shows up in the user's History!
+            const receipt = {
+                orderId: orderId,
+                dateString: new Date().toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' }),
+                items: itemsString.slice(0, -2), 
+                subtotal: subtotal,
+                transport: transportCost,
+                total: totalAmount,
+                type: 'Snippe Secure Payment',
+                status: 'PENDING'
+            };
 
-        // 2. Check for success
-        if (response.ok && data.success) {
-            // 🎉 MAGIC: Send the user to Snippe's beautiful payment screen!
-            window.location.href = data.checkoutUrl; 
-        } else {
-            alert("Checkout Error: " + (data.error || "Unknown error occurred."));
-            btn.innerText = "Pay with Mobile Money";
-            btn.disabled = false;
+            // SYNC TO FIREBASE SO HISTORY WORKS BEFORE REDIRECTING
+            if(window.submitCloudOrder) {
+                window.submitCloudOrder(receipt, orderId);
+            }
+
+            const btn = document.getElementById("pay-btn");
+            btn.innerText = "⏳ Redirecting...";
+            btn.disabled = true;
+
+            try {
+                // 🔗 YOUR SNIPPE FIREBASE LINK
+                const functionUrl = "https://europe-west1-ujenzismart-878af.cloudfunctions.net/createSnippePayment";
+                
+                const response = await fetch(functionUrl, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        amount: totalAmount,
+                        phoneNumber: phoneInput,
+                        orderId: orderId
+                    })
+                });
+
+                const data = await response.json();
+
+                if (response.ok && data.success) {
+                    window.location.href = data.checkoutUrl; 
+                } else {
+                    alert("Checkout Error: " + (data.error || "Unknown error occurred."));
+                    btn.innerText = "⚡ SECURE CHECKOUT";
+                    btn.disabled = false;
+                }
+
+            } catch (error) {
+                console.error("Network Error:", error);
+                alert("Could not reach the payment server. Please check your internet connection.");
+                btn.innerText = "⚡ SECURE CHECKOUT";
+                btn.disabled = false;
+            }
         }
-
-    } catch (error) {
-        console.error("Network Error:", error);
-        alert("Could not reach the payment server. Please check your internet connection.");
-        btn.innerText = "Pay with Mobile Money";
-        btn.disabled = false;
-    }
-}
 
         function checkoutWhatsApp() {
             const u = JSON.parse(localStorage.getItem('ujenzi_user'));
@@ -1060,7 +1088,7 @@
             };
 
             if(window.submitCloudOrder) {
-                window.submitCloudOrder(receipt);
+                window.submitCloudOrder(receipt, orderId);
             }
 
             m += `\n\n*Order ID: ${orderId}*\n*(Admin: Check your Dashboard to mark this as Paid)*`;
@@ -1079,7 +1107,7 @@
 
             let totalMat = 0; let totalTrans = 0;
             history.forEach(r => { 
-                if(r.status === 'PAID') {
+                if(r.status === 'PAID' || r.status === 'SUCCESS') {
                     totalMat += r.subtotal; totalTrans += r.transport; 
                 }
             });
@@ -1102,7 +1130,7 @@
             }
 
             feed.innerHTML = history.map((r, i) => {
-                const isPaid = r.status === 'PAID';
+                const isPaid = r.status === 'PAID' || r.status === 'SUCCESS';
                 const badgeColor = isPaid ? 'bg-green-50 text-green-600 dark:bg-green-900/30 dark:text-green-400' : 'bg-amber-50 text-amber-600 dark:bg-amber-900/30 dark:text-amber-400';
                 const moneyColor = isPaid ? 'text-red-500 font-black' : 'text-gray-400 dark:text-gray-500 font-bold line-through';
                 
@@ -1326,9 +1354,11 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
         import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithRedirect, getRedirectResult, signOut, onAuthStateChanged, updateProfile } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
-        import { getFirestore, collection, addDoc, query, where, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+        
+        // 🛑 NEW: Added 'doc' and 'setDoc' imports here so submitCloudOrder can overlay local IDs with the backend
+        import { getFirestore, collection, addDoc, doc, setDoc, query, where, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+        
         import { getMessaging, getToken, onMessage } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-messaging.js";
-        // 🌟 IMPORTING THE SECURE CLOUD FUNCTIONS 🌟
         import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-functions.js";
         
         const firebaseConfig = { 
@@ -1346,7 +1376,6 @@
         window.firebaseAuth = auth;
         const db = getFirestore(app);
         
-        // 🌟 INITIALIZING CLOUD FUNCTIONS 🌟
         const functions = getFunctions(app);
         window.firebaseHttpsCallable = httpsCallable;
         window.firebaseFunctions = functions;
@@ -1354,7 +1383,6 @@
         const provider = new GoogleAuthProvider();
         provider.setCustomParameters({ prompt: 'select_account' });
 
-        // 🟢 THE CLOUD LISTENER (Products)
         onSnapshot(collection(db, "products"), (snapshot) => {
             window.productDatabase = {}; 
             
@@ -1390,7 +1418,7 @@
                     snapshot.forEach((doc) => {
                         const data = doc.data();
                         history.push({ id: doc.id, ...data });
-                        if(data.status === 'PAID') approvedSpend += data.total;
+                        if(data.status === 'PAID' || data.status === 'SUCCESS') approvedSpend += data.total;
                     });
                     history.sort((a, b) => {
                         const timeA = a.createdAt ? a.createdAt.toMillis() : 0;
@@ -1407,11 +1435,17 @@
             } catch (err) {}
         }
 
-        window.submitCloudOrder = async function(receipt) {
+        // 🛑 NEW: submitCloudOrder now accepts customId (the Snippe orderId) so they sync perfectly
+        window.submitCloudOrder = async function(receipt, customId = null) {
             const user = auth.currentUser;
             if(!user) return alert("You must be signed in to place a secure order.");
             try {
-                await addDoc(collection(db, "orders"), { ...receipt, userId: user.uid, userName: user.displayName || 'Customer', userEmail: user.email, createdAt: serverTimestamp() });
+                const orderData = { ...receipt, userId: user.uid, userName: user.displayName || 'Customer', userEmail: user.email, createdAt: serverTimestamp() };
+                if(customId) {
+                    await setDoc(doc(db, "orders", customId), orderData, { merge: true });
+                } else {
+                    await addDoc(collection(db, "orders"), orderData);
+                }
             } catch (error) { alert("Failed to sync secure order. Check connection."); }
         };
 
