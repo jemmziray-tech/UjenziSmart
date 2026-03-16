@@ -67,6 +67,13 @@
         .toggle-checkbox:checked + .toggle-label { background-color: #10b981; }
         .toggle-checkbox { right: 4px; z-index: 1; border-color: #e5e7eb; transition: all 0.3s; }
         .toggle-label { width: 3rem; height: 1.5rem; background-color: #e5e7eb; border-radius: 9999px; transition: all 0.3s; }
+        
+        /* Custom styles for the stylish payment selector */
+        .payment-option { transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); border: 2px solid transparent; }
+        .payment-option.selected { border-color: #10b981; background-color: rgba(16, 185, 129, 0.05); }
+        .dark .payment-option.selected { background-color: rgba(16, 185, 129, 0.1); }
+        .check-icon { opacity: 0; transform: scale(0.5); transition: all 0.2s; }
+        .payment-option.selected .check-icon { opacity: 1; transform: scale(1); }
     </style>
 </head>
 <body class="bg-[#f4f6f9] dark:bg-gray-900 text-gray-800 dark:text-gray-100 pb-24 transition-colors duration-300 relative min-h-screen">
@@ -218,22 +225,48 @@
 
                     <div class="bg-gray-50 dark:bg-gray-800 rounded-[2rem] p-5 border border-gray-200 dark:border-gray-700 mt-4 shadow-sm relative overflow-hidden">
                         <div class="absolute top-0 right-0 w-32 h-32 bg-green-500/10 rounded-full blur-[40px] pointer-events-none"></div>
-                        <div class="flex items-center gap-2 mb-3 relative z-10">
-                            <span class="bg-green-500 text-white text-[9px] font-black px-2 py-1 rounded-md uppercase tracking-widest flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-white animate-pulse"></span> Live</span>
-                            <h3 class="text-sm font-black text-gray-900 dark:text-white">Pay with Mobile Money</h3>
+                        
+                        <div class="flex items-center gap-2 mb-2 relative z-10">
+                            <span class="bg-green-500 text-white text-[9px] font-black px-2 py-1 rounded-md uppercase tracking-widest flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-white animate-pulse"></span> Secured</span>
+                            <h3 class="text-sm font-black text-gray-900 dark:text-white">Payment Method</h3>
                         </div>
-                        <p class="text-xs text-gray-500 dark:text-gray-400 mb-4 font-medium relative z-10">A secure payment prompt will be sent directly to your phone screen.</p>
+                        <p class="text-[11px] text-gray-500 dark:text-gray-400 mb-5 font-medium relative z-10">Choose how you want to pay.</p>
                         
-                        <input type="tel" id="phone-number" placeholder="Enter Phone (e.g. 0754...)" class="w-full bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-xl px-4 py-3 outline-none font-bold text-xs mb-3 focus:ring-2 focus:ring-green-500 transition-all relative z-10">
+                        <div class="grid grid-cols-3 gap-2 mb-4 relative z-10" id="payment-options-grid">
+                            <div onclick="selectPaymentMethod('mobile')" id="opt-mobile" class="payment-option selected bg-white dark:bg-gray-900 rounded-xl p-3 flex flex-col items-center justify-center gap-2 click-press shadow-sm cursor-pointer relative">
+                                <span class="text-xl">📱</span>
+                                <span class="text-[10px] font-black text-gray-800 dark:text-gray-200">Mobile</span>
+                                <div class="check-icon absolute top-1.5 right-1.5 w-4 h-4 bg-green-500 rounded-full flex items-center justify-center text-white text-[8px] font-bold shadow-sm">✓</div>
+                            </div>
+                            
+                            <div onclick="selectPaymentMethod('card')" id="opt-card" class="payment-option bg-white dark:bg-gray-900 rounded-xl p-3 flex flex-col items-center justify-center gap-2 click-press shadow-sm cursor-pointer relative">
+                                <span class="text-xl">💳</span>
+                                <span class="text-[10px] font-black text-gray-800 dark:text-gray-200">Card</span>
+                                <div class="check-icon absolute top-1.5 right-1.5 w-4 h-4 bg-green-500 rounded-full flex items-center justify-center text-white text-[8px] font-bold shadow-sm">✓</div>
+                            </div>
+
+                            <div onclick="selectPaymentMethod('tips')" id="opt-tips" class="payment-option bg-white dark:bg-gray-900 rounded-xl p-3 flex flex-col items-center justify-center gap-2 click-press shadow-sm cursor-pointer relative">
+                                <span class="text-xl">🏦</span>
+                                <span class="text-[10px] font-black text-gray-800 dark:text-gray-200">Scan QR</span>
+                                <div class="check-icon absolute top-1.5 right-1.5 w-4 h-4 bg-green-500 rounded-full flex items-center justify-center text-white text-[8px] font-bold shadow-sm">✓</div>
+                            </div>
+                        </div>
+
+                        <input type="hidden" id="selected-payment-method" value="mobile">
+
+                        <div id="phone-input-wrapper" class="relative z-10 transition-all duration-300">
+                            <input type="tel" id="phone-number" placeholder="Enter Phone (e.g. 0754...)" class="w-full bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-xl px-4 py-3.5 outline-none font-bold text-xs mb-4 focus:ring-2 focus:ring-green-500 transition-all shadow-inner">
+                        </div>
                         
-                        <button onclick="processCheckout()" id="pay-btn" class="w-full py-4 bg-green-600 hover:bg-green-700 text-white rounded-[1.5rem] font-black shadow-[0_10px_20px_rgba(22,163,74,0.3)] click-press uppercase text-xs tracking-widest flex items-center justify-center gap-2 transition-all relative z-10">
-                            ⚡ Secure Checkout
+                        <button onclick="processCheckout()" id="pay-btn" class="w-full py-4 bg-green-600 hover:bg-green-700 text-white rounded-[1.5rem] font-black shadow-[0_10px_20px_rgba(22,163,74,0.3)] click-press uppercase text-xs tracking-widest flex items-center justify-center gap-2 transition-colors relative z-10">
+                            📱 Send Prompt to Phone
                         </button>
                         
-                        <div class="flex justify-center items-center gap-3 grayscale opacity-40 mt-4 pt-4 border-t border-gray-200 dark:border-gray-700 relative z-10">
+                        <div class="flex justify-center items-center gap-3 grayscale opacity-40 mt-5 pt-4 border-t border-gray-200 dark:border-gray-700 relative z-10">
                             <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c2/M-Pesa_logo.svg/512px-M-Pesa_logo.svg.png" class="h-4">
                             <img src="https://upload.wikimedia.org/wikipedia/commons/a/a2/Tigo_logo.svg" class="h-4">
                             <img src="https://logos-world.net/wp-content/uploads/2020/12/Airtel-Logo.png" class="h-3">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Mastercard-logo.svg/1280px-Mastercard-logo.svg.png" class="h-4 ml-2">
                         </div>
                     </div>
                 </div>
@@ -978,11 +1011,44 @@
             calculateDelivery();
         }
 
-        // 🌟 OFFICIAL SNIPPE SECURE PAYMENT FUNCTION (EUROPE) 🌟
+        // 🟢 NEW: Stylish Payment Method Selector Logic
+        window.selectPaymentMethod = function(method) {
+            // Update hidden input
+            document.getElementById('selected-payment-method').value = method;
+            
+            // Remove 'selected' class from all options
+            document.querySelectorAll('.payment-option').forEach(el => el.classList.remove('selected'));
+            
+            // Add 'selected' class to clicked option
+            document.getElementById(`opt-${method}`).classList.add('selected');
+            
+            // Handle UI changes based on selection
+            const phoneWrapper = document.getElementById('phone-input-wrapper');
+            const payBtn = document.getElementById('pay-btn');
+            
+            if(method === 'mobile') {
+                phoneWrapper.style.opacity = '1';
+                phoneWrapper.style.transform = 'translateY(0)';
+                phoneWrapper.style.height = 'auto';
+                phoneWrapper.style.marginBottom = '1rem';
+                phoneWrapper.style.pointerEvents = 'auto';
+                payBtn.innerHTML = '📱 Send Prompt to Phone';
+            } else {
+                phoneWrapper.style.opacity = '0';
+                phoneWrapper.style.transform = 'translateY(-10px)';
+                phoneWrapper.style.height = '0';
+                phoneWrapper.style.marginBottom = '0';
+                phoneWrapper.style.pointerEvents = 'none';
+                payBtn.innerHTML = '⚡ Continue to Secure Gateway';
+            }
+        }
+
+        // 🌟 OFFICIAL SNIPPE SECURE PAYMENT FUNCTION (DYNAMIC) 🌟
         async function processCheckout() {
+            const payMethod = document.getElementById("selected-payment-method").value;
             const phoneInput = document.getElementById("phone-number").value.trim(); 
             
-            if (!phoneInput) {
+            if (payMethod === 'mobile' && !phoneInput) {
                 return alert("Please enter your mobile money number.");
             }
 
@@ -1001,7 +1067,7 @@
             // Generate a unique Order ID for this transaction
             const orderId = "ORD-" + Math.floor(Math.random() * 1000000); 
 
-            // 🛑 NEW: Build the receipt so it shows up in the user's History!
+            // Build the receipt so it shows up in the user's History!
             const receipt = {
                 orderId: orderId,
                 dateString: new Date().toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' }),
@@ -1009,7 +1075,7 @@
                 subtotal: subtotal,
                 transport: transportCost,
                 total: totalAmount,
-                type: 'Snippe Secure Payment',
+                type: payMethod === 'mobile' ? 'Mobile Money' : (payMethod === 'card' ? 'Bank Card' : 'TIPS QR'),
                 status: 'PENDING'
             };
 
@@ -1019,7 +1085,7 @@
             }
 
             const btn = document.getElementById("pay-btn");
-            btn.innerText = "⏳ Redirecting...";
+            btn.innerText = "⏳ Connecting to Gateway...";
             btn.disabled = true;
 
             try {
@@ -1028,30 +1094,53 @@
                 
                 const response = await fetch(functionUrl, {
                     method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
+                    headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({
                         amount: totalAmount,
                         phoneNumber: phoneInput,
-                        orderId: orderId
+                        orderId: orderId,
+                        paymentType: payMethod // Send the selected method to the backend!
                     })
                 });
 
                 const data = await response.json();
 
                 if (response.ok && data.success) {
-                    window.location.href = data.checkoutUrl; 
+                    if (data.checkoutUrl) {
+                        // Snippe returned a Hosted Page (for Card or TIPS)
+                        window.location.href = data.checkoutUrl; 
+                    } else {
+                        // Snippe sent a direct USSD push (for Mobile)
+                        btn.innerText = "📱 Check phone for PIN prompt!";
+                        btn.classList.replace("bg-green-600", "bg-blue-600");
+                        
+                        const unsubscribe = onSnapshot(doc(db, "orders", orderId), (docSnap) => {
+                            if(docSnap.exists() && docSnap.data().status === "SUCCESS") {
+                                unsubscribe();
+                                btn.innerText = "✅ Payment Received!";
+                                btn.classList.replace("bg-blue-600", "bg-gray-900");
+                                
+                                setTimeout(() => {
+                                    cart = [];
+                                    updateBadge();
+                                    navigateTo('history', false, true); 
+                                    btn.innerHTML = '📱 Send Prompt to Phone';
+                                    btn.disabled = false;
+                                    btn.classList.replace("bg-gray-900", "bg-green-600");
+                                }, 2000);
+                            }
+                        });
+                    }
                 } else {
                     alert("Checkout Error: " + (data.error || "Unknown error occurred."));
-                    btn.innerText = "⚡ SECURE CHECKOUT";
+                    btn.innerHTML = payMethod === 'mobile' ? '📱 Send Prompt to Phone' : '⚡ Continue to Secure Gateway';
                     btn.disabled = false;
                 }
 
             } catch (error) {
                 console.error("Network Error:", error);
                 alert("Could not reach the payment server. Please check your internet connection.");
-                btn.innerText = "⚡ SECURE CHECKOUT";
+                btn.innerHTML = payMethod === 'mobile' ? '📱 Send Prompt to Phone' : '⚡ Continue to Secure Gateway';
                 btn.disabled = false;
             }
         }
@@ -1354,10 +1443,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
         import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithRedirect, getRedirectResult, signOut, onAuthStateChanged, updateProfile } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
-        
-        // 🛑 NEW: Added 'doc' and 'setDoc' imports here so submitCloudOrder can overlay local IDs with the backend
         import { getFirestore, collection, addDoc, doc, setDoc, query, where, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
-        
         import { getMessaging, getToken, onMessage } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-messaging.js";
         import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-functions.js";
         
@@ -1435,7 +1521,6 @@
             } catch (err) {}
         }
 
-        // 🛑 NEW: submitCloudOrder now accepts customId (the Snippe orderId) so they sync perfectly
         window.submitCloudOrder = async function(receipt, customId = null) {
             const user = auth.currentUser;
             if(!user) return alert("You must be signed in to place a secure order.");
