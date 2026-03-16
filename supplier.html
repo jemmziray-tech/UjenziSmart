@@ -5,9 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>UjenziSmart - Supplier Portal</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = { darkMode: 'class' }
+        function applyTheme() {
+            if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        }
+        applyTheme();
+    </script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800;900&display=swap');
-        body { font-family: 'Inter', sans-serif; background-color: #f4f6f9; color: #1f2937; }
+        body { font-family: 'Inter', sans-serif; }
         
         /* Premium Tech Background for Login */
         .bg-deep-tech { background: radial-gradient(circle at top right, #112347 0%, #030814 100%); }
@@ -22,9 +33,11 @@
 
         @keyframes staggerIn { from { opacity: 0; transform: scale(0.95) translateY(10px); } to { opacity: 1; transform: scale(1) translateY(0); } }
         .stagger-item { animation: staggerIn 0.5s cubic-bezier(0.22, 1, 0.36, 1) both; }
+        
+        ::-webkit-scrollbar { width: 0px; background: transparent; }
     </style>
 </head>
-<body class="min-h-screen flex flex-col items-center bg-[#f4f6f9] pb-24">
+<body class="min-h-screen flex flex-col items-center bg-[#f4f6f9] dark:bg-[#0f172a] text-gray-800 dark:text-gray-100 pb-24 transition-colors duration-300 relative">
 
     <div id="login-screen" class="fixed inset-0 z-50 bg-deep-tech flex flex-col items-center justify-center p-6 text-white transition-opacity duration-500">
         <div class="absolute top-[-10%] right-[-5%] w-96 h-96 bg-green-500/20 rounded-full blur-[100px] pointer-events-none"></div>
@@ -47,47 +60,57 @@
         </div>
     </div>
 
-    <div id="dashboard-screen" class="hidden w-full max-w-3xl py-8 px-4">
-        <header class="flex justify-between items-center mb-8 bg-white p-6 rounded-[2rem] shadow-sm border border-gray-100">
-            <div class="flex items-center gap-4">
-                <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center text-green-600 text-xl font-black">🏢</div>
+    <div id="dashboard-screen" class="hidden w-full max-w-3xl py-8 px-4 relative z-10">
+        
+        <header class="flex justify-between items-center mb-8 bg-white dark:bg-gray-800 p-6 rounded-[2rem] shadow-sm border border-gray-100 dark:border-gray-700 transition-colors">
+            
+            <div class="flex items-center gap-4 cursor-pointer group click-press" onclick="openProfileSettings()">
+                <div class="relative">
+                    <img id="header-avatar" src="https://ui-avatars.com/api/?name=Vendor&background=10b981&color=fff" class="w-14 h-14 rounded-full object-cover border-2 border-gray-100 dark:border-gray-700 shadow-sm transition-transform group-hover:scale-105 group-hover:border-green-500">
+                    <div class="absolute bottom-0 right-0 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-full w-5 h-5 flex items-center justify-center text-[10px] shadow-sm text-gray-800 dark:text-gray-300 group-hover:text-green-500">⚙️</div>
+                </div>
                 <div>
-                    <h1 class="text-xl font-black text-gray-800">Command Center</h1>
-                    <p id="supplier-name" class="text-xs font-bold text-gray-500 mt-0.5"></p>
+                    <h1 class="text-xl font-black text-gray-800 dark:text-white transition-colors">Command Center</h1>
+                    <p id="supplier-name" class="text-xs font-bold text-gray-500 dark:text-gray-400 mt-0.5 group-hover:text-green-500 transition-colors">Loading...</p>
                 </div>
             </div>
-            <button id="logout-btn" class="text-xs font-bold text-red-500 hover:bg-red-50 px-5 py-3 rounded-xl transition-colors flex items-center gap-2 click-press">
-                <span>Logout</span>🚪
-            </button>
+
+            <div class="flex items-center gap-3">
+                <button onclick="switchTheme()" class="w-11 h-11 bg-gray-50 dark:bg-gray-900 rounded-full flex items-center justify-center click-press shadow-inner transition-colors border border-gray-200 dark:border-gray-700">
+                    <svg id="icon-sun" style="display:none;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-5 h-5 text-amber-500"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-2.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z" /></svg>
+                    <svg id="icon-moon" style="display:none;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-5 h-5 text-blue-400"><path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998Z" /></svg>
+                </button>
+                <button id="logout-btn" class="w-11 h-11 bg-red-50 dark:bg-red-900/20 text-red-500 rounded-full flex items-center justify-center font-bold text-lg click-press transition-colors border border-red-100 dark:border-red-900/50" title="Logout">🚪</button>
+            </div>
         </header>
 
         <div class="mb-8 space-y-4 stagger-item">
-            <h2 class="text-lg font-black flex items-center gap-2 px-2"><span class="text-green-500">📊</span> Performance Overview</h2>
+            <h2 class="text-lg font-black flex items-center gap-2 px-2 text-gray-900 dark:text-white"><span class="text-green-500">📊</span> Performance Overview</h2>
             
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <div class="bg-white p-5 rounded-[2rem] shadow-sm border border-gray-100 flex flex-col justify-center relative overflow-hidden group hover:shadow-md transition-shadow">
-                    <div class="absolute -right-4 -top-4 w-16 h-16 bg-green-50 rounded-full group-hover:scale-150 transition-transform duration-500"></div>
+                <div class="bg-white dark:bg-gray-800 p-5 rounded-[2rem] shadow-sm border border-gray-100 dark:border-gray-700 flex flex-col justify-center relative overflow-hidden group hover:shadow-md transition-all">
+                    <div class="absolute -right-4 -top-4 w-16 h-16 bg-green-50 dark:bg-green-900/20 rounded-full group-hover:scale-150 transition-transform duration-500"></div>
                     <p class="text-[9px] text-gray-400 font-bold uppercase tracking-widest mb-1 relative z-10">Total Revenue</p>
-                    <h3 id="stat-revenue" class="text-xl font-black text-gray-900 relative z-10">TZS 0</h3>
+                    <h3 id="stat-revenue" class="text-xl font-black text-gray-900 dark:text-white relative z-10 transition-colors">TZS 0</h3>
                 </div>
-                <div class="bg-white p-5 rounded-[2rem] shadow-sm border border-gray-100 flex flex-col justify-center relative overflow-hidden group hover:shadow-md transition-shadow">
-                    <div class="absolute -right-4 -top-4 w-16 h-16 bg-blue-50 rounded-full group-hover:scale-150 transition-transform duration-500"></div>
+                <div class="bg-white dark:bg-gray-800 p-5 rounded-[2rem] shadow-sm border border-gray-100 dark:border-gray-700 flex flex-col justify-center relative overflow-hidden group hover:shadow-md transition-all">
+                    <div class="absolute -right-4 -top-4 w-16 h-16 bg-blue-50 dark:bg-blue-900/20 rounded-full group-hover:scale-150 transition-transform duration-500"></div>
                     <p class="text-[9px] text-gray-400 font-bold uppercase tracking-widest mb-1 relative z-10">Units Sold</p>
-                    <h3 id="stat-units" class="text-2xl font-black text-gray-900 relative z-10">0</h3>
+                    <h3 id="stat-units" class="text-2xl font-black text-gray-900 dark:text-white relative z-10 transition-colors">0</h3>
                 </div>
-                <div class="bg-white p-5 rounded-[2rem] shadow-sm border border-gray-100 flex flex-col justify-center relative overflow-hidden group hover:shadow-md transition-shadow">
-                    <div class="absolute -right-4 -top-4 w-16 h-16 bg-amber-50 rounded-full group-hover:scale-150 transition-transform duration-500"></div>
+                <div class="bg-white dark:bg-gray-800 p-5 rounded-[2rem] shadow-sm border border-gray-100 dark:border-gray-700 flex flex-col justify-center relative overflow-hidden group hover:shadow-md transition-all">
+                    <div class="absolute -right-4 -top-4 w-16 h-16 bg-amber-50 dark:bg-amber-900/20 rounded-full group-hover:scale-150 transition-transform duration-500"></div>
                     <p class="text-[9px] text-gray-400 font-bold uppercase tracking-widest mb-1 relative z-10">Live Products</p>
-                    <h3 id="stat-active" class="text-2xl font-black text-gray-900 relative z-10">0</h3>
+                    <h3 id="stat-active" class="text-2xl font-black text-gray-900 dark:text-white relative z-10 transition-colors">0</h3>
                 </div>
-                <div class="bg-white p-5 rounded-[2rem] shadow-sm border border-gray-100 flex flex-col justify-center relative overflow-hidden group hover:shadow-md transition-shadow">
-                    <div class="absolute -right-4 -top-4 w-16 h-16 bg-purple-50 rounded-full group-hover:scale-150 transition-transform duration-500"></div>
+                <div class="bg-white dark:bg-gray-800 p-5 rounded-[2rem] shadow-sm border border-gray-100 dark:border-gray-700 flex flex-col justify-center relative overflow-hidden group hover:shadow-md transition-all">
+                    <div class="absolute -right-4 -top-4 w-16 h-16 bg-purple-50 dark:bg-purple-900/20 rounded-full group-hover:scale-150 transition-transform duration-500"></div>
                     <p class="text-[9px] text-gray-400 font-bold uppercase tracking-widest mb-1 relative z-10">Top Product</p>
-                    <h3 id="stat-top-product" class="text-xs font-black text-gray-900 relative z-10 truncate">-</h3>
+                    <h3 id="stat-top-product" class="text-xs font-black text-gray-900 dark:text-white relative z-10 truncate transition-colors">-</h3>
                 </div>
             </div>
 
-            <div class="bg-white p-6 rounded-[2rem] shadow-sm border border-gray-100 mt-4">
+            <div class="bg-white dark:bg-gray-800 p-6 rounded-[2rem] shadow-sm border border-gray-100 dark:border-gray-700 mt-4 transition-colors">
                 <h3 class="text-[10px] font-black mb-4 uppercase tracking-widest text-gray-400">🏆 Top Performers</h3>
                 <div id="top-performers-list" class="space-y-3">
                     <p class="text-xs text-gray-400 font-bold text-center py-4 animate-pulse">Calculating secure sales data...</p>
@@ -95,19 +118,19 @@
             </div>
         </div>
 
-        <div class="bg-white p-8 rounded-[2rem] shadow-sm border border-gray-100 mb-8 relative overflow-hidden stagger-item" style="animation-delay: 0.1s;">
-            <div class="absolute top-0 right-0 w-32 h-32 bg-green-50 rounded-full blur-[40px] pointer-events-none"></div>
-            <h2 class="text-lg font-black mb-6 flex items-center gap-2 relative z-10"><span class="text-green-500">➕</span> Add New Product</h2>
+        <div class="bg-white dark:bg-gray-800 p-8 rounded-[2rem] shadow-sm border border-gray-100 dark:border-gray-700 mb-8 relative overflow-hidden stagger-item transition-colors" style="animation-delay: 0.1s;">
+            <div class="absolute top-0 right-0 w-32 h-32 bg-green-50 dark:bg-green-900/10 rounded-full blur-[40px] pointer-events-none"></div>
+            <h2 class="text-lg font-black mb-6 flex items-center gap-2 relative z-10 text-gray-900 dark:text-white"><span class="text-green-500">➕</span> Add New Product</h2>
             
             <form id="add-product-form" class="space-y-5 relative z-10">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                     <div>
                         <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Product Name</label>
-                        <input type="text" id="prod-name" required class="w-full bg-gray-50 border border-gray-200 rounded-2xl px-5 py-4 text-sm font-bold outline-none focus:ring-2 focus:ring-green-500 transition-shadow" placeholder="e.g. Simba Cement 50kg">
+                        <input type="text" id="prod-name" required class="w-full bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-600 rounded-2xl px-5 py-4 text-sm font-bold text-gray-900 dark:text-white outline-none focus:ring-2 focus:ring-green-500 transition-colors" placeholder="e.g. Simba Cement 50kg">
                     </div>
                     <div>
                         <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Category</label>
-                        <select id="prod-category" class="w-full bg-gray-50 border border-gray-200 rounded-2xl px-5 py-4 text-sm font-bold outline-none focus:ring-2 focus:ring-green-500 transition-shadow text-gray-700">
+                        <select id="prod-category" class="w-full bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-600 rounded-2xl px-5 py-4 text-sm font-bold text-gray-700 dark:text-gray-200 outline-none focus:ring-2 focus:ring-green-500 transition-colors">
                             <option value="Foundation & Structural">Foundation & Structural</option>
                             <option value="Roofing Materials">Roofing Materials</option>
                             <option value="Finishing & Painting">Finishing & Painting</option>
@@ -121,34 +144,34 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                     <div>
                         <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Price (TZS)</label>
-                        <input type="number" id="prod-price" required class="w-full bg-gray-50 border border-gray-200 rounded-2xl px-5 py-4 text-sm font-bold outline-none focus:ring-2 focus:ring-green-500 transition-shadow" placeholder="18500">
+                        <input type="number" id="prod-price" required class="w-full bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-600 rounded-2xl px-5 py-4 text-sm font-bold text-gray-900 dark:text-white outline-none focus:ring-2 focus:ring-green-500 transition-colors" placeholder="18500">
                     </div>
                     <div>
                         <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Weight per unit (KG)</label>
-                        <input type="number" id="prod-weight" required class="w-full bg-gray-50 border border-gray-200 rounded-2xl px-5 py-4 text-sm font-bold outline-none focus:ring-2 focus:ring-green-500 transition-shadow" placeholder="50">
+                        <input type="number" id="prod-weight" required class="w-full bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-600 rounded-2xl px-5 py-4 text-sm font-bold text-gray-900 dark:text-white outline-none focus:ring-2 focus:ring-green-500 transition-colors" placeholder="50">
                     </div>
                 </div>
 
                 <div>
                     <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Short Description</label>
-                    <input type="text" id="prod-desc" required class="w-full bg-gray-50 border border-gray-200 rounded-2xl px-5 py-4 text-sm font-bold outline-none focus:ring-2 focus:ring-green-500 transition-shadow" placeholder="Grade 42.5R high-strength cement.">
+                    <input type="text" id="prod-desc" required class="w-full bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-600 rounded-2xl px-5 py-4 text-sm font-bold text-gray-900 dark:text-white outline-none focus:ring-2 focus:ring-green-500 transition-colors" placeholder="Grade 42.5R high-strength cement.">
                 </div>
 
                 <div>
                     <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Product Image (High Quality)</label>
-                    <div class="w-full bg-gray-50 border border-gray-200 border-dashed rounded-2xl p-4 hover:bg-gray-100 transition-colors">
-                        <input type="file" id="prod-image" accept="image/*" required class="w-full text-sm text-gray-500 file:mr-4 file:py-3 file:px-6 file:rounded-xl file:border-0 file:text-xs file:font-black file:uppercase file:tracking-widest file:bg-green-100 file:text-green-700 hover:file:bg-green-200 cursor-pointer">
+                    <div class="w-full bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-600 border-dashed rounded-2xl p-4 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+                        <input type="file" id="prod-image" accept="image/*" required class="w-full text-sm text-gray-500 file:mr-4 file:py-3 file:px-6 file:rounded-xl file:border-0 file:text-xs file:font-black file:uppercase file:tracking-widest file:bg-green-100 dark:file:bg-green-900/30 file:text-green-700 dark:file:text-green-400 hover:file:bg-green-200 cursor-pointer transition-colors">
                     </div>
                 </div>
 
-                <button type="submit" id="submit-btn" class="w-full py-5 mt-2 bg-gray-900 hover:bg-black text-white rounded-2xl font-black shadow-xl transition-colors flex items-center justify-center gap-2 click-press uppercase tracking-widest text-sm">
+                <button type="submit" id="submit-btn" class="w-full py-5 mt-2 bg-gray-900 dark:bg-green-600 hover:bg-black dark:hover:bg-green-700 text-white rounded-2xl font-black shadow-xl transition-colors flex items-center justify-center gap-2 click-press uppercase tracking-widest text-sm">
                     ☁️ Publish to Live Store
                 </button>
             </form>
         </div>
 
-        <div class="bg-white p-8 rounded-[2rem] shadow-sm border border-gray-100 stagger-item" style="animation-delay: 0.2s;">
-            <h2 class="text-lg font-black mb-6 flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-full bg-green-500 animate-pulse"></span> My Live Inventory</h2>
+        <div class="bg-white dark:bg-gray-800 p-8 rounded-[2rem] shadow-sm border border-gray-100 dark:border-gray-700 stagger-item transition-colors" style="animation-delay: 0.2s;">
+            <h2 class="text-lg font-black mb-6 flex items-center gap-2 text-gray-900 dark:text-white"><span class="w-2.5 h-2.5 rounded-full bg-green-500 animate-pulse"></span> My Live Inventory</h2>
             <div id="inventory-list" class="space-y-4">
                 <div class="text-center py-10">
                     <p class="text-sm text-gray-400 font-bold animate-pulse">Loading secure inventory...</p>
@@ -157,10 +180,79 @@
         </div>
     </div>
 
+    <div id="profile-modal" class="fixed inset-0 z-[200] hidden bg-black/60 flex items-center justify-center transition-opacity backdrop-blur-sm px-4">
+        <div class="bg-white dark:bg-gray-900 w-full max-w-sm rounded-[2.5rem] p-8 shadow-2xl animate-stagger-in border border-transparent dark:border-gray-700 relative">
+            <button onclick="closeProfileSettings()" class="absolute top-4 right-4 w-8 h-8 bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 rounded-full flex items-center justify-center font-bold transition-colors hover:bg-gray-200 dark:hover:bg-gray-700 click-press">✕</button>
+            
+            <h3 class="text-xl font-black mb-1 text-center text-gray-900 dark:text-white">Profile Settings</h3>
+            <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest text-center mb-6">Manage your brand identity</p>
+            
+            <div class="flex flex-col items-center mb-6 relative group cursor-pointer" onclick="document.getElementById('modal-profile-upload').click()">
+                <div class="relative">
+                    <img id="modal-avatar-preview" src="" class="w-24 h-24 rounded-full object-cover border-4 border-gray-100 dark:border-gray-800 shadow-md group-hover:opacity-80 transition-all">
+                    <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                        <span class="bg-black/50 text-white text-xs font-bold px-2 py-1 rounded-lg backdrop-blur-sm">Change</span>
+                    </div>
+                </div>
+                <input type="file" id="modal-profile-upload" class="hidden" accept="image/*" onchange="previewProfileImage(event)">
+                <p class="text-[10px] text-gray-400 font-bold mt-2 text-center">Tap image to upload</p>
+            </div>
+
+            <div class="mb-6">
+                <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Display Name / Company</label>
+                <input type="text" id="edit-name-input" class="w-full bg-gray-50 dark:bg-gray-800 p-4 rounded-2xl outline-none border border-gray-200 dark:border-gray-700 font-bold text-sm text-gray-800 dark:text-gray-100 focus:ring-2 focus:ring-green-500 transition-colors">
+            </div>
+
+            <button id="save-profile-btn" onclick="saveProfileSettings()" class="w-full py-4 bg-green-600 hover:bg-green-700 text-white rounded-2xl font-black click-press shadow-[0_8px_15px_rgba(22,163,74,0.3)] text-xs uppercase tracking-widest transition-colors flex justify-center items-center gap-2">
+                💾 Save Changes
+            </button>
+        </div>
+    </div>
+
+    <script>
+        function updateThemeIcon() {
+            const isDark = document.documentElement.classList.contains('dark');
+            const sun = document.getElementById('icon-sun');
+            const moon = document.getElementById('icon-moon');
+            if(sun && moon) {
+                sun.style.display = isDark ? 'block' : 'none';
+                moon.style.display = isDark ? 'none' : 'block';
+            }
+        }
+        
+        function switchTheme() {
+            const html = document.documentElement;
+            html.classList.toggle('dark');
+            localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+            updateThemeIcon();
+        }
+        document.addEventListener("DOMContentLoaded", updateThemeIcon);
+
+        function openProfileSettings() {
+            document.getElementById('profile-modal').classList.remove('hidden');
+        }
+
+        function closeProfileSettings() {
+            document.getElementById('profile-modal').classList.add('hidden');
+        }
+
+        let newProfileImageFile = null;
+        function previewProfileImage(event) {
+            const file = event.target.files[0];
+            if(file) {
+                newProfileImageFile = file;
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('modal-avatar-preview').src = e.target.result;
+                }
+                reader.readAsDataURL(file);
+            }
+        }
+    </script>
+
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-        import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
-        // ADDED getDocs to pull the orders for the new dashboard!
+        import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut, updateProfile } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
         import { getFirestore, collection, addDoc, query, where, onSnapshot, deleteDoc, doc, serverTimestamp, getDocs } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
         import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-storage.js";
 
@@ -191,6 +283,14 @@
             "another.partner@example.com"
         ];
 
+        function updateHeaderUI(user) {
+            const photoSrc = user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName)}&background=10b981&color=fff`;
+            document.getElementById('header-avatar').src = photoSrc;
+            document.getElementById('modal-avatar-preview').src = photoSrc;
+            document.getElementById('supplier-name').textContent = user.displayName;
+            document.getElementById('edit-name-input').value = user.displayName;
+        }
+
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 if (!APPROVED_SUPPLIERS.includes(user.email)) {
@@ -201,7 +301,8 @@
 
                 loginScreen.classList.add('hidden');
                 dashboardScreen.classList.remove('hidden');
-                document.getElementById('supplier-name').textContent = user.displayName + " (" + user.email + ")";
+                
+                updateHeaderUI(user);
                 listenToInventory(user.uid);
             } else {
                 loginScreen.classList.remove('hidden');
@@ -217,6 +318,48 @@
         document.getElementById('logout-btn').onclick = async () => {
             await signOut(auth);
         };
+
+        // 🟢 SAVE PROFILE SETTINGS 🟢
+        window.saveProfileSettings = async function() {
+            const user = auth.currentUser;
+            if(!user) return;
+
+            const saveBtn = document.getElementById('save-profile-btn');
+            const newName = document.getElementById('edit-name-input').value.trim();
+            if(!newName) return alert("Display name cannot be empty.");
+
+            saveBtn.innerHTML = "⏳ Saving...";
+            saveBtn.disabled = true;
+
+            try {
+                let newPhotoURL = user.photoURL;
+
+                // If user selected a new image, upload it to Storage first
+                if(newProfileImageFile) {
+                    const storageRef = ref(storage, 'avatars/' + user.uid);
+                    await uploadBytes(storageRef, newProfileImageFile);
+                    newPhotoURL = await getDownloadURL(storageRef);
+                }
+
+                // Update Firebase Auth Profile
+                await updateProfile(user, {
+                    displayName: newName,
+                    photoURL: newPhotoURL
+                });
+
+                // Update UI Instantly
+                updateHeaderUI(auth.currentUser);
+                alert("✅ Profile updated securely.");
+                closeProfileSettings();
+                newProfileImageFile = null; // Reset
+            } catch (error) {
+                console.error(error);
+                alert("Failed to update profile.");
+            } finally {
+                saveBtn.innerHTML = "💾 Save Changes";
+                saveBtn.disabled = false;
+            }
+        }
 
         document.getElementById('add-product-form').onsubmit = async (e) => {
             e.preventDefault();
@@ -263,31 +406,23 @@
             }
         };
 
-        // 🟢 THE NEW KPI CALCULATOR HACK 🟢
         async function fetchAndCalculateStats(supplierProducts) {
             try {
-                // Fetch ALL orders to scan them for this supplier's products
                 const querySnapshot = await getDocs(collection(db, "orders"));
                 
                 let totalRevenue = 0;
                 let totalUnits = 0;
                 let productStats = {}; 
 
-                // Setup the scoreboard
                 supplierProducts.forEach(p => {
                     productStats[p.name] = { name: p.name, sold: 0, rev: 0, img: p.img, price: p.price };
                 });
 
-                // Scan every successful order receipt
                 querySnapshot.forEach((doc) => {
                     const order = doc.data();
                     if (order.status === "SUCCESS" || order.status === "PAID") {
-                        
-                        // Check if our products are inside the receipt text
                         supplierProducts.forEach(p => {
-                            // Escape regex just in case product name has weird characters
                             const escapedName = p.name.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
-                            // Looks for: "Simba Cement 50kg (x10)"
                             const regex = new RegExp(`${escapedName}\\s*\\(x(\\d+)\\)`, 'i');
                             const match = (order.items || "").match(regex);
                             
@@ -302,11 +437,9 @@
                     }
                 });
 
-                // Update the Dashboard KPI Cards
                 document.getElementById('stat-revenue').textContent = `TZS ${totalRevenue.toLocaleString()}`;
                 document.getElementById('stat-units').textContent = totalUnits;
 
-                // Find Top Product
                 let topProd = { name: "-", sold: -1 };
                 let sortedPerformers = [];
                 
@@ -323,24 +456,22 @@
                     document.getElementById('stat-top-product').textContent = "No sales yet";
                 }
 
-                // Render Top Performers List
-                sortedPerformers.sort((a, b) => b.sold - a.sold); // Sort highest to lowest
-                
+                sortedPerformers.sort((a, b) => b.sold - a.sold); 
                 const performersList = document.getElementById('top-performers-list');
                 
                 if(totalUnits === 0) {
                     performersList.innerHTML = `<p class="text-xs text-gray-400 font-bold text-center py-4">Make your first sale to see analytics here.</p>`;
                 } else {
                     performersList.innerHTML = sortedPerformers.filter(p => p.sold > 0).map(p => `
-                        <div class="flex items-center justify-between p-3 bg-gray-50 rounded-2xl border border-gray-100">
+                        <div class="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-700 transition-colors">
                             <div class="flex items-center gap-3">
-                                <img src="${p.img}" class="w-10 h-10 rounded-lg object-cover border border-gray-200">
+                                <img src="${p.img}" class="w-10 h-10 rounded-lg object-cover border border-gray-200 dark:border-gray-600">
                                 <div>
-                                    <p class="text-xs font-black text-gray-800">${p.name}</p>
-                                    <p class="text-[9px] text-green-600 font-bold uppercase tracking-widest mt-0.5">TZS ${p.rev.toLocaleString()}</p>
+                                    <p class="text-xs font-black text-gray-800 dark:text-gray-100">${p.name}</p>
+                                    <p class="text-[9px] text-green-600 dark:text-green-400 font-bold uppercase tracking-widest mt-0.5">TZS ${p.rev.toLocaleString()}</p>
                                 </div>
                             </div>
-                            <span class="bg-green-100 text-green-700 text-[10px] font-black px-3 py-1.5 rounded-lg">x${p.sold} Sold</span>
+                            <span class="bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 text-[10px] font-black px-3 py-1.5 rounded-lg">x${p.sold} Sold</span>
                         </div>
                     `).join('');
                 }
@@ -351,7 +482,6 @@
             }
         }
 
-        // LISTEN TO INVENTORY
         function listenToInventory(uid) {
             const q = query(collection(db, "products"), where("supplierId", "==", uid));
             
@@ -362,15 +492,12 @@
                     items.push({ id: doc.id, ...doc.data() });
                 });
 
-                // Update "Live Products" KPI
                 document.getElementById('stat-active').textContent = items.length;
-                
-                // Fire the Data Hacker to update the dashboard!
                 fetchAndCalculateStats(items);
 
                 if(items.length === 0) {
                     list.innerHTML = `
-                    <div class="text-center py-10 bg-gray-50 rounded-2xl border border-dashed border-gray-200">
+                    <div class="text-center py-10 bg-gray-50 dark:bg-gray-900 rounded-2xl border border-dashed border-gray-200 dark:border-gray-700 transition-colors">
                         <p class="text-3xl mb-2">📦</p>
                         <p class="text-sm text-gray-400 font-bold">You have no products live.</p>
                     </div>`;
@@ -378,14 +505,14 @@
                 }
 
                 list.innerHTML = items.map(p => `
-                    <div class="flex items-center gap-4 p-4 border border-gray-100 rounded-2xl bg-gray-50 hover:bg-gray-100 transition-colors group">
-                        <img src="${p.img}" class="w-16 h-16 object-cover rounded-xl border border-gray-200 shadow-sm">
+                    <div class="flex items-center gap-4 p-4 border border-gray-100 dark:border-gray-700 rounded-2xl bg-gray-50 dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors group">
+                        <img src="${p.img}" class="w-16 h-16 object-cover rounded-xl border border-gray-200 dark:border-gray-600 shadow-sm">
                         <div class="flex-grow">
-                            <p class="font-black text-sm text-gray-800">${p.name}</p>
+                            <p class="font-black text-sm text-gray-800 dark:text-gray-100">${p.name}</p>
                             <p class="text-[9px] font-bold text-gray-400 uppercase tracking-widest mt-0.5">${p.category}</p>
-                            <p class="text-green-600 font-black text-sm mt-1">TZS ${p.price.toLocaleString()}</p>
+                            <p class="text-green-600 dark:text-green-400 font-black text-sm mt-1">TZS ${p.price.toLocaleString()}</p>
                         </div>
-                        <button onclick="deleteProduct('${p.id}')" class="text-red-400 hover:text-red-600 hover:bg-red-50 p-3 rounded-xl transition-colors" title="Remove Product">🗑️</button>
+                        <button onclick="deleteProduct('${p.id}')" class="text-red-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 p-3 rounded-xl transition-colors" title="Remove Product">🗑️</button>
                     </div>
                 `).join('');
             });
@@ -393,12 +520,8 @@
 
         window.deleteProduct = async function(docId) {
             if(confirm("Are you sure you want to remove this product from the live store?")) {
-                try {
-                    await deleteDoc(doc(db, "products", docId));
-                } catch(e) {
-                    console.error("Delete error:", e);
-                    alert("Failed to delete.");
-                }
+                try { await deleteDoc(doc(db, "products", docId)); } 
+                catch(e) { alert("Failed to delete."); }
             }
         };
     </script>
