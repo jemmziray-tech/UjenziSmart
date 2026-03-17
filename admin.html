@@ -309,6 +309,7 @@
             }
         };
 
+        // 🌟 UPGRADED ADMIN PIPELINE 🌟
         function renderOrders(orders) {
             const feed = document.getElementById('admin-orders-feed');
             if(orders.length === 0) {
@@ -316,16 +317,40 @@
                 return;
             }
             feed.innerHTML = orders.map(o => {
-                const isPaid = o.status === 'PAID' || o.status === 'SUCCESS';
                 const safeDate = (o.createdAt && typeof o.createdAt.toDate === 'function') ? o.createdAt.toDate().toLocaleDateString() : (o.dateString || 'Just now');
                 
+                // Pipeline Logic
+                let statusColor = "bg-gray-100 text-gray-600";
+                let actionButton = "";
+                
+                if (o.status === 'PENDING') {
+                    statusColor = "bg-amber-100 text-amber-700 border-amber-200";
+                    actionButton = `<button disabled class="px-4 py-2 bg-gray-200 text-gray-400 rounded-xl text-[9px] font-black uppercase tracking-widest cursor-not-allowed">Awaiting Payment</button>`;
+                } 
+                else if (o.status === 'SUCCESS' || o.status === 'PAID') {
+                    statusColor = "bg-blue-100 text-blue-700 border-blue-200";
+                    actionButton = `<button onclick="updateStatus('orders', '${o.id}', 'PROCESSING')" class="px-4 py-2 bg-blue-600 text-white rounded-xl text-[9px] font-black uppercase tracking-widest shadow-lg hover:scale-105 transition-transform click-press">Payment Auto-Verified: Send to Supplier</button>`;
+                }
+                else if (o.status === 'PROCESSING') {
+                    statusColor = "bg-purple-100 text-purple-700 border-purple-200";
+                    actionButton = `<button onclick="updateStatus('orders', '${o.id}', 'SOLVED')" class="px-4 py-2 bg-green-600 text-white rounded-xl text-[9px] font-black uppercase tracking-widest shadow-lg hover:scale-105 transition-transform click-press">Mark as Delivered (Solved)</button>`;
+                }
+                else if (o.status === 'SOLVED') {
+                    statusColor = "bg-green-100 text-green-700 border-green-200";
+                    actionButton = `<button disabled class="px-4 py-2 bg-gray-100 dark:bg-white/5 text-green-500 rounded-xl text-[9px] font-black uppercase tracking-widest cursor-not-allowed">✅ Order Closed</button>`;
+                }
+
+                // Show a warning if the customer deleted this from their history
+                const hiddenWarning = o.hiddenFromCustomer ? `<span class="text-[8px] bg-red-100 text-red-600 px-1.5 py-0.5 rounded ml-2">Hidden by User</span>` : "";
+
                 return `
-                <tr class="hover:bg-gray-50 dark:hover:bg-white/[0.02] transition-colors border-l-4 ${isPaid ? 'border-green-500' : 'border-amber-500'}">
+                <tr class="hover:bg-gray-50 dark:hover:bg-white/[0.02] transition-colors border-l-4 border-transparent hover:border-gray-300">
                     <td class="p-6">
                         <p class="font-black text-gray-900 dark:text-white tracking-widest text-sm">${o.orderId || 'UNNAMED'}</p>
                         <p class="text-[10px] text-gray-500 font-bold mt-1">${safeDate}</p>
-                        <div class="mt-3">
-                            <span class="${isPaid ? 'text-green-700 bg-green-100 dark:text-green-400 dark:bg-green-400/10' : 'text-amber-700 bg-amber-100 dark:text-amber-400 dark:bg-amber-400/10'} px-2 py-1 rounded text-[9px] font-black border border-gray-200 dark:border-white/5 uppercase">${o.status}</span>
+                        <div class="mt-3 flex items-center">
+                            <span class="${statusColor} px-2 py-1 rounded text-[9px] font-black border uppercase">${o.status}</span>
+                            ${hiddenWarning}
                         </div>
                     </td>
                     <td class="p-6">
@@ -336,13 +361,11 @@
                         <p class="text-xs text-gray-500 dark:text-gray-400 leading-relaxed max-w-[200px] italic">"${o.items || 'No data'}"</p>
                     </td>
                     <td class="p-6">
-                        <p class="font-black text-gray-900 dark:text-white text-base">TZS ${o.total.toLocaleString()}</p>
-                        <p class="text-[10px] text-gray-500 mt-1">Fee: TZS ${o.transport.toLocaleString()}</p>
+                        <p class="font-black text-gray-900 dark:text-white text-base">TZS ${(o.total || 0).toLocaleString()}</p>
+                        <p class="text-[10px] text-gray-500 mt-1">Fee: TZS ${(o.transport || 0).toLocaleString()}</p>
                     </td>
                     <td class="p-6 text-center">
-                        <button onclick="updateStatus('orders', '${o.id}', '${isPaid ? 'PENDING' : 'PAID'}')" class="px-6 py-3 ${isPaid ? 'bg-gray-200 text-gray-500 dark:bg-white/5 dark:text-gray-400' : 'bg-green-600 text-white shadow-[0_0_20px_rgba(16,185,129,0.4)]'} rounded-xl text-[10px] font-black uppercase tracking-widest transition-all hover:scale-105 active:scale-95 click-press">
-                            ${isPaid ? 'Undo' : 'Mark Final'}
-                        </button>
+                        ${actionButton}
                     </td>
                 </tr>`;
             }).join('');
