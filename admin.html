@@ -3,57 +3,97 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UjenziSmart - Admin Control Panel</title>
+    <title>UjenziSmart - Master Admin Portal</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap');
-        body { font-family: 'Inter', sans-serif; background-color: #0f172a; color: white; }
-        .glass-panel { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.1); }
-        .pulse-green { animation: pulseGreen 2s infinite; }
-        @keyframes pulseGreen { 0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); } 70% { box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); } 100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); } }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap');
+        body { font-family: 'Inter', sans-serif; background: radial-gradient(circle at top right, #0f172a 0%, #020617 100%); color: white; min-h-screen: 100vh; }
+        
+        .glass-panel { background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.05); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); }
+        .neon-border-green { border-left: 4px solid #10b981; box-shadow: -10px 0 20px -10px rgba(16, 185, 129, 0.3); }
+        .neon-border-amber { border-left: 4px solid #f59e0b; box-shadow: -10px 0 20px -10px rgba(245, 158, 11, 0.3); }
+        
+        .tab-active { color: #10b981; border-bottom: 3px solid #10b981; background: rgba(16, 185, 129, 0.05); }
+        
+        @keyframes glow { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+        .pulse-dot { animation: glow 2s ease-in-out infinite; }
+        
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
     </style>
 </head>
-<body class="min-h-screen p-6">
+<body class="p-4 md:p-8">
 
-    <div class="max-w-5xl mx-auto">
-        <header class="flex justify-between items-center mb-8 glass-panel p-6 rounded-3xl">
+    <div class="max-w-6xl mx-auto">
+        <header class="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-6">
             <div>
-                <h1 class="text-3xl font-black text-white tracking-tighter">Command Center</h1>
-                <p class="text-green-400 text-sm font-bold tracking-widest uppercase mt-1 flex items-center gap-2">
-                    <span class="w-2 h-2 rounded-full bg-green-500 pulse-green block"></span> Live Orders
-                </p>
+                <h1 class="text-4xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-500">
+                    Control Panel
+                </h1>
+                <div class="flex items-center gap-3 mt-2">
+                    <span class="px-3 py-1 bg-green-500/10 text-green-500 text-[10px] font-black uppercase tracking-widest rounded-full border border-green-500/20 flex items-center gap-2">
+                        <span class="w-1.5 h-1.5 bg-green-500 rounded-full pulse-dot"></span> System Live
+                    </span>
+                    <span id="admin-email-tag" class="text-xs font-bold text-gray-500 uppercase tracking-tighter">Checking Auth...</span>
+                </div>
             </div>
-            <div class="text-right">
-                <p class="text-xs text-gray-400 font-bold uppercase tracking-widest">Total Revenue (Paid)</p>
-                <h2 id="total-revenue" class="text-2xl font-black text-white">TZS 0</h2>
+            
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-4 w-full md:w-auto">
+                <div class="glass-panel p-4 rounded-2xl border-b-2 border-green-500/50">
+                    <p class="text-[9px] font-bold text-gray-500 uppercase tracking-widest">Gross Revenue</p>
+                    <h2 id="total-revenue" class="text-xl font-black text-white mt-1">TZS 0</h2>
+                </div>
+                <div class="glass-panel p-4 rounded-2xl border-b-2 border-blue-500/50">
+                    <p class="text-[9px] font-bold text-gray-500 uppercase tracking-widest">Active Orders</p>
+                    <h2 id="order-count" class="text-xl font-black text-white mt-1">0</h2>
+                </div>
+                <div class="glass-panel p-4 rounded-2xl border-b-2 border-amber-500/50 hidden md:block">
+                    <p class="text-[9px] font-bold text-gray-500 uppercase tracking-widest">Payout Requests</p>
+                    <h2 id="payout-count" class="text-xl font-black text-amber-400 mt-1">0</h2>
+                </div>
             </div>
         </header>
 
-        <div class="glass-panel rounded-3xl overflow-hidden shadow-2xl">
-            <div class="overflow-x-auto">
-                <table class="w-full text-left border-collapse">
-                    <thead>
-                        <tr class="border-b border-gray-700 bg-gray-800/50">
-                            <th class="p-5 text-xs font-black uppercase tracking-widest text-gray-400">Order Info</th>
-                            <th class="p-5 text-xs font-black uppercase tracking-widest text-gray-400">Customer</th>
-                            <th class="p-5 text-xs font-black uppercase tracking-widest text-gray-400">Items</th>
-                            <th class="p-5 text-xs font-black uppercase tracking-widest text-gray-400">Total Value</th>
-                            <th class="p-5 text-xs font-black uppercase tracking-widest text-gray-400 text-center">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody id="admin-orders-feed" class="divide-y divide-gray-700/50">
-                        <tr><td colspan="5" class="p-8 text-center text-gray-500 font-bold">Loading live orders...</td></tr>
-                    </tbody>
-                </table>
+        <div class="flex gap-2 mb-6 overflow-hidden rounded-2xl p-1 bg-white/5 border border-white/5 w-fit">
+            <button onclick="switchTab('orders')" id="btn-orders" class="px-6 py-3 text-xs font-black uppercase tracking-widest transition-all rounded-xl tab-active">
+                🛒 Sales Flow
+            </button>
+            <button onclick="switchTab('payouts')" id="btn-payouts" class="px-6 py-3 text-xs font-black uppercase tracking-widest transition-all rounded-xl text-gray-500 hover:text-white">
+                💰 Payouts
+            </button>
+        </div>
+
+        <div id="view-orders" class="stagger-item">
+            <div class="glass-panel rounded-[2.5rem] overflow-hidden">
+                <div class="overflow-x-auto overflow-y-auto max-h-[60vh]">
+                    <table class="w-full text-left border-collapse">
+                        <thead class="sticky top-0 bg-[#0f172a] z-10">
+                            <tr class="border-b border-white/5">
+                                <th class="p-6 text-[10px] font-black uppercase tracking-widest text-gray-500">Order & Status</th>
+                                <th class="p-6 text-[10px] font-black uppercase tracking-widest text-gray-500">Customer Intelligence</th>
+                                <th class="p-6 text-[10px] font-black uppercase tracking-widest text-gray-500">Inventory Logic</th>
+                                <th class="p-6 text-[10px] font-black uppercase tracking-widest text-gray-500">Net Value</th>
+                                <th class="p-6 text-[10px] font-black uppercase tracking-widest text-gray-500 text-center">Executive Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="admin-orders-feed" class="divide-y divide-white/5">
+                            </tbody>
+                    </table>
+                </div>
             </div>
+        </div>
+
+        <div id="view-payouts" class="hidden stagger-item">
+            <div class="grid grid-cols-1 gap-4" id="payout-requests-feed">
+                </div>
         </div>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-        import { getFirestore, collection, query, onSnapshot, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+        import { getFirestore, collection, query, onSnapshot, doc, updateDoc, orderBy } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
-        // EXACT SAME CONFIG AS YOUR APP
         const firebaseConfig = { 
             apiKey: "AIzaSyCX2C1TXRb20nGtxEaYXGUo2KEH7gbZCY0", 
             authDomain: "ujenzismart-878af.firebaseapp.com", 
@@ -65,92 +105,137 @@
         };
 
         const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // LISTEN TO EVERY ORDER IN REAL-TIME
-        const q = query(collection(db, "orders"));
-        
-        onSnapshot(q, (snapshot) => {
-            let orders = [];
-            let totalRev = 0;
+        const MASTER_ADMIN = "jem.mziray@gmail.com"; 
 
-            snapshot.forEach((doc) => {
-                const data = doc.data();
-                orders.push({ id: doc.id, ...data });
-                if(data.status === 'PAID') {
-                    totalRev += data.total;
-                }
-            });
-
-            // Sort by newest first using javascript
-            orders.sort((a, b) => {
-                const timeA = a.createdAt ? a.createdAt.toMillis() : 0;
-                const timeB = b.createdAt ? b.createdAt.toMillis() : 0;
-                return timeB - timeA;
-            });
-
-            document.getElementById('total-revenue').textContent = `TZS ${totalRev.toLocaleString()}`;
-            renderAdminTable(orders);
+        // SECURE AUTH CHECK
+        onAuthStateChanged(auth, (user) => {
+            if (user && (user.email === MASTER_ADMIN || user.email === "venancechesco58@gmail.com")) {
+                document.getElementById('admin-email-tag').textContent = user.email;
+                startDataSync();
+            } else {
+                alert("Restricted Access. Admins Only.");
+                window.location.href = "index.html";
+            }
         });
 
-        // RENDER THE UI
-        function renderAdminTable(orders) {
+        function startDataSync() {
+            // 🔄 SYNC CLIENT ORDERS
+            const ordersQ = query(collection(db, "orders"), orderBy("createdAt", "desc"));
+            onSnapshot(ordersQ, (snapshot) => {
+                let orders = [];
+                let revenue = 0;
+                snapshot.forEach(doc => {
+                    const data = doc.data();
+                    orders.push({id: doc.id, ...data});
+                    if(data.status === 'PAID' || data.status === 'SUCCESS') revenue += data.total;
+                });
+                document.getElementById('total-revenue').textContent = `TZS ${revenue.toLocaleString()}`;
+                document.getElementById('order-count').textContent = orders.length;
+                renderOrders(orders);
+            });
+
+            // 🔄 SYNC PAYOUT REQUESTS
+            const payoutQ = query(collection(db, "payouts"), orderBy("createdAt", "desc"));
+            onSnapshot(payoutQ, (snapshot) => {
+                let payouts = [];
+                snapshot.forEach(doc => payouts.push({id: doc.id, ...doc.data()}));
+                document.getElementById('payout-count').textContent = payouts.filter(p => p.status === "PENDING").length;
+                renderPayouts(payouts);
+            });
+        }
+
+        function renderOrders(orders) {
             const feed = document.getElementById('admin-orders-feed');
-            
             if(orders.length === 0) {
-                feed.innerHTML = `<tr><td colspan="5" class="p-8 text-center text-gray-500 font-bold">No orders found in database.</td></tr>`;
+                feed.innerHTML = `<tr><td colspan="5" class="p-12 text-center text-gray-600 font-bold">Zero system transactions.</td></tr>`;
                 return;
             }
-
             feed.innerHTML = orders.map(o => {
-                const isPaid = o.status === 'PAID';
-                
-                // Status Badge Logic
-                const statusBadge = isPaid 
-                    ? `<span class="bg-green-500/20 text-green-400 px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-widest border border-green-500/30">PAID</span>`
-                    : `<span class="bg-amber-500/20 text-amber-400 px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-widest border border-amber-500/30">PENDING</span>`;
-                
-                // Button Logic
-                const actionBtn = isPaid
-                    ? `<button onclick="toggleStatus('${o.id}', 'PENDING')" class="w-full py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-xl text-[10px] font-black uppercase tracking-widest transition-colors">Undo</button>`
-                    : `<button onclick="toggleStatus('${o.id}', 'PAID')" class="w-full py-2 bg-green-500 hover:bg-green-400 text-white shadow-[0_0_15px_rgba(16,185,129,0.3)] rounded-xl text-[10px] font-black uppercase tracking-widest transition-colors pulse-green">Mark Paid</button>`;
-
+                const isPaid = o.status === 'PAID' || o.status === 'SUCCESS';
                 return `
-                <tr class="hover:bg-white/5 transition-colors">
-                    <td class="p-5">
-                        <p class="font-black text-sm text-white">${o.orderId}</p>
-                        <p class="text-[10px] text-gray-400 font-bold mt-1">${o.dateString}</p>
-                        <div class="mt-2">${statusBadge}</div>
+                <tr class="hover:bg-white/[0.02] transition-colors border-l-4 ${isPaid ? 'border-green-500' : 'border-amber-500'}">
+                    <td class="p-6">
+                        <p class="font-black text-white tracking-widest text-sm">${o.orderId || 'UNNAMED'}</p>
+                        <p class="text-[10px] text-gray-500 font-bold mt-1">${o.dateString || 'Recently'}</p>
+                        <div class="mt-3">
+                            <span class="${isPaid ? 'text-green-400 bg-green-400/10' : 'text-amber-400 bg-amber-400/10'} px-2 py-1 rounded text-[9px] font-black border border-white/5 uppercase">${o.status}</span>
+                        </div>
                     </td>
-                    <td class="p-5">
-                        <p class="font-bold text-sm text-blue-300">${o.userName}</p>
-                        <p class="text-[10px] text-gray-500 mt-0.5">${o.userEmail || 'No email'}</p>
+                    <td class="p-6">
+                        <p class="font-bold text-sm text-gray-200">${o.userName || 'Anonymous'}</p>
+                        <p class="text-[10px] text-gray-500 mt-1">${o.userEmail || 'No Digital ID'}</p>
                     </td>
-                    <td class="p-5 max-w-xs">
-                        <p class="text-xs text-gray-300 leading-relaxed">${o.items}</p>
+                    <td class="p-6">
+                        <p class="text-xs text-gray-400 leading-relaxed max-w-[200px] italic">"${o.items || 'No data'}"</p>
                     </td>
-                    <td class="p-5">
-                        <p class="font-black text-white text-lg">TZS ${o.total.toLocaleString()}</p>
-                        <p class="text-[10px] text-gray-500 font-bold mt-1">Trans: TZS ${o.transport.toLocaleString()}</p>
+                    <td class="p-6">
+                        <p class="font-black text-white text-base">TZS ${o.total.toLocaleString()}</p>
+                        <p class="text-[10px] text-gray-500 mt-1">Fee: TZS ${o.transport.toLocaleString()}</p>
                     </td>
-                    <td class="p-5 align-middle">
-                        ${actionBtn}
+                    <td class="p-6 text-center">
+                        <button onclick="updateStatus('orders', '${o.id}', '${isPaid ? 'PENDING' : 'PAID'}')" class="px-6 py-3 ${isPaid ? 'bg-white/5 text-gray-400' : 'bg-green-600 text-white shadow-[0_0_20px_rgba(16,185,129,0.4)]'} rounded-xl text-[10px] font-black uppercase tracking-widest transition-all hover:scale-105 active:scale-95">
+                            ${isPaid ? 'Undo' : 'Mark Final'}
+                        </button>
                     </td>
                 </tr>`;
             }).join('');
         }
 
-        // 🌟 THE MAGIC SWITCH 🌟
-        window.toggleStatus = async function(docId, newStatus) {
+        function renderPayouts(payouts) {
+            const feed = document.getElementById('payout-requests-feed');
+            if(payouts.length === 0) {
+                feed.innerHTML = `<div class="p-20 text-center text-gray-600 font-bold glass-panel rounded-[2.5rem]">No payout requests in the queue.</div>`;
+                return;
+            }
+            feed.innerHTML = payouts.map(p => {
+                const isPaid = p.status === 'PAID';
+                return `
+                <div class="glass-panel p-6 rounded-[2rem] flex flex-col md:flex-row justify-between items-center gap-6 border-l-4 ${isPaid ? 'border-green-500' : 'border-amber-500'}">
+                    <div class="flex-1">
+                        <div class="flex items-center gap-3 mb-2">
+                            <h4 class="text-lg font-black text-white">${p.supplierName}</h4>
+                            <span class="text-[9px] font-black px-2 py-1 bg-white/5 rounded border border-white/5 uppercase text-gray-400 tracking-tighter">Supplier ID: ${p.supplierId.slice(0,8)}</span>
+                        </div>
+                        <p class="text-xs text-gray-500 font-bold uppercase tracking-widest mb-4">Request for TZS <span class="text-green-500 text-sm font-black">${p.amount.toLocaleString()}</span></p>
+                        <div class="bg-black/40 p-4 rounded-2xl border border-white/5">
+                            <p class="text-[10px] text-gray-600 font-black uppercase mb-1">Settlement Channel</p>
+                            <p class="text-sm font-mono text-blue-400">${p.accountDetails}</p>
+                        </div>
+                    </div>
+                    <div class="flex flex-col items-center gap-3">
+                        <p class="text-[10px] text-gray-500 font-bold uppercase tracking-widest">${p.createdAt?.toDate().toLocaleDateString() || 'Pending Date'}</p>
+                        ${isPaid ? 
+                            `<span class="px-8 py-4 bg-green-500/20 text-green-500 rounded-2xl text-[10px] font-black uppercase tracking-widest border border-green-500/20">✅ System Settled</span>` :
+                            `<button onclick="updateStatus('payouts', '${p.id}', 'PAID')" class="px-8 py-4 bg-amber-500 hover:bg-amber-400 text-black rounded-2xl text-[10px] font-black uppercase tracking-widest shadow-lg shadow-amber-500/20 active:scale-95 transition-all">Settle Payment</button>`
+                        }
+                    </div>
+                </div>`;
+            }).join('');
+        }
+
+        // TAB SWITCHER
+        window.switchTab = (tab) => {
+            document.getElementById('view-orders').classList.toggle('hidden', tab !== 'orders');
+            document.getElementById('view-payouts').classList.toggle('hidden', tab !== 'payouts');
+            
+            document.getElementById('btn-orders').className = `px-6 py-3 text-xs font-black uppercase tracking-widest transition-all rounded-xl ${tab === 'orders' ? 'tab-active' : 'text-gray-500'}`;
+            document.getElementById('btn-payouts').className = `px-6 py-3 text-xs font-black uppercase tracking-widest transition-all rounded-xl ${tab === 'payouts' ? 'tab-active' : 'text-gray-500'}`;
+        };
+
+        // SHARED UPDATE LOGIC
+        window.updateStatus = async (collectionName, docId, newStatus) => {
+            const confirmMsg = collectionName === 'orders' ? "Update order status?" : "Confirm you have physically sent the money?";
+            if(!confirm(confirmMsg)) return;
+
             try {
-                const orderRef = doc(db, "orders", docId);
-                await updateDoc(orderRef, {
-                    status: newStatus
-                });
-                console.log(`Order ${docId} successfully changed to ${newStatus}`);
-            } catch (error) {
-                console.error("Error updating order:", error);
-                alert("Failed to update status. Check console.");
+                await updateDoc(doc(db, collectionName, docId), { status: newStatus });
+                console.log("Success: Ledger Updated.");
+            } catch(e) {
+                console.error(e);
+                alert("Permission error. Check Firebase Rules.");
             }
         };
     </script>
