@@ -1536,6 +1536,40 @@
             } catch (error) { alert("Failed to sync secure order. Check connection."); }
         };
 
+        // 🟢 REAL-TIME WEBHOOK LISTENER FOR SNIPPE
+        window.listenForSnippeWebhook = function(orderId, btnElement, payMethod) {
+            const unsubscribe = onSnapshot(doc(db, "orders", orderId), (docSnap) => {
+                if (docSnap.exists()) {
+                    const status = docSnap.data().status;
+                    
+                    if (status === "SUCCESS" || status === "PAID") {
+                        unsubscribe(); // Stop listening
+                        btnElement.innerText = "✅ Payment Received!";
+                        btnElement.classList.replace("bg-blue-600", "bg-gray-900");
+                        
+                        setTimeout(() => {
+                            cart = [];
+                            updateBadge();
+                            navigateTo('history', false, true); 
+                            btnElement.innerHTML = '📱 Send Prompt to Phone';
+                            btnElement.disabled = false;
+                            btnElement.classList.replace("bg-gray-900", "bg-green-600");
+                        }, 2000);
+                    } else if (status === "FAILED" || status === "CANCELLED") {
+                        unsubscribe();
+                        btnElement.innerText = "❌ Payment Failed/Cancelled";
+                        btnElement.classList.replace("bg-blue-600", "bg-red-600");
+                        
+                        setTimeout(() => {
+                            btnElement.innerHTML = payMethod === 'mobile' ? '📱 Send Prompt to Phone' : '⚡ Continue to Secure Gateway';
+                            btnElement.disabled = false;
+                            btnElement.classList.replace("bg-red-600", "bg-green-600");
+                        }, 3000);
+                    }
+                }
+            });
+        };
+
         getRedirectResult(auth).then((result) => {
             if (result) {
                 localStorage.setItem('ujenzi_user', JSON.stringify({ name: result.user.displayName, email: result.user.email, photoURL: result.user.photoURL }));
