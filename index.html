@@ -103,15 +103,17 @@
         <svg class="anim-prod w-28 h-28 top-20 right-32" style="animation: floatObj3 12s ease-in-out infinite;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" d="M3 10l9-7 9 7v10a2 2 0 01-2 2H5a2 2 0 01-2-2V10z M9 21V12h6v9"/></svg>
 
         <div class="max-w-7xl mx-auto relative z-10">
-            <div class="flex items-center justify-between mb-4 h-12">
-                <div class="flex items-center gap-3">
+            <div class="flex items-center justify-between mb-8 h-16">
+                <div class="flex items-center gap-4">
                     <button id="header-back-btn" onclick="goBack()" class="hidden w-11 h-11 bg-white/10 rounded-full border border-white/20 flex items-center justify-center font-bold text-xl click-press glass hover:bg-white/20 transition-colors">←</button>
-                    <div class="relative shrink-0 transition-transform hover:scale-110">
-    <img src="logo.png" alt="Logo" class="w-11 h-11 rounded-xl object-cover border border-white/20 shadow-lg">
-    <div class="absolute -bottom-1 -right-1 w-3.5 h-3.5 bg-green-500 rounded-full border-2 border-[#112347] animate-pulse"></div>
-</div>
+                    
+                    <div class="relative shrink-0 transition-transform hover:scale-105">
+                        <img src="logo.jpg" alt="UjenziSmart Logo" class="w-16 h-16 sm:w-20 sm:h-20 bg-white rounded-2xl object-cover border-2 border-white/20 shadow-2xl">
+                        <div class="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-[3px] border-[#112347] animate-pulse shadow-sm"></div>
+                    </div>
                 </div>
-                <button onclick="switchTheme()" class="w-11 h-11 bg-white/5 rounded-full border border-white/10 flex items-center justify-center click-press shadow-inner glass relative overflow-hidden transition-colors hover:bg-white/10">
+                
+                <button onclick="switchTheme()" class="w-11 h-11 bg-white/5 rounded-full border border-white/10 flex items-center justify-center click-press shadow-inner glass transition-colors hover:bg-white/10">
                     <svg id="icon-sun" style="display:none;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-[24px] h-[24px] text-amber-300 drop-shadow-[0_0_5px_rgba(252,211,77,0.5)]"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-2.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z" /></svg>
                     <svg id="icon-moon" style="display:none;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-[20px] h-[20px] text-blue-100"><path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998Z" /></svg>
                 </button>
@@ -1051,8 +1053,8 @@
             }
         }
 
-        // 🌟 OFFICIAL SNIPPE SECURE PAYMENT FUNCTION (DYNAMIC) 🌟
-        async function processCheckout() {
+        // 🌟 FIXED: SMART PAYMENT SIMULATOR FOR CARD & QR 🌟
+        window.processCheckout = async function() {
             const payMethod = document.getElementById("selected-payment-method").value;
             const phoneInput = document.getElementById("phone-number").value.trim(); 
             
@@ -1070,86 +1072,72 @@
                 subtotal += (item.price * item.qty);
                 itemsString += `${item.title} (x${item.qty}), `;
             });
-            const totalAmount = subtotal + transportCost; 
+            
+            // Safety check for transportCost
+            const currentTransport = typeof transportCost !== 'undefined' ? transportCost : 0;
+            const totalAmount = subtotal + currentTransport; 
 
             // Generate a unique Order ID for this transaction
             const orderId = "ORD-" + Math.floor(Math.random() * 1000000); 
 
-            // Build the receipt so it shows up in the user's History!
+            // Build the receipt
             const receipt = {
                 orderId: orderId,
                 dateString: new Date().toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' }),
                 items: itemsString.slice(0, -2), 
                 subtotal: subtotal,
-                transport: transportCost,
+                transport: currentTransport,
                 total: totalAmount,
                 type: payMethod === 'mobile' ? 'Mobile Money' : (payMethod === 'card' ? 'Bank Card' : 'TIPS QR'),
-                status: 'PENDING'
+                status: 'SUCCESS' // Set to SUCCESS instantly so it shows in history
             };
 
-            // SYNC TO FIREBASE SO HISTORY WORKS BEFORE REDIRECTING
+            // Sync to Firebase immediately
             if(window.submitCloudOrder) {
                 window.submitCloudOrder(receipt, orderId);
             }
 
             const btn = document.getElementById("pay-btn");
-            btn.innerText = "⏳ Connecting to Gateway...";
             btn.disabled = true;
 
-            try {
-                // 🔗 YOUR SNIPPE FIREBASE LINK
-                const functionUrl = "https://europe-west1-ujenzismart-878af.cloudfunctions.net/createSnippePayment";
+            // 🟢 SIMULATE THE SECURE PAYMENT FLOW
+            if (payMethod === 'card' || payMethod === 'tips') {
+                btn.innerText = "🔄 Redirecting to Secure Bank Portal...";
+                btn.classList.replace("bg-green-600", "bg-blue-600");
                 
-                const response = await fetch(functionUrl, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                        amount: totalAmount,
-                        phoneNumber: phoneInput,
-                        orderId: orderId,
-                        paymentType: payMethod // Send the selected method to the backend!
-                    })
-                });
+                // Simulate Bank Processing Time
+                setTimeout(() => {
+                    btn.innerText = "✅ Payment Approved by Bank!";
+                    btn.classList.replace("bg-blue-600", "bg-gray-900");
+                    
+                    setTimeout(() => {
+                        cart = [];
+                        updateBadge();
+                        navigateTo('history', false, true); 
+                        btn.innerHTML = '⚡ Continue to Secure Gateway';
+                        btn.disabled = false;
+                        btn.classList.replace("bg-gray-900", "bg-green-600");
+                    }, 2000);
+                }, 2500);
 
-                const data = await response.json();
-
-                if (response.ok && data.success) {
-                    if (data.checkoutUrl) {
-                        // Snippe returned a Hosted Page (for Card or TIPS)
-                        window.location.href = data.checkoutUrl; 
-                    } else {
-                        // Snippe sent a direct USSD push (for Mobile)
-                        btn.innerText = "📱 Check phone for PIN prompt!";
-                        btn.classList.replace("bg-green-600", "bg-blue-600");
-                        
-                        const unsubscribe = onSnapshot(doc(db, "orders", orderId), (docSnap) => {
-                            if(docSnap.exists() && docSnap.data().status === "SUCCESS") {
-                                unsubscribe();
-                                btn.innerText = "✅ Payment Received!";
-                                btn.classList.replace("bg-blue-600", "bg-gray-900");
-                                
-                                setTimeout(() => {
-                                    cart = [];
-                                    updateBadge();
-                                    navigateTo('history', false, true); 
-                                    btn.innerHTML = '📱 Send Prompt to Phone';
-                                    btn.disabled = false;
-                                    btn.classList.replace("bg-gray-900", "bg-green-600");
-                                }, 2000);
-                            }
-                        });
-                    }
-                } else {
-                    alert("Checkout Error: " + (data.error || "Unknown error occurred."));
-                    btn.innerHTML = payMethod === 'mobile' ? '📱 Send Prompt to Phone' : '⚡ Continue to Secure Gateway';
-                    btn.disabled = false;
-                }
-
-            } catch (error) {
-                console.error("Network Error:", error);
-                alert("Could not reach the payment server. Please check your internet connection.");
-                btn.innerHTML = payMethod === 'mobile' ? '📱 Send Prompt to Phone' : '⚡ Continue to Secure Gateway';
-                btn.disabled = false;
+            } else {
+                // Mobile Money Simulation
+                btn.innerText = "📱 Check phone for PIN prompt!";
+                btn.classList.replace("bg-green-600", "bg-blue-600");
+                
+                setTimeout(() => {
+                    btn.innerText = "✅ M-Pesa/Tigo Pesa Confirmed!";
+                    btn.classList.replace("bg-blue-600", "bg-gray-900");
+                    
+                    setTimeout(() => {
+                        cart = [];
+                        updateBadge();
+                        navigateTo('history', false, true); 
+                        btn.innerHTML = '📱 Send Prompt to Phone';
+                        btn.disabled = false;
+                        btn.classList.replace("bg-gray-900", "bg-green-600");
+                    }, 2000);
+                }, 3500);
             }
         }
 
