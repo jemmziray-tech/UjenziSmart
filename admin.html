@@ -20,11 +20,9 @@
 
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap');
-        /* 🟢 MODIFIED: Made body adaptive to light/dark mode */
         body { font-family: 'Inter', sans-serif; transition: background-color 0.3s ease, color 0.3s ease; }
         .bg-cyber { background: radial-gradient(circle at top right, #0f172a 0%, #020617 100%); }
         
-        /* 🟢 MODIFIED: Glass panel adjusts based on theme */
         .glass-panel { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(20px); border: 1px solid rgba(0, 0, 0, 0.05); box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.1); }
         .dark .glass-panel { background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.05); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); }
         
@@ -32,17 +30,21 @@
         .neon-border-amber { border-left: 4px solid #f59e0b; box-shadow: -10px 0 20px -10px rgba(245, 158, 11, 0.3); }
         
         .tab-active { color: #10b981; border-bottom: 3px solid #10b981; background: rgba(16, 185, 129, 0.05); }
+        .sub-tab-active { background: #10b981; color: white; border-color: #10b981; box-shadow: 0 4px 14px 0 rgba(16, 185, 129, 0.39); }
         
         @keyframes glow { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
         .pulse-dot { animation: glow 2s ease-in-out infinite; }
         
-        ::-webkit-scrollbar { width: 6px; }
+        .click-press { transition: transform 0.1s ease; }
+        .click-press:active { transform: scale(0.96); }
+        
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
     </style>
 </head>
-<body class="p-4 md:p-8 min-h-screen bg-[#f4f6f9] text-gray-900 dark:bg-cyber dark:text-white">
+<body class="p-4 md:p-8 min-h-screen bg-[#f4f6f9] text-gray-900 dark:bg-cyber dark:text-white relative">
 
-    <div class="max-w-6xl mx-auto">
+    <div class="max-w-[1400px] mx-auto">
         <header class="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-6">
             <div>
                 <h1 class="text-4xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-gray-900 to-gray-500 dark:from-white dark:to-gray-500">
@@ -56,43 +58,58 @@
                 </div>
             </div>
             
-            <div class="flex items-center gap-6">
-                <div class="grid grid-cols-2 md:grid-cols-3 gap-4 w-full md:w-auto">
-                    <div class="glass-panel p-4 rounded-2xl border-b-2 border-green-500/50">
+            <div class="flex items-center gap-6 w-full md:w-auto overflow-x-auto pb-2 md:pb-0">
+                <div class="flex gap-4">
+                    <div class="glass-panel p-4 rounded-2xl border-b-2 border-green-500/50 min-w-[140px]">
                         <p class="text-[9px] font-bold text-gray-500 uppercase tracking-widest">Gross Revenue</p>
                         <h2 id="total-revenue" class="text-xl font-black text-gray-900 dark:text-white mt-1">TZS 0</h2>
                     </div>
-                    <div class="glass-panel p-4 rounded-2xl border-b-2 border-blue-500/50">
+                    <div class="glass-panel p-4 rounded-2xl border-b-2 border-blue-500/50 min-w-[120px]">
                         <p class="text-[9px] font-bold text-gray-500 uppercase tracking-widest">Active Orders</p>
                         <h2 id="order-count" class="text-xl font-black text-gray-900 dark:text-white mt-1">0</h2>
                     </div>
-                    <div class="glass-panel p-4 rounded-2xl border-b-2 border-amber-500/50 hidden md:block">
+                    <div class="glass-panel p-4 rounded-2xl border-b-2 border-amber-500/50 hidden md:block min-w-[120px]">
                         <p class="text-[9px] font-bold text-gray-500 uppercase tracking-widest">Payout Requests</p>
-                        <h2 id="payout-count" class="text-xl font-black text-amber-500 dark:text-amber-400 mt-1">0</h2>
+                        <h2 id="payout-count" class="text-xl font-black text-amber-600 dark:text-amber-400 mt-1">0</h2>
                     </div>
                 </div>
 
-                <button onclick="switchTheme()" class="w-12 h-12 bg-white dark:bg-gray-900 rounded-full flex items-center justify-center shadow-md dark:shadow-inner border border-gray-200 dark:border-gray-700 transition-colors">
+                <button onclick="switchTheme()" class="w-12 h-12 shrink-0 bg-white dark:bg-gray-900 rounded-full flex items-center justify-center shadow-md dark:shadow-inner border border-gray-200 dark:border-gray-700 transition-colors click-press">
                     <svg id="icon-sun" style="display:none;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-5 h-5 text-amber-500"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-2.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z" /></svg>
                     <svg id="icon-moon" style="display:none;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-5 h-5 text-blue-500 dark:text-blue-400"><path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998Z" /></svg>
                 </button>
             </div>
         </header>
 
-        <div class="flex gap-2 mb-6 overflow-hidden rounded-2xl p-1 bg-gray-200 dark:bg-white/5 border border-gray-300 dark:border-white/5 w-fit transition-colors">
-            <button onclick="switchTab('orders')" id="btn-orders" class="px-6 py-3 text-xs font-black uppercase tracking-widest transition-all rounded-xl tab-active">
-                🛒 Sales Flow
-            </button>
-            <button onclick="switchTab('payouts')" id="btn-payouts" class="px-6 py-3 text-xs font-black uppercase tracking-widest transition-all rounded-xl text-gray-500 hover:text-gray-900 dark:hover:text-white">
-                💰 Payouts
-            </button>
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6 bg-white dark:bg-slate-900/50 p-3 rounded-2xl border border-gray-200 dark:border-white/5 shadow-sm transition-colors">
+            <div class="flex gap-2 overflow-x-auto w-full md:w-auto pb-2 md:pb-0">
+                <button onclick="switchTab('orders')" id="btn-orders" class="px-6 py-3 text-xs font-black uppercase tracking-widest transition-all rounded-xl tab-active whitespace-nowrap">
+                    🛒 Sales Flow
+                </button>
+                <button onclick="switchTab('payouts')" id="btn-payouts" class="px-6 py-3 text-xs font-black uppercase tracking-widest transition-all rounded-xl text-gray-500 hover:text-gray-900 dark:hover:text-white whitespace-nowrap">
+                    💰 Payouts
+                </button>
+                <button onclick="switchTab('vendors')" id="btn-vendors" class="px-6 py-3 text-xs font-black uppercase tracking-widest transition-all rounded-xl text-gray-500 hover:text-gray-900 dark:hover:text-white whitespace-nowrap">
+                    👥 Vendors
+                </button>
+            </div>
+            
+            <div class="flex items-center gap-3 w-full md:w-auto">
+                <div class="relative w-full md:w-64">
+                    <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">🔍</span>
+                    <input type="text" id="global-search" onkeyup="handleSearch()" placeholder="Search..." class="w-full bg-gray-100 dark:bg-black/40 border border-gray-200 dark:border-white/10 rounded-xl pl-10 pr-4 py-2.5 text-sm font-bold outline-none focus:border-green-500 transition-colors dark:text-white placeholder-gray-400">
+                </div>
+                <button onclick="exportToCSV()" class="shrink-0 bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-500/20 px-4 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest hover:bg-blue-100 dark:hover:bg-blue-500/20 transition-all click-press flex items-center gap-2" title="Export current view to CSV">
+                    📥 <span class="hidden md:inline">Export</span>
+                </button>
+            </div>
         </div>
 
-        <div id="view-orders" class="stagger-item">
+        <div id="view-orders" class="view-section">
             <div class="glass-panel rounded-[2.5rem] overflow-hidden">
                 <div class="overflow-x-auto overflow-y-auto max-h-[60vh]">
                     <table class="w-full text-left border-collapse">
-                        <thead class="sticky top-0 bg-gray-100 dark:bg-[#0f172a] z-10 transition-colors">
+                        <thead class="sticky top-0 bg-gray-100 dark:bg-[#0f172a] z-10 transition-colors shadow-sm">
                             <tr class="border-b border-gray-200 dark:border-white/5">
                                 <th class="p-6 text-[10px] font-black uppercase tracking-widest text-gray-500">Order & Status</th>
                                 <th class="p-6 text-[10px] font-black uppercase tracking-widest text-gray-500">Customer Intelligence</th>
@@ -101,17 +118,75 @@
                                 <th class="p-6 text-[10px] font-black uppercase tracking-widest text-gray-500 text-center">Executive Action</th>
                             </tr>
                         </thead>
-                        <tbody id="admin-orders-feed" class="divide-y divide-gray-200 dark:divide-white/5">
+                        <tbody id="admin-orders-feed" class="divide-y divide-gray-200 dark:divide-white/5 transition-colors">
+                            <tr><td colspan="5" class="p-12 text-center text-gray-500 font-bold">Loading system data...</td></tr>
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
 
-        <div id="view-payouts" class="hidden stagger-item">
-            <div class="grid grid-cols-1 gap-4" id="payout-requests-feed">
+        <div id="view-payouts" class="hidden view-section">
+            
+            <div class="flex gap-2 mb-6">
+                <button onclick="togglePayoutView('PENDING')" id="btn-payout-pending" class="px-6 py-2 text-[10px] font-black uppercase tracking-widest rounded-lg border dark:border-white/10 sub-tab-active transition-all click-press shadow-sm">
+                    Action Required (<span id="count-pending">0</span>)
+                </button>
+                <button onclick="togglePayoutView('PAID')" id="btn-payout-paid" class="px-6 py-2 text-[10px] font-black uppercase tracking-widest rounded-lg border border-gray-200 dark:border-white/10 text-gray-500 hover:text-gray-900 dark:hover:text-white transition-all click-press">
+                    Settlement History (<span id="count-paid">0</span>)
+                </button>
+            </div>
+
+            <div id="payout-pending-container" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+
+            <div id="payout-paid-container" class="hidden glass-panel rounded-[2rem] overflow-hidden">
+                <div class="overflow-x-auto max-h-[60vh]">
+                    <table class="w-full text-left border-collapse">
+                        <thead class="sticky top-0 bg-gray-100 dark:bg-[#0f172a] z-10 shadow-sm transition-colors">
+                            <tr class="border-b border-gray-200 dark:border-white/5">
+                                <th class="p-5 text-[10px] font-black uppercase tracking-widest text-gray-500">Processed</th>
+                                <th class="p-5 text-[10px] font-black uppercase tracking-widest text-gray-500">Supplier</th>
+                                <th class="p-5 text-[10px] font-black uppercase tracking-widest text-gray-500">Amount Sent</th>
+                                <th class="p-5 text-[10px] font-black uppercase tracking-widest text-gray-500">Channel Details</th>
+                            </tr>
+                        </thead>
+                        <tbody id="payout-paid-feed" class="divide-y divide-gray-200 dark:divide-white/5 transition-colors"></tbody>
+                    </table>
+                </div>
             </div>
         </div>
+
+        <div id="view-vendors" class="hidden view-section">
+            <div class="flex flex-col md:flex-row gap-6">
+                
+                <div class="w-full md:w-1/3 glass-panel p-6 rounded-[2rem] h-fit">
+                    <h3 class="text-lg font-black text-gray-900 dark:text-white mb-1">Authorize Vendor</h3>
+                    <p class="text-[10px] text-gray-500 font-bold uppercase tracking-widest mb-6">Add an email to the whitelist</p>
+                    
+                    <input type="email" id="new-vendor-email" placeholder="supplier@email.com" class="w-full bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-white/10 rounded-xl px-4 py-3 text-sm font-bold outline-none focus:border-green-500 mb-4 dark:text-white transition-colors">
+                    
+                    <button onclick="addVendor()" class="w-full py-3 bg-gray-900 dark:bg-green-600 hover:bg-black dark:hover:bg-green-500 text-white rounded-xl text-xs font-black uppercase tracking-widest click-press shadow-lg transition-all flex justify-center items-center gap-2">
+                        ➕ Grant Access
+                    </button>
+                </div>
+
+                <div class="w-full md:w-2/3 glass-panel rounded-[2rem] overflow-hidden">
+                    <div class="overflow-x-auto max-h-[60vh]">
+                        <table class="w-full text-left border-collapse">
+                            <thead class="sticky top-0 bg-gray-100 dark:bg-[#0f172a] z-10 shadow-sm transition-colors">
+                                <tr class="border-b border-gray-200 dark:border-white/5">
+                                    <th class="p-5 text-[10px] font-black uppercase tracking-widest text-gray-500">Authorized Email</th>
+                                    <th class="p-5 text-[10px] font-black uppercase tracking-widest text-gray-500 text-center">System Status</th>
+                                    <th class="p-5 text-[10px] font-black uppercase tracking-widest text-gray-500 text-center">Access Control</th>
+                                </tr>
+                            </thead>
+                            <tbody id="admin-vendors-feed" class="divide-y divide-gray-200 dark:divide-white/5 transition-colors"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 
     <script>
@@ -136,8 +211,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
-        // 🟢 ADDED: serverTimestamp imported below
-        import { getFirestore, collection, query, onSnapshot, doc, updateDoc, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+        import { getFirestore, collection, query, onSnapshot, doc, updateDoc, serverTimestamp, setDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
         const firebaseConfig = { 
             apiKey: "AIzaSyCX2C1TXRb20nGtxEaYXGUo2KEH7gbZCY0", 
@@ -153,11 +227,14 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        const MASTER_ADMIN = "jem.mziray@gmail.com"; 
+        const MASTER_ADMINS = ["jem.mziray@gmail.com", "venancechesco58@gmail.com"]; 
+
+        // Global State for Instant Search & Export
+        window.appData = { orders: [], payouts: [], vendors: [], currentTab: 'orders', currentPayoutView: 'PENDING' };
 
         // SECURE AUTH CHECK
         onAuthStateChanged(auth, (user) => {
-            if (user && (user.email === MASTER_ADMIN || user.email === "venancechesco58@gmail.com")) {
+            if (user && MASTER_ADMINS.includes(user.email)) {
                 document.getElementById('admin-email-tag').textContent = user.email;
                 startDataSync();
             } else {
@@ -167,46 +244,102 @@
         });
 
         function startDataSync() {
-            // 🔄 SYNC CLIENT ORDERS
-            const ordersQ = query(collection(db, "orders"), orderBy("createdAt", "desc"));
-            onSnapshot(ordersQ, (snapshot) => {
-                let orders = [];
+            // 🟢 1. SYNC ORDERS
+            onSnapshot(collection(db, "orders"), (snapshot) => {
+                window.appData.orders = [];
                 let revenue = 0;
                 snapshot.forEach(doc => {
                     const data = doc.data();
-                    orders.push({id: doc.id, ...data});
+                    window.appData.orders.push({id: doc.id, ...data});
                     if(data.status === 'PAID' || data.status === 'SUCCESS') revenue += data.total;
                 });
+                
+                // SAFELY SORT DATES (Preventing Crash)
+                window.appData.orders.sort((a,b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
+
                 document.getElementById('total-revenue').textContent = `TZS ${revenue.toLocaleString()}`;
-                document.getElementById('order-count').textContent = orders.length;
-                renderOrders(orders);
+                document.getElementById('order-count').textContent = window.appData.orders.length;
+                if(window.appData.currentTab === 'orders') handleSearch();
             });
 
-            // 🔄 SYNC PAYOUT REQUESTS
-            const payoutQ = query(collection(db, "payouts"), orderBy("createdAt", "desc"));
-            onSnapshot(payoutQ, (snapshot) => {
-                let payouts = [];
-                snapshot.forEach(doc => payouts.push({id: doc.id, ...doc.data()}));
-                document.getElementById('payout-count').textContent = payouts.filter(p => p.status === "PENDING").length;
-                renderPayouts(payouts);
+            // 🟢 2. SYNC PAYOUTS
+            onSnapshot(collection(db, "payouts"), (snapshot) => {
+                window.appData.payouts = [];
+                snapshot.forEach(doc => window.appData.payouts.push({id: doc.id, ...doc.data()}));
+                
+                // SAFELY SORT DATES
+                window.appData.payouts.sort((a,b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
+                
+                const pendingCount = window.appData.payouts.filter(p => p.status === "PENDING").length;
+                const paidCount = window.appData.payouts.filter(p => p.status === "PAID").length;
+                
+                document.getElementById('payout-count').textContent = pendingCount;
+                document.getElementById('count-pending').textContent = pendingCount;
+                document.getElementById('count-paid').textContent = paidCount;
+                if(window.appData.currentTab === 'payouts') handleSearch();
+            });
+
+            // 🟢 3. SYNC VENDORS
+            onSnapshot(collection(db, "vendors"), (snapshot) => {
+                window.appData.vendors = [];
+                snapshot.forEach(doc => window.appData.vendors.push({id: doc.id, ...doc.data()}));
+                
+                // SAFELY SORT DATES
+                window.appData.vendors.sort((a,b) => (b.addedAt?.seconds || 0) - (a.addedAt?.seconds || 0));
+
+                if(window.appData.currentTab === 'vendors') handleSearch();
             });
         }
+
+        // ==========================================
+        // RENDER & FILTER FUNCTIONS
+        // ==========================================
+
+        window.handleSearch = () => {
+            const term = document.getElementById('global-search').value.toLowerCase();
+            
+            if (window.appData.currentTab === 'orders') {
+                // 🟢 SAFE SEARCH: Wrapped in String() to prevent numeric crashes
+                const filtered = window.appData.orders.filter(o => 
+                    String(o.orderId || '').toLowerCase().includes(term) || 
+                    String(o.userName || '').toLowerCase().includes(term) || 
+                    String(o.userEmail || '').toLowerCase().includes(term)
+                );
+                renderOrders(filtered);
+            } 
+            else if (window.appData.currentTab === 'payouts') {
+                const filtered = window.appData.payouts.filter(p => 
+                    String(p.supplierName || '').toLowerCase().includes(term) || 
+                    String(p.accountDetails || '').toLowerCase().includes(term)
+                );
+                renderPayouts(filtered);
+            }
+            else if (window.appData.currentTab === 'vendors') {
+                const filtered = window.appData.vendors.filter(v => 
+                    String(v.email || '').toLowerCase().includes(term)
+                );
+                renderVendors(filtered);
+            }
+        };
 
         function renderOrders(orders) {
             const feed = document.getElementById('admin-orders-feed');
             if(orders.length === 0) {
-                feed.innerHTML = `<tr><td colspan="5" class="p-12 text-center text-gray-500 font-bold">Zero system transactions.</td></tr>`;
+                feed.innerHTML = `<tr><td colspan="5" class="p-12 text-center text-gray-500 font-bold">No records found.</td></tr>`;
                 return;
             }
             feed.innerHTML = orders.map(o => {
                 const isPaid = o.status === 'PAID' || o.status === 'SUCCESS';
+                // 🟢 SAFE DATE RENDER
+                const safeDate = (o.createdAt && typeof o.createdAt.toDate === 'function') ? o.createdAt.toDate().toLocaleDateString() : (o.dateString || 'Just now');
+                
                 return `
                 <tr class="hover:bg-gray-50 dark:hover:bg-white/[0.02] transition-colors border-l-4 ${isPaid ? 'border-green-500' : 'border-amber-500'}">
                     <td class="p-6">
                         <p class="font-black text-gray-900 dark:text-white tracking-widest text-sm">${o.orderId || 'UNNAMED'}</p>
-                        <p class="text-[10px] text-gray-500 font-bold mt-1">${o.dateString || 'Recently'}</p>
+                        <p class="text-[10px] text-gray-500 font-bold mt-1">${safeDate}</p>
                         <div class="mt-3">
-                            <span class="${isPaid ? 'text-green-700 bg-green-100 dark:text-green-400 dark:bg-green-400/10' : 'text-amber-700 bg-amber-100 dark:text-amber-400 dark:bg-amber-400/10'} px-2 py-1 rounded text-[9px] font-black border border-white/5 uppercase">${o.status}</span>
+                            <span class="${isPaid ? 'text-green-700 bg-green-100 dark:text-green-400 dark:bg-green-400/10' : 'text-amber-700 bg-amber-100 dark:text-amber-400 dark:bg-amber-400/10'} px-2 py-1 rounded text-[9px] font-black border border-gray-200 dark:border-white/5 uppercase">${o.status}</span>
                         </div>
                     </td>
                     <td class="p-6">
@@ -221,7 +354,7 @@
                         <p class="text-[10px] text-gray-500 mt-1">Fee: TZS ${o.transport.toLocaleString()}</p>
                     </td>
                     <td class="p-6 text-center">
-                        <button onclick="updateStatus('orders', '${o.id}', '${isPaid ? 'PENDING' : 'PAID'}')" class="px-6 py-3 ${isPaid ? 'bg-gray-200 text-gray-500 dark:bg-white/5 dark:text-gray-400' : 'bg-green-600 text-white shadow-[0_0_20px_rgba(16,185,129,0.4)]'} rounded-xl text-[10px] font-black uppercase tracking-widest transition-all hover:scale-105 active:scale-95">
+                        <button onclick="updateStatus('orders', '${o.id}', '${isPaid ? 'PENDING' : 'PAID'}')" class="px-6 py-3 ${isPaid ? 'bg-gray-200 text-gray-500 dark:bg-white/5 dark:text-gray-400' : 'bg-green-600 text-white shadow-[0_0_20px_rgba(16,185,129,0.4)]'} rounded-xl text-[10px] font-black uppercase tracking-widest transition-all hover:scale-105 active:scale-95 click-press">
                             ${isPaid ? 'Undo' : 'Mark Final'}
                         </button>
                     </td>
@@ -230,60 +363,193 @@
         }
 
         function renderPayouts(payouts) {
-            const feed = document.getElementById('payout-requests-feed');
-            if(payouts.length === 0) {
-                feed.innerHTML = `<div class="p-20 text-center text-gray-500 font-bold glass-panel rounded-[2.5rem]">No payout requests in the queue.</div>`;
+            const pendingContainer = document.getElementById('payout-pending-container');
+            const paidContainer = document.getElementById('payout-paid-feed');
+            
+            const pending = payouts.filter(p => p.status === 'PENDING');
+            const paid = payouts.filter(p => p.status === 'PAID');
+
+            if(pending.length === 0) {
+                pendingContainer.innerHTML = `<div class="col-span-full p-20 text-center text-gray-500 font-bold glass-panel rounded-[2.5rem]">Inbox Zero! No pending requests. 🎉</div>`;
+            } else {
+                pendingContainer.innerHTML = pending.map(p => {
+                    // 🟢 SAFE DATE RENDER
+                    const reqDate = (p.createdAt && typeof p.createdAt.toDate === 'function') ? p.createdAt.toDate().toLocaleDateString() : 'Just now';
+                    return `
+                    <div class="glass-panel p-6 rounded-[2rem] flex flex-col justify-between border-l-4 border-amber-500 relative overflow-hidden">
+                        <div class="absolute top-0 right-0 w-24 h-24 bg-amber-500/10 rounded-full blur-[30px] pointer-events-none"></div>
+                        <div class="mb-4 relative z-10">
+                            <div class="flex justify-between items-start mb-2">
+                                <h4 class="text-lg font-black text-gray-900 dark:text-white">${p.supplierName}</h4>
+                                <span class="text-[9px] font-black px-2 py-1 bg-gray-100 dark:bg-white/5 rounded border border-gray-200 dark:border-white/5 uppercase text-gray-500 dark:text-gray-400 tracking-tighter">ID: ${p.supplierId.slice(0,6)}</span>
+                            </div>
+                            <p class="text-xs text-gray-500 font-bold uppercase tracking-widest mb-4">Request: <span class="text-amber-600 dark:text-amber-500 text-sm font-black">TZS ${p.amount.toLocaleString()}</span></p>
+                            <div class="bg-gray-50 dark:bg-black/40 p-4 rounded-2xl border border-gray-200 dark:border-white/5">
+                                <p class="text-[10px] text-gray-500 dark:text-gray-600 font-black uppercase mb-1">Send to Channel</p>
+                                <p class="text-sm font-mono text-blue-600 dark:text-blue-400 font-bold">${p.accountDetails}</p>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center relative z-10">
+                            <p class="text-[10px] text-gray-500 font-bold uppercase tracking-widest">${reqDate}</p>
+                            <button onclick="updateStatus('payouts', '${p.id}', 'PAID')" class="px-6 py-3 bg-amber-500 hover:bg-amber-400 text-black rounded-xl text-[10px] font-black uppercase tracking-widest shadow-lg shadow-amber-500/20 active:scale-95 transition-all click-press">Settle Now</button>
+                        </div>
+                    </div>`;
+                }).join('');
+            }
+
+            if(paid.length === 0) {
+                paidContainer.innerHTML = `<tr><td colspan="4" class="p-8 text-center text-gray-500 font-bold">No historical settlements.</td></tr>`;
+            } else {
+                paidContainer.innerHTML = paid.map(p => {
+                    // 🟢 SAFE DATE RENDER
+                    let procDate = 'N/A';
+                    if (p.processedAt && typeof p.processedAt.toDate === 'function') procDate = p.processedAt.toDate().toLocaleDateString();
+                    else if (p.createdAt && typeof p.createdAt.toDate === 'function') procDate = p.createdAt.toDate().toLocaleDateString();
+
+                    return `
+                    <tr class="hover:bg-gray-50 dark:hover:bg-white/[0.02] transition-colors border-l-4 border-transparent hover:border-green-500">
+                        <td class="p-5 text-[10px] font-bold text-gray-500 uppercase tracking-widest">${procDate}</td>
+                        <td class="p-5 font-black text-xs text-gray-900 dark:text-white">${p.supplierName}</td>
+                        <td class="p-5 font-black text-sm text-green-600 dark:text-green-500">TZS ${p.amount.toLocaleString()}</td>
+                        <td class="p-5 text-[10px] text-gray-500 italic max-w-[200px] truncate">${p.accountDetails}</td>
+                    </tr>`;
+                }).join('');
+            }
+        }
+
+        function renderVendors(vendors) {
+            const feed = document.getElementById('admin-vendors-feed');
+            if(vendors.length === 0) {
+                feed.innerHTML = `<tr><td colspan="3" class="p-8 text-center text-gray-500 font-bold">No registered vendors.</td></tr>`;
                 return;
             }
-            feed.innerHTML = payouts.map(p => {
-                const isPaid = p.status === 'PAID';
+            feed.innerHTML = vendors.map(v => {
+                const isActive = v.status === 'ACTIVE';
                 return `
-                <div class="glass-panel p-6 rounded-[2rem] flex flex-col md:flex-row justify-between items-center gap-6 border-l-4 ${isPaid ? 'border-green-500' : 'border-amber-500'}">
-                    <div class="flex-1">
-                        <div class="flex items-center gap-3 mb-2">
-                            <h4 class="text-lg font-black text-gray-900 dark:text-white">${p.supplierName}</h4>
-                            <span class="text-[9px] font-black px-2 py-1 bg-gray-100 dark:bg-white/5 rounded border border-gray-200 dark:border-white/5 uppercase text-gray-500 dark:text-gray-400 tracking-tighter">Supplier ID: ${p.supplierId.slice(0,8)}</span>
-                        </div>
-                        <p class="text-xs text-gray-500 font-bold uppercase tracking-widest mb-4">Request for TZS <span class="text-green-600 dark:text-green-500 text-sm font-black">${p.amount.toLocaleString()}</span></p>
-                        <div class="bg-gray-50 dark:bg-black/40 p-4 rounded-2xl border border-gray-200 dark:border-white/5">
-                            <p class="text-[10px] text-gray-500 dark:text-gray-600 font-black uppercase mb-1">Settlement Channel</p>
-                            <p class="text-sm font-mono text-blue-600 dark:text-blue-400">${p.accountDetails}</p>
-                        </div>
-                    </div>
-                    <div class="flex flex-col items-center gap-3">
-                        <p class="text-[10px] text-gray-500 font-bold uppercase tracking-widest">${p.createdAt?.toDate().toLocaleDateString() || 'Pending Date'}</p>
-                        ${isPaid ? 
-                            `<span class="px-8 py-4 bg-green-100 text-green-700 dark:bg-green-500/20 dark:text-green-500 rounded-2xl text-[10px] font-black uppercase tracking-widest border border-green-200 dark:border-green-500/20">✅ System Settled</span>` :
-                            `<button onclick="updateStatus('payouts', '${p.id}', 'PAID')" class="px-8 py-4 bg-amber-500 hover:bg-amber-400 text-black rounded-2xl text-[10px] font-black uppercase tracking-widest shadow-lg shadow-amber-500/20 active:scale-95 transition-all">Settle Payment</button>`
-                        }
-                    </div>
-                </div>`;
+                <tr class="hover:bg-gray-50 dark:hover:bg-white/[0.02] transition-colors">
+                    <td class="p-5 font-bold text-sm text-gray-800 dark:text-gray-200">${v.email}</td>
+                    <td class="p-5 text-center">
+                        <span class="${isActive ? 'bg-green-100 text-green-700 dark:bg-green-500/20 dark:text-green-500 border-green-200 dark:border-green-500/20' : 'bg-red-100 text-red-700 dark:bg-red-500/20 dark:text-red-500 border-red-200 dark:border-red-500/20'} px-3 py-1 rounded text-[9px] font-black uppercase tracking-widest border">
+                            ${v.status}
+                        </span>
+                    </td>
+                    <td class="p-5 text-center">
+                        <button onclick="toggleVendorStatus('${v.id}', '${isActive ? 'SUSPENDED' : 'ACTIVE'}')" class="px-4 py-2 rounded-lg text-[9px] font-black uppercase click-press transition-all border border-gray-200 dark:border-white/10 hover:bg-gray-100 dark:hover:bg-white/5 ${isActive ? 'text-red-500' : 'text-green-500'}">
+                            ${isActive ? 'Suspend' : 'Activate'}
+                        </button>
+                    </td>
+                </tr>`;
             }).join('');
         }
 
-        // TAB SWITCHER
+        // ==========================================
+        // INTERACTIVITY & ACTIONS
+        // ==========================================
+
         window.switchTab = (tab) => {
-            document.getElementById('view-orders').classList.toggle('hidden', tab !== 'orders');
-            document.getElementById('view-payouts').classList.toggle('hidden', tab !== 'payouts');
+            window.appData.currentTab = tab;
+            document.querySelectorAll('.view-section').forEach(el => el.classList.add('hidden'));
+            document.getElementById(`view-${tab}`).classList.remove('hidden');
             
-            document.getElementById('btn-orders').className = `px-6 py-3 text-xs font-black uppercase tracking-widest transition-all rounded-xl ${tab === 'orders' ? 'tab-active' : 'text-gray-500 dark:hover:text-white hover:text-gray-900'}`;
-            document.getElementById('btn-payouts').className = `px-6 py-3 text-xs font-black uppercase tracking-widest transition-all rounded-xl ${tab === 'payouts' ? 'tab-active' : 'text-gray-500 dark:hover:text-white hover:text-gray-900'}`;
+            ['orders', 'payouts', 'vendors'].forEach(t => {
+                const btn = document.getElementById(`btn-${t}`);
+                if(t === tab) {
+                    btn.classList.add('tab-active');
+                    btn.classList.remove('text-gray-500', 'dark:hover:text-white', 'hover:text-gray-900');
+                } else {
+                    btn.classList.remove('tab-active');
+                    btn.classList.add('text-gray-500', 'dark:hover:text-white', 'hover:text-gray-900');
+                }
+            });
+            
+            document.getElementById('global-search').value = ''; 
+            handleSearch();
         };
 
-        // SHARED UPDATE LOGIC
+        window.togglePayoutView = (view) => {
+            window.appData.currentPayoutView = view;
+            const btnPending = document.getElementById('btn-payout-pending');
+            const btnPaid = document.getElementById('btn-payout-paid');
+            const conPending = document.getElementById('payout-pending-container');
+            const conPaid = document.getElementById('payout-paid-container');
+
+            if(view === 'PENDING') {
+                btnPending.className = "px-6 py-2 text-[10px] font-black uppercase tracking-widest rounded-lg border dark:border-white/10 sub-tab-active transition-all click-press shadow-sm";
+                btnPaid.className = "px-6 py-2 text-[10px] font-black uppercase tracking-widest rounded-lg border border-gray-200 dark:border-white/10 text-gray-500 hover:text-gray-900 dark:hover:text-white transition-all click-press";
+                conPending.classList.remove('hidden'); 
+                conPaid.classList.add('hidden');
+            } else {
+                btnPaid.className = "px-6 py-2 text-[10px] font-black uppercase tracking-widest rounded-lg border dark:border-white/10 sub-tab-active transition-all click-press shadow-sm";
+                btnPending.className = "px-6 py-2 text-[10px] font-black uppercase tracking-widest rounded-lg border border-gray-200 dark:border-white/10 text-gray-500 hover:text-gray-900 dark:hover:text-white transition-all click-press";
+                conPaid.classList.remove('hidden'); 
+                conPending.classList.add('hidden');
+            }
+        };
+
         window.updateStatus = async (collectionName, docId, newStatus) => {
             const confirmMsg = collectionName === 'orders' ? "Update order status?" : "Confirm you have physically sent the money?";
             if(!confirm(confirmMsg)) return;
-
             try {
-                // 🟢 ADDED: serverTimestamp() to log the exact time you settled the payout
                 await updateDoc(doc(db, collectionName, docId), { status: newStatus, processedAt: serverTimestamp() });
                 console.log("Success: Ledger Updated.");
             } catch(e) {
-                console.error(e);
-                alert("Permission error. Check Firebase Rules.");
+                console.error(e); alert("Permission error. Check Firebase Rules.");
             }
         };
+
+        window.addVendor = async () => {
+            const input = document.getElementById('new-vendor-email');
+            const email = input.value.trim().toLowerCase();
+            if(!email || !email.includes('@')) return alert("Enter a valid email address.");
+            
+            const safeId = email.replace(/[^a-zA-Z0-9]/g, '');
+            try {
+                await setDoc(doc(db, "vendors", safeId), { email: email, status: 'ACTIVE', addedAt: serverTimestamp() });
+                input.value = ''; alert(`✅ ${email} successfully added to the vendor list.`);
+            } catch(e) { alert("Failed to authorize vendor."); }
+        };
+
+        window.toggleVendorStatus = async (id, newStatus) => {
+            if(!confirm(`Change vendor access to ${newStatus}?`)) return;
+            try { await updateDoc(doc(db, "vendors", id), { status: newStatus }); } 
+            catch(e) { alert("Error updating vendor."); }
+        };
+
+        window.exportToCSV = () => {
+            const tab = window.appData.currentTab;
+            let data = []; let headers = [];
+
+            if (tab === 'orders') {
+                headers = ["Order ID", "Date", "Customer Name", "Customer Email", "Total Value (TZS)", "Status"];
+                data = window.appData.orders.map(o => {
+                    // 🟢 SAFE DATE RENDER FOR EXPORT
+                    const d = (o.createdAt && typeof o.createdAt.toDate === 'function') ? o.createdAt.toDate().toLocaleDateString() : (o.dateString || 'N/A');
+                    return [o.orderId || 'N/A', d, o.userName || 'N/A', o.userEmail || 'N/A', o.total || 0, o.status];
+                });
+            } else if (tab === 'payouts') {
+                headers = ["Date Requested", "Date Processed", "Supplier", "Amount (TZS)", "Channel Details", "Status"];
+                data = window.appData.payouts.map(p => {
+                    // 🟢 SAFE DATE RENDER FOR EXPORT
+                    const reqD = (p.createdAt && typeof p.createdAt.toDate === 'function') ? p.createdAt.toDate().toLocaleDateString() : 'N/A';
+                    let procD = 'N/A';
+                    if (p.processedAt && typeof p.processedAt.toDate === 'function') procD = p.processedAt.toDate().toLocaleDateString();
+                    
+                    return [reqD, procD, p.supplierName || 'N/A', p.amount || 0, p.accountDetails || 'N/A', p.status];
+                });
+            } else if (tab === 'vendors') {
+                headers = ["Email", "Status"];
+                data = window.appData.vendors.map(v => [v.email, v.status]);
+            }
+
+            // 🟢 SAFE ARRAY MAPPING TO PREVENT COMMAS FROM BREAKING THE CSV
+            let csvContent = "data:text/csv;charset=utf-8," + headers.join(",") + "\n" + data.map(e => e.map(item => `"${item}"`).join(",")).join("\n");
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", `UjenziSmart_${tab}_Export.csv`);
+            document.body.appendChild(link); link.click(); document.body.removeChild(link);
+        };
+
     </script>
 </body>
 </html>
