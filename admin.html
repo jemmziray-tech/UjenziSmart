@@ -490,7 +490,7 @@
             document.querySelectorAll('.view-section').forEach(el => el.classList.add('hidden'));
             document.getElementById(`view-${tab}`).classList.remove('hidden');
             
-            ['orders', 'payouts', 'vendors'].forEach(t => {
+            ['orders', 'payouts', 'vendors', 'messages'].forEach(t => {
                 const btn = document.getElementById(`btn-${t}`);
                 if(t === tab) {
                     btn.classList.add('tab-active');
