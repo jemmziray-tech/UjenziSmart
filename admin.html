@@ -90,6 +90,7 @@
                 <button onclick="switchTab('orders')" id="btn-orders" class="px-6 py-3 text-xs font-black uppercase tracking-widest transition-all rounded-xl tab-active whitespace-nowrap">🛒 Sales Flow</button>
                 <button onclick="switchTab('payouts')" id="btn-payouts" class="px-6 py-3 text-xs font-black uppercase tracking-widest transition-all rounded-xl text-gray-500 hover:text-gray-900 dark:hover:text-white whitespace-nowrap">💰 Payouts</button>
                 <button onclick="switchTab('vendors')" id="btn-vendors" class="px-6 py-3 text-xs font-black uppercase tracking-widest transition-all rounded-xl text-gray-500 hover:text-gray-900 dark:hover:text-white whitespace-nowrap">👥 Vendors</button>
+                <button onclick="switchTab('messages')" id="btn-messages" class="px-6 py-3 text-xs font-black uppercase tracking-widest transition-all rounded-xl text-gray-500 hover:text-gray-900 dark:hover:text-white whitespace-nowrap">💬 Messages</button>
             </div>
             
             <div class="flex items-center gap-3 w-full md:w-auto">
@@ -180,7 +181,42 @@
                 </div>
             </div>
         </div>
+        
+<div id="view-messages" class="hidden view-section stagger-item h-[65vh]">
+            <div class="glass-panel rounded-[2rem] flex h-full overflow-hidden border border-gray-200 dark:border-white/10">
+                
+                <div class="w-1/3 border-r border-gray-200 dark:border-white/10 flex flex-col bg-white/50 dark:bg-black/20">
+                    <div class="p-5 border-b border-gray-200 dark:border-white/10">
+                        <h3 class="font-black text-gray-900 dark:text-white">Active Chats</h3>
+                    </div>
+                    <div id="admin-chat-list" class="flex-grow overflow-y-auto p-2 space-y-1">
+                        <div class="p-4 text-center text-xs font-bold text-gray-500">Loading messages...</div>
+                    </div>
+                </div>
 
+                <div class="w-2/3 flex flex-col bg-gray-50/50 dark:bg-black/40 relative">
+                    <div id="chat-placeholder" class="absolute inset-0 flex flex-col items-center justify-center text-gray-400">
+                        <span class="text-6xl mb-4 opacity-50">🎧</span>
+                        <p class="font-bold text-sm uppercase tracking-widest">Select a conversation</p>
+                    </div>
+
+                    <div id="active-chat-header" class="p-5 border-b border-gray-200 dark:border-white/10 flex justify-between items-center hidden bg-white/80 dark:bg-slate-900/80 backdrop-blur-md z-10">
+                        <div>
+                            <h3 id="chat-user-name" class="font-black text-gray-900 dark:text-white">Customer Name</h3>
+                            <p class="text-[10px] text-green-500 font-bold uppercase tracking-widest">Online</p>
+                        </div>
+                    </div>
+                    
+                    <div id="chat-messages-area" class="flex-grow overflow-y-auto p-6 flex flex-col gap-4 hidden">
+                        </div>
+                    
+                    <div id="chat-input-area" class="p-4 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-t border-gray-200 dark:border-white/10 flex gap-2 hidden z-10">
+                        <input type="text" id="admin-chat-input" onkeypress="if(event.key === 'Enter') sendAdminMessage()" class="flex-grow bg-gray-100 dark:bg-black/50 rounded-xl px-5 py-3 text-sm font-bold outline-none border border-transparent focus:border-green-500 dark:text-white transition-colors" placeholder="Type a reply...">
+                        <button onclick="sendAdminMessage()" class="px-6 py-3 bg-green-600 hover:bg-green-500 text-white rounded-xl font-black uppercase tracking-widest text-[10px] click-press transition-colors shadow-lg shadow-green-500/20">Send</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script>
