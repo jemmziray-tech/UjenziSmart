@@ -581,6 +581,89 @@
             document.body.appendChild(link); link.click(); document.body.removeChild(link);
         };
 
+        // --- 💬 ADMIN CHAT LOGIC ---
+        window.appData.activeChatId = null;
+        let activeChatListener = null;
+
+        // 1. Listen for all conversations in the sidebar
+        onAuthStateChanged(auth, (user) => {
+            if (user && MASTER_ADMINS.includes(user.email)) {
+                onSnapshot(query(collection(db, "chats"), orderBy("updatedAt", "desc")), (snapshot) => {
+                    const chatList = document.getElementById('admin-chat-list');
+                    if (!chatList) return;
+                    
+                    if(snapshot.empty) {
+                        chatList.innerHTML = `<div class="p-4 text-center text-xs font-bold text-gray-500">No active chats.</div>`;
+                        return;
+                    }
+                    
+                    chatList.innerHTML = '';
+                    snapshot.forEach(docSnap => {
+                        const chat = docSnap.data();
+                        const isSelected = window.appData.activeChatId === docSnap.id;
+                        
+                        chatList.innerHTML += `
+                        <div onclick="openAdminChat('${docSnap.id}', '${chat.customerName}')" class="p-4 rounded-xl cursor-pointer transition-colors click-press border-l-4 ${isSelected ? 'bg-white dark:bg-white/5 border-green-500 shadow-sm' : 'border-transparent hover:bg-gray-100 dark:hover:bg-white/5'}">
+                            <h4 class="font-bold text-sm text-gray-900 dark:text-white">${chat.customerName || 'Customer'}</h4>
+                            <p class="text-xs text-gray-500 truncate mt-1">${chat.lastMessage || 'New conversation started...'}</p>
+                        </div>`;
+                    });
+                });
+            }
+        });
+
+        // 2. Open a specific chat and load messages
+        window.openAdminChat = (chatId, customerName) => {
+            window.appData.activeChatId = chatId;
+            document.getElementById('chat-placeholder').classList.add('hidden');
+            document.getElementById('active-chat-header').classList.remove('hidden');
+            document.getElementById('chat-messages-area').classList.remove('hidden');
+            document.getElementById('chat-input-area').classList.remove('hidden');
+            
+            document.getElementById('chat-user-name').textContent = customerName;
+            const messagesArea = document.getElementById('chat-messages-area');
+            
+            if(activeChatListener) activeChatListener(); // Stop listening to old chat
+            
+            // Listen to specific chat messages in real-time
+            activeChatListener = onSnapshot(query(collection(db, `chats/${chatId}/messages`), orderBy("timestamp", "asc")), (snapshot) => {
+                messagesArea.innerHTML = '';
+                snapshot.forEach(msgDoc => {
+                    const msg = msgDoc.data();
+                    const isAdmin = msg.senderId === 'admin';
+                    
+                    messagesArea.innerHTML += `
+                    <div class="max-w-[75%] p-3 rounded-2xl text-sm ${isAdmin ? 'bg-green-600 text-white self-end rounded-tr-none shadow-md' : 'bg-white dark:bg-gray-800 text-gray-900 dark:text-white self-start rounded-tl-none shadow-sm border border-gray-200 dark:border-white/5'}">
+                        ${msg.text}
+                    </div>`;
+                });
+                messagesArea.scrollTop = messagesArea.scrollHeight; // Auto-scroll to bottom
+            });
+        };
+
+        // 3. Send a message back to the customer
+        window.sendAdminMessage = async () => {
+            const input = document.getElementById('admin-chat-input');
+            const text = input.value.trim();
+            const chatId = window.appData.activeChatId;
+            
+            if(!text || !chatId) return;
+            input.value = ''; // clear instantly for good UX
+            
+            // Add to subcollection
+            await addDoc(collection(db, `chats/${chatId}/messages`), {
+                senderId: 'admin',
+                text: text,
+                timestamp: serverTimestamp()
+            });
+            
+            // Update parent document for the sidebar
+            await updateDoc(doc(db, "chats", chatId), {
+                lastMessage: text,
+                updatedAt: serverTimestamp()
+            });
+        };
+
     </script>
 </body>
 </html>
