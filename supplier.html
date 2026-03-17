@@ -99,7 +99,7 @@
             </div>
         </div>
 
-        <div class="bg-white dark:bg-gray-800 p-6 rounded-[2.5rem] shadow-sm border border-gray-100 dark:border-gray-700 mb-8 stagger-item transition-colors">
+        :bg-gray-800 p-6 rounded-[2.5rem] shadow-sm border border-gray-100 dark:border-gray-700 mb-8 stagger-item transition-colors">
             <h3 class="text-[10px] font-black mb-4 uppercase tracking-widest text-gray-400 flex items-center gap-2">
                 <span class="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span> Payout History & Status
             </h3>
@@ -188,6 +188,27 @@
                     ☁️ Publish to Live Store
                 </button>
             </form>
+        </div>
+
+    <div class="bg-white dark:bg-gray-800 p-8 rounded-[2rem] shadow-sm border border-gray-100 dark:border-gray-700 mb-8 stagger-item transition-colors" style="animation-delay: 0.25s;">
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-lg font-black flex items-center gap-2 text-gray-900 dark:text-white"><span class="text-blue-500">💬</span> Dispatch HQ</h2>
+                <span class="text-[9px] font-bold uppercase tracking-widest text-blue-500 bg-blue-50 dark:bg-blue-900/30 px-2 py-1 rounded">Talk to Admin</span>
+            </div>
+            
+            <div class="h-[300px] border border-gray-100 dark:border-gray-700 rounded-2xl flex flex-col bg-gray-50 dark:bg-gray-900/50 overflow-hidden relative">
+                <div id="supplier-chat-area" class="flex-grow overflow-y-auto p-4 flex flex-col gap-3">
+                    <div class="text-center text-[10px] text-gray-400 font-bold uppercase tracking-widest my-2">Secure Admin Channel</div>
+                    <div class="max-w-[85%] p-3 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 text-xs rounded-xl rounded-tl-none shadow-sm border border-gray-100 dark:border-gray-700 self-start font-medium leading-relaxed">
+                        Welcome to Dispatch HQ. Use this channel to confirm inventory or report that an order is out for delivery.
+                    </div>
+                </div>
+
+                <div class="p-3 bg-white dark:bg-gray-800 border-t border-gray-100 dark:border-gray-700 flex gap-2 shrink-0">
+                    <input type="text" id="supplier-chat-input" onkeypress="if(event.key === 'Enter') sendSupplierMessage()" class="flex-grow bg-gray-100 dark:bg-gray-900 rounded-lg px-4 py-2.5 text-xs font-bold outline-none border border-transparent focus:border-blue-500 dark:text-white transition-colors" placeholder="Message Admin...">
+                    <button onclick="sendSupplierMessage()" class="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-black text-[10px] uppercase tracking-widest click-press shadow-md transition-colors">Send</button>
+                </div>
+            </div>
         </div>
 
         <div class="bg-white dark:bg-gray-800 p-8 rounded-[2rem] shadow-sm border border-gray-100 dark:border-gray-700 stagger-item transition-colors" style="animation-delay: 0.3s;">
@@ -369,7 +390,8 @@
                 dashboardScreen.classList.remove('hidden');
                 updateHeaderUI(user);
                 listenToInventory(user.uid);
-                listenToPayouts(user.uid); // 🟢 NEW: Trigger the payout listener on login
+                listenToPayouts(user.uid);  // 🟢 NEW: Trigger the payout listener on login
+                window.initSupplierChat(); // 🟢 NEW: Start the chat listener!
             } else {
                 loginScreen.classList.remove('hidden');
                 dashboardScreen.classList.add('hidden');
@@ -657,7 +679,7 @@
 
                 querySnapshot.forEach((doc) => {
                     const order = doc.data();
-                    if (order.status === "SUCCESS" || order.status === "PAID") {
+                    if (order.status === "PROCESSING" || order.status === "SOLVED") {
                         let orderTotalForSupplier = 0;
                         
                         supplierProducts.forEach(p => {
@@ -779,6 +801,69 @@
                 try { await deleteDoc(doc(db, "products", docId)); } 
                 catch(e) { alert("Failed to delete."); }
             }
+        };
+        // --- 💬 SUPPLIER CHAT LOGIC ---
+        let supplierChatListener = null;
+
+        window.initSupplierChat = async function() {
+            const user = auth.currentUser;
+            if(!user) return; 
+            
+            const chatId = `supplier_chat_${user.uid}`;
+            const chatArea = document.getElementById('supplier-chat-area');
+            
+            // 1. Create the master chat document
+            await setDoc(doc(db, "chats", chatId), {
+                participants: [user.uid, 'admin'],
+                customerName: `Supplier: ${user.displayName || user.email}`,
+                isSupplier: true, // Flag it so admin knows it's a vendor
+                updatedAt: serverTimestamp()
+            }, { merge: true });
+
+            if(supplierChatListener) supplierChatListener();
+            
+            // 2. Listen to messages
+            supplierChatListener = onSnapshot(query(collection(db, `chats/${chatId}/messages`), orderBy("timestamp", "asc")), (snapshot) => {
+                chatArea.innerHTML = `
+                    <div class="text-center text-[10px] text-gray-400 font-bold uppercase tracking-widest my-2">Secure Admin Channel</div>
+                    <div class="max-w-[85%] p-3 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 text-xs rounded-xl rounded-tl-none shadow-sm border border-gray-100 dark:border-gray-700 self-start font-medium leading-relaxed">
+                        Welcome to Dispatch HQ. Use this channel to confirm inventory or report that an order is out for delivery.
+                    </div>`;
+                    
+                snapshot.forEach(msgDoc => {
+                    const msg = msgDoc.data();
+                    const isMe = msg.senderId === user.uid;
+                    
+                    chatArea.innerHTML += `
+                    <div class="max-w-[85%] p-3 rounded-xl text-xs font-medium ${isMe ? 'bg-blue-600 text-white self-end rounded-tr-none shadow-md' : 'bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 self-start rounded-tl-none shadow-sm border border-gray-100 dark:border-gray-700'}">
+                        ${msg.text}
+                    </div>`;
+                });
+                chatArea.scrollTop = chatArea.scrollHeight;
+            });
+        };
+
+        window.sendSupplierMessage = async () => {
+            const user = auth.currentUser;
+            if(!user) return;
+            
+            const input = document.getElementById('supplier-chat-input');
+            const text = input.value.trim();
+            if(!text) return;
+            
+            input.value = '';
+            const chatId = `supplier_chat_${user.uid}`;
+            
+            await addDoc(collection(db, `chats/${chatId}/messages`), {
+                senderId: user.uid,
+                text: text,
+                timestamp: serverTimestamp()
+            });
+            
+            await updateDoc(doc(db, "chats", chatId), {
+                lastMessage: text,
+                updatedAt: serverTimestamp()
+            });
         };
     </script>
 </body>
