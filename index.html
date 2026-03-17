@@ -1648,11 +1648,7 @@
         window.updateFirebaseName = async function(newName) {
             if(auth.currentUser) { try { await updateProfile(auth.currentUser, { displayName: newName }); } catch (error) {} }
         };
-window.updateFirebaseName = async function(newName) {
-            if(auth.currentUser) { try { await updateProfile(auth.currentUser, { displayName: newName }); } catch (error) {} }
-        };
 
-        // 🟢 PASTE THE NEW NATIVE CUSTOMER CHAT LOGIC HERE 🟢
         // --- 💬 NATIVE CUSTOMER CHAT LOGIC ---
         let customerChatListener = null;
 
@@ -1719,9 +1715,6 @@ window.updateFirebaseName = async function(newName) {
             });
         };
 
-        let messaging = null;
-        try { messaging = getMessaging(app); onMessage(messaging, (payload) => { alert(`📢 UjenziSmart News: ${payload.notification.title}\n${payload.notification.body}`); }); } catch (e) {}
-        
         let messaging = null;
         try { messaging = getMessaging(app); onMessage(messaging, (payload) => { alert(`📢 UjenziSmart News: ${payload.notification.title}\n${payload.notification.body}`); }); } catch (e) {}
 
