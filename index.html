@@ -1243,8 +1243,22 @@
             }).join('');
         }
 
-        function clearHistory() {
-            alert("For financial security, official cloud receipts cannot be deleted. Please contact Support to cancel an order.");
+        // 🟢 SOFT DELETE: Hides from user, keeps visible for Admin
+        window.clearHistory = async function() {
+            if(!confirm("Are you sure you want to clear your transaction history?")) return;
+            
+            const historyToHide = window.appHistory;
+            if(historyToHide.length === 0) return alert("Your history is already empty.");
+
+            try {
+                // Loop through all orders and mark them as hidden
+                for (const order of historyToHide) {
+                    await updateDoc(doc(db, "orders", order.id), { hiddenFromCustomer: true });
+                }
+                alert("✅ Transaction history cleared from your device.");
+            } catch (error) {
+                alert("Failed to clear history. Please check your connection.");
+            }
         }
 
         function shareStatement() {
@@ -1505,8 +1519,11 @@
                     let history = []; let approvedSpend = 0;
                     snapshot.forEach((doc) => {
                         const data = doc.data();
-                        history.push({ id: doc.id, ...data });
-                        if(data.status === 'PAID' || data.status === 'SUCCESS') approvedSpend += data.total;
+                        // 🟢 SECURITY: Only show if the user hasn't deleted it
+                        if (!data.hiddenFromCustomer) {
+                            history.push({ id: doc.id, ...data });
+                            if(data.status === 'PAID' || data.status === 'SUCCESS') approvedSpend += data.total;
+                        }
                     });
                     history.sort((a, b) => {
                         const timeA = a.createdAt ? a.createdAt.toMillis() : 0;
