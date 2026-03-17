@@ -1053,7 +1053,7 @@
             }
         }
 
-        // 🌟 FIXED: SMART PAYMENT SIMULATOR FOR CARD & QR 🌟
+        // 🌟 OFFICIAL SECURE PAYMENT FUNCTION (REAL GATEWAY) 🌟
         window.processCheckout = async function() {
             const payMethod = document.getElementById("selected-payment-method").value;
             const phoneInput = document.getElementById("phone-number").value.trim(); 
@@ -1073,14 +1073,13 @@
                 itemsString += `${item.title} (x${item.qty}), `;
             });
             
-            // Safety check for transportCost
             const currentTransport = typeof transportCost !== 'undefined' ? transportCost : 0;
             const totalAmount = subtotal + currentTransport; 
 
-            // Generate a unique Order ID for this transaction
+            // Generate a unique Order ID
             const orderId = "ORD-" + Math.floor(Math.random() * 1000000); 
 
-            // Build the receipt
+            // 1. Build the receipt - IT MUST START AS PENDING
             const receipt = {
                 orderId: orderId,
                 dateString: new Date().toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' }),
@@ -1089,55 +1088,62 @@
                 transport: currentTransport,
                 total: totalAmount,
                 type: payMethod === 'mobile' ? 'Mobile Money' : (payMethod === 'card' ? 'Bank Card' : 'TIPS QR'),
-                status: 'SUCCESS' // Set to SUCCESS instantly so it shows in history
+                status: 'PENDING' // <-- SECURITY: Starts as pending!
             };
 
-            // Sync to Firebase immediately
+            // 2. Sync to Firebase immediately so the Webhook has a document to update
             if(window.submitCloudOrder) {
                 window.submitCloudOrder(receipt, orderId);
             }
 
             const btn = document.getElementById("pay-btn");
+            btn.innerText = "⏳ Connecting to Secure Gateway...";
             btn.disabled = true;
 
-            // 🟢 SIMULATE THE SECURE PAYMENT FLOW
-            if (payMethod === 'card' || payMethod === 'tips') {
-                btn.innerText = "🔄 Redirecting to Secure Bank Portal...";
-                btn.classList.replace("bg-green-600", "bg-blue-600");
+            try {
+                // 3. 🔗 YOUR REAL SNIPPE FIREBASE LINK
+                const functionUrl = "https://europe-west1-ujenzismart-878af.cloudfunctions.net/createSnippePayment";
                 
-                // Simulate Bank Processing Time
-                setTimeout(() => {
-                    btn.innerText = "✅ Payment Approved by Bank!";
-                    btn.classList.replace("bg-blue-600", "bg-gray-900");
-                    
-                    setTimeout(() => {
-                        cart = [];
-                        updateBadge();
-                        navigateTo('history', false, true); 
-                        btn.innerHTML = '⚡ Continue to Secure Gateway';
-                        btn.disabled = false;
-                        btn.classList.replace("bg-gray-900", "bg-green-600");
-                    }, 2000);
-                }, 2500);
+                const response = await fetch(functionUrl, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        amount: totalAmount,
+                        phoneNumber: phoneInput,
+                        orderId: orderId,
+                        paymentType: payMethod 
+                    })
+                });
 
-            } else {
-                // Mobile Money Simulation
-                btn.innerText = "📱 Check phone for PIN prompt!";
-                btn.classList.replace("bg-green-600", "bg-blue-600");
-                
-                setTimeout(() => {
-                    btn.innerText = "✅ M-Pesa/Tigo Pesa Confirmed!";
-                    btn.classList.replace("bg-blue-600", "bg-gray-900");
-                    
-                    setTimeout(() => {
-                        cart = [];
-                        updateBadge();
-                        navigateTo('history', false, true); 
-                        btn.innerHTML = '📱 Send Prompt to Phone';
-                        btn.disabled = false;
-                        btn.classList.replace("bg-gray-900", "bg-green-600");
-                    }, 2000);
-                }, 3500);
+                const data = await response.json();
+
+                if (response.ok && data.success) {
+                    if (data.checkoutUrl) {
+                        // 💳 CARD / QR FLOW: Snippe returned a Hosted Page. REDIRECT THE USER.
+                        btn.innerText = "🔄 Redirecting to Bank...";
+                        window.location.href = data.checkoutUrl; 
+                    } else {
+                        // 📱 MOBILE FLOW: Snippe sent a direct USSD push to their phone.
+                        btn.innerText = "📱 Check phone for PIN prompt!";
+                        btn.classList.replace("bg-green-600", "bg-blue-600");
+                        
+                        // 4. REAL-TIME SECURITY LISTENER
+                        // We wait for the backend to update Firebase. We do NOT trust the frontend.
+                        if (window.listenForSnippeWebhook) {
+                            window.listenForSnippeWebhook(orderId, btn, payMethod);
+                        }
+                    }
+                } else {
+                    alert("Checkout Error: " + (data.error || "Unknown error occurred."));
+                    btn.innerHTML = payMethod === 'mobile' ? '📱 Send Prompt to Phone' : '⚡ Continue to Secure Gateway';
+                    btn.disabled = false;
+                }
+
+            } catch (error) {
+                console.error("Network Error:", error);
+                alert("Could not reach the payment server. Please check your internet connection.");
+                btn.innerHTML = payMethod === 'mobile' ? '📱 Send Prompt to Phone' : '⚡ Continue to Secure Gateway';
+                btn.disabled = false;
             }
         }
 
