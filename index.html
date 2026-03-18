@@ -439,10 +439,18 @@
                 </div>
             </div>
 
-            <h3 class="font-black text-lg mb-4 px-2">Transaction Feed</h3>
-            <div id="receipt-feed" class="flex flex-col gap-4 mb-6">
-                </div>
-            <button onclick="clearHistory()" class="w-full py-4 text-xs font-bold text-red-500 bg-red-50 dark:bg-red-900/20 rounded-[2rem] click-press mb-4">Clear Transaction History</button>
+            <div id="active-tracking-area" class="mb-8 hidden">
+                <h3 class="font-black text-lg mb-4 px-2 flex items-center gap-2">
+                    <span class="relative flex h-3 w-3"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span><span class="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span></span>
+                    Live Deliveries
+                </h3>
+                <div id="tracking-feed" class="flex flex-col gap-4"></div>
+            </div>
+
+            <h3 class="font-black text-lg mb-4 px-2">Past Receipts</h3>
+            <div id="receipt-feed" class="flex flex-col gap-4 mb-6"></div>
+            
+            <button onclick="clearHistory()" class="w-full py-4 text-xs font-bold text-red-500 bg-red-50 dark:bg-red-900/20 rounded-[2rem] click-press mb-4 transition-colors hover:bg-red-100">Clear Transaction History</button>
         </div>
 
         <div id="view-cs" class="view-content hidden mt-4 h-[75vh]">
@@ -1247,7 +1255,7 @@
 
             let totalMat = 0; let totalTrans = 0;
             history.forEach(r => { 
-                if(r.status === 'PAID' || r.status === 'SUCCESS') {
+                if(r.status === 'PAID' || r.status === 'SUCCESS' || r.status === 'SOLVED' || r.status === 'PROCESSING') {
                     totalMat += r.subtotal; totalTrans += r.transport; 
                 }
             });
@@ -1263,33 +1271,118 @@
                 document.getElementById('bar-transport').style.width = `${transPct}%`;
             }, 100);
 
-            const feed = document.getElementById('receipt-feed');
+            const activeArea = document.getElementById('active-tracking-area');
+            const trackFeed = document.getElementById('tracking-feed');
+            const receiptFeed = document.getElementById('receipt-feed');
+
             if(history.length === 0) {
-                feed.innerHTML = `<div class="bg-gray-50 dark:bg-gray-800 p-6 rounded-3xl border dark:border-gray-700 text-center"><p class="text-3xl mb-2 opacity-50">🧾</p><p class="text-xs text-gray-400 font-bold">No secure transactions found.</p></div>`;
+                activeArea.classList.add('hidden');
+                receiptFeed.innerHTML = `<div class="bg-gray-50 dark:bg-gray-800 p-6 rounded-3xl border dark:border-gray-700 text-center"><p class="text-3xl mb-2 opacity-50">🧾</p><p class="text-xs text-gray-400 font-bold">No secure transactions found.</p></div>`;
                 return;
             }
 
-            feed.innerHTML = history.map((r, i) => {
-                const isPaid = r.status === 'PAID' || r.status === 'SUCCESS';
-                const badgeColor = isPaid ? 'bg-green-50 text-green-600 dark:bg-green-900/30 dark:text-green-400' : 'bg-amber-50 text-amber-600 dark:bg-amber-900/30 dark:text-amber-400';
-                const moneyColor = isPaid ? 'text-red-500 font-black' : 'text-gray-400 dark:text-gray-500 font-bold line-through';
-                
-                return `
-                <div class="bg-white dark:bg-gray-800 p-5 rounded-[2rem] shadow-sm border dark:border-gray-700 stagger-item" style="animation-delay: ${i*0.05}s">
-                    <div class="flex justify-between items-start mb-3 border-b dark:border-gray-700 pb-3">
-                        <div>
-                            <p class="text-[9px] text-gray-400 font-black uppercase tracking-widest">${r.dateString}</p>
-                            <p class="text-xs font-bold text-gray-800 dark:text-gray-100 mt-0.5">Order ${r.orderId}</p>
+            let activeHtml = '';
+            let pastHtml = '';
+
+            history.forEach((r, i) => {
+                const status = (r.status || 'PENDING').toUpperCase();
+                // If it is Solved, Delivered, Cancelled, or Failed, it goes to Past Receipts
+                const isCompleted = status === 'SOLVED' || status === 'DELIVERED' || status === 'CANCELLED' || status === 'FAILED';
+
+                if (!isCompleted && status !== 'PENDING') {
+                    // 🟢 THIS IS AN ACTIVE DELIVERY! Draw the Pipeline.
+                    let step = 1; // Default: Paid
+                    let progressW = '15%';
+                    
+                    if(status === 'PREPARING' || status === 'PROCESSING') { step = 2; progressW = '50%'; }
+                    if(status === 'EN_ROUTE' || status === 'DISPATCHED') { step = 3; progressW = '85%'; }
+
+                    const step1C = step >= 1 ? 'bg-green-500 text-white' : 'bg-gray-200 dark:bg-gray-700 text-gray-400';
+                    const step2C = step >= 2 ? 'bg-green-500 text-white' : 'bg-gray-200 dark:bg-gray-700 text-gray-400';
+                    const step3C = step >= 3 ? 'bg-green-500 text-white' : 'bg-gray-200 dark:bg-gray-700 text-gray-400';
+                    
+                    const p1 = step >= 1 ? 'text-green-600 dark:text-green-400' : 'text-gray-400';
+                    const p2 = step >= 2 ? 'text-green-600 dark:text-green-400' : 'text-gray-400';
+                    const p3 = step >= 3 ? 'text-green-600 dark:text-green-400' : 'text-gray-400';
+
+                    const ring1 = step === 1 ? 'ring-4 ring-green-100 dark:ring-green-900 animate-pulse' : 'ring-4 ring-white dark:ring-gray-800';
+                    const ring2 = step === 2 ? 'ring-4 ring-green-100 dark:ring-green-900 animate-pulse' : 'ring-4 ring-white dark:ring-gray-800';
+                    const ring3 = step === 3 ? 'ring-4 ring-green-100 dark:ring-green-900 animate-pulse' : 'ring-4 ring-white dark:ring-gray-800';
+
+                    activeHtml += `
+                    <div class="bg-white dark:bg-gray-800 p-5 rounded-[2rem] shadow-lg border-2 border-green-500/50 mb-2 relative overflow-hidden stagger-item">
+                        <div class="absolute top-0 right-0 p-4 opacity-5 dark:opacity-10 text-6xl pointer-events-none">🚚</div>
+                        <div class="relative z-10">
+                            <div class="flex justify-between items-start mb-2">
+                                <div>
+                                    <h4 class="font-black text-lg text-gray-900 dark:text-white">Order ${r.orderId}</h4>
+                                    <p class="text-[10px] text-gray-500 font-bold uppercase tracking-widest">Est. Arrival: Today</p>
+                                </div>
+                                <span class="bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-400 text-[9px] font-black px-2 py-1 rounded-md uppercase tracking-widest">${status}</span>
+                            </div>
+                            <p class="text-xs text-gray-600 dark:text-gray-300 font-medium truncate max-w-[80%] mb-6">${r.items}</p>
+
+                            <div class="relative flex justify-between items-center mb-2 px-1">
+                                <div class="absolute left-0 top-1/2 w-full h-1 bg-gray-100 dark:bg-gray-700 -z-10 -translate-y-1/2 rounded-full"></div>
+                                <div class="absolute left-0 top-1/2 h-1 bg-green-500 -z-10 -translate-y-1/2 transition-all duration-1000 rounded-full" style="width: ${progressW}"></div>
+
+                                <div class="w-6 h-6 rounded-full ${step1C} flex items-center justify-center text-[10px] font-black shadow-sm ${ring1}">✓</div>
+                                <div class="w-6 h-6 rounded-full ${step2C} flex items-center justify-center text-[10px] font-black shadow-sm ${ring2}">${step > 2 ? '✓' : '2'}</div>
+                                <div class="w-6 h-6 rounded-full ${step3C} flex items-center justify-center text-[10px] font-black shadow-sm ${ring3}">${step > 3 ? '✓' : '3'}</div>
+                                <div class="w-6 h-6 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-400 flex items-center justify-center text-[10px] font-black shadow-sm ring-4 ring-white dark:ring-gray-800">4</div>
+                            </div>
+                            <div class="flex justify-between text-[8px] font-black uppercase tracking-widest px-1">
+                                <span class="${p1}">Paid</span>
+                                <span class="${p2} text-center">Loading</span>
+                                <span class="${p3} text-center">Transit</span>
+                                <span class="text-gray-400 text-right">Arrived</span>
+                            </div>
+                            
+                            ${step === 3 ? `
+                            <div class="mt-6 bg-blue-50 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-800 p-3 rounded-2xl flex items-center justify-between">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 bg-white dark:bg-gray-800 rounded-full flex items-center justify-center text-lg shadow-sm">👨🏾‍✈️</div>
+                                    <div><p class="text-[9px] font-black text-blue-800 dark:text-blue-300 uppercase tracking-widest">Driver Assigned</p><p class="text-xs font-bold text-gray-900 dark:text-white">Call: 0754 *** ***</p></div>
+                                </div>
+                                <button class="w-10 h-10 bg-blue-600 hover:bg-blue-500 text-white rounded-full flex items-center justify-center text-sm shadow-md click-press">📞</button>
+                            </div>` : ''}
                         </div>
-                        <span class="${badgeColor} text-[9px] font-black px-2 py-1 rounded-md uppercase tracking-widest">${r.status || 'PENDING'}</span>
-                    </div>
-                    <p class="text-xs text-gray-500 dark:text-gray-400 font-medium leading-relaxed mb-3">${r.items}</p>
-                    <div class="flex justify-between items-center">
-                        <span class="text-[10px] text-gray-400 font-bold">Transport: TZS ${r.transport.toLocaleString()}</span>
-                        <span class="text-sm ${moneyColor}">- TZS ${r.total.toLocaleString()}</span>
-                    </div>
-                </div>`;
-            }).join('');
+                    </div>`;
+                } else {
+                    // 🧾 THIS IS A PAST RECEIPT
+                    const badgeColor = isCompleted ? 'bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-300' : 'bg-amber-50 text-amber-600 dark:bg-amber-900/30 dark:text-amber-400';
+                    const moneyColor = isCompleted ? 'text-gray-900 dark:text-white font-black' : 'text-gray-400 dark:text-gray-500 font-bold line-through';
+                    
+                    pastHtml += `
+                    <div class="bg-white dark:bg-gray-800 p-5 rounded-[2rem] shadow-sm border dark:border-gray-700 stagger-item" style="animation-delay: ${i*0.05}s">
+                        <div class="flex justify-between items-start mb-3 border-b dark:border-gray-700 pb-3">
+                            <div>
+                                <p class="text-[9px] text-gray-400 font-black uppercase tracking-widest">${r.dateString}</p>
+                                <p class="text-xs font-bold text-gray-800 dark:text-gray-100 mt-0.5">Order ${r.orderId}</p>
+                            </div>
+                            <span class="${badgeColor} text-[9px] font-black px-2 py-1 rounded-md uppercase tracking-widest">${status}</span>
+                        </div>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 font-medium leading-relaxed mb-3">${r.items}</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-[10px] text-gray-400 font-bold">Transport: TZS ${r.transport.toLocaleString()}</span>
+                            <span class="text-sm ${moneyColor}">- TZS ${r.total.toLocaleString()}</span>
+                        </div>
+                    </div>`;
+                }
+            });
+
+            if (activeHtml !== '') {
+                trackFeed.innerHTML = activeHtml;
+                activeArea.classList.remove('hidden');
+            } else {
+                activeArea.classList.add('hidden');
+            }
+
+            if (pastHtml !== '') {
+                receiptFeed.innerHTML = pastHtml;
+            } else {
+                receiptFeed.innerHTML = `<div class="bg-gray-50 dark:bg-gray-800 p-6 rounded-3xl border dark:border-gray-700 text-center text-gray-400 text-xs font-bold">No past receipts.</div>`;
+            }
         }
 
         // 🟢 SOFT DELETE: Hides from user, keeps visible for Admin
