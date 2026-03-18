@@ -467,7 +467,7 @@
                 }
                 else if (o.status === 'SOLVED') {
                     statusColor = "bg-green-100 text-green-700 border-green-200";
-                    actionButton = `<button disabled class="px-4 py-2 bg-gray-100 dark:bg-white/5 text-green-500 rounded-xl text-[9px] font-black uppercase tracking-widest cursor-not-allowed">✅ Completed</button>`;
+                    actionButton = `<button disabled class="px-4 py-2 bg-gray-100 dark:bg-white/5 text-green-500 rounded-xl text-[9px] font-black uppercase tracking-widest cursor-not-allowed">Order Closed</button>`;
                 }
 
                 const hiddenWarning = o.hiddenFromCustomer ? `<span class="text-[8px] bg-red-100 text-red-600 px-1.5 py-0.5 rounded ml-2">Hidden by User</span>` : "";
@@ -647,7 +647,8 @@
             const safeId = email.replace(/[^a-zA-Z0-9]/g, '');
             try {
                 await setDoc(doc(db, "vendors", safeId), { email: email, status: 'ACTIVE', addedAt: serverTimestamp() });
-                input.value = ''; alert(`✅ ${email} successfully added to the vendor list.`);
+                input.value = ''; 
+                alert(`${email} successfully added to the vendor list.`);
             } catch(e) { alert("Failed to authorize vendor."); }
         };
 
