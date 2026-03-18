@@ -462,7 +462,16 @@
                 
                 if (o.status === 'PENDING') {
                     statusColor = "bg-amber-100 text-amber-700 border-amber-200 dark:bg-amber-900/30 dark:text-amber-400 dark:border-amber-800";
-                    actionButton = `<button onclick="updateStatus('orders', '${o.id}', 'PAID')" class="px-4 py-2 bg-amber-500 hover:bg-amber-400 text-white rounded-xl text-[9px] font-black uppercase tracking-widest shadow-lg hover:scale-105 transition-transform click-press">Mark as Paid (Manual)</button>`;
+                    
+                    if (o.type === 'WhatsApp Order') {
+                        actionButton = `<button onclick="updateStatus('orders', '${o.id}', 'PAID')" class="px-4 py-2 bg-amber-500 hover:bg-amber-400 text-white rounded-xl text-[9px] font-black uppercase tracking-widest shadow-lg hover:scale-105 transition-transform click-press w-full mb-1">Verify WhatsApp Pay</button>`;
+                    } else {
+                        actionButton = `
+                        <button disabled class="px-4 py-2 bg-gray-200 dark:bg-slate-700 text-gray-400 dark:text-gray-500 rounded-xl text-[9px] font-black uppercase tracking-widest cursor-not-allowed w-full mb-1">Awaiting Auto-Ping</button>
+                        <br>
+                        <button onclick="updateStatus('orders', '${o.id}', 'PAID')" class="text-[8px] font-bold text-gray-400 dark:text-gray-500 underline hover:text-amber-500 transition-colors click-press mt-1">Force Manual Override</button>
+                        `;
+                    }
                 } 
                 else if (o.status === 'SUCCESS' || o.status === 'PAID') {
                     statusColor = "bg-blue-100 text-blue-700 border-blue-200 dark:bg-blue-900/30 dark:text-blue-400 dark:border-blue-800";
