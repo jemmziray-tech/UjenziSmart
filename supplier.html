@@ -20,7 +20,7 @@
     </script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800;900&display=swap');
-        body { font-family: 'Inter', sans-serif; }
+        body { font-family: 'Inter', sans-serif; overflow-x: hidden; }
         
         .bg-deep-tech { background: radial-gradient(circle at top right, #112347 0%, #030814 100%); }
         .glass-panel { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.1); }
@@ -32,9 +32,8 @@
         .animate-secure { animation: subtlePulse 3s ease-in-out infinite; }
 
         @keyframes staggerIn { from { opacity: 0; transform: scale(0.95) translateY(10px); } to { opacity: 1; transform: scale(1) translateY(0); } }
-        .stagger-item { animation: staggerIn 0.5s cubic-bezier(0.22, 1, 0.36, 1) both; }
+        .stagger-item { animation: staggerIn 0.4s cubic-bezier(0.22, 1, 0.36, 1) both; }
         
-        /* 🟢 NEW: NOTIFICATION ANIMATION */
         @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
         .notification-toast { animation: slideIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
 
@@ -62,7 +61,7 @@
         </div>
     </div>
 
-    <div id="dashboard-screen" class="hidden w-full max-w-3xl py-8 px-4 relative z-10">
+    <div id="dashboard-screen" class="hidden w-full max-w-4xl py-8 px-4 relative z-10">
         
         <header class="flex justify-between items-center mb-8 bg-white dark:bg-gray-800 p-6 rounded-[2rem] shadow-sm border border-gray-100 dark:border-gray-700 transition-colors">
             <div class="flex items-center gap-4 cursor-pointer group click-press" onclick="openProfileSettings()">
@@ -84,201 +83,214 @@
             </div>
         </header>
 
-        <div class="bg-gray-900 dark:bg-green-900/20 p-8 rounded-[2.5rem] shadow-xl text-white mb-8 relative overflow-hidden stagger-item border border-gray-800 dark:border-green-800">
-            <div class="absolute top-0 right-0 w-48 h-48 bg-green-500/20 rounded-full blur-[50px] pointer-events-none"></div>
-            <div class="flex flex-col md:flex-row justify-between items-start md:items-center relative z-10 gap-6">
-                <div>
-                    <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-1 flex items-center gap-2">
-                        <span class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span> Available Wallet Balance
-                    </p>
-                    <h3 id="wallet-balance" class="text-4xl font-black tracking-tight">TZS 0</h3>
-                </div>
-                <button onclick="requestPayout()" class="w-full md:w-auto bg-green-500 hover:bg-green-600 text-white px-8 py-4 rounded-[1.5rem] font-black text-xs uppercase tracking-widest transition-colors shadow-[0_10px_20px_rgba(34,197,94,0.3)] click-press flex items-center justify-center gap-2">
-                    💳 Request Payout
-                </button>
-            </div>
+        <div class="flex gap-2 mb-8 bg-white dark:bg-gray-800 p-2 rounded-2xl w-fit shadow-sm border border-gray-100 dark:border-gray-700">
+            <button onclick="switchSupplierTab('overview')" id="tab-overview" class="px-6 py-3 rounded-xl text-xs font-black uppercase tracking-widest transition-all bg-green-500 text-white shadow-sm">📊 Overview</button>
+            <button onclick="switchSupplierTab('inventory')" id="tab-inventory" class="px-6 py-3 rounded-xl text-xs font-black uppercase tracking-widest transition-all text-gray-500 hover:text-gray-900 dark:hover:text-white">📦 Inventory</button>
+            <button onclick="switchSupplierTab('dispatch')" id="tab-dispatch" class="px-6 py-3 rounded-xl text-xs font-black uppercase tracking-widest transition-all text-gray-500 hover:text-gray-900 dark:hover:text-white">🚚 Dispatch HQ</button>
         </div>
 
-        <div class="bg-white dark:bg-gray-800 p-6 rounded-[2.5rem] shadow-sm border border-gray-100 dark:border-gray-700 mb-8 stagger-item transition-colors">
-            <h3 class="text-[10px] font-black mb-4 uppercase tracking-widest text-gray-400 flex items-center gap-2">
-                <span class="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span> Payout History & Status
-            </h3>
-            <div id="payout-history-list" class="space-y-3 max-h-48 overflow-y-auto pr-2">
-                <p class="text-xs text-gray-400 font-bold text-center py-4">Loading history...</p>
-            </div>
-        </div>
-
-        <div class="mb-8 space-y-4 stagger-item" style="animation-delay: 0.1s;">
-            <h2 class="text-lg font-black flex items-center gap-2 px-2 text-gray-900 dark:text-white"><span class="text-green-500">📊</span> Performance Overview</h2>
+        <div id="view-overview" class="supplier-view space-y-8 stagger-item">
             
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <div class="bg-white dark:bg-gray-800 p-5 rounded-[2rem] shadow-sm border border-gray-100 dark:border-gray-700 flex flex-col justify-center relative overflow-hidden group hover:shadow-md transition-all">
-                    <p class="text-[9px] text-gray-400 font-bold uppercase tracking-widest mb-1 relative z-10">Total Revenue</p>
-                    <h3 id="stat-revenue" class="text-xl font-black text-gray-900 dark:text-white relative z-10 transition-colors">TZS 0</h3>
-                </div>
-                <div class="bg-white dark:bg-gray-800 p-5 rounded-[2rem] shadow-sm border border-gray-100 dark:border-gray-700 flex flex-col justify-center relative overflow-hidden group hover:shadow-md transition-all">
-                    <p class="text-[9px] text-gray-400 font-bold uppercase tracking-widest mb-1 relative z-10">Units Sold</p>
-                    <h3 id="stat-units" class="text-2xl font-black text-gray-900 dark:text-white relative z-10 transition-colors">0</h3>
-                </div>
-                <div class="bg-white dark:bg-gray-800 p-5 rounded-[2rem] shadow-sm border border-gray-100 dark:border-gray-700 flex flex-col justify-center relative overflow-hidden group hover:shadow-md transition-all">
-                    <p class="text-[9px] text-gray-400 font-bold uppercase tracking-widest mb-1 relative z-10">Live Products</p>
-                    <h3 id="stat-active" class="text-2xl font-black text-gray-900 dark:text-white relative z-10 transition-colors">0</h3>
-                </div>
-                <div class="bg-white dark:bg-gray-800 p-5 rounded-[2rem] shadow-sm border border-gray-100 dark:border-gray-700 flex flex-col justify-center relative overflow-hidden group hover:shadow-md transition-all">
-                    <p class="text-[9px] text-gray-400 font-bold uppercase tracking-widest mb-1 relative z-10">Top Product</p>
-                    <h3 id="stat-top-product" class="text-xs font-black text-gray-900 dark:text-white relative z-10 truncate transition-colors">-</h3>
+            <div class="bg-gray-900 dark:bg-green-900/20 p-8 rounded-[2.5rem] shadow-xl text-white relative overflow-hidden border border-gray-800 dark:border-green-800">
+                <div class="absolute top-0 right-0 w-48 h-48 bg-green-500/20 rounded-full blur-[50px] pointer-events-none"></div>
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center relative z-10 gap-6">
+                    <div>
+                        <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-1 flex items-center gap-2">
+                            <span class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span> Available Wallet Balance
+                        </p>
+                        <h3 id="wallet-balance" class="text-4xl font-black tracking-tight">TZS 0</h3>
+                    </div>
+                    <button onclick="requestPayout()" class="w-full md:w-auto bg-green-500 hover:bg-green-600 text-white px-8 py-4 rounded-[1.5rem] font-black text-xs uppercase tracking-widest transition-colors shadow-[0_10px_20px_rgba(34,197,94,0.3)] click-press flex items-center justify-center gap-2">
+                        💳 Request Payout
+                    </button>
                 </div>
             </div>
 
-            <div class="bg-white dark:bg-gray-800 p-6 rounded-[2rem] shadow-sm border border-gray-100 dark:border-gray-700 mt-4 transition-colors">
-                <h3 class="text-[10px] font-black mb-4 uppercase tracking-widest text-gray-400">📈 7-Day Revenue Trend</h3>
-                <div class="relative h-56 w-full">
-                    <canvas id="revenueChart"></canvas>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-[2.5rem] shadow-sm border border-gray-100 dark:border-gray-700 transition-colors">
+                    <h3 class="text-[10px] font-black mb-4 uppercase tracking-widest text-gray-400 flex items-center gap-2">
+                        <span class="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span> Payout History & Status
+                    </h3>
+                    <div id="payout-history-list" class="space-y-3 max-h-48 overflow-y-auto pr-2">
+                        <p class="text-xs text-gray-400 font-bold text-center py-4">Loading history...</p>
+                    </div>
+                </div>
+                
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-[2rem] shadow-sm border border-gray-100 dark:border-gray-700 transition-colors">
+                    <h3 class="text-[10px] font-black mb-4 uppercase tracking-widest text-gray-400">📈 7-Day Revenue Trend</h3>
+                    <div class="relative h-48 w-full"><canvas id="revenueChart"></canvas></div>
+                </div>
+            </div>
+
+            <div class="space-y-4">
+                <h2 class="text-lg font-black flex items-center gap-2 px-2 text-gray-900 dark:text-white"><span class="text-green-500">📊</span> Performance Overview</h2>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div class="bg-white dark:bg-gray-800 p-5 rounded-[2rem] shadow-sm border border-gray-100 dark:border-gray-700 flex flex-col justify-center relative overflow-hidden group">
+                        <p class="text-[9px] text-gray-400 font-bold uppercase tracking-widest mb-1">Total Revenue</p>
+                        <h3 id="stat-revenue" class="text-xl font-black text-gray-900 dark:text-white">TZS 0</h3>
+                    </div>
+                    <div class="bg-white dark:bg-gray-800 p-5 rounded-[2rem] shadow-sm border border-gray-100 dark:border-gray-700 flex flex-col justify-center relative overflow-hidden group">
+                        <p class="text-[9px] text-gray-400 font-bold uppercase tracking-widest mb-1">Units Sold</p>
+                        <h3 id="stat-units" class="text-2xl font-black text-gray-900 dark:text-white">0</h3>
+                    </div>
+                    <div class="bg-white dark:bg-gray-800 p-5 rounded-[2rem] shadow-sm border border-gray-100 dark:border-gray-700 flex flex-col justify-center relative overflow-hidden group">
+                        <p class="text-[9px] text-gray-400 font-bold uppercase tracking-widest mb-1">Live Products</p>
+                        <h3 id="stat-active" class="text-2xl font-black text-gray-900 dark:text-white">0</h3>
+                    </div>
+                    <div class="bg-white dark:bg-gray-800 p-5 rounded-[2rem] shadow-sm border border-gray-100 dark:border-gray-700 flex flex-col justify-center relative overflow-hidden group">
+                        <p class="text-[9px] text-gray-400 font-bold uppercase tracking-widest mb-1">Top Product</p>
+                        <h3 id="stat-top-product" class="text-xs font-black text-gray-900 dark:text-white truncate">-</h3>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <div class="bg-white dark:bg-gray-800 p-8 rounded-[2rem] shadow-sm border border-gray-100 dark:border-gray-700 mb-8 relative overflow-hidden stagger-item transition-colors" style="animation-delay: 0.2s;">
-            <div class="absolute top-0 right-0 w-32 h-32 bg-green-50 dark:bg-green-900/10 rounded-full blur-[40px] pointer-events-none"></div>
-            <h2 class="text-lg font-black mb-6 flex items-center gap-2 relative z-10 text-gray-900 dark:text-white"><span class="text-green-500">➕</span> Add New Product</h2>
+        <div id="view-inventory" class="supplier-view hidden space-y-8 stagger-item">
             
-            <form id="add-product-form" class="space-y-5 relative z-10">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-                    <div>
-                        <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Product Name</label>
-                        <input type="text" id="prod-name" required class="w-full bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-600 rounded-2xl px-5 py-4 text-sm font-bold text-gray-900 dark:text-white outline-none focus:ring-2 focus:ring-green-500 transition-colors" placeholder="e.g. Simba Cement 50kg">
+            <div class="bg-white dark:bg-gray-800 p-8 rounded-[2.5rem] shadow-sm border border-gray-100 dark:border-gray-700 relative overflow-hidden transition-colors">
+                <div class="absolute top-0 right-0 w-32 h-32 bg-green-50 dark:bg-green-900/10 rounded-full blur-[40px] pointer-events-none"></div>
+                <h2 class="text-lg font-black mb-6 flex items-center gap-2 relative z-10 text-gray-900 dark:text-white"><span class="text-green-500">➕</span> Add New Product</h2>
+                
+                <form id="add-product-form" class="space-y-5 relative z-10">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <div>
+                            <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Product Name</label>
+                            <input type="text" id="prod-name" required class="w-full bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-600 rounded-2xl px-5 py-4 text-sm font-bold outline-none focus:ring-2 focus:ring-green-500 text-gray-900 dark:text-white" placeholder="e.g. Simba Cement 50kg">
+                        </div>
+                        <div>
+                            <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Category</label>
+                            <select id="prod-category" class="w-full bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-600 rounded-2xl px-5 py-4 text-sm font-bold outline-none focus:ring-2 focus:ring-green-500 text-gray-900 dark:text-white">
+                                <option value="Foundation & Structural">Foundation & Structural</option>
+                                <option value="Roofing Materials">Roofing Materials</option>
+                                <option value="Finishing & Painting">Finishing & Painting</option>
+                                <option value="Tools & Hardware">Tools & Hardware</option>
+                                <option value="Plumbing">Plumbing</option>
+                                <option value="Electrical">Electrical</option>
+                            </select>
+                        </div>
                     </div>
-                    <div>
-                        <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Category</label>
-                        <select id="prod-category" class="w-full bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-600 rounded-2xl px-5 py-4 text-sm font-bold text-gray-700 dark:text-gray-200 outline-none focus:ring-2 focus:ring-green-500 transition-colors">
-                            <option value="Foundation & Structural">Foundation & Structural</option>
-                            <option value="Roofing Materials">Roofing Materials</option>
-                            <option value="Finishing & Painting">Finishing & Painting</option>
-                            <option value="Tools & Hardware">Tools & Hardware</option>
-                            <option value="Plumbing">Plumbing</option>
-                            <option value="Electrical">Electrical</option>
-                        </select>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                        <div>
+                            <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Price (TZS)</label>
+                            <input type="number" id="prod-price" required class="w-full bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-600 rounded-2xl px-5 py-4 text-sm font-bold outline-none focus:ring-2 focus:ring-green-500 text-gray-900 dark:text-white" placeholder="18500">
+                        </div>
+                        <div>
+                            <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Weight per unit (KG)</label>
+                            <input type="number" id="prod-weight" required class="w-full bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-600 rounded-2xl px-5 py-4 text-sm font-bold outline-none focus:ring-2 focus:ring-green-500 text-gray-900 dark:text-white" placeholder="50">
+                        </div>
+                        <div>
+                            <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Initial Stock</label>
+                            <input type="number" id="prod-stock" required class="w-full bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-600 rounded-2xl px-5 py-4 text-sm font-bold outline-none focus:ring-2 focus:ring-green-500 text-gray-900 dark:text-white" placeholder="e.g. 500">
+                        </div>
                     </div>
-                </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                     <div>
-                        <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Price (TZS)</label>
-                        <input type="number" id="prod-price" required class="w-full bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-600 rounded-2xl px-5 py-4 text-sm font-bold text-gray-900 dark:text-white outline-none focus:ring-2 focus:ring-green-500 transition-colors" placeholder="18500">
+                        <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Short Description</label>
+                        <input type="text" id="prod-desc" required class="w-full bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-600 rounded-2xl px-5 py-4 text-sm font-bold outline-none focus:ring-2 focus:ring-green-500 text-gray-900 dark:text-white" placeholder="Grade 42.5R high-strength cement.">
                     </div>
+
                     <div>
-                        <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Weight per unit (KG)</label>
-                        <input type="number" id="prod-weight" required class="w-full bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-600 rounded-2xl px-5 py-4 text-sm font-bold text-gray-900 dark:text-white outline-none focus:ring-2 focus:ring-green-500 transition-colors" placeholder="50">
+                        <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Product Image</label>
+                        <div class="w-full bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-600 border-dashed rounded-2xl p-4 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+                            <input type="file" id="prod-image" accept="image/*" required class="w-full text-sm text-gray-500 file:mr-4 file:py-3 file:px-6 file:rounded-xl file:border-0 file:text-xs file:font-black file:uppercase file:tracking-widest file:bg-green-100 dark:file:bg-green-900/30 file:text-green-700 dark:file:text-green-400 hover:file:bg-green-200 cursor-pointer">
+                        </div>
                     </div>
-                </div>
 
-                <div>
-                    <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Short Description</label>
-                    <input type="text" id="prod-desc" required class="w-full bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-600 rounded-2xl px-5 py-4 text-sm font-bold text-gray-900 dark:text-white outline-none focus:ring-2 focus:ring-green-500 transition-colors" placeholder="Grade 42.5R high-strength cement.">
-                </div>
+                    <button type="submit" id="submit-btn" class="w-full py-5 mt-2 bg-gray-900 dark:bg-green-600 hover:bg-black dark:hover:bg-green-700 text-white rounded-2xl font-black shadow-xl click-press uppercase tracking-widest text-sm transition-colors">
+                        ☁️ Publish to Live Store
+                    </button>
+                </form>
+            </div>
 
-                <div>
-                    <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Product Image (High Quality)</label>
-                    <div class="w-full bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-600 border-dashed rounded-2xl p-4 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
-                        <input type="file" id="prod-image" accept="image/*" required class="w-full text-sm text-gray-500 file:mr-4 file:py-3 file:px-6 file:rounded-xl file:border-0 file:text-xs file:font-black file:uppercase file:tracking-widest file:bg-green-100 dark:file:bg-green-900/30 file:text-green-700 dark:file:text-green-400 hover:file:bg-green-200 cursor-pointer transition-colors">
-                    </div>
+            <div class="bg-white dark:bg-gray-800 p-8 rounded-[2rem] shadow-sm border border-gray-100 dark:border-gray-700 transition-colors">
+                <h2 class="text-lg font-black mb-6 flex items-center gap-2 text-gray-900 dark:text-white"><span class="w-2.5 h-2.5 rounded-full bg-green-500 animate-pulse"></span> My Live Inventory</h2>
+                <div id="inventory-list" class="space-y-4">
+                    <p class="text-sm text-gray-400 font-bold text-center py-10">Loading secure inventory...</p>
                 </div>
-
-                <button type="submit" id="submit-btn" class="w-full py-5 mt-2 bg-gray-900 dark:bg-green-600 hover:bg-black dark:hover:bg-green-700 text-white rounded-2xl font-black shadow-xl transition-colors flex items-center justify-center gap-2 click-press uppercase tracking-widest text-sm">
-                    ☁️ Publish to Live Store
-                </button>
-            </form>
+            </div>
         </div>
 
-    <div class="bg-white dark:bg-gray-800 p-8 rounded-[2rem] shadow-sm border border-gray-100 dark:border-gray-700 mb-8 stagger-item transition-colors" style="animation-delay: 0.25s;">
-            <div class="flex items-center justify-between mb-6">
-                <h2 class="text-lg font-black flex items-center gap-2 text-gray-900 dark:text-white"><span class="text-blue-500">💬</span> Dispatch HQ</h2>
-                <span class="text-[9px] font-bold uppercase tracking-widest text-blue-500 bg-blue-50 dark:bg-blue-900/30 px-2 py-1 rounded">Talk to Admin</span>
-            </div>
+        <div id="view-dispatch" class="supplier-view hidden space-y-8 stagger-item">
             
-            <div class="h-[300px] border border-gray-100 dark:border-gray-700 rounded-2xl flex flex-col bg-gray-50 dark:bg-gray-900/50 overflow-hidden relative">
-                <div id="supplier-chat-area" class="flex-grow overflow-y-auto p-4 flex flex-col gap-3">
-                    <div class="text-center text-[10px] text-gray-400 font-bold uppercase tracking-widest my-2">Secure Admin Channel</div>
-                    <div class="max-w-[85%] p-3 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 text-xs rounded-xl rounded-tl-none shadow-sm border border-gray-100 dark:border-gray-700 self-start font-medium leading-relaxed">
-                        Welcome to Dispatch HQ. Use this channel to confirm inventory or report that an order is out for delivery.
-                    </div>
+            <div class="bg-gray-100/50 dark:bg-gray-900/50 p-8 rounded-[2.5rem] shadow-sm border border-gray-200 dark:border-gray-800 transition-colors">
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-lg font-black flex items-center gap-2 text-gray-900 dark:text-white"><span class="text-purple-500">🚚</span> Active Dispatch Orders</h2>
+                    <span class="text-[9px] font-bold uppercase tracking-widest text-purple-500 bg-purple-100 dark:bg-purple-900/30 px-3 py-1.5 rounded-lg">Action Required</span>
                 </div>
+                <div id="dispatch-orders-feed" class="space-y-4">
+                    <p class="text-xs text-gray-400 font-bold text-center py-4">Checking for new dispatch requests...</p>
+                </div>
+            </div>
 
-                <div class="p-3 bg-white dark:bg-gray-800 border-t border-gray-100 dark:border-gray-700 flex gap-2 shrink-0">
-                    <input type="text" id="supplier-chat-input" onkeypress="if(event.key === 'Enter') sendSupplierMessage()" class="flex-grow bg-gray-100 dark:bg-gray-900 rounded-lg px-4 py-2.5 text-xs font-bold outline-none border border-transparent focus:border-blue-500 dark:text-white transition-colors" placeholder="Message Admin...">
-                    <button onclick="sendSupplierMessage()" class="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-black text-[10px] uppercase tracking-widest click-press shadow-md transition-colors">Send</button>
+            <div class="bg-white dark:bg-gray-800 p-8 rounded-[2.5rem] shadow-sm border border-gray-100 dark:border-gray-700 h-[500px] flex flex-col transition-colors">
+                <div class="flex items-center justify-between mb-6 shrink-0">
+                    <h2 class="text-lg font-black flex items-center gap-2 text-gray-900 dark:text-white"><span class="text-blue-500">💬</span> Dispatch Chat</h2>
+                    <span class="text-[9px] font-bold uppercase tracking-widest text-blue-500 bg-blue-50 dark:bg-blue-900/30 px-2 py-1 rounded">Talk to Admin</span>
+                </div>
+                
+                <div id="supplier-chat-area" class="flex-grow overflow-y-auto p-4 flex flex-col gap-3 bg-gray-50 dark:bg-gray-900/50 rounded-2xl mb-4 border border-gray-100 dark:border-gray-700"></div>
+                
+                <div class="flex gap-2 shrink-0">
+                    <input type="text" id="supplier-chat-input" onkeypress="if(event.key === 'Enter') sendSupplierMessage()" class="flex-grow bg-gray-100 dark:bg-gray-900 rounded-lg px-4 py-3 text-sm font-bold outline-none border border-transparent focus:border-blue-500 dark:text-white transition-colors" placeholder="Message Admin...">
+                    <button onclick="sendSupplierMessage()" class="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-black text-[10px] uppercase tracking-widest click-press shadow-md transition-colors">Send</button>
                 </div>
             </div>
         </div>
 
-        <div class="bg-white dark:bg-gray-800 p-8 rounded-[2rem] shadow-sm border border-gray-100 dark:border-gray-700 stagger-item transition-colors" style="animation-delay: 0.3s;">
-            <h2 class="text-lg font-black mb-6 flex items-center gap-2 text-gray-900 dark:text-white"><span class="w-2.5 h-2.5 rounded-full bg-green-500 animate-pulse"></span> My Live Inventory</h2>
-            <div id="inventory-list" class="space-y-4">
-                <div class="text-center py-10">
-                    <p class="text-sm text-gray-400 font-bold animate-pulse">Loading secure inventory...</p>
-                </div>
-            </div>
-        </div>
     </div>
 
-    <div id="profile-modal" class="fixed inset-0 z-[200] hidden bg-black/60 flex items-center justify-center transition-opacity backdrop-blur-sm px-4">
-        <div class="bg-white dark:bg-gray-900 w-full max-w-sm rounded-[2.5rem] p-8 shadow-2xl animate-stagger-in border border-transparent dark:border-gray-700 relative">
-            <button onclick="closeProfileSettings()" class="absolute top-4 right-4 w-8 h-8 bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 rounded-full flex items-center justify-center font-bold transition-colors hover:bg-gray-200 dark:hover:bg-gray-700 click-press">✕</button>
-            
+    <div id="profile-modal" class="fixed inset-0 z-[200] hidden bg-black/60 flex items-center justify-center backdrop-blur-sm px-4">
+        <div class="bg-white dark:bg-gray-900 w-full max-w-sm rounded-[2.5rem] p-8 shadow-2xl relative border border-transparent dark:border-gray-700 transition-colors">
+            <button onclick="closeProfileSettings()" class="absolute top-4 right-4 w-8 h-8 bg-gray-100 dark:bg-gray-800 text-gray-500 rounded-full font-bold click-press transition-colors hover:bg-gray-200 dark:hover:bg-gray-700">✕</button>
             <h3 class="text-xl font-black mb-1 text-center text-gray-900 dark:text-white">Profile Settings</h3>
             <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest text-center mb-6">Manage your brand identity</p>
             
             <div class="flex flex-col items-center mb-6 relative group cursor-pointer" onclick="document.getElementById('modal-profile-upload').click()">
                 <div class="relative">
-                    <img id="modal-avatar-preview" src="" class="w-24 h-24 rounded-full object-cover border-4 border-gray-100 dark:border-gray-800 shadow-md group-hover:opacity-80 transition-all">
+                    <img id="modal-avatar-preview" src="" class="w-24 h-24 rounded-full object-cover border-4 border-gray-100 dark:border-gray-800">
                     <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                        <span class="bg-black/50 text-white text-xs font-bold px-2 py-1 rounded-lg backdrop-blur-sm">Change</span>
+                        <span class="bg-black/50 text-white text-xs font-bold px-2 py-1 rounded-lg">Change</span>
                     </div>
                 </div>
                 <input type="file" id="modal-profile-upload" class="hidden" accept="image/*" onchange="previewProfileImage(event)">
-                <p class="text-[10px] text-gray-400 font-bold mt-2 text-center">Tap image to upload</p>
             </div>
-
             <div class="mb-6">
-                <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Display Name / Company</label>
-                <input type="text" id="edit-name-input" class="w-full bg-gray-50 dark:bg-gray-800 p-4 rounded-2xl outline-none border border-gray-200 dark:border-gray-700 font-bold text-sm text-gray-800 dark:text-gray-100 focus:ring-2 focus:ring-green-500 transition-colors">
+                <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Display Name</label>
+                <input type="text" id="edit-name-input" class="w-full bg-gray-50 dark:bg-gray-800 p-4 rounded-2xl outline-none font-bold text-sm text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 transition-colors">
             </div>
-
-            <button id="save-profile-btn" onclick="saveProfileSettings()" class="w-full py-4 bg-green-600 hover:bg-green-700 text-white rounded-2xl font-black click-press shadow-[0_8px_15px_rgba(22,163,74,0.3)] text-xs uppercase tracking-widest transition-colors flex justify-center items-center gap-2">
-                💾 Save Changes
-            </button>
+            <button id="save-profile-btn" onclick="saveProfileSettings()" class="w-full py-4 bg-green-600 hover:bg-green-700 text-white rounded-2xl font-black click-press text-xs uppercase tracking-widest transition-colors">💾 Save Changes</button>
         </div>
     </div>
 
-    <div id="edit-product-modal" class="fixed inset-0 z-[200] hidden bg-black/60 flex items-center justify-center transition-opacity backdrop-blur-sm px-4">
-        <div class="bg-white dark:bg-gray-900 w-full max-w-md rounded-[2.5rem] p-8 shadow-2xl animate-stagger-in border border-transparent dark:border-gray-700 relative">
-            <button onclick="closeEditModal()" class="absolute top-4 right-4 w-8 h-8 bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 rounded-full flex items-center justify-center font-bold transition-colors hover:bg-gray-200 dark:hover:bg-gray-700 click-press">✕</button>
-            
+    <div id="edit-product-modal" class="fixed inset-0 z-[200] hidden bg-black/60 flex items-center justify-center backdrop-blur-sm px-4">
+        <div class="bg-white dark:bg-gray-900 w-full max-w-md rounded-[2.5rem] p-8 shadow-2xl relative border border-transparent dark:border-gray-700 transition-colors">
+            <button onclick="closeEditModal()" class="absolute top-4 right-4 w-8 h-8 bg-gray-100 dark:bg-gray-800 text-gray-500 rounded-full font-bold click-press transition-colors hover:bg-gray-200 dark:hover:bg-gray-700">✕</button>
             <h3 class="text-xl font-black mb-1 text-gray-900 dark:text-white">Quick Edit</h3>
             <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-6">Update live product details</p>
-            
             <input type="hidden" id="edit-doc-id">
             
             <div class="space-y-4">
                 <div>
                     <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Product Name</label>
-                    <input type="text" id="quick-edit-name" class="w-full bg-gray-50 dark:bg-gray-800 p-4 rounded-xl outline-none border border-gray-200 dark:border-gray-700 font-bold text-sm text-gray-800 dark:text-gray-100 focus:ring-2 focus:ring-green-500 transition-colors">
+                    <input type="text" id="quick-edit-name" class="w-full bg-gray-50 dark:bg-gray-800 p-4 rounded-xl outline-none font-bold text-sm text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 transition-colors">
                 </div>
-                <div class="grid grid-cols-2 gap-4">
+                <div class="grid grid-cols-3 gap-4">
                     <div>
                         <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Price (TZS)</label>
-                        <input type="number" id="quick-edit-price" class="w-full bg-gray-50 dark:bg-gray-800 p-4 rounded-xl outline-none border border-gray-200 dark:border-gray-700 font-bold text-sm text-gray-800 dark:text-gray-100 focus:ring-2 focus:ring-green-500 transition-colors">
+                        <input type="number" id="quick-edit-price" class="w-full bg-gray-50 dark:bg-gray-800 p-4 rounded-xl outline-none font-bold text-sm text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 transition-colors">
                     </div>
                     <div>
                         <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Weight (KG)</label>
-                        <input type="number" id="quick-edit-weight" class="w-full bg-gray-50 dark:bg-gray-800 p-4 rounded-xl outline-none border border-gray-200 dark:border-gray-700 font-bold text-sm text-gray-800 dark:text-gray-100 focus:ring-2 focus:ring-green-500 transition-colors">
+                        <input type="number" id="quick-edit-weight" class="w-full bg-gray-50 dark:bg-gray-800 p-4 rounded-xl outline-none font-bold text-sm text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 transition-colors">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Stock</label>
+                        <input type="number" id="quick-edit-stock" class="w-full bg-gray-50 dark:bg-gray-800 p-4 rounded-xl outline-none font-bold text-sm text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 transition-colors">
                     </div>
                 </div>
             </div>
-
-            <button id="save-edit-btn" onclick="saveEditedProduct()" class="w-full py-4 mt-6 bg-blue-600 hover:bg-blue-700 text-white rounded-2xl font-black click-press shadow-[0_8px_15px_rgba(37,99,235,0.3)] text-xs uppercase tracking-widest transition-colors flex justify-center items-center gap-2">
-                🔄 Update Product
-            </button>
+            <button id="save-edit-btn" onclick="saveEditedProduct()" class="w-full py-4 mt-6 bg-blue-600 hover:bg-blue-700 text-white rounded-2xl font-black click-press text-xs uppercase tracking-widest transition-colors">🔄 Update Product</button>
         </div>
     </div>
 
@@ -287,9 +299,9 @@
             const isDark = document.documentElement.classList.contains('dark');
             const sun = document.getElementById('icon-sun');
             const moon = document.getElementById('icon-moon');
-            if(sun && moon) {
-                sun.style.display = isDark ? 'block' : 'none';
-                moon.style.display = isDark ? 'none' : 'block';
+            if(sun && moon) { 
+                sun.style.display = isDark ? 'block' : 'none'; 
+                moon.style.display = isDark ? 'none' : 'block'; 
             }
             if(window.revenueChartInstance) {
                 window.revenueChartInstance.options.scales.x.ticks.color = isDark ? '#9ca3af' : '#6b7280';
@@ -301,9 +313,9 @@
         }
         
         function switchTheme() {
-            const html = document.documentElement;
+            const html = document.documentElement; 
             html.classList.toggle('dark');
-            localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+            localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light'); 
             updateThemeIcon();
         }
         document.addEventListener("DOMContentLoaded", updateThemeIcon);
@@ -314,33 +326,39 @@
         let newProfileImageFile = null;
         function previewProfileImage(event) {
             const file = event.target.files[0];
-            if(file) {
-                newProfileImageFile = file;
-                const reader = new FileReader();
-                reader.onload = function(e) { document.getElementById('modal-avatar-preview').src = e.target.result; }
-                reader.readAsDataURL(file);
+            if(file) { 
+                newProfileImageFile = file; 
+                const reader = new FileReader(); 
+                reader.onload = function(e) { document.getElementById('modal-avatar-preview').src = e.target.result; }; 
+                reader.readAsDataURL(file); 
             }
         }
 
-        // Quick Edit Modal Logic
-        function openEditModal(id, name, price, weight) {
-            document.getElementById('edit-doc-id').value = id;
+        window.switchSupplierTab = function(tabName) {
+            document.querySelectorAll('.supplier-view').forEach(view => view.classList.add('hidden'));
+            document.getElementById(`view-${tabName}`).classList.remove('hidden');
+            
+            ['overview', 'inventory', 'dispatch'].forEach(t => { 
+                document.getElementById(`tab-${t}`).className = "px-6 py-3 rounded-xl text-xs font-black uppercase tracking-widest transition-all text-gray-500 hover:text-gray-900 dark:hover:text-white"; 
+            });
+            
+            document.getElementById(`tab-${tabName}`).className = "px-6 py-3 rounded-xl text-xs font-black uppercase tracking-widest transition-all bg-green-500 text-white shadow-sm";
+        };
+
+        window.openEditModal = (id, name, price, weight, stock) => {
+            document.getElementById('edit-doc-id').value = id; 
             document.getElementById('quick-edit-name').value = name;
-            document.getElementById('quick-edit-price').value = price;
+            document.getElementById('quick-edit-price').value = price; 
             document.getElementById('quick-edit-weight').value = weight;
+            document.getElementById('quick-edit-stock').value = stock || 0;
             document.getElementById('edit-product-modal').classList.remove('hidden');
-        }
-        function closeEditModal() { document.getElementById('edit-product-modal').classList.add('hidden'); }
-        
-        // Expose to global window so HTML onclick works
-        window.openEditModal = openEditModal;
-        window.closeEditModal = closeEditModal;
+        };
+        window.closeEditModal = () => document.getElementById('edit-product-modal').classList.add('hidden');
     </script>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
         import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut, updateProfile } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
-        // 🟢 NEW: Added orderBy to the imports so listenToPayouts works perfectly
         import { getFirestore, collection, addDoc, query, where, onSnapshot, deleteDoc, doc, updateDoc, serverTimestamp, getDocs, orderBy, setDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
         import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-storage.js";
 
@@ -350,119 +368,186 @@
             projectId: "ujenzismart-878af", 
             storageBucket: "ujenzismart-878af.firebasestorage.app", 
             messagingSenderId: "626807014511", 
-            appId: "1:626807014511:web:844e137d32048d6460399a",
-            measurementId: "G-V8C9KKGKFY" 
+            appId: "1:626807014511:web:844e137d32048d6460399a"
         };
 
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
+        const app = initializeApp(firebaseConfig); 
+        const auth = getAuth(app); 
+        const db = getFirestore(app); 
         const storage = getStorage(app); 
         const provider = new GoogleAuthProvider();
 
-        const loginScreen = document.getElementById('login-screen');
-        const dashboardScreen = document.getElementById('dashboard-screen');
-        const submitBtn = document.getElementById('submit-btn');
-
-        // 🚨 THE VIP GUEST LIST 🚨
         const APPROVED_SUPPLIERS = [
-            "jem.mziray@gmail.com",
+            "jem.mziray@gmail.com", 
             "venancechesco58@gmail.com",
             "another.partner@example.com"
         ];
 
         function updateHeaderUI(user) {
             const photoSrc = user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName)}&background=10b981&color=fff`;
-            document.getElementById('header-avatar').src = photoSrc;
+            document.getElementById('header-avatar').src = photoSrc; 
             document.getElementById('modal-avatar-preview').src = photoSrc;
-            document.getElementById('supplier-name').textContent = user.displayName;
+            document.getElementById('supplier-name').textContent = user.displayName; 
             document.getElementById('edit-name-input').value = user.displayName;
         }
 
         onAuthStateChanged(auth, async (user) => {
             if (user) {
-                if (!APPROVED_SUPPLIERS.includes(user.email)) {
-                    alert("⛔ Unauthorized Access! You are not an approved UjenziSmart supplier.");
-                    await signOut(auth);
+                if (!APPROVED_SUPPLIERS.includes(user.email)) { 
+                    alert("⛔ Unauthorized Access! You are not an approved UjenziSmart supplier."); 
+                    await signOut(auth); 
                     return; 
                 }
-                loginScreen.classList.add('hidden');
-                dashboardScreen.classList.remove('hidden');
+                document.getElementById('login-screen').classList.add('hidden'); 
+                document.getElementById('dashboard-screen').classList.remove('hidden');
+                
                 updateHeaderUI(user);
-                listenToInventory(user.uid);
-                listenToPayouts(user.uid);  // 🟢 NEW: Trigger the payout listener on login
-                window.initSupplierChat(); // 🟢 NEW: Start the chat listener!
+                listenToInventory(user.uid); 
+                listenToPayouts(user.uid); 
+                window.initSupplierChat(); 
+                listenToDispatchOrders(); 
             } else {
-                loginScreen.classList.remove('hidden');
-                dashboardScreen.classList.add('hidden');
+                document.getElementById('login-screen').classList.remove('hidden'); 
+                document.getElementById('dashboard-screen').classList.add('hidden');
             }
         });
 
-        document.getElementById('google-login-btn').onclick = async () => {
-            try { await signInWithPopup(auth, provider); } catch (error) { alert("Login failed: " + error.message); }
+        document.getElementById('google-login-btn').onclick = async () => { 
+            try { await signInWithPopup(auth, provider); } catch (error) { alert("Login failed: " + error.message); } 
         };
         
-        document.getElementById('logout-btn').onclick = async () => { await signOut(auth); };
+        document.getElementById('logout-btn').onclick = async () => { 
+            await signOut(auth); 
+        };
 
-        // 🟢 NEW: NOTIFICATION ENGINE
         function showNotification(title, message) {
-            const area = document.getElementById('notification-area');
+            const area = document.getElementById('notification-area'); 
             const toast = document.createElement('div');
             toast.className = "notification-toast glass-panel bg-green-500/90 dark:bg-green-600/90 p-4 rounded-2xl shadow-2xl text-white pointer-events-auto border-l-4 border-white transition-opacity duration-500";
-            toast.innerHTML = `<div class="flex items-center gap-3">
-                <div class="text-2xl">💰</div>
-                <div>
-                    <p class="font-black text-sm uppercase tracking-tighter">${title}</p>
-                    <p class="text-[11px] font-medium opacity-90">${message}</p>
-                </div>
-            </div>`;
-            area.appendChild(toast);
+            toast.innerHTML = `<div class="flex items-center gap-3"><div class="text-2xl">💰</div><div><p class="font-black text-sm uppercase tracking-tighter">${title}</p><p class="text-[11px] font-medium opacity-90">${message}</p></div></div>`;
+            area.appendChild(toast); 
             setTimeout(() => { 
                 toast.style.opacity = '0'; 
                 setTimeout(() => toast.remove(), 500); 
             }, 6000);
         }
 
-        // 💳 REQUEST PAYOUT LOGIC
-        window.requestPayout = async function() {
-            const user = auth.currentUser;
-            if(!user) return;
-            
-            const currentBalText = document.getElementById('wallet-balance').textContent.replace(/[^0-9]/g, '');
-            if(parseInt(currentBalText) === 0) return alert("Your wallet balance is currently zero.");
-
-            const amount = prompt("Enter amount to withdraw (TZS):");
-            if(!amount || isNaN(amount) || amount <= 0) return;
-            
-            const details = prompt("Enter your Mobile Money Number or Bank Account for the transfer:");
-            if(!details) return;
-            
-            try {
-                await addDoc(collection(db, "payouts"), {
-                    supplierId: user.uid,
-                    supplierName: user.displayName,
-                    amount: Number(amount),
-                    accountDetails: details,
-                    status: "PENDING",
-                    createdAt: serverTimestamp()
+        // --- 🚚 ACTIVE DISPATCH FEED ---
+        function listenToDispatchOrders() {
+            const q = query(collection(db, "orders"), where("status", "==", "PROCESSING"));
+            onSnapshot(q, (snapshot) => {
+                const list = document.getElementById('dispatch-orders-feed');
+                let html = '';
+                
+                snapshot.forEach(docSnap => {
+                    const order = docSnap.data();
+                    if(order.supplierAcknowledged) return; 
+                    
+                    html += `
+                    <div class="bg-white dark:bg-gray-800 p-5 rounded-[1.5rem] border border-gray-200 dark:border-gray-700 mb-4 shadow-sm flex flex-col md:flex-row justify-between items-start md:items-center gap-4 animate-stagger-in transition-colors">
+                        <div>
+                            <p class="text-[10px] text-purple-500 font-black uppercase tracking-widest mb-1">Order ${order.orderId || docSnap.id}</p>
+                            <p class="text-sm font-bold text-gray-900 dark:text-white">${order.items}</p>
+                            <p class="text-[10px] text-gray-500 font-bold mt-1">Customer: ${order.userName || 'Customer'}</p>
+                        </div>
+                        <button onclick="acknowledgeOrder('${docSnap.id}', '${order.orderId || docSnap.id}')" class="shrink-0 w-full md:w-auto px-6 py-4 bg-purple-600 hover:bg-purple-700 text-white rounded-xl font-black text-[10px] uppercase tracking-widest click-press shadow-md transition-colors">
+                            ✅ Acknowledge & Prepare
+                        </button>
+                    </div>`;
                 });
-                alert("✅ Payout request submitted! Admin will process it shortly.");
-            } catch(e) { alert("Failed to request payout. Try again later."); }
+                
+                list.innerHTML = html || `<div class="text-center py-8 bg-white dark:bg-gray-800 border border-dashed border-gray-200 dark:border-gray-700 rounded-[1.5rem] transition-colors"><p class="text-xs text-gray-400 font-bold">No new dispatch requests from Admin.</p></div>`;
+            });
         }
 
-        // 🟢 NEW: LISTEN TO PAYOUTS (HISTORY + NOTIFICATION)
-        let lastPayoutState = {}; 
-        window.totalPaidOut = 0; // tracking global math
+        window.acknowledgeOrder = async function(docId, displayOrderId) {
+            try {
+                // 1. Hide from feed
+                await updateDoc(doc(db, "orders", docId), { supplierAcknowledged: true });
+                
+                // 2. Send Auto-Message to Admin
+                const user = auth.currentUser;
+                const chatId = `supplier_chat_${user.uid}`;
+                const autoMessage = `✅ I have acknowledged Order ${displayOrderId} and am preparing it for delivery.`;
+                
+                await addDoc(collection(db, `chats/${chatId}/messages`), { senderId: user.uid, text: autoMessage, timestamp: serverTimestamp() });
+                await updateDoc(doc(db, "chats", chatId), { lastMessage: autoMessage, updatedAt: serverTimestamp() });
+                
+                showNotification("Order Acknowledged", "Admin has been notified in Dispatch HQ.");
+            } catch(e) { 
+                alert("Error acknowledging order."); 
+            }
+        };
 
+        // --- 📦 INVENTORY LOGIC (With Edit and Delete buttons restored) ---
+        function listenToInventory(uid) {
+            const q = query(collection(db, "products"), where("supplierId", "==", uid));
+            
+            onSnapshot(q, (snapshot) => {
+                const list = document.getElementById('inventory-list');
+                let items = [];
+                snapshot.forEach((doc) => { items.push({ id: doc.id, ...doc.data() }); });
+                
+                document.getElementById('stat-active').textContent = items.length;
+                fetchAndCalculateStats(items);
+
+                if(items.length === 0) { 
+                    list.innerHTML = `
+                    <div class="text-center py-10 bg-gray-50 dark:bg-gray-900 rounded-2xl border border-dashed border-gray-200 dark:border-gray-700 transition-colors">
+                        <p class="text-3xl mb-2">📦</p>
+                        <p class="text-sm text-gray-400 font-bold">You have no products live.</p>
+                    </div>`; 
+                    return; 
+                }
+
+                list.innerHTML = items.map(p => {
+                    const isLow = (p.stock || 0) < 10; 
+                    const safeWeight = p.weight || 0; 
+                    const safeStock = p.stock || 0;
+                    
+                    return `
+                    <div class="flex items-center gap-4 p-4 border ${isLow ? 'border-red-400 bg-red-50 dark:bg-red-900/20' : 'border-gray-100 dark:border-gray-700 bg-gray-50 dark:bg-gray-900'} rounded-2xl group transition-colors stagger-item">
+                        <img src="${p.img}" class="w-16 h-16 object-cover rounded-xl border border-gray-200 dark:border-gray-600 shadow-sm">
+                        <div class="flex-grow">
+                            <p class="font-black text-sm text-gray-800 dark:text-gray-100">${p.name}</p>
+                            <p class="text-[10px] font-black uppercase tracking-widest mt-0.5 ${isLow ? 'text-red-500 animate-pulse' : 'text-gray-400'}">Stock: ${safeStock} units ${isLow ? '⚠️ LOW' : ''}</p>
+                            <p class="text-green-600 dark:text-green-400 font-black text-sm mt-1">TZS ${p.price.toLocaleString()}</p>
+                        </div>
+                        <div class="flex gap-1">
+                            <button onclick="openEditModal('${p.id}', '${p.name.replace(/'/g, "\\'")}', ${p.price}, ${safeWeight}, ${safeStock})" class="text-blue-500 hover:text-blue-700 hover:bg-blue-50 dark:text-blue-400 dark:hover:text-blue-300 dark:hover:bg-blue-900/30 p-2.5 rounded-xl transition-all click-press" title="Edit Product">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" /></svg>
+                            </button>
+                            <button onclick="deleteProduct('${p.id}')" class="text-red-500 hover:text-red-700 hover:bg-red-50 dark:text-red-400 dark:hover:text-red-300 dark:hover:bg-red-900/30 p-2.5 rounded-xl transition-all click-press" title="Remove Product">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" /></svg>
+                            </button>
+                        </div>
+                    </div>`;
+                }).join('');
+            });
+        }
+
+        // --- 🗑️ DELETE PRODUCT LOGIC ---
+        window.deleteProduct = async function(docId) {
+            if(confirm("Are you sure you want to remove this product from the live store?")) {
+                try { 
+                    await deleteDoc(doc(db, "products", docId)); 
+                } catch(e) { 
+                    alert("Failed to delete."); 
+                }
+            }
+        };
+
+        // --- 💸 PAYOUTS & STATS ---
+        window.totalPaidOut = 0; 
+        let lastPayoutState = {}; 
+        
         function listenToPayouts(uid) {
             const q = query(collection(db, "payouts"), where("supplierId", "==", uid));
             
             onSnapshot(q, (snapshot) => {
-                let paidTotal = 0;
+                let paidTotal = 0; 
                 let payoutsArray = [];
-                const list = document.getElementById('payout-history-list');
                 
-                // 1. Check for real-time changes (Notifications)
                 snapshot.docChanges().forEach(change => {
                     const data = change.doc.data();
                     const id = change.doc.id;
@@ -474,396 +559,346 @@
                     lastPayoutState[id] = data.status;
                 });
 
-                // 2. Gather data and calculate total paid
-                snapshot.forEach(doc => {
+                snapshot.forEach(doc => { 
                     const p = doc.data(); 
-                    if(p.status === "PAID") paidTotal += p.amount;
-                    payoutsArray.push({ id: doc.id, ...p });
+                    if(p.status === "PAID") paidTotal += p.amount; 
+                    payoutsArray.push({ id: doc.id, ...p }); 
                 });
-
-                // 🟢 THE FIX: Safely check for the timestamp before sorting
-                payoutsArray.sort((a, b) => {
-                    const timeA = a.createdAt?.seconds || 0;
-                    const timeB = b.createdAt?.seconds || 0;
-                    return timeB - timeA; // Sorts newest to oldest
+                
+                payoutsArray.sort((a, b) => { 
+                    const timeA = a.createdAt?.seconds || 0; 
+                    const timeB = b.createdAt?.seconds || 0; 
+                    return timeB - timeA; 
                 });
-
-                // 3. Render the HTML
-                list.innerHTML = payoutsArray.map(p => {
-                    const isPaid = p.status === 'PAID';
-                    // If the date isn't ready yet from the server, just say "Just now"
-                    const dateStr = p.createdAt ? p.createdAt.toDate().toLocaleDateString() : 'Just now';
-                    
-                    return `<div class="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-900/50 rounded-xl border border-gray-100 dark:border-gray-700">
+                
+                document.getElementById('payout-history-list').innerHTML = payoutsArray.map(p => `
+                    <div class="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-900/50 rounded-xl border border-gray-100 dark:border-gray-700 transition-colors">
                         <div>
                             <p class="text-xs font-black text-gray-900 dark:text-white">TZS ${p.amount.toLocaleString()}</p>
-                            <p class="text-[8px] text-gray-400 font-bold uppercase mt-0.5">${dateStr}</p>
+                            <p class="text-[8px] text-gray-400 font-bold uppercase mt-0.5">${p.createdAt ? p.createdAt.toDate().toLocaleDateString() : 'Just now'}</p>
                         </div>
-                        <span class="${isPaid ? 'bg-green-100 text-green-700 dark:bg-green-500/20 dark:text-green-500 border border-green-200 dark:border-green-500/20' : 'bg-amber-100 text-amber-700 dark:bg-amber-500/20 dark:text-amber-500 border border-amber-200 dark:border-amber-500/20'} text-[8px] font-black px-2 py-1 rounded-md uppercase tracking-widest border">
-                            ${isPaid ? '✅ Paid' : '⏳ Pending'}
+                        <span class="${p.status === 'PAID' ? 'bg-green-100 text-green-700 dark:bg-green-500/20 dark:text-green-500 border-green-200 dark:border-green-500/20' : 'bg-amber-100 text-amber-700 dark:bg-amber-500/20 dark:text-amber-500 border-amber-200 dark:border-amber-500/20'} text-[8px] font-black px-2 py-1 rounded-md uppercase tracking-widest border">
+                            ${p.status === 'PAID' ? '✅ Paid' : '⏳ Pending'}
                         </span>
-                    </div>`;
-                }).join('') || `<p class="text-xs text-gray-400 font-bold text-center py-4">No history yet.</p>`;
+                    </div>`).join('') || `<p class="text-xs text-gray-400 font-bold text-center py-4">No history yet.</p>`;
                 
                 window.totalPaidOut = paidTotal;
-                
-                // 4. Update the main Wallet Balance instantly
                 if(window.totalGrossRevenue !== undefined) {
-                    const bal = window.totalGrossRevenue - window.totalPaidOut;
-                    document.getElementById('wallet-balance').textContent = `TZS ${bal.toLocaleString()}`;
+                    document.getElementById('wallet-balance').textContent = `TZS ${(window.totalGrossRevenue - window.totalPaidOut).toLocaleString()}`;
                 }
             });
         }
-        // 🟢 SAVE PROFILE SETTINGS 🟢
-        window.saveProfileSettings = async function() {
-            const user = auth.currentUser;
+
+        window.requestPayout = async function() {
+            const user = auth.currentUser; 
             if(!user) return;
-            const saveBtn = document.getElementById('save-profile-btn');
-            const newName = document.getElementById('edit-name-input').value.trim();
-            if(!newName) return alert("Display name cannot be empty.");
-
-            saveBtn.innerHTML = "⏳ Saving...";
-            saveBtn.disabled = true;
-
-            try {
-                let newPhotoURL = user.photoURL;
-                if(newProfileImageFile) {
-                    const storageRef = ref(storage, 'avatars/' + user.uid);
-                    await uploadBytes(storageRef, newProfileImageFile);
-                    newPhotoURL = await getDownloadURL(storageRef);
-                }
-                await updateProfile(user, { displayName: newName, photoURL: newPhotoURL });
-                updateHeaderUI(auth.currentUser);
-                alert("✅ Profile updated securely.");
-                closeProfileSettings();
-                newProfileImageFile = null; 
-            } catch (error) { alert("Failed to update profile."); } 
-            finally { saveBtn.innerHTML = "💾 Save Changes"; saveBtn.disabled = false; }
-        }
-
-        // ✏️ SAVE EDITED PRODUCT
-        window.saveEditedProduct = async function() {
-            const docId = document.getElementById('edit-doc-id').value;
-            const newName = document.getElementById('quick-edit-name').value;
-            const newPrice = Number(document.getElementById('quick-edit-price').value);
-            const newWeight = Number(document.getElementById('quick-edit-weight').value);
             
-            const btn = document.getElementById('save-edit-btn');
-            btn.innerHTML = "⏳ Updating..."; btn.disabled = true;
-
-            try {
-                await updateDoc(doc(db, "products", docId), {
-                    name: newName,
-                    price: newPrice,
-                    weight: newWeight
-                });
-                closeEditModal();
-            } catch(e) {
-                console.error(e);
-                alert("Failed to update product.");
-            } finally {
-                btn.innerHTML = "🔄 Update Product"; btn.disabled = false;
+            const currentBalText = document.getElementById('wallet-balance').textContent.replace(/[^0-9]/g, '');
+            if(parseInt(currentBalText) === 0) return alert("Your wallet balance is currently zero.");
+            
+            const amount = prompt("Enter amount to withdraw (TZS):"); 
+            if(!amount || isNaN(amount) || amount <= 0) return;
+            
+            const details = prompt("Enter your Mobile Money Number or Bank Account for the transfer:"); 
+            if(!details) return;
+            
+            try { 
+                await addDoc(collection(db, "payouts"), { 
+                    supplierId: user.uid, 
+                    supplierName: user.displayName, 
+                    amount: Number(amount), 
+                    accountDetails: details, 
+                    status: "PENDING", 
+                    createdAt: serverTimestamp() 
+                }); 
+                alert("✅ Payout request submitted! Admin will process it shortly."); 
+            } catch(e) { 
+                alert("Failed to request payout. Try again later."); 
             }
-        }
-
-        // UPLOAD PRODUCT
-        document.getElementById('add-product-form').onsubmit = async (e) => {
-            e.preventDefault();
-            const user = auth.currentUser;
-            if(!user) return alert("Please sign in first.");
-
-            const file = document.getElementById('prod-image').files[0];
-            if(!file) return alert("Please select an image.");
-
-            submitBtn.innerHTML = "⏳ Uploading Image..."; submitBtn.disabled = true;
-
-            try {
-                const storageRef = ref(storage, 'products/' + user.uid + '_' + Date.now() + '_' + file.name);
-                await uploadBytes(storageRef, file);
-                
-                submitBtn.innerHTML = "⏳ Generating Link...";
-                const downloadURL = await getDownloadURL(storageRef);
-
-                submitBtn.innerHTML = "⏳ Saving to Database...";
-                await addDoc(collection(db, "products"), {
-                    supplierId: user.uid,
-                    supplierName: user.displayName,
-                    name: document.getElementById('prod-name').value,
-                    category: document.getElementById('prod-category').value,
-                    price: Number(document.getElementById('prod-price').value),
-                    weight: Number(document.getElementById('prod-weight').value),
-                    desc: document.getElementById('prod-desc').value,
-                    img: downloadURL, 
-                    rating: 5.0, 
-                    reviews: 0,
-                    reviewTxt: "Verified product from authorized vendor.",
-                    createdAt: serverTimestamp()
-                });
-
-                alert("✅ Product published successfully!");
-                document.getElementById('add-product-form').reset();
-            } catch (error) { alert("Failed to upload. Check console."); } 
-            finally { submitBtn.innerHTML = "☁️ Publish to Live Store"; submitBtn.disabled = false; }
-        };
-
-        // 📈 CHART.JS LOGIC
-        window.revenueChartInstance = null;
-        function renderChart(dailyData) {
-            const ctx = document.getElementById('revenueChart').getContext('2d');
-            const isDark = document.documentElement.classList.contains('dark');
-            
-            if (window.revenueChartInstance) window.revenueChartInstance.destroy();
-            
-            const gradient = ctx.createLinearGradient(0, 0, 0, 400);
-            gradient.addColorStop(0, 'rgba(16, 185, 129, 0.5)'); 
-            gradient.addColorStop(1, 'rgba(16, 185, 129, 0.0)');
-
-            window.revenueChartInstance = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: dailyData.map(d => d.date),
-                    datasets: [{
-                        label: 'Revenue (TZS)',
-                        data: dailyData.map(d => d.amount),
-                        borderColor: '#10b981',
-                        backgroundColor: gradient,
-                        borderWidth: 3,
-                        pointBackgroundColor: '#fff',
-                        pointBorderColor: '#10b981',
-                        pointBorderWidth: 2,
-                        pointRadius: 4,
-                        fill: true,
-                        tension: 0.4 
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: { legend: { display: false } },
-                    scales: {
-                        x: { 
-                            grid: { display: false, color: isDark ? '#374151' : '#f3f4f6' },
-                            ticks: { color: isDark ? '#9ca3af' : '#6b7280', font: { family: 'Inter', size: 10 } }
-                        },
-                        y: { 
-                            border: { display: false },
-                            grid: { color: isDark ? '#374151' : '#f3f4f6' },
-                            ticks: { 
-                                color: isDark ? '#9ca3af' : '#6b7280', 
-                                font: { family: 'Inter', size: 10 },
-                                callback: function(value) { return value >= 1000 ? (value/1000) + 'k' : value; }
-                            }
-                        }
-                    }
-                }
-            });
         }
 
         async function fetchAndCalculateStats(supplierProducts) {
             try {
                 const querySnapshot = await getDocs(collection(db, "orders"));
-                
-                let totalRevenue = 0;
-                let totalUnits = 0;
+                let totalRevenue = 0; 
+                let totalUnits = 0; 
                 let productStats = {}; 
-                
                 let dailyStats = {};
-                for(let i=6; i>=0; i--) {
-                    const d = new Date(); d.setDate(d.getDate() - i);
-                    dailyStats[d.toLocaleDateString('en-US', {weekday:'short'})] = 0;
+                
+                for(let i=6; i>=0; i--) { 
+                    const d = new Date(); d.setDate(d.getDate() - i); 
+                    dailyStats[d.toLocaleDateString('en-US', {weekday:'short'})] = 0; 
                 }
-
-                supplierProducts.forEach(p => {
-                    productStats[p.name] = { name: p.name, sold: 0, rev: 0, img: p.img, price: p.price };
+                
+                supplierProducts.forEach(p => { 
+                    productStats[p.name] = { name: p.name, sold: 0, rev: 0, img: p.img, price: p.price }; 
                 });
 
                 querySnapshot.forEach((doc) => {
                     const order = doc.data();
+                    // Admin verified and pushed to supplier
                     if (order.status === "PROCESSING" || order.status === "SOLVED") {
                         let orderTotalForSupplier = 0;
-                        
                         supplierProducts.forEach(p => {
                             const escapedName = p.name.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
                             const regex = new RegExp(`${escapedName}\\s*\\(x(\\d+)\\)`, 'i');
                             const match = (order.items || "").match(regex);
                             
-                            if (match) {
-                                const qty = parseInt(match[1]);
-                                const rev = (qty * p.price);
-                                productStats[p.name].sold += qty;
-                                productStats[p.name].rev += rev;
-                                totalUnits += qty;
-                                totalRevenue += rev;
-                                orderTotalForSupplier += rev;
+                            if (match) { 
+                                const qty = parseInt(match[1]); 
+                                const rev = (qty * p.price); 
+                                productStats[p.name].sold += qty; 
+                                productStats[p.name].rev += rev; 
+                                totalUnits += qty; 
+                                totalRevenue += rev; 
+                                orderTotalForSupplier += rev; 
                             }
                         });
-
-                        if(orderTotalForSupplier > 0 && order.createdAt) {
+                        
+                        if(orderTotalForSupplier > 0 && order.createdAt) { 
                             const orderDate = order.createdAt.toDate();
-                            const dayName = orderDate.toLocaleDateString('en-US', {weekday:'short'});
+                            const dayName = orderDate.toLocaleDateString('en-US', {weekday:'short'}); 
                             if(dailyStats[dayName] !== undefined) {
-                                dailyStats[dayName] += orderTotalForSupplier;
+                                dailyStats[dayName] += orderTotalForSupplier; 
                             }
                         }
                     }
                 });
 
-                // 🟢 NEW: Math logic for the wallet
-                window.totalGrossRevenue = totalRevenue;
+                window.totalGrossRevenue = totalRevenue; 
                 const availableBalance = totalRevenue - (window.totalPaidOut || 0);
 
-                document.getElementById('stat-revenue').textContent = `TZS ${totalRevenue.toLocaleString()}`;
-                document.getElementById('wallet-balance').textContent = `TZS ${availableBalance.toLocaleString()}`;
+                document.getElementById('stat-revenue').textContent = `TZS ${totalRevenue.toLocaleString()}`; 
+                document.getElementById('wallet-balance').textContent = `TZS ${availableBalance.toLocaleString()}`; 
                 document.getElementById('stat-units').textContent = totalUnits;
-
+                
                 const chartDataArray = Object.keys(dailyStats).map(key => ({ date: key, amount: dailyStats[key] }));
                 renderChart(chartDataArray);
-
-                let topProd = { name: "-", sold: -1 };
-                let sortedPerformers = [];
-                for (let key in productStats) {
-                    sortedPerformers.push(productStats[key]);
-                    if(productStats[key].sold > topProd.sold) topProd = productStats[key];
-                }
                 
+                let topProd = { name: "-", sold: -1 }; 
+                for (let key in productStats) { 
+                    if(productStats[key].sold > topProd.sold) topProd = productStats[key]; 
+                } 
                 document.getElementById('stat-top-product').textContent = topProd.sold > 0 ? topProd.name : "No sales yet";
-
-                sortedPerformers.sort((a, b) => b.sold - a.sold); 
-                const performersList = document.getElementById('top-performers-list');
                 
-                if(totalUnits === 0) {
-                    performersList.innerHTML = `<p class="text-xs text-gray-400 font-bold text-center py-4">Make your first sale to see analytics here.</p>`;
-                } else {
-                    performersList.innerHTML = sortedPerformers.filter(p => p.sold > 0).map(p => `
-                        <div class="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-700 transition-colors">
-                            <div class="flex items-center gap-3">
-                                <img src="${p.img}" class="w-10 h-10 rounded-lg object-cover border border-gray-200 dark:border-gray-600">
-                                <div>
-                                    <p class="text-xs font-black text-gray-800 dark:text-gray-100">${p.name}</p>
-                                    <p class="text-[9px] text-green-600 dark:text-green-400 font-bold uppercase tracking-widest mt-0.5">TZS ${p.rev.toLocaleString()}</p>
-                                </div>
-                            </div>
-                            <span class="bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 text-[10px] font-black px-3 py-1.5 rounded-lg">x${p.sold} Sold</span>
-                        </div>
-                    `).join('');
-                }
-
             } catch (error) {
-                console.error("Failed to load analytics:", error);
-                document.getElementById('top-performers-list').innerHTML = `<p class="text-xs text-red-400 font-bold text-center py-4">Failed to sync analytics.</p>`;
+                console.error("Analytics Error", error);
             }
         }
 
-        // LISTEN TO INVENTORY (NOW WITH SLEEK SVG ICONS)
-        function listenToInventory(uid) {
-            const q = query(collection(db, "products"), where("supplierId", "==", uid));
+        window.revenueChartInstance = null;
+        function renderChart(dailyData) {
+            const ctx = document.getElementById('revenueChart').getContext('2d'); 
+            const isDark = document.documentElement.classList.contains('dark');
             
-            onSnapshot(q, (snapshot) => {
-                const list = document.getElementById('inventory-list');
-                let items = [];
-                snapshot.forEach((doc) => { items.push({ id: doc.id, ...doc.data() }); });
-
-                document.getElementById('stat-active').textContent = items.length;
-                fetchAndCalculateStats(items);
-
-                if(items.length === 0) {
-                    list.innerHTML = `
-                    <div class="text-center py-10 bg-gray-50 dark:bg-gray-900 rounded-2xl border border-dashed border-gray-200 dark:border-gray-700 transition-colors">
-                        <p class="text-3xl mb-2">📦</p>
-                        <p class="text-sm text-gray-400 font-bold">You have no products live.</p>
-                    </div>`;
-                    return;
-                }
-
-                list.innerHTML = items.map(p => `
-                    <div class="flex items-center gap-4 p-4 border border-gray-100 dark:border-gray-700 rounded-2xl bg-gray-50 dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors group">
-                        <img src="${p.img}" class="w-16 h-16 object-cover rounded-xl border border-gray-200 dark:border-gray-600 shadow-sm">
-                        <div class="flex-grow">
-                            <p class="font-black text-sm text-gray-800 dark:text-gray-100">${p.name}</p>
-                            <p class="text-[9px] font-bold text-gray-400 uppercase tracking-widest mt-0.5">${p.category}</p>
-                            <p class="text-green-600 dark:text-green-400 font-black text-sm mt-1">TZS ${p.price.toLocaleString()}</p>
-                        </div>
-                        <div class="flex gap-1">
-                            <button onclick="openEditModal('${p.id}', '${p.name.replace(/'/g, "\\'")}', ${p.price}, ${p.weight})" class="text-blue-500 hover:text-blue-700 hover:bg-blue-50 dark:text-blue-400 dark:hover:text-blue-300 dark:hover:bg-blue-900/30 p-2.5 rounded-xl transition-all click-press" title="Edit Product">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" /></svg>
-                            </button>
-                            <button onclick="deleteProduct('${p.id}')" class="text-red-500 hover:text-red-700 hover:bg-red-50 dark:text-red-400 dark:hover:text-red-300 dark:hover:bg-red-900/30 p-2.5 rounded-xl transition-all click-press" title="Remove Product">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" /></svg>
-                            </button>
-                        </div>
-                    </div>
-                `).join('');
+            if (window.revenueChartInstance) window.revenueChartInstance.destroy();
+            
+            const gradient = ctx.createLinearGradient(0, 0, 0, 400); 
+            gradient.addColorStop(0, 'rgba(16, 185, 129, 0.5)'); 
+            gradient.addColorStop(1, 'rgba(16, 185, 129, 0.0)');
+            
+            window.revenueChartInstance = new Chart(ctx, { 
+                type: 'line', 
+                data: { 
+                    labels: dailyData.map(d => d.date), 
+                    datasets: [{ 
+                        label: 'Revenue (TZS)', 
+                        data: dailyData.map(d => d.amount), 
+                        borderColor: '#10b981', 
+                        backgroundColor: gradient, 
+                        borderWidth: 3, 
+                        pointBackgroundColor: '#fff', 
+                        pointBorderColor: '#10b981', 
+                        pointBorderWidth: 2, 
+                        pointRadius: 4, 
+                        fill: true, 
+                        tension: 0.4 
+                    }] 
+                }, 
+                options: { 
+                    responsive: true, 
+                    maintainAspectRatio: false, 
+                    plugins: { legend: { display: false } }, 
+                    scales: { 
+                        x: { 
+                            grid: { display: false, color: isDark ? '#374151' : '#f3f4f6' }, 
+                            ticks: { color: isDark ? '#9ca3af' : '#6b7280', font: { family: 'Inter', size: 10 } } 
+                        }, 
+                        y: { 
+                            border: { display: false }, 
+                            grid: { color: isDark ? '#374151' : '#f3f4f6' }, 
+                            ticks: { 
+                                color: isDark ? '#9ca3af' : '#6b7280', 
+                                font: { family: 'Inter', size: 10 }, 
+                                callback: function(value) { return value >= 1000 ? (value/1000) + 'k' : value; } 
+                            } 
+                        } 
+                    } 
+                } 
             });
         }
 
-        window.deleteProduct = async function(docId) {
-            if(confirm("Are you sure you want to remove this product from the live store?")) {
-                try { await deleteDoc(doc(db, "products", docId)); } 
-                catch(e) { alert("Failed to delete."); }
-            }
-        };
-        // --- 💬 SUPPLIER CHAT LOGIC ---
+        // --- 💬 DISPATCH CHAT ---
         let supplierChatListener = null;
-
         window.initSupplierChat = async function() {
-            const user = auth.currentUser;
+            const user = auth.currentUser; 
             if(!user) return; 
             
-            const chatId = `supplier_chat_${user.uid}`;
+            const chatId = `supplier_chat_${user.uid}`; 
             const chatArea = document.getElementById('supplier-chat-area');
             
-            // 1. Create the master chat document
-            await setDoc(doc(db, "chats", chatId), {
-                participants: [user.uid, 'admin'],
-                customerName: `Supplier: ${user.displayName || user.email}`,
-                isSupplier: true, // Flag it so admin knows it's a vendor
-                updatedAt: serverTimestamp()
+            await setDoc(doc(db, "chats", chatId), { 
+                participants: [user.uid, 'admin'], 
+                customerName: `Supplier: ${user.displayName || user.email}`, 
+                isSupplier: true, 
+                updatedAt: serverTimestamp() 
             }, { merge: true });
-
+            
             if(supplierChatListener) supplierChatListener();
             
-            // 2. Listen to messages
             supplierChatListener = onSnapshot(query(collection(db, `chats/${chatId}/messages`), orderBy("timestamp", "asc")), (snapshot) => {
                 chatArea.innerHTML = `
                     <div class="text-center text-[10px] text-gray-400 font-bold uppercase tracking-widest my-2">Secure Admin Channel</div>
                     <div class="max-w-[85%] p-3 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 text-xs rounded-xl rounded-tl-none shadow-sm border border-gray-100 dark:border-gray-700 self-start font-medium leading-relaxed">
                         Welcome to Dispatch HQ. Use this channel to confirm inventory or report that an order is out for delivery.
                     </div>`;
-                    
-                snapshot.forEach(msgDoc => {
-                    const msg = msgDoc.data();
-                    const isMe = msg.senderId === user.uid;
+                
+                snapshot.forEach(msgDoc => { 
+                    const msg = msgDoc.data(); 
+                    const isMe = msg.senderId === user.uid; 
                     
                     chatArea.innerHTML += `
                     <div class="max-w-[85%] p-3 rounded-xl text-xs font-medium ${isMe ? 'bg-blue-600 text-white self-end rounded-tr-none shadow-md' : 'bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 self-start rounded-tl-none shadow-sm border border-gray-100 dark:border-gray-700'}">
                         ${msg.text}
-                    </div>`;
+                    </div>`; 
                 });
                 chatArea.scrollTop = chatArea.scrollHeight;
             });
         };
 
         window.sendSupplierMessage = async () => {
-            const user = auth.currentUser;
+            const user = auth.currentUser; 
             if(!user) return;
             
-            const input = document.getElementById('supplier-chat-input');
-            const text = input.value.trim();
+            const input = document.getElementById('supplier-chat-input'); 
+            const text = input.value.trim(); 
             if(!text) return;
             
-            input.value = '';
+            input.value = ''; 
             const chatId = `supplier_chat_${user.uid}`;
             
-            await addDoc(collection(db, `chats/${chatId}/messages`), {
-                senderId: user.uid,
-                text: text,
-                timestamp: serverTimestamp()
+            await addDoc(collection(db, `chats/${chatId}/messages`), { 
+                senderId: user.uid, 
+                text: text, 
+                timestamp: serverTimestamp() 
             });
+            await updateDoc(doc(db, "chats", chatId), { 
+                lastMessage: text, 
+                updatedAt: serverTimestamp() 
+            });
+        };
+
+        // --- 📝 SAVE PROFILE / EDITS ---
+        window.saveProfileSettings = async function() {
+            const user = auth.currentUser; 
+            if(!user) return;
             
-            await updateDoc(doc(db, "chats", chatId), {
-                lastMessage: text,
-                updatedAt: serverTimestamp()
-            });
+            const saveBtn = document.getElementById('save-profile-btn'); 
+            const newName = document.getElementById('edit-name-input').value.trim();
+            if(!newName) return alert("Display name cannot be empty."); 
+            
+            saveBtn.innerHTML = "⏳ Saving..."; 
+            saveBtn.disabled = true;
+            
+            try { 
+                let newPhotoURL = user.photoURL; 
+                if(newProfileImageFile) { 
+                    const storageRef = ref(storage, 'avatars/' + user.uid); 
+                    await uploadBytes(storageRef, newProfileImageFile); 
+                    newPhotoURL = await getDownloadURL(storageRef); 
+                } 
+                await updateProfile(user, { displayName: newName, photoURL: newPhotoURL }); 
+                updateHeaderUI(auth.currentUser); 
+                alert("✅ Profile updated securely."); 
+                closeProfileSettings(); 
+                newProfileImageFile = null; 
+            } catch (error) { 
+                alert("Failed to update profile."); 
+            } finally { 
+                saveBtn.innerHTML = "💾 Save Changes"; 
+                saveBtn.disabled = false; 
+            }
+        }
+
+        window.saveEditedProduct = async function() {
+            const docId = document.getElementById('edit-doc-id').value; 
+            const btn = document.getElementById('save-edit-btn'); 
+            
+            btn.innerHTML = "⏳ Updating..."; 
+            btn.disabled = true;
+            
+            try { 
+                await updateDoc(doc(db, "products", docId), { 
+                    name: document.getElementById('quick-edit-name').value, 
+                    price: Number(document.getElementById('quick-edit-price').value), 
+                    weight: Number(document.getElementById('quick-edit-weight').value), 
+                    stock: Number(document.getElementById('quick-edit-stock').value) 
+                }); 
+                closeEditModal(); 
+            } catch(e) { 
+                console.error(e);
+                alert("Failed to update product."); 
+            } finally { 
+                btn.innerHTML = "🔄 Update Product"; 
+                btn.disabled = false; 
+            }
+        }
+
+        // --- 📤 UPLOAD PRODUCT FORM ---
+        document.getElementById('add-product-form').onsubmit = async (e) => {
+            e.preventDefault(); 
+            const user = auth.currentUser; 
+            if(!user) return alert("Please sign in first."); 
+            
+            const file = document.getElementById('prod-image').files[0]; 
+            if(!file) return alert("Please select an image.");
+            
+            const btn = document.getElementById('submit-btn'); 
+            btn.innerHTML = "⏳ Uploading Image..."; 
+            btn.disabled = true;
+            
+            try { 
+                const storageRef = ref(storage, 'products/' + user.uid + '_' + Date.now() + '_' + file.name); 
+                await uploadBytes(storageRef, file); 
+                
+                btn.innerHTML = "⏳ Generating Link...";
+                const downloadURL = await getDownloadURL(storageRef); 
+                
+                btn.innerHTML = "⏳ Saving to Database...";
+                await addDoc(collection(db, "products"), { 
+                    supplierId: user.uid, 
+                    supplierName: user.displayName, 
+                    name: document.getElementById('prod-name').value, 
+                    category: document.getElementById('prod-category').value, 
+                    price: Number(document.getElementById('prod-price').value), 
+                    weight: Number(document.getElementById('prod-weight').value), 
+                    stock: Number(document.getElementById('prod-stock').value), 
+                    desc: document.getElementById('prod-desc').value, 
+                    img: downloadURL, 
+                    rating: 5.0, 
+                    reviews: 0, 
+                    reviewTxt: "Verified product from authorized vendor.", 
+                    createdAt: serverTimestamp() 
+                }); 
+                
+                alert("✅ Product published successfully!"); 
+                document.getElementById('add-product-form').reset(); 
+            } catch (error) { 
+                alert("Failed to upload. Check console."); 
+            } finally { 
+                btn.innerHTML = "☁️ Publish to Live Store"; 
+                btn.disabled = false; 
+            }
         };
     </script>
 </body>
