@@ -38,7 +38,6 @@
         .click-press { transition: transform 0.1s ease; }
         .click-press:active { transform: scale(0.96); }
 
-        /* 🟢 RESTORED: STAGGER ANIMATIONS */
         @keyframes staggerIn { from { opacity: 0; transform: scale(0.95) translateY(10px); } to { opacity: 1; transform: scale(1) translateY(0); } }
         .stagger-item { animation: staggerIn 0.5s cubic-bezier(0.22, 1, 0.36, 1) both; }
         
@@ -103,6 +102,7 @@
                 </button>
             </div>
         </div>
+
         <div id="view-orders" class="view-section stagger-item">
             <div class="glass-panel rounded-[2.5rem] overflow-hidden">
                 <div class="overflow-x-auto overflow-y-auto max-h-[60vh]">
@@ -181,9 +181,8 @@
             </div>
         </div>
         
-<div id="view-messages" class="hidden view-section stagger-item h-[65vh]">
+        <div id="view-messages" class="hidden view-section stagger-item h-[65vh]">
             <div class="glass-panel rounded-[2rem] flex h-full overflow-hidden border border-gray-200 dark:border-white/10">
-                
                 <div class="w-1/3 border-r border-gray-200 dark:border-white/10 flex flex-col bg-white/50 dark:bg-black/20">
                     <div class="p-5 border-b border-gray-200 dark:border-white/10">
                         <h3 class="font-black text-gray-900 dark:text-white">Active Chats</h3>
@@ -206,8 +205,7 @@
                         </div>
                     </div>
                     
-                    <div id="chat-messages-area" class="flex-grow overflow-y-auto p-6 flex flex-col gap-4 hidden">
-                        </div>
+                    <div id="chat-messages-area" class="flex-grow overflow-y-auto p-6 flex flex-col gap-4 hidden"></div>
                     
                     <div id="chat-input-area" class="p-4 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-t border-gray-200 dark:border-white/10 flex gap-2 hidden z-10">
                         <input type="text" id="admin-chat-input" onkeypress="if(event.key === 'Enter') sendAdminMessage()" class="flex-grow bg-gray-100 dark:bg-black/50 rounded-xl px-5 py-3 text-sm font-bold outline-none border border-transparent focus:border-green-500 dark:text-white transition-colors" placeholder="Type a reply...">
@@ -215,6 +213,35 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <div id="export-modal" class="fixed inset-0 z-[200] hidden bg-black/60 flex items-center justify-center backdrop-blur-sm px-4">
+        <div class="bg-white dark:bg-gray-900 w-full max-w-md rounded-[2.5rem] p-8 shadow-2xl relative border border-transparent dark:border-gray-700 transition-colors">
+            <button onclick="closeExportModal()" class="absolute top-4 right-4 w-8 h-8 bg-gray-100 dark:bg-gray-800 text-gray-500 rounded-full font-bold click-press transition-colors hover:bg-gray-200 dark:hover:bg-gray-700">✕</button>
+            
+            <h3 class="text-xl font-black mb-1 text-center text-gray-900 dark:text-white">Export Financials</h3>
+            <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest text-center mb-6">Select Statement Date Range</p>
+            
+            <div class="grid grid-cols-2 gap-3 mb-6">
+                <button onclick="setExportRange(7)" class="py-3 bg-gray-50 dark:bg-gray-800 hover:bg-green-50 dark:hover:bg-green-900/20 text-gray-700 dark:text-gray-300 hover:text-green-600 rounded-xl font-bold text-xs click-press transition-colors border border-gray-200 dark:border-gray-700">Last 7 Days</button>
+                <button onclick="setExportRange(30)" class="py-3 bg-gray-50 dark:bg-gray-800 hover:bg-green-50 dark:hover:bg-green-900/20 text-gray-700 dark:text-gray-300 hover:text-green-600 rounded-xl font-bold text-xs click-press transition-colors border border-gray-200 dark:border-gray-700">This Month</button>
+            </div>
+
+            <div class="space-y-4 mb-6">
+                <div>
+                    <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Custom Start Date</label>
+                    <input type="date" id="export-start" class="w-full bg-gray-50 dark:bg-gray-800 p-4 rounded-xl outline-none font-bold text-sm text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 border border-gray-200 dark:border-gray-700 transition-colors">
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Custom End Date</label>
+                    <input type="date" id="export-end" class="w-full bg-gray-50 dark:bg-gray-800 p-4 rounded-xl outline-none font-bold text-sm text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 border border-gray-200 dark:border-gray-700 transition-colors">
+                </div>
+            </div>
+
+            <button onclick="executeCustomExport()" class="w-full py-4 bg-green-600 hover:bg-green-700 text-white rounded-2xl font-black click-press text-xs uppercase tracking-widest transition-colors flex justify-center items-center gap-2 shadow-lg">
+                📥 Download CSV
+            </button>
         </div>
     </div>
 
@@ -240,7 +267,6 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
-        // 🟢 RESTORED: orderBy for accurate database-level sorting
         import { getFirestore, collection, query, onSnapshot, doc, updateDoc, orderBy, serverTimestamp, setDoc, addDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
         const firebaseConfig = { 
@@ -270,32 +296,35 @@
             }
         });
 
+        function safeTime(timestampObj) {
+            return (timestampObj && timestampObj.seconds) ? timestampObj.seconds : 0;
+        }
+
         function startDataSync() {
-            // 🟢 RESTORED: `orderBy` is back because you successfully added the DB Index!
             onSnapshot(query(collection(db, "orders"), orderBy("createdAt", "desc")), (snapshot) => {
                 window.appData.orders = [];
                 let revenue = 0;
                 snapshot.forEach(doc => {
                     const data = doc.data();
                     window.appData.orders.push({id: doc.id, ...data});
-                    if(data.status === 'PAID' || data.status === 'SUCCESS') revenue += data.total;
+                    
+                    if(data.status === 'PAID' || data.status === 'SUCCESS' || data.status === 'PROCESSING' || data.status === 'SOLVED') {
+                        revenue += Number(data.total || 0);
+                    }
                 });
                 
-                // Backup Safety Sort
-                window.appData.orders.sort((a,b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
+                window.appData.orders.sort((a,b) => safeTime(b.createdAt) - safeTime(a.createdAt));
 
                 document.getElementById('total-revenue').textContent = `TZS ${revenue.toLocaleString()}`;
                 document.getElementById('order-count').textContent = window.appData.orders.length;
                 if(window.appData.currentTab === 'orders') handleSearch();
             });
 
-            // 🟢 RESTORED: `orderBy`
             onSnapshot(query(collection(db, "payouts"), orderBy("createdAt", "desc")), (snapshot) => {
                 window.appData.payouts = [];
                 snapshot.forEach(doc => window.appData.payouts.push({id: doc.id, ...doc.data()}));
                 
-                // Backup Safety Sort
-                window.appData.payouts.sort((a,b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
+                window.appData.payouts.sort((a,b) => safeTime(b.createdAt) - safeTime(a.createdAt));
                 
                 const pendingCount = window.appData.payouts.filter(p => p.status === "PENDING").length;
                 const paidCount = window.appData.payouts.filter(p => p.status === "PAID").length;
@@ -306,55 +335,57 @@
                 if(window.appData.currentTab === 'payouts') handleSearch();
             });
 
-            // 🟢 RESTORED: `orderBy` (assuming you added an index for 'addedAt')
             onSnapshot(query(collection(db, "vendors"), orderBy("addedAt", "desc")), (snapshot) => {
                 window.appData.vendors = [];
                 snapshot.forEach(doc => window.appData.vendors.push({id: doc.id, ...doc.data()}));
                 
-                // Backup Safety Sort
-                window.appData.vendors.sort((a,b) => (b.addedAt?.seconds || 0) - (a.addedAt?.seconds || 0));
-
+                window.appData.vendors.sort((a,b) => safeTime(b.addedAt) - safeTime(a.addedAt));
                 if(window.appData.currentTab === 'vendors') handleSearch();
             });
         }
 
+        // --- 🟢 UPGRADED LIGHTNING FAST SEARCH ---
         window.handleSearch = () => {
-            const term = document.getElementById('global-search').value.toLowerCase();
+            const el = document.getElementById('global-search');
+            const term = (el ? el.value : '').toLowerCase();
             
             if (window.appData.currentTab === 'orders') {
                 const filtered = window.appData.orders.filter(o => 
                     String(o.orderId || '').toLowerCase().includes(term) || 
                     String(o.userName || '').toLowerCase().includes(term) || 
-                    String(o.userEmail || '').toLowerCase().includes(term)
+                    String(o.userEmail || '').toLowerCase().includes(term) ||
+                    String(o.status || '').toLowerCase().includes(term) 
                 );
                 renderOrders(filtered);
             } 
             else if (window.appData.currentTab === 'payouts') {
                 const filtered = window.appData.payouts.filter(p => 
                     String(p.supplierName || '').toLowerCase().includes(term) || 
-                    String(p.accountDetails || '').toLowerCase().includes(term)
+                    String(p.accountDetails || '').toLowerCase().includes(term) ||
+                    String(p.status || '').toLowerCase().includes(term)
                 );
                 renderPayouts(filtered);
             }
             else if (window.appData.currentTab === 'vendors') {
                 const filtered = window.appData.vendors.filter(v => 
-                    String(v.email || '').toLowerCase().includes(term)
+                    String(v.email || '').toLowerCase().includes(term) ||
+                    String(v.status || '').toLowerCase().includes(term)
                 );
                 renderVendors(filtered);
             }
         };
 
-        // 🌟 UPGRADED ADMIN PIPELINE 🌟
         function renderOrders(orders) {
             const feed = document.getElementById('admin-orders-feed');
             if(orders.length === 0) {
                 feed.innerHTML = `<tr><td colspan="5" class="p-12 text-center text-gray-500 font-bold">No records found.</td></tr>`;
                 return;
             }
-            feed.innerHTML = orders.map(o => {
+            
+            let html = '';
+            orders.forEach(o => {
                 const safeDate = (o.createdAt && typeof o.createdAt.toDate === 'function') ? o.createdAt.toDate().toLocaleDateString() : (o.dateString || 'Just now');
                 
-                // Pipeline Logic
                 let statusColor = "bg-gray-100 text-gray-600";
                 let actionButton = "";
                 
@@ -375,16 +406,17 @@
                     actionButton = `<button disabled class="px-4 py-2 bg-gray-100 dark:bg-white/5 text-green-500 rounded-xl text-[9px] font-black uppercase tracking-widest cursor-not-allowed">✅ Order Closed</button>`;
                 }
 
-                // Show a warning if the customer deleted this from their history
                 const hiddenWarning = o.hiddenFromCustomer ? `<span class="text-[8px] bg-red-100 text-red-600 px-1.5 py-0.5 rounded ml-2">Hidden by User</span>` : "";
+                const safeTotal = Number(o.total || 0).toLocaleString();
+                const safeTransport = Number(o.transport || 0).toLocaleString();
 
-                return `
+                html += `
                 <tr class="hover:bg-gray-50 dark:hover:bg-white/[0.02] transition-colors border-l-4 border-transparent hover:border-gray-300">
                     <td class="p-6">
                         <p class="font-black text-gray-900 dark:text-white tracking-widest text-sm">${o.orderId || 'UNNAMED'}</p>
                         <p class="text-[10px] text-gray-500 font-bold mt-1">${safeDate}</p>
                         <div class="mt-3 flex items-center">
-                            <span class="${statusColor} px-2 py-1 rounded text-[9px] font-black border uppercase">${o.status}</span>
+                            <span class="${statusColor} px-2 py-1 rounded text-[9px] font-black border uppercase">${o.status || 'UNKNOWN'}</span>
                             ${hiddenWarning}
                         </div>
                     </td>
@@ -396,14 +428,15 @@
                         <p class="text-xs text-gray-500 dark:text-gray-400 leading-relaxed max-w-[200px] italic">"${o.items || 'No data'}"</p>
                     </td>
                     <td class="p-6">
-                        <p class="font-black text-gray-900 dark:text-white text-base">TZS ${(o.total || 0).toLocaleString()}</p>
-                        <p class="text-[10px] text-gray-500 mt-1">Fee: TZS ${(o.transport || 0).toLocaleString()}</p>
+                        <p class="font-black text-gray-900 dark:text-white text-base">TZS ${safeTotal}</p>
+                        <p class="text-[10px] text-gray-500 mt-1">Fee: TZS ${safeTransport}</p>
                     </td>
                     <td class="p-6 text-center">
                         ${actionButton}
                     </td>
                 </tr>`;
-            }).join('');
+            });
+            feed.innerHTML = html;
         }
 
         function renderPayouts(payouts) {
@@ -416,20 +449,23 @@
             if(pending.length === 0) {
                 pendingContainer.innerHTML = `<div class="col-span-full p-20 text-center text-gray-500 font-bold glass-panel rounded-[2.5rem]">Inbox Zero! No pending requests. 🎉</div>`;
             } else {
-                pendingContainer.innerHTML = pending.map(p => {
+                let pendingHtml = '';
+                pending.forEach(p => {
                     const reqDate = (p.createdAt && typeof p.createdAt.toDate === 'function') ? p.createdAt.toDate().toLocaleDateString() : 'Just now';
-                    return `
+                    const safeAmount = Number(p.amount || 0).toLocaleString(); 
+                    
+                    pendingHtml += `
                     <div class="glass-panel p-6 rounded-[2rem] flex flex-col justify-between border-l-4 border-amber-500 relative overflow-hidden">
                         <div class="absolute top-0 right-0 w-24 h-24 bg-amber-500/10 rounded-full blur-[30px] pointer-events-none"></div>
                         <div class="mb-4 relative z-10">
                             <div class="flex justify-between items-start mb-2">
-                                <h4 class="text-lg font-black text-gray-900 dark:text-white">${p.supplierName}</h4>
-                                <span class="text-[9px] font-black px-2 py-1 bg-gray-100 dark:bg-white/5 rounded border border-gray-200 dark:border-white/5 uppercase text-gray-500 dark:text-gray-400 tracking-tighter">ID: ${p.supplierId.slice(0,6)}</span>
+                                <h4 class="text-lg font-black text-gray-900 dark:text-white">${p.supplierName || 'Unknown'}</h4>
+                                <span class="text-[9px] font-black px-2 py-1 bg-gray-100 dark:bg-white/5 rounded border border-gray-200 dark:border-white/5 uppercase text-gray-500 dark:text-gray-400 tracking-tighter">ID: ${(p.supplierId || 'XXXXXX').slice(0,6)}</span>
                             </div>
-                            <p class="text-xs text-gray-500 font-bold uppercase tracking-widest mb-4">Request: <span class="text-amber-600 dark:text-amber-500 text-sm font-black">TZS ${p.amount.toLocaleString()}</span></p>
+                            <p class="text-xs text-gray-500 font-bold uppercase tracking-widest mb-4">Request: <span class="text-amber-600 dark:text-amber-500 text-sm font-black">TZS ${safeAmount}</span></p>
                             <div class="bg-gray-50 dark:bg-black/40 p-4 rounded-2xl border border-gray-200 dark:border-white/5">
                                 <p class="text-[10px] text-gray-500 dark:text-gray-600 font-black uppercase mb-1">Send to Channel</p>
-                                <p class="text-sm font-mono text-blue-600 dark:text-blue-400 font-bold">${p.accountDetails}</p>
+                                <p class="text-sm font-mono text-blue-600 dark:text-blue-400 font-bold">${p.accountDetails || 'No details'}</p>
                             </div>
                         </div>
                         <div class="flex justify-between items-center relative z-10">
@@ -437,25 +473,30 @@
                             <button onclick="updateStatus('payouts', '${p.id}', 'PAID')" class="px-6 py-3 bg-amber-500 hover:bg-amber-400 text-black rounded-xl text-[10px] font-black uppercase tracking-widest shadow-lg shadow-amber-500/20 active:scale-95 transition-all click-press">Settle Now</button>
                         </div>
                     </div>`;
-                }).join('');
+                });
+                pendingContainer.innerHTML = pendingHtml;
             }
 
             if(paid.length === 0) {
                 paidContainer.innerHTML = `<tr><td colspan="4" class="p-8 text-center text-gray-500 font-bold">No historical settlements.</td></tr>`;
             } else {
-                paidContainer.innerHTML = paid.map(p => {
+                let paidHtml = '';
+                paid.forEach(p => {
                     let procDate = 'N/A';
                     if (p.processedAt && typeof p.processedAt.toDate === 'function') procDate = p.processedAt.toDate().toLocaleDateString();
                     else if (p.createdAt && typeof p.createdAt.toDate === 'function') procDate = p.createdAt.toDate().toLocaleDateString();
 
-                    return `
+                    const safeAmount = Number(p.amount || 0).toLocaleString();
+
+                    paidHtml += `
                     <tr class="hover:bg-gray-50 dark:hover:bg-white/[0.02] transition-colors border-l-4 border-transparent hover:border-green-500">
                         <td class="p-5 text-[10px] font-bold text-gray-500 uppercase tracking-widest">${procDate}</td>
-                        <td class="p-5 font-black text-xs text-gray-900 dark:text-white">${p.supplierName}</td>
-                        <td class="p-5 font-black text-sm text-green-600 dark:text-green-500">TZS ${p.amount.toLocaleString()}</td>
-                        <td class="p-5 text-[10px] text-gray-500 italic max-w-[200px] truncate">${p.accountDetails}</td>
+                        <td class="p-5 font-black text-xs text-gray-900 dark:text-white">${p.supplierName || 'Unknown'}</td>
+                        <td class="p-5 font-black text-sm text-green-600 dark:text-green-500">TZS ${safeAmount}</td>
+                        <td class="p-5 text-[10px] text-gray-500 italic max-w-[200px] truncate">${p.accountDetails || ''}</td>
                     </tr>`;
-                }).join('');
+                });
+                paidContainer.innerHTML = paidHtml;
             }
         }
 
@@ -465,14 +506,16 @@
                 feed.innerHTML = `<tr><td colspan="3" class="p-8 text-center text-gray-500 font-bold">No registered vendors.</td></tr>`;
                 return;
             }
-            feed.innerHTML = vendors.map(v => {
+            
+            let html = '';
+            vendors.forEach(v => {
                 const isActive = v.status === 'ACTIVE';
-                return `
+                html += `
                 <tr class="hover:bg-gray-50 dark:hover:bg-white/[0.02] transition-colors">
                     <td class="p-5 font-bold text-sm text-gray-800 dark:text-gray-200">${v.email}</td>
                     <td class="p-5 text-center">
                         <span class="${isActive ? 'bg-green-100 text-green-700 dark:bg-green-500/20 dark:text-green-500 border-green-200 dark:border-green-500/20' : 'bg-red-100 text-red-700 dark:bg-red-500/20 dark:text-red-500 border-red-200 dark:border-red-500/20'} px-3 py-1 rounded text-[9px] font-black uppercase tracking-widest border">
-                            ${v.status}
+                            ${v.status || 'UNKNOWN'}
                         </span>
                     </td>
                     <td class="p-5 text-center">
@@ -481,7 +524,8 @@
                         </button>
                     </td>
                 </tr>`;
-            }).join('');
+            });
+            feed.innerHTML = html;
         }
 
         window.switchTab = (tab) => {
@@ -500,7 +544,8 @@
                 }
             });
             
-            document.getElementById('global-search').value = ''; 
+            const searchEl = document.getElementById('global-search');
+            if(searchEl) searchEl.value = ''; 
             handleSearch();
         };
 
@@ -548,29 +593,10 @@
             catch(e) { alert("Error updating vendor."); }
         };
 
-        // --- 🔍 LIGHTNING FAST SEARCH FILTER ---
-        window.handleSearch = function() {
-            const query = document.getElementById('global-search').value.toLowerCase();
-            
-            // This grabs all the order cards currently on your screen
-            const orderCards = document.querySelectorAll('[id$="-feed"] > div, #admin-orders-list > div, .order-card');
-            
-            orderCards.forEach(card => {
-                const text = card.innerText.toLowerCase();
-                // If the card has the word (e.g. "pending", "mziray", "580390"), show it!
-                if(text.includes(query)) {
-                    card.style.display = '';
-                } else {
-                    card.style.display = 'none';
-                }
-            });
-        };
-
-        // --- 📅 CUSTOM RANGE EXPORT LOGIC ---
+        // --- 🟢 RESTORED: MULTI-TAB DYNAMIC EXPORT LOGIC ---
         window.openExportModal = () => document.getElementById('export-modal').classList.remove('hidden');
         window.closeExportModal = () => document.getElementById('export-modal').classList.add('hidden');
         
-        // Auto-fill dates for "7 Days" or "30 Days" buttons
         window.setExportRange = (days) => {
             const end = new Date();
             const start = new Date();
@@ -579,7 +605,6 @@
             document.getElementById('export-start').value = start.toISOString().split('T')[0];
         };
 
-        // Execute the custom CSV download
         window.executeCustomExport = () => {
             const startVal = document.getElementById('export-start').value;
             const endVal = document.getElementById('export-end').value;
@@ -588,36 +613,72 @@
             
             const start = new Date(startVal);
             const end = new Date(endVal);
-            end.setHours(23, 59, 59, 999); // Include the entire end day
+            end.setHours(23, 59, 59, 999); 
             
-            // Filter global orders array by date
-            const filteredOrders = window.appData.orders.filter(o => {
-                if(!o.createdAt) return false;
-                const orderDate = o.createdAt.toDate();
-                return orderDate >= start && orderDate <= end;
-            });
-            
-            if(filteredOrders.length === 0) {
-                alert("No transactions found in this specific date range.");
-                return;
+            const tab = window.appData.currentTab;
+            let headers = [];
+            let data = [];
+            let filtered = [];
+
+            if (tab === 'orders') {
+                filtered = window.appData.orders.filter(o => {
+                    if(!o.createdAt) return false;
+                    const orderDate = o.createdAt.toDate();
+                    return orderDate >= start && orderDate <= end;
+                });
+                if(filtered.length === 0) return alert("No orders found in this date range.");
+                
+                headers = ["Date", "Order ID", "Customer", "Items", "Total (TZS)", "Status"];
+                data = filtered.map(o => [
+                    `"${o.createdAt.toDate().toLocaleString()}"`,
+                    `"${o.orderId || o.id}"`,
+                    `"${o.userName || 'Customer'}"`,
+                    `"${o.items || ''}"`,
+                    `"${o.total || 0}"`,
+                    `"${o.status || 'PENDING'}"`
+                ]);
+            } 
+            else if (tab === 'payouts') {
+                filtered = window.appData.payouts.filter(p => {
+                    if(!p.createdAt) return false;
+                    const d = p.createdAt.toDate();
+                    return d >= start && d <= end;
+                });
+                if(filtered.length === 0) return alert("No payouts found in this date range.");
+
+                headers = ["Request Date", "Supplier Name", "Amount (TZS)", "Account Details", "Status"];
+                data = filtered.map(p => [
+                    `"${p.createdAt.toDate().toLocaleString()}"`,
+                    `"${p.supplierName || 'Unknown'}"`,
+                    `"${p.amount || 0}"`,
+                    `"${p.accountDetails || ''}"`,
+                    `"${p.status || 'PENDING'}"`
+                ]);
             }
-            
-            // Build CSV Data
-            const headers = ["Date", "Order ID", "Customer", "Items", "Total (TZS)", "Status"];
-            const data = filteredOrders.map(o => [
-                `"${o.createdAt.toDate().toLocaleString()}"`,
-                `"${o.orderId || o.id}"`,
-                `"${o.userName || 'Customer'}"`,
-                `"${o.items || ''}"`,
-                `"${o.total || 0}"`,
-                `"${o.status || 'PENDING'}"`
-            ]);
+            else if (tab === 'vendors') {
+                filtered = window.appData.vendors.filter(v => {
+                    if(!v.addedAt) return false;
+                    const d = v.addedAt.toDate();
+                    return d >= start && d <= end;
+                });
+                if(filtered.length === 0) return alert("No vendors authorized in this date range.");
+
+                headers = ["Date Authorized", "Email", "Status"];
+                data = filtered.map(v => [
+                    `"${v.addedAt.toDate().toLocaleString()}"`,
+                    `"${v.email || ''}"`,
+                    `"${v.status || 'UNKNOWN'}"`
+                ]);
+            }
+            else {
+                return alert("Export is not available for this tab.");
+            }
             
             let csvContent = "data:text/csv;charset=utf-8," + headers.join(",") + "\n" + data.map(row => row.join(",")).join("\n");
             const encodedUri = encodeURI(csvContent);
             const link = document.createElement("a");
             link.setAttribute("href", encodedUri);
-            link.setAttribute("download", `UjenziSmart_Financials_${startVal}_to_${endVal}.csv`);
+            link.setAttribute("download", `UjenziSmart_${tab.toUpperCase()}_${startVal}_to_${endVal}.csv`);
             document.body.appendChild(link); 
             link.click(); 
             document.body.removeChild(link);
@@ -629,7 +690,6 @@
         window.appData.activeChatId = null;
         let activeChatListener = null;
 
-        // 1. Listen for all conversations in the sidebar
         onAuthStateChanged(auth, (user) => {
             if (user && MASTER_ADMINS.includes(user.email)) {
                 onSnapshot(query(collection(db, "chats"), orderBy("updatedAt", "desc")), (snapshot) => {
@@ -641,22 +701,22 @@
                         return;
                     }
                     
-                    chatList.innerHTML = '';
+                    let html = '';
                     snapshot.forEach(docSnap => {
                         const chat = docSnap.data();
                         const isSelected = window.appData.activeChatId === docSnap.id;
                         
-                        chatList.innerHTML += `
+                        html += `
                         <div onclick="openAdminChat('${docSnap.id}', '${chat.customerName}')" class="p-4 rounded-xl cursor-pointer transition-colors click-press border-l-4 ${isSelected ? 'bg-white dark:bg-white/5 border-green-500 shadow-sm' : 'border-transparent hover:bg-gray-100 dark:hover:bg-white/5'}">
                             <h4 class="font-bold text-sm text-gray-900 dark:text-white">${chat.customerName || 'Customer'}</h4>
                             <p class="text-xs text-gray-500 truncate mt-1">${chat.lastMessage || 'New conversation started...'}</p>
                         </div>`;
                     });
+                    chatList.innerHTML = html;
                 });
             }
         });
 
-        // 2. Open a specific chat and load messages
         window.openAdminChat = (chatId, customerName) => {
             window.appData.activeChatId = chatId;
             document.getElementById('chat-placeholder').classList.add('hidden');
@@ -667,41 +727,38 @@
             document.getElementById('chat-user-name').textContent = customerName;
             const messagesArea = document.getElementById('chat-messages-area');
             
-            if(activeChatListener) activeChatListener(); // Stop listening to old chat
+            if(activeChatListener) activeChatListener(); 
             
-            // Listen to specific chat messages in real-time
             activeChatListener = onSnapshot(query(collection(db, `chats/${chatId}/messages`), orderBy("timestamp", "asc")), (snapshot) => {
-                messagesArea.innerHTML = '';
+                let html = '';
                 snapshot.forEach(msgDoc => {
                     const msg = msgDoc.data();
                     const isAdmin = msg.senderId === 'admin';
                     
-                    messagesArea.innerHTML += `
+                    html += `
                     <div class="max-w-[75%] p-3 rounded-2xl text-sm ${isAdmin ? 'bg-green-600 text-white self-end rounded-tr-none shadow-md' : 'bg-white dark:bg-gray-800 text-gray-900 dark:text-white self-start rounded-tl-none shadow-sm border border-gray-200 dark:border-white/5'}">
                         ${msg.text}
                     </div>`;
                 });
-                messagesArea.scrollTop = messagesArea.scrollHeight; // Auto-scroll to bottom
+                messagesArea.innerHTML = html;
+                messagesArea.scrollTop = messagesArea.scrollHeight; 
             });
         };
 
-        // 3. Send a message back to the customer
         window.sendAdminMessage = async () => {
             const input = document.getElementById('admin-chat-input');
             const text = input.value.trim();
             const chatId = window.appData.activeChatId;
             
             if(!text || !chatId) return;
-            input.value = ''; // clear instantly for good UX
+            input.value = ''; 
             
-            // Add to subcollection
             await addDoc(collection(db, `chats/${chatId}/messages`), {
                 senderId: 'admin',
                 text: text,
                 timestamp: serverTimestamp()
             });
             
-            // Update parent document for the sidebar
             await updateDoc(doc(db, "chats", chatId), {
                 lastMessage: text,
                 updatedAt: serverTimestamp()
@@ -709,34 +766,5 @@
         };
 
     </script>
-<div id="export-modal" class="fixed inset-0 z-[200] hidden bg-black/60 flex items-center justify-center backdrop-blur-sm px-4">
-        <div class="bg-white dark:bg-gray-900 w-full max-w-md rounded-[2.5rem] p-8 shadow-2xl relative border border-transparent dark:border-gray-700 transition-colors">
-            <button onclick="closeExportModal()" class="absolute top-4 right-4 w-8 h-8 bg-gray-100 dark:bg-gray-800 text-gray-500 rounded-full font-bold click-press transition-colors hover:bg-gray-200 dark:hover:bg-gray-700">✕</button>
-            
-            <h3 class="text-xl font-black mb-1 text-center text-gray-900 dark:text-white">Export Financials</h3>
-            <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest text-center mb-6">Select Statement Date Range</p>
-            
-            <div class="grid grid-cols-2 gap-3 mb-6">
-                <button onclick="setExportRange(7)" class="py-3 bg-gray-50 dark:bg-gray-800 hover:bg-green-50 dark:hover:bg-green-900/20 text-gray-700 dark:text-gray-300 hover:text-green-600 rounded-xl font-bold text-xs click-press transition-colors border border-gray-200 dark:border-gray-700">Last 7 Days</button>
-                <button onclick="setExportRange(30)" class="py-3 bg-gray-50 dark:bg-gray-800 hover:bg-green-50 dark:hover:bg-green-900/20 text-gray-700 dark:text-gray-300 hover:text-green-600 rounded-xl font-bold text-xs click-press transition-colors border border-gray-200 dark:border-gray-700">This Month</button>
-            </div>
-
-            <div class="space-y-4 mb-6">
-                <div>
-                    <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Custom Start Date</label>
-                    <input type="date" id="export-start" class="w-full bg-gray-50 dark:bg-gray-800 p-4 rounded-xl outline-none font-bold text-sm text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 border border-gray-200 dark:border-gray-700 transition-colors">
-                </div>
-                <div>
-                    <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Custom End Date</label>
-                    <input type="date" id="export-end" class="w-full bg-gray-50 dark:bg-gray-800 p-4 rounded-xl outline-none font-bold text-sm text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 border border-gray-200 dark:border-gray-700 transition-colors">
-                </div>
-            </div>
-
-            <button onclick="executeCustomExport()" class="w-full py-4 bg-green-600 hover:bg-green-700 text-white rounded-2xl font-black click-press text-xs uppercase tracking-widest transition-colors flex justify-center items-center gap-2 shadow-lg">
-                📥 Download CSV Statement
-            </button>
-        </div>
-    </div>
-    
 </body>
 </html>
