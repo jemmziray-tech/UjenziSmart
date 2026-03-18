@@ -32,7 +32,6 @@
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
         body { font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; scroll-behavior: smooth; overscroll-behavior-y: none; }
         
-        /* 🌟 Native Smartphone Animations (Hardware Accelerated) 🌟 */
         .view-content { width: 100%; will-change: transform, opacity; }
         @keyframes slideUpFade { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes slideInRightNative { from { opacity: 0; transform: translateX(60px); } to { opacity: 1; transform: translateX(0); } }
@@ -47,17 +46,14 @@
 
         .glass { backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); }
         
-        /* Premium Blue Tech Background */
         .bg-deep-tech { background: radial-gradient(circle at top right, #112347 0%, #030814 100%); }
         .pattern-overlay { background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.03' fill-rule='evenodd'%3E%3Ccircle cx='20' cy='20' r='1'/%3E%3C/g%3E%3C/svg%3E"); }
 
-        /* Animated Floating Products */
         @keyframes floatObj1 { 0%, 100% { transform: translateY(0px) rotate(-5deg); } 50% { transform: translateY(-15px) rotate(5deg); } }
         @keyframes floatObj2 { 0%, 100% { transform: translateY(0px) translateX(0px) rotate(10deg); } 50% { transform: translateY(12px) translateX(-8px) rotate(-5deg); } }
         @keyframes floatObj3 { 0%, 100% { transform: scale(1) rotate(0deg); } 50% { transform: scale(1.05) rotate(-5deg) translateY(-10px); } }
         .anim-prod { position: absolute; color: rgba(255, 255, 255, 0.06); pointer-events: none; z-index: 1; }
 
-        /* The Signature Green Gradient Pulse */
         .gradient-pulse { background: linear-gradient(-45deg, #059669, #10b981, #34d399, #059669); background-size: 400% 400%; animation: gradientMove 10s ease infinite; }
         @keyframes gradientMove { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
 
@@ -75,25 +71,22 @@
         .toggle-checkbox:checked + .toggle-label { background-color: #10b981; }
         .toggle-checkbox { right: 4px; z-index: 1; border-color: #e5e7eb; transition: all 0.3s; }
         .toggle-label { width: 3rem; height: 1.5rem; background-color: #e5e7eb; border-radius: 9999px; transition: all 0.3s; }
-        
-        /* Custom styles for the stylish payment selector */
-        .payment-option { transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); border: 2px solid transparent; }
-        .payment-option.selected { border-color: #10b981; background-color: rgba(16, 185, 129, 0.05); }
-        .dark .payment-option.selected { background-color: rgba(16, 185, 129, 0.1); }
-        .check-icon { opacity: 0; transform: scale(0.5); transition: all 0.2s; }
-        .payment-option.selected .check-icon { opacity: 1; transform: scale(1); }
     </style>
 </head>
 <body class="bg-[#f4f6f9] dark:bg-gray-900 text-gray-800 dark:text-gray-100 pb-24 transition-colors duration-300 relative min-h-screen">
 
     <div id="global-alert-bar" class="w-full bg-[#ea580c] text-white text-[10px] sm:text-xs font-bold text-center py-2.5 px-4 shadow-md z-[201] relative flex justify-center items-center gap-2 transition-all">
-    <span class="flex-grow">🚧 <strong>LIVE UPDATE:</strong> High-quality building materials are now available for instant delivery.</span>
+    <span class="flex-grow">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4 inline-block mr-1 -mt-0.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+        <strong>LIVE UPDATE:</strong> High-quality building materials are now available for instant delivery.
+    </span>
     <button onclick="document.getElementById('global-alert-bar').style.display='none'" class="shrink-0 text-white hover:text-gray-200 text-xl leading-none px-2">&times;</button>
 </div>
 
     <div id="auth-screen" class="fixed inset-0 z-[200] bg-[#f4f6f9] dark:bg-gray-900 flex flex-col justify-center px-6 transition-opacity duration-300">
         <div class="max-w-md mx-auto w-full bg-white dark:bg-gray-800 p-8 rounded-[2.5rem] shadow-2xl border dark:border-gray-700 text-center animate-stagger-in">
-            <h1 class="text-4xl font-black text-green-600 dark:text-green-500 mb-2 tracking-tighter">UjenziSmart</h1>
+            <img src="logo.png" alt="UjenziSmart Logo" class="w-24 h-24 mx-auto mb-4 rounded-3xl object-cover shadow-lg border border-gray-100 dark:border-gray-700">
+            <h1 class="text-3xl font-black text-green-600 dark:text-green-500 mb-2 tracking-tighter">UjenziSmart</h1>
             <p class="text-gray-500 mb-8 text-sm font-medium">Your premium building partner.</p>
             <button type="button" id="google-signin-btn" class="w-full py-4 bg-white dark:bg-gray-700 text-gray-700 dark:text-white border dark:border-gray-600 rounded-2xl font-bold flex items-center justify-center gap-3 click-press shadow-sm">
                 <svg viewBox="0 0 24 24" width="18" height="18"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
@@ -113,7 +106,9 @@
         <div class="max-w-7xl mx-auto relative z-10">
             <div class="flex items-center justify-between mb-8 h-16">
                 <div class="flex items-center gap-4">
-                    <button id="header-back-btn" onclick="goBack()" class="hidden w-11 h-11 bg-white/10 rounded-full border border-white/20 flex items-center justify-center font-bold text-xl click-press glass hover:bg-white/20 transition-colors">←</button>
+                    <button id="header-back-btn" onclick="goBack()" class="hidden w-11 h-11 bg-white/10 rounded-full border border-white/20 flex items-center justify-center click-press glass hover:bg-white/20 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" /></svg>
+                    </button>
                     
                     <div class="relative shrink-0 transition-transform hover:scale-105">
                         <img src="logo.png" alt="UjenziSmart Logo" class="w-16 h-16 sm:w-20 sm:h-20 bg-white rounded-2xl object-cover border-2 border-white/20 shadow-2xl">
@@ -139,7 +134,9 @@
             <div id="search-sticky-wrapper" class="sticky top-0 z-50 -mx-5 px-5 py-3 transition-all duration-300 stagger-item">
                 <div class="relative shadow-[0_15px_30px_rgba(0,0,0,0.08)] rounded-[2rem] bg-white dark:bg-gray-800 border border-transparent dark:border-gray-700 transition-all hover:shadow-lg">
                     <input type="text" id="search-input" onkeyup="handleSearch()" placeholder="Search cement, tiles, rebars..." class="w-full bg-transparent rounded-[2rem] px-14 py-[18px] outline-none font-bold text-[13px] text-gray-800 dark:text-gray-100 placeholder-gray-400 focus:ring-2 focus:ring-green-500">
-                    <span class="absolute left-5 top-[17px] text-lg opacity-40">🔍</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 absolute left-5 top-[18px] text-gray-400">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+                    </svg>
                 </div>
             </div>
             <div id="dynamic-home-content" class="flex flex-col gap-8"></div>
@@ -160,7 +157,8 @@
                         <h3 class="font-black text-xl leading-tight">Simba Cement 50kg</h3>
                     </div>
                     <div class="absolute top-4 right-4 bg-white/90 glass text-gray-900 text-[10px] font-black px-3 py-1 rounded-full flex items-center gap-1 shadow-lg">
-                        <span class="text-green-600">▼</span> -2% this week
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="w-3 h-3 text-green-600"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" /></svg>
+                        -2% this week
                     </div>
                 </div>
                 <div class="p-5 flex justify-between items-end">
@@ -186,7 +184,8 @@
                         <h3 class="font-black text-xl leading-tight">Y12 Steel Rebars</h3>
                     </div>
                     <div class="absolute top-4 right-4 bg-white/90 glass text-gray-900 text-[10px] font-black px-3 py-1 rounded-full flex items-center gap-1 shadow-lg">
-                        <span class="text-red-500">▲</span> +3% this week
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="w-3 h-3 text-red-500"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 15.75l7.5-7.5 7.5 7.5" /></svg>
+                        +3% this week
                     </div>
                 </div>
                 <div class="p-5 flex justify-between items-end">
@@ -205,24 +204,28 @@
         </div>
 
         <div id="view-cart" class="view-content hidden mt-6">
-            <h2 class="text-3xl font-black tracking-tighter mb-6 text-center">My Cart 🛒</h2>
+            <h2 class="text-3xl font-black tracking-tighter mb-6 text-center">My Cart</h2>
             <div id="cart-items-container" class="flex flex-col gap-4 mb-6"></div>
             
             <div id="cart-footer" class="hidden">
                 <div class="bg-white dark:bg-gray-800 rounded-3xl p-5 border dark:border-gray-700 shadow-md mb-6 relative overflow-hidden">
-                    <div class="absolute -right-4 -top-4 opacity-5 text-6xl">🚚</div>
-                    <h3 class="font-black text-sm mb-1">Smart Delivery Estimator</h3>
-                    <p class="text-[10px] text-gray-400 mb-4 font-bold">Select Dar Es Salaam Zone</p>
-                    <select id="delivery-zone" onchange="calculateDelivery()" class="w-full bg-gray-50 dark:bg-gray-900 border dark:border-gray-700 rounded-xl px-4 py-3 outline-none font-bold text-xs mb-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" class="absolute -right-4 -top-4 w-24 h-24 text-gray-200 dark:text-gray-700 opacity-50 pointer-events-none">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 18.75a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 01-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.124a17.902 17.902 0 00-3.213-9.193 2.056 2.056 0 00-1.58-.86H14.25M16.5 18.75h-2.25m0-11.177v-.958c0-.568-.422-1.048-.987-1.106a48.554 48.554 0 00-10.026 0 1.106 1.106 0 00-.987 1.106v7.635m12-6.677v6.677m0 4.5v-4.5m0 0h-12" />
+                    </svg>
+                    <h3 class="font-black text-sm mb-1 relative z-10">Smart Delivery Estimator</h3>
+                    <p class="text-[10px] text-gray-400 mb-4 font-bold relative z-10">Select Dar Es Salaam Zone</p>
+                    <select id="delivery-zone" onchange="calculateDelivery()" class="w-full bg-gray-50 dark:bg-gray-900 border dark:border-gray-700 rounded-xl px-4 py-3 outline-none font-bold text-xs mb-4 relative z-10">
                         <option value="0">Self Pickup (Store Collection)</option>
                         <option value="1">Tegeta / Boko / Bunju</option>
                         <option value="1.2">Mbezi / Kimara</option>
                         <option value="1.5">Kigamboni (Includes Toll)</option>
                         <option value="0.8">Kinondoni / Posta</option>
                     </select>
-                    <div id="delivery-result-box" class="bg-green-50 dark:bg-green-900/20 p-4 rounded-xl border border-green-100 dark:border-green-800 transition-all flex items-center justify-between">
+                    <div id="delivery-result-box" class="bg-green-50 dark:bg-green-900/20 p-4 rounded-xl border border-green-100 dark:border-green-800 transition-all flex items-center justify-between relative z-10">
                         <div class="flex items-center gap-3">
-                            <span id="vehicle-icon" class="text-2xl">🏪</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-green-600 dark:text-green-400">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 21v-7.5a.75.75 0 01.75-.75h3a.75.75 0 01.75.75V21m-4.5 0H2.36m11.14 0H18m0 0h3.64m-1.39 0V9.349m-16.5 11.65V9.35m0 0a3.001 3.001 0 003.75-.615A2.993 2.993 0 009.75 9.75c.896 0 1.7-.393 2.25-1.016a2.993 2.993 0 002.25 1.016c.896 0 1.7-.393 2.25-1.016a3.001 3.001 0 003.75.614m-16.5 0a3.004 3.004 0 01-.621-4.72L4.318 3.44A1.5 1.5 0 015.378 3h13.243a1.5 1.5 0 011.06.44l1.19 1.189a3 3 0 01-.621 4.72m-13.5 8.65h3.75a.75.75 0 00.75-.75V13.5a.75.75 0 00-.75-.75H6.75a.75.75 0 00-.75.75v3.75c0 .415.336.75.75.75z" />
+                            </svg>
                             <div>
                                 <p class="text-[10px] font-black uppercase tracking-widest text-green-800 dark:text-green-300">Transport Method</p>
                                 <p class="text-sm font-black text-green-900 dark:text-white" id="vehicle-name">Store Pickup</p>
@@ -237,8 +240,9 @@
                     <div class="flex justify-between text-xs font-bold text-green-500 mb-4 px-2"><span>Transport</span><span id="cart-transport">TZS 0</span></div>
                     <div class="flex justify-between text-2xl font-black mb-8 px-2"><span>Total</span><span id="cart-total-price" class="text-green-600 dark:text-green-400">TZS 0</span></div>
                     
-                    <button onclick="checkoutWhatsApp()" class="w-full py-4 bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 rounded-[1.5rem] font-bold click-press text-xs tracking-widest mb-4 transition-colors">
-                        💬 Just Order via WhatsApp
+                    <button onclick="checkoutWhatsApp()" class="w-full py-4 bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 rounded-[1.5rem] font-bold click-press text-xs tracking-widest mb-4 transition-colors flex items-center justify-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M8.625 12a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 01-2.555-.337A5.972 5.972 0 015.41 20.97a5.969 5.969 0 01-.474-.065 4.48 4.48 0 00.978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25z" /></svg>
+                        Just Order via WhatsApp
                     </button>
 
                     <div class="bg-gray-50 dark:bg-gray-800 rounded-[2rem] p-5 border border-gray-200 dark:border-gray-700 mt-4 shadow-sm relative overflow-hidden">
@@ -248,43 +252,31 @@
                             <span class="bg-green-500 text-white text-[9px] font-black px-2 py-1 rounded-md uppercase tracking-widest flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-white animate-pulse"></span> Secured</span>
                             <h3 class="text-sm font-black text-gray-900 dark:text-white">Payment Method</h3>
                         </div>
-                        <p class="text-[11px] text-gray-500 dark:text-gray-400 mb-5 font-medium relative z-10">Choose how you want to pay.</p>
+                        <p class="text-[11px] text-gray-500 dark:text-gray-400 mb-5 font-medium relative z-10">Mobile money is supported for quick checkout.</p>
                         
-                        <div class="grid grid-cols-3 gap-2 mb-4 relative z-10" id="payment-options-grid">
-                            <div onclick="selectPaymentMethod('mobile')" id="opt-mobile" class="payment-option selected bg-white dark:bg-gray-900 rounded-xl p-3 flex flex-col items-center justify-center gap-2 click-press shadow-sm cursor-pointer relative">
-                                <span class="text-xl">📱</span>
-                                <span class="text-[10px] font-black text-gray-800 dark:text-gray-200">Mobile</span>
-                                <div class="check-icon absolute top-1.5 right-1.5 w-4 h-4 bg-green-500 rounded-full flex items-center justify-center text-white text-[8px] font-bold shadow-sm">✓</div>
-                            </div>
-                            
-                            <div onclick="selectPaymentMethod('card')" id="opt-card" class="payment-option bg-white dark:bg-gray-900 rounded-xl p-3 flex flex-col items-center justify-center gap-2 click-press shadow-sm cursor-pointer relative">
-                                <span class="text-xl">💳</span>
-                                <span class="text-[10px] font-black text-gray-800 dark:text-gray-200">Card</span>
-                                <div class="check-icon absolute top-1.5 right-1.5 w-4 h-4 bg-green-500 rounded-full flex items-center justify-center text-white text-[8px] font-bold shadow-sm">✓</div>
-                            </div>
-
-                            <div onclick="selectPaymentMethod('tips')" id="opt-tips" class="payment-option bg-white dark:bg-gray-900 rounded-xl p-3 flex flex-col items-center justify-center gap-2 click-press shadow-sm cursor-pointer relative">
-                                <span class="text-xl">🏦</span>
-                                <span class="text-[10px] font-black text-gray-800 dark:text-gray-200">Scan QR</span>
-                                <div class="check-icon absolute top-1.5 right-1.5 w-4 h-4 bg-green-500 rounded-full flex items-center justify-center text-white text-[8px] font-bold shadow-sm">✓</div>
+                        <div class="mb-4 relative z-10">
+                            <div class="bg-green-50 dark:bg-green-900/20 border-2 border-green-500 rounded-xl p-4 flex items-center justify-between shadow-sm">
+                                <div class="flex items-center gap-3">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-green-600 dark:text-green-400"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 1.5H8.25A2.25 2.25 0 006 3.75v16.5a2.25 2.25 0 002.25 2.25h7.5A2.25 2.25 0 0018 20.25V3.75a2.25 2.25 0 00-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3" /></svg>
+                                    <span class="text-xs font-black text-green-800 dark:text-green-400">Mobile Money Network</span>
+                                </div>
+                                <div class="w-5 h-5 bg-green-500 rounded-full flex items-center justify-center text-white text-[10px] font-bold shadow-sm">✓</div>
                             </div>
                         </div>
 
-                        <input type="hidden" id="selected-payment-method" value="mobile">
-
                         <div id="phone-input-wrapper" class="relative z-10 transition-all duration-300">
-                            <input type="tel" id="phone-number" placeholder="Enter Phone (e.g. 0754...)" class="w-full bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-xl px-4 py-3.5 outline-none font-bold text-xs mb-4 focus:ring-2 focus:ring-green-500 transition-all shadow-inner">
+                            <input type="tel" id="phone-number" placeholder="Enter Mobile Money Number (e.g. 0754...)" class="w-full bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-xl px-4 py-3.5 outline-none font-bold text-xs mb-4 focus:ring-2 focus:ring-green-500 transition-all shadow-inner">
                         </div>
                         
                         <button onclick="processCheckout()" id="pay-btn" class="w-full py-4 bg-green-600 hover:bg-green-700 text-white rounded-[1.5rem] font-black shadow-[0_10px_20px_rgba(22,163,74,0.3)] click-press uppercase text-xs tracking-widest flex items-center justify-center gap-2 transition-colors relative z-10">
-                            📱 Send Prompt to Phone
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 1.5H8.25A2.25 2.25 0 006 3.75v16.5a2.25 2.25 0 002.25 2.25h7.5A2.25 2.25 0 0018 20.25V3.75a2.25 2.25 0 00-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3" /></svg>
+                            Send Prompt to Phone
                         </button>
                         
                         <div class="flex justify-center items-center gap-3 grayscale opacity-40 mt-5 pt-4 border-t border-gray-200 dark:border-gray-700 relative z-10">
                             <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c2/M-Pesa_logo.svg/512px-M-Pesa_logo.svg.png" class="h-4">
                             <img src="https://upload.wikimedia.org/wikipedia/commons/a/a2/Tigo_logo.svg" class="h-4">
                             <img src="https://logos-world.net/wp-content/uploads/2020/12/Airtel-Logo.png" class="h-3">
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Mastercard-logo.svg/1280px-Mastercard-logo.svg.png" class="h-4 ml-2">
                         </div>
                     </div>
                 </div>
@@ -295,7 +287,9 @@
             <div class="bg-white dark:bg-gray-800 rounded-[2.5rem] p-6 shadow-xl border border-transparent dark:border-gray-700 text-center relative mb-8 flex flex-col items-center">
                 <div class="relative -mt-16 mb-4 group cursor-pointer z-10" onclick="document.getElementById('profile-upload').click()">
                     <img id="p-image" src="https://ui-avatars.com/api/?name=User&background=10b981&color=fff&size=128" class="w-28 h-28 rounded-full object-cover border-[6px] border-white dark:border-gray-800 shadow-xl click-press transition-transform bg-white dark:bg-gray-800">
-                    <div class="absolute bottom-1 right-1 bg-green-600 text-white w-8 h-8 rounded-full shadow-md border-2 border-white dark:border-gray-800 flex items-center justify-center text-xs">📷</div>
+                    <div class="absolute bottom-1 right-1 bg-green-600 text-white w-8 h-8 rounded-full shadow-md border-2 border-white dark:border-gray-800 flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M6.827 6.175A2.31 2.31 0 015.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 00-1.134-.175 2.31 2.31 0 01-1.64-1.055l-.822-1.316a2.192 2.192 0 00-1.736-1.039 48.774 48.774 0 00-5.232 0 2.192 2.192 0 00-1.736 1.039l-.821 1.316z" /><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 12.75a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0zM18.75 10.5h.008v.008h-.008V10.5z" /></svg>
+                    </div>
                     <input type="file" id="profile-upload" class="hidden" accept="image/*" onchange="handleProfileUpload(event)">
                 </div>
                 
@@ -336,28 +330,36 @@
             <h3 class="font-black text-lg mb-4 px-2 tracking-tight">My Project Phases</h3>
             <div class="grid grid-cols-3 gap-3 mb-8 stagger-item" style="animation-delay: 0.1s">
                 <div class="bg-white dark:bg-gray-800 p-4 rounded-[1.5rem] border dark:border-gray-700 shadow-sm click-press flex flex-col items-center text-center transition-shadow hover:shadow-md" onclick="renderWishlistPhase('Foundation')">
-                    <div class="text-2xl mb-1">🏗️</div>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8 mb-2 text-gray-700 dark:text-gray-300">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 21h19.5m-18-18v18m10.5-18v18m6-13.5V21M6.75 6.75h.75m-.75 3h.75m-.75 3h.75m3-6h.75m-.75 3h.75m-.75 3h.75M6.75 21v-3.375c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21M3 3h12m-.75 4.5H21m-3.75 3.75h.008v.008h-.008v-.008zm0 3h.008v.008h-.008v-.008zm0 3h.008v.008h-.008v-.008z" />
+                    </svg>
                     <p class="font-black text-[10px] text-gray-800 dark:text-white">Foundation</p>
                     <p class="text-[9px] text-green-500 font-black mt-2" id="count-foundation">0 Items</p>
                 </div>
                 <div class="bg-white dark:bg-gray-800 p-4 rounded-[1.5rem] border dark:border-gray-700 shadow-sm click-press flex flex-col items-center text-center transition-shadow hover:shadow-md" onclick="renderWishlistPhase('Roofing')">
-                    <div class="text-2xl mb-1">🏠</div>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8 mb-2 text-gray-700 dark:text-gray-300">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
+                    </svg>
                     <p class="font-black text-[10px] text-gray-800 dark:text-white">Roofing</p>
                     <p class="text-[9px] text-green-500 font-black mt-2" id="count-roofing">0 Items</p>
                 </div>
                 <div class="bg-white dark:bg-gray-800 p-4 rounded-[1.5rem] border dark:border-gray-700 shadow-sm click-press flex flex-col items-center text-center transition-shadow hover:shadow-md" onclick="renderWishlistPhase('Finishing')">
-                    <div class="text-2xl mb-1">🎨</div>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8 mb-2 text-gray-700 dark:text-gray-300">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9.53 16.122a3 3 0 00-5.78 1.128 2.25 2.25 0 01-2.4 2.245 4.5 4.5 0 008.4-2.245c0-.399-.078-.78-.22-1.128zm0 0a15.998 15.998 0 003.388-1.62m-5.043-.025a15.994 15.994 0 011.622-3.395m3.42 3.42a15.995 15.995 0 004.764-4.648l3.813-3.814a1.5 1.5 0 00-2.122-2.122L15.3 8.536m-8.36 8.362l-1.077-1.077a1.5 1.5 0 012.122-2.122L9.53 14.78c-.24.24-.455.5-.644.773z" />
+                    </svg>
                     <p class="font-black text-[10px] text-gray-800 dark:text-white">Finishing</p>
                     <p class="text-[9px] text-green-500 font-black mt-2" id="count-finishing">0 Items</p>
                 </div>
             </div>
             
             <div id="wishlist-render-area" class="mb-8 hidden"></div>
+            
             <div class="bg-white dark:bg-slate-900/50 p-6 rounded-[2rem] shadow-sm border border-gray-200 dark:border-white/5 mb-8 transition-colors stagger-item" style="animation-delay: 0.15s">
                 <div class="flex justify-between items-center mb-6">
                     <div>
                         <h2 class="text-lg font-black text-gray-900 dark:text-white flex items-center gap-2">
-                            <span class="text-blue-500">📊</span> Expense Tracker
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-blue-500"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6a7.5 7.5 0 107.5 7.5h-7.5V6z" /><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 10.5H21A7.5 7.5 0 0013.5 3v7.5z" /></svg>
+                            Expense Tracker
                         </h2>
                         <p class="text-[10px] text-gray-500 font-bold uppercase tracking-widest mt-1">Total Project Spend</p>
                     </div>
@@ -368,7 +370,9 @@
                     <div class="relative h-48 w-full md:w-1/2 flex justify-center shrink-0">
                         <canvas id="expensePieChart"></canvas>
                         <div id="empty-chart-msg" class="absolute inset-0 flex flex-col items-center justify-center text-gray-400">
-                            <span class="text-4xl opacity-50 mb-2">🏗️</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-10 h-10 opacity-50 mb-2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18.75a60.07 60.07 0 0115.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 013 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 00-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 01-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 003 15h-.75M15 10.5a3 3 0 11-6 0 3 3 0 016 0zm3 0h.008v.008H18V10.5zm-12 0h.008v.008H6V10.5z" />
+                            </svg>
                             <p class="text-[10px] font-bold uppercase tracking-widest">No expenses yet</p>
                         </div>
                     </div>
@@ -383,7 +387,9 @@
             <div class="bg-white dark:bg-gray-800 rounded-[2.5rem] p-1 border dark:border-gray-700 shadow-sm mb-6 stagger-item" style="animation-delay: 0.2s">
                 <div class="flex items-center justify-between p-5 border-b dark:border-gray-700">
                     <div class="flex items-center gap-4">
-                        <span class="text-xl">🔔</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-gray-600 dark:text-gray-300">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0" />
+                        </svg>
                         <span class="font-bold text-sm">Notifications</span>
                     </div>
                     <div class="relative inline-block w-12 mr-2 align-middle select-none transition duration-200 ease-in">
@@ -393,27 +399,43 @@
                 </div>
 
                 <button onclick="navigateTo('cs')" class="w-full flex items-center justify-between p-5 hover:bg-gray-50 dark:hover:bg-gray-700 transition click-press border-b dark:border-gray-700">
-                    <div class="flex items-center gap-4"><span class="text-xl">🎧</span><span class="font-bold text-sm">Customer Support</span></div>
+                    <div class="flex items-center gap-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-gray-600 dark:text-gray-300">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 20.25c4.97 0 9-3.694 9-8.25s-4.03-8.25-9-8.25S3 7.444 3 12c0 2.104.859 4.023 2.273 5.48.432.447.74 1.04.586 1.641a4.483 4.483 0 01-.923 1.785A5.969 5.969 0 006 21c1.282 0 2.47-.402 3.445-1.087.81.22 1.668.337 2.555.337z" />
+                        </svg>
+                        <span class="font-bold text-sm">Customer Support</span>
+                    </div>
                     <span class="text-gray-400 font-bold text-xl">›</span>
                 </button>
 
                 <button onclick="navigateTo('legal')" class="w-full flex items-center justify-between p-5 hover:bg-gray-50 dark:hover:bg-gray-700 transition click-press border-b dark:border-gray-700">
-                    <div class="flex items-center gap-4"><span class="text-xl">📜</span><span class="font-bold text-sm">Legal & Policies</span></div>
+                    <div class="flex items-center gap-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-gray-600 dark:text-gray-300">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+                        </svg>
+                        <span class="font-bold text-sm">Legal & Policies</span>
+                    </div>
                     <span class="text-gray-400 font-bold text-xl">›</span>
                 </button>
 
                 <button onclick="logoutUser()" class="w-full flex items-center gap-4 p-5 hover:bg-red-50 dark:hover:bg-red-900/10 transition click-press text-red-500 rounded-b-[2.5rem]">
-                    <span class="text-xl">🚪</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" />
+                    </svg>
                     <span class="font-bold text-sm text-left">Logout from Account</span>
                 </button>
             </div>
         </div>
 
-        <div id="view-history" class="view-content hidden">
-            <div class="bg-white dark:bg-gray-800 rounded-[2.5rem] p-6 shadow-xl border dark:border-gray-700 mb-8 mt-2 stagger-item">
-                <div class="flex items-center gap-3 mb-6 click-press cursor-pointer" onclick="goBack()">
-                    <span class="w-8 h-8 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center shadow-sm font-bold border border-transparent dark:border-gray-600">←</span>
-                    <h2 class="text-lg font-black">Financial Overview</h2>
+        <div id="view-history" class="view-content hidden mt-2">
+            <div class="bg-white dark:bg-gray-800 rounded-[2.5rem] p-6 shadow-xl border dark:border-gray-700 mb-6 stagger-item">
+                <div class="flex items-center justify-between mb-6">
+                    <div class="flex items-center gap-3 click-press cursor-pointer" onclick="goBack()">
+                        <span class="w-8 h-8 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center shadow-sm font-bold border border-transparent dark:border-gray-600">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" /></svg>
+                        </span>
+                        <h2 class="text-lg font-black">Financial Overview</h2>
+                    </div>
                 </div>
                 
                 <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest text-center mb-1">Total Lifetime Spend (Paid)</p>
@@ -437,12 +459,23 @@
 
                 <div class="flex gap-3 mt-4">
                     <button onclick="downloadStatement()" class="flex-1 py-3 bg-gray-900 text-white rounded-2xl font-black click-press shadow-md text-[10px] uppercase tracking-widest flex items-center justify-center gap-2">
-                        📄 Save PDF
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" /></svg>
+                        Save PDF
                     </button>
                     <button onclick="shareStatement()" class="flex-1 py-3 bg-[#25D366] text-white rounded-2xl font-black click-press shadow-md text-[10px] uppercase tracking-widest flex items-center justify-center gap-2">
-                        💬 Share
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M7.217 10.907a2.25 2.25 0 100 2.186m0-2.186c.18.324.283.696.283 1.093s-.103.77-.283 1.093m0-2.186l9.566-5.314m-9.566 7.5l9.566 5.314m0 0a2.25 2.25 0 103.935 2.186 2.25 2.25 0 00-3.935-2.186zm0-12.814a2.25 2.25 0 103.933-2.185 2.25 2.25 0 00-3.933 2.185z" /></svg>
+                        Share
                     </button>
                 </div>
+            </div>
+
+            <div class="flex justify-between items-center mb-4 px-2">
+                <h3 class="font-black text-lg">Transaction Feed</h3>
+                <select id="history-filter" onchange="renderHistory()" class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-xs font-bold rounded-xl px-3 py-1.5 outline-none shadow-sm cursor-pointer">
+                    <option value="ALL">All Receipts</option>
+                    <option value="PAID">Paid / Success</option>
+                    <option value="PENDING">Pending</option>
+                </select>
             </div>
 
             <div id="active-tracking-area" class="mb-8 hidden">
@@ -453,7 +486,6 @@
                 <div id="tracking-feed" class="flex flex-col gap-4"></div>
             </div>
 
-            <h3 class="font-black text-lg mb-4 px-2">Past Receipts</h3>
             <div id="receipt-feed" class="flex flex-col gap-4 mb-6"></div>
             
             <button onclick="clearHistory()" class="w-full py-4 text-xs font-bold text-red-500 bg-red-50 dark:bg-red-900/20 rounded-[2rem] click-press mb-4 transition-colors hover:bg-red-100">Clear Transaction History</button>
@@ -461,14 +493,31 @@
 
         <div id="view-cs" class="view-content hidden mt-4 h-[75vh]">
             <div class="flex items-center gap-3 mb-4 click-press cursor-pointer px-2" onclick="goBack()">
-                <span class="w-8 h-8 bg-white dark:bg-gray-800 rounded-full flex items-center justify-center shadow-sm font-bold border border-transparent dark:border-gray-700">←</span>
+                <span class="w-8 h-8 bg-white dark:bg-gray-800 rounded-full flex items-center justify-center shadow-sm font-bold border border-transparent dark:border-gray-700">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" /></svg>
+                </span>
                 <h2 class="text-xl font-black">Live Support</h2>
             </div>
+            
+            <a href="tel:+255743924467" class="w-full bg-white dark:bg-gray-800 rounded-2xl p-4 mb-4 shadow-sm border border-transparent dark:border-gray-700 flex items-center justify-between click-press hover:border-green-500 transition-colors">
+                <div class="flex items-center gap-4">
+                    <div class="w-10 h-10 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center text-green-600">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-2.896-1.596-5.265-3.965-6.861-6.86l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z" /></svg>
+                    </div>
+                    <div>
+                        <h3 class="font-black text-sm text-gray-900 dark:text-white">Call Direct Line</h3>
+                        <p class="text-[10px] text-gray-500 font-bold uppercase tracking-widest">+255 743 924 467</p>
+                    </div>
+                </div>
+                <span class="bg-green-600 text-white text-[10px] font-black px-3 py-1.5 rounded-xl shadow-sm">Dial Now</span>
+            </a>
             
             <div class="h-full bg-white dark:bg-gray-800 rounded-[2.5rem] border dark:border-gray-700 shadow-xl flex flex-col overflow-hidden relative">
                 <div class="bg-gray-50 dark:bg-gray-900 p-4 border-b dark:border-gray-700 flex items-center gap-3 z-10 shrink-0">
                     <div class="relative">
-                        <div class="w-10 h-10 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center text-green-600 text-lg">🎧</div>
+                        <div class="w-10 h-10 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center text-green-600">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 20.25c4.97 0 9-3.694 9-8.25s-4.03-8.25-9-8.25S3 7.444 3 12c0 2.104.859 4.023 2.273 5.48.432.447.74 1.04.586 1.641a4.483 4.483 0 01-.923 1.785A5.969 5.969 0 006 21c1.282 0 2.47-.402 3.445-1.087.81.22 1.668.337 2.555.337z" /></svg>
+                        </div>
                         <div class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white dark:border-gray-900 rounded-full animate-pulse"></div>
                     </div>
                     <div>
@@ -486,7 +535,9 @@
 
                 <div class="p-4 bg-white dark:bg-gray-800 border-t dark:border-gray-700 flex gap-2 shrink-0 z-10">
                     <input type="text" id="customer-chat-input" onkeypress="if(event.key === 'Enter') sendCustomerMessage()" class="flex-grow bg-gray-100 dark:bg-gray-900 rounded-xl px-5 py-4 text-sm font-medium outline-none border border-transparent focus:border-green-500 dark:text-white transition-all" placeholder="Type your message...">
-                    <button onclick="sendCustomerMessage()" class="w-14 h-14 bg-green-600 hover:bg-green-500 text-white rounded-xl font-bold flex items-center justify-center text-xl click-press shadow-md transition-colors">→</button>
+                    <button onclick="sendCustomerMessage()" class="w-14 h-14 bg-green-600 hover:bg-green-500 text-white rounded-xl font-bold flex items-center justify-center click-press shadow-md transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" /></svg>
+                    </button>
                 </div>
             </div>
         </div>
@@ -517,7 +568,9 @@
         <div id="product-sheet" class="bg-white dark:bg-gray-900 w-full max-w-md rounded-t-[2.5rem] overflow-hidden shadow-2xl flex flex-col max-h-[92vh] bottom-sheet">
             <div class="relative shrink-0">
                 <img id="modal-img" src="" class="w-full h-56 object-cover">
-                <button onclick="closeProduct()" class="absolute top-4 right-4 w-10 h-10 bg-black/40 text-white rounded-full flex items-center justify-center font-bold backdrop-blur-md click-press">✕</button>
+                <button onclick="closeProduct()" class="absolute top-4 right-4 w-10 h-10 bg-black/40 text-white rounded-full flex items-center justify-center font-bold backdrop-blur-md click-press">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+                </button>
             </div>
             <div class="p-6 overflow-y-auto shrink-1 hide-scrollbar">
                 <h3 id="modal-title" class="text-2xl font-black mb-1 text-gray-900 dark:text-white leading-tight"></h3>
@@ -527,7 +580,10 @@
                 </div>
                 <p id="modal-desc" class="text-gray-500 dark:text-gray-400 text-sm mb-5 leading-relaxed font-medium"></p>
                 <div class="bg-green-50 dark:bg-green-900/20 p-4 rounded-2xl mb-5 border border-green-100 dark:border-green-800 shadow-inner">
-                    <p class="text-[9px] text-green-600 dark:text-green-400 font-black uppercase tracking-widest mb-1 flex items-center gap-1">✓ Verified Review</p>
+                    <p class="text-[9px] text-green-600 dark:text-green-400 font-black uppercase tracking-widest mb-1 flex items-center gap-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-3 h-3"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd" /></svg>
+                        Verified Review
+                    </p>
                     <p id="modal-review-text" class="text-xs italic text-gray-700 dark:text-gray-300 font-medium"></p>
                 </div>
                 
@@ -560,7 +616,10 @@
                     <select id="phase-selector" class="flex-grow bg-gray-50 dark:bg-gray-800 border dark:border-gray-700 rounded-2xl px-4 outline-none text-xs font-bold dark:text-gray-200">
                         <option value="Foundation">Phase 1: Foundation</option><option value="Roofing">Phase 2: Roofing</option><option value="Finishing">Phase 3: Finishing</option>
                     </select>
-                    <button onclick="saveToPhase()" class="px-5 py-4 bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 rounded-2xl font-black text-[10px] uppercase tracking-widest click-press shadow-sm">Save 📌</button>
+                    <button onclick="saveToPhase()" class="px-5 py-4 bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 rounded-2xl font-black text-[10px] uppercase tracking-widest click-press shadow-sm flex items-center gap-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0111.186 0z" /></svg>
+                        Save
+                    </button>
                 </div>
                 <button id="add-to-cart-btn" class="w-full py-5 bg-green-600 text-white rounded-[2rem] font-black text-sm uppercase tracking-widest shadow-[0_10px_20px_rgba(22,163,74,0.3)] click-press">Add to Basket</button>
             </div>
@@ -576,7 +635,9 @@
                     </div>
                     <div><h2 class="font-black text-sm leading-tight text-white">AI Hub</h2><p class="text-[9px] text-green-100 font-bold uppercase tracking-widest mt-1">Smart Construction</p></div>
                 </div>
-                <button onclick="closeAiHub()" class="w-8 h-8 flex items-center justify-center bg-black/20 hover:bg-black/30 rounded-full font-bold transition-colors">✕</button>
+                <button onclick="closeAiHub()" class="w-8 h-8 flex items-center justify-center bg-black/20 hover:bg-black/30 rounded-full font-bold transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+                </button>
             </div>
             
             <div class="flex border-b dark:border-gray-700 shrink-0 bg-white dark:bg-gray-900">
@@ -590,7 +651,9 @@
                 </div>
                 <div class="p-4 bg-white dark:bg-gray-800 border-t dark:border-gray-700 flex gap-2 shrink-0">
                     <input type="text" id="chat-input" onkeypress="if(event.key === 'Enter') sendMessage()" class="flex-grow bg-gray-100 dark:bg-gray-900 rounded-xl px-5 py-4 text-sm font-medium outline-none border dark:border-gray-600 focus:ring-2 focus:ring-green-500 transition-shadow" placeholder="Ask anything...">
-                    <button id="send-btn" onclick="sendMessage()" class="w-14 h-14 bg-green-600 hover:bg-green-700 text-white rounded-xl font-bold click-press shadow-md transition-colors flex items-center justify-center text-xl shrink-0">→</button>
+                    <button id="send-btn" onclick="sendMessage()" class="w-14 h-14 bg-green-600 hover:bg-green-700 text-white rounded-xl font-bold click-press shadow-md transition-colors flex items-center justify-center shrink-0">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" /></svg>
+                    </button>
                 </div>
             </div>
 
@@ -620,17 +683,21 @@
 
     <nav class="fixed bottom-0 w-full bg-white/95 dark:bg-[#0f172a]/95 glass border-t dark:border-gray-800 px-6 py-2 flex justify-around items-center z-50">
         <button onclick="navigateTo('home', false, true)" id="nav-home" class="nav-btn active-nav flex flex-col items-center gap-1 text-gray-400 text-[10px] font-bold transition-all p-2 click-press w-16 text-green-600">
-            <span class="text-2xl mb-0.5">🏠</span><span>Home</span>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6 mb-0.5"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" /></svg>
+            <span>Home</span>
         </button>
         <button onclick="navigateTo('trending', false, true)" id="nav-trending" class="nav-btn flex flex-col items-center gap-1 text-gray-400 text-[10px] font-bold transition-all p-2 click-press w-16">
-            <span class="text-2xl mb-0.5">📈</span><span>Watch</span>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6 mb-0.5"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18L9 11.25l4.306 4.307a11.95 11.95 0 015.814-5.519l2.74-1.22m0 0l-5.94-2.28m5.94 2.28l-2.28 5.941" /></svg>
+            <span>Watch</span>
         </button>
         <button onclick="navigateTo('cart', false, true)" id="nav-cart" class="nav-btn flex flex-col items-center gap-1 text-gray-400 text-[10px] font-bold transition-all p-2 relative click-press w-16">
-            <span class="text-2xl mb-0.5">🛒</span><span>Cart</span>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6 mb-0.5"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" /></svg>
+            <span>Cart</span>
             <span id="cart-badge" class="hidden absolute top-1 right-2 bg-red-500 text-white text-[8px] px-1.5 rounded-full font-black ring-2 ring-white dark:ring-gray-900 shadow-sm">0</span>
         </button>
         <button onclick="navigateTo('profile', false, true)" id="nav-profile" class="nav-btn flex flex-col items-center gap-1 text-gray-400 text-[10px] font-bold transition-all p-2 click-press w-16">
-            <span class="text-2xl mb-0.5">👤</span><span>Profile</span>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6 mb-0.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" /></svg>
+            <span>Profile</span>
         </button>
     </nav>
 
@@ -645,7 +712,6 @@
         window.appHistory = [];
         window.appSpend = 0;
 
-        // 🟢 CLOUD DATABASE
         window.productDatabase = {}; 
 
         function updateThemeIcon() {
@@ -681,7 +747,6 @@
             }
         });
 
-        // --- SMART ROUTER FOR PHONE NAVIGATION ---
         window.addEventListener('popstate', (event) => {
             const productSheet = document.getElementById('product-sheet');
             const aiHubSheet = document.getElementById('ai-hub-sheet');
@@ -800,7 +865,6 @@
                 
                 const photoSrc = user.photoURL || `https://ui-avatars.com/api/?name=${user.name}&background=10b981&color=fff`;
                 document.getElementById('p-image').src = photoSrc;
-                document.getElementById('header-p-image').src = photoSrc;
                 
                 document.getElementById('notif-toggle').checked = localStorage.getItem('ujenzi_notif') === 'true';
                 window.renderHomeBase();
@@ -825,7 +889,6 @@
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     document.getElementById('p-image').src = e.target.result;
-                    document.getElementById('header-p-image').src = e.target.result;
                     let u = JSON.parse(localStorage.getItem('ujenzi_user'));
                     u.photoURL = e.target.result;
                     localStorage.setItem('ujenzi_user', JSON.stringify(u));
@@ -904,7 +967,9 @@
             }
             container.innerHTML = `
                 <div class="flex items-center gap-3 mb-2 click-press cursor-pointer" onclick="document.getElementById('search-input').value=''; window.renderHomeBase();">
-                    <span class="w-8 h-8 bg-white dark:bg-gray-800 rounded-full flex items-center justify-center shadow-sm font-bold border dark:border-gray-700">←</span>
+                    <span class="w-8 h-8 bg-white dark:bg-gray-800 rounded-full flex items-center justify-center shadow-sm font-bold border dark:border-gray-700">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" /></svg>
+                    </span>
                     <h2 class="text-lg font-bold">Search Results</h2>
                 </div>
                 <div class="grid grid-cols-2 gap-4">${results.map((p, i) => generateProductCardHTML(p, i)).join('')}</div>`;
@@ -921,26 +986,52 @@
                     <p class="text-[11px] font-bold px-1 leading-tight mb-1 h-8 overflow-hidden">${p.name}</p>
                     <div class="flex justify-between items-center px-1 mt-auto pb-1">
                         <p class="text-green-600 font-black text-[11px]">TZS ${p.price.toLocaleString()}</p>
-                        <div class="w-7 h-7 bg-gray-100 dark:bg-gray-700 rounded-lg flex items-center justify-center font-bold text-lg">+</div>
+                        <div class="w-7 h-7 bg-gray-100 dark:bg-gray-700 rounded-lg flex items-center justify-center font-bold text-lg">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
+                        </div>
                     </div>
                 </div>`;
         }
 
         window.renderHomeBase = function() {
             const container = document.getElementById('dynamic-home-content');
-            container.innerHTML = `
-                <section>
-                    <h2 class="text-lg font-bold mb-4 px-1">Categories</h2>
-                    <div class="grid grid-cols-2 gap-4">
+            let html = '';
+
+            html += `
+                <section class="mb-2">
+                    <h2 class="text-lg font-bold mb-3 px-1">Quick Categories</h2>
+                    <div class="flex gap-3 overflow-x-auto pb-4 hide-scrollbar -mx-5 px-5">
                         ${Object.keys(categoryImages).map((cat, i) => `
-                            <div onclick="window.openCategory('${cat}')" class="bg-white dark:bg-gray-800 rounded-3xl p-3 shadow-sm border dark:border-gray-700 flex flex-col click-press transition-all stagger-item" style="animation-delay: ${i*0.05}s">
-                                <img src="${categoryImages[cat]}" class="w-full h-24 object-cover rounded-2xl mb-3">
-                                <p class="font-bold text-sm px-1 mb-2">${cat}</p>
-                                <button class="w-full py-2 bg-green-50 dark:bg-green-900/30 text-green-600 dark:text-green-400 rounded-xl text-xs font-bold mt-auto">Explore</button>
+                            <div onclick="window.openCategory('${cat}')" class="flex flex-col items-center gap-2 shrink-0 click-press stagger-item" style="animation-delay: ${i*0.05}s">
+                                <img src="${categoryImages[cat]}" class="w-16 h-16 rounded-full object-cover border-2 border-transparent hover:border-green-500 transition-colors shadow-sm">
+                                <span class="text-[10px] font-bold text-gray-600 dark:text-gray-300">${cat}</span>
                             </div>
                         `).join('')}
                     </div>
                 </section>`;
+
+            let hasProducts = false;
+            for (let cat in window.productDatabase) {
+                if (window.productDatabase[cat] && window.productDatabase[cat].length > 0) {
+                    hasProducts = true;
+                    html += `
+                    <section class="mb-8 border-t dark:border-gray-800 pt-6 stagger-item">
+                        <div class="flex justify-between items-end mb-4 px-1">
+                            <h2 class="text-xl font-black tracking-tight">${cat}</h2>
+                            <button onclick="window.openCategory('${Object.keys(catMap).find(k => catMap[k] === cat) || cat}')" class="text-[10px] font-bold text-green-600 uppercase tracking-widest click-press">See All</button>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            ${window.productDatabase[cat].slice(0, 4).map((p, i) => generateProductCardHTML(p, i)).join('')}
+                        </div>
+                    </section>`;
+                }
+            }
+
+            if (!hasProducts) {
+                html += `<div class="text-center py-16 text-gray-400 font-bold border-2 border-dashed border-gray-200 dark:border-gray-700 rounded-3xl mt-8">Loading product catalog...</div>`;
+            }
+
+            container.innerHTML = html;
         }
 
         window.openCategory = function(shortCatName, isHistoryNav = false) {
@@ -950,12 +1041,19 @@
             
             let html = `
                 <div class="flex items-center gap-3 mb-4 click-press cursor-pointer" onclick="history.back()">
-                    <span class="w-8 h-8 bg-white dark:bg-gray-800 rounded-full flex items-center justify-center shadow-sm font-bold border dark:border-gray-700">←</span>
+                    <span class="w-8 h-8 bg-white dark:bg-gray-800 rounded-full flex items-center justify-center shadow-sm font-bold border dark:border-gray-700">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" /></svg>
+                    </span>
                     <h2 class="text-xl font-bold">${shortCatName}</h2>
                 </div>`;
                 
             if(products.length === 0) {
-                html += `<div class="text-center mt-12 p-8 border-2 border-dashed border-gray-200 dark:border-gray-700 rounded-[2rem]"><p class="text-3xl mb-2">📦</p><p class="text-gray-400 text-sm font-bold">No products live in this category yet.</p></div>`;
+                html += `<div class="text-center mt-12 p-8 border-2 border-dashed border-gray-200 dark:border-gray-700 rounded-[2rem]">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-12 h-12 mx-auto mb-3 text-gray-300">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M21 7.5l-2.25-1.313M21 7.5v2.25m0-2.25l-2.25 1.313M3 7.5l2.25-1.313M3 7.5l2.25 1.313M3 7.5v2.25m9 3l2.25-1.313M12 12.75l-2.25-1.313M12 12.75V15m0 6.75l2.25-1.313M12 21.75V19.5m0 2.25l-2.25-1.313m0-16.875L12 2.25l2.25 1.313M21 14.25v2.25l-2.25 1.313m-13.5 0L3 16.5v-2.25" />
+                            </svg>
+                            <p class="text-gray-400 text-sm font-bold">No products live in this category yet.</p>
+                        </div>`;
             } else {
                 html += `<div class="grid grid-cols-2 gap-4">${products.map((p, i) => generateProductCardHTML(p, i)).join('')}</div>`;
             }
@@ -1018,7 +1116,7 @@
             setTimeout(() => document.getElementById('product-modal').classList.add('hidden'), 300);
         }
 
-        function changeQty(amt) {
+        window.changeQty = function(amt) {
             const input = document.getElementById('modal-qty');
             let current = parseInt(input.value);
             if (isNaN(current)) current = 0; 
@@ -1027,7 +1125,7 @@
             else input.value = 1;
         }
 
-        function validateQty() {
+        window.validateQty = function() {
             const input = document.getElementById('modal-qty');
             let v = parseInt(input.value);
             if(isNaN(v) || v < 1) {
@@ -1042,7 +1140,7 @@
         }
 
         let transportCost = 0;
-        function calculateDelivery() {
+        window.calculateDelivery = function() {
             const zone = parseFloat(document.getElementById('delivery-zone').value);
             let tw = 0; cart.forEach(i => tw += (i.wt * i.qty));
             let br = 0; let n = "Store Pickup"; 
@@ -1078,50 +1176,18 @@
                         <p class="font-bold text-xs uppercase">${i.title}</p>
                         <p class="text-xs text-gray-500 mt-1">${i.qty} units × TZS ${i.price.toLocaleString()}</p>
                     </div>
-                    <button onclick="cart.splice(${idx},1);renderCart();updateBadge();" class="w-8 h-8 flex items-center justify-center bg-red-50 dark:bg-red-900/20 text-red-500 rounded-full font-bold click-press">✕</button>
+                    <button onclick="cart.splice(${idx},1);renderCart();updateBadge();" class="w-8 h-8 flex items-center justify-center bg-red-50 dark:bg-red-900/20 text-red-500 rounded-full font-bold click-press">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+                    </button>
                 </div>`).join('');
             document.getElementById('cart-footer').classList.remove('hidden');
-            calculateDelivery();
+            window.calculateDelivery();
         }
 
-        // 🟢 NEW: Stylish Payment Method Selector Logic
-        window.selectPaymentMethod = function(method) {
-            // Update hidden input
-            document.getElementById('selected-payment-method').value = method;
-            
-            // Remove 'selected' class from all options
-            document.querySelectorAll('.payment-option').forEach(el => el.classList.remove('selected'));
-            
-            // Add 'selected' class to clicked option
-            document.getElementById(`opt-${method}`).classList.add('selected');
-            
-            // Handle UI changes based on selection
-            const phoneWrapper = document.getElementById('phone-input-wrapper');
-            const payBtn = document.getElementById('pay-btn');
-            
-            if(method === 'mobile') {
-                phoneWrapper.style.opacity = '1';
-                phoneWrapper.style.transform = 'translateY(0)';
-                phoneWrapper.style.height = 'auto';
-                phoneWrapper.style.marginBottom = '1rem';
-                phoneWrapper.style.pointerEvents = 'auto';
-                payBtn.innerHTML = '📱 Send Prompt to Phone';
-            } else {
-                phoneWrapper.style.opacity = '0';
-                phoneWrapper.style.transform = 'translateY(-10px)';
-                phoneWrapper.style.height = '0';
-                phoneWrapper.style.marginBottom = '0';
-                phoneWrapper.style.pointerEvents = 'none';
-                payBtn.innerHTML = '⚡ Continue to Secure Gateway';
-            }
-        }
-
-        // 🌟 OFFICIAL SECURE PAYMENT FUNCTION (REAL GATEWAY) 🌟
         window.processCheckout = async function() {
-            const payMethod = document.getElementById("selected-payment-method").value;
             const phoneInput = document.getElementById("phone-number").value.trim(); 
             
-            if (payMethod === 'mobile' && !phoneInput) {
+            if (!phoneInput) {
                 return alert("Please enter your mobile money number.");
             }
 
@@ -1139,10 +1205,8 @@
             const currentTransport = typeof transportCost !== 'undefined' ? transportCost : 0;
             const totalAmount = subtotal + currentTransport; 
 
-            // Generate a unique Order ID
             const orderId = "ORD-" + Math.floor(Math.random() * 1000000); 
 
-            // 1. Build the receipt - IT MUST START AS PENDING
             const receipt = {
                 orderId: orderId,
                 dateString: new Date().toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' }),
@@ -1150,21 +1214,19 @@
                 subtotal: subtotal,
                 transport: currentTransport,
                 total: totalAmount,
-                type: payMethod === 'mobile' ? 'Mobile Money' : (payMethod === 'card' ? 'Bank Card' : 'TIPS QR'),
-                status: 'PENDING' // <-- SECURITY: Starts as pending!
+                type: 'Mobile Money',
+                status: 'PENDING' 
             };
 
-            // 2. Sync to Firebase immediately so the Webhook has a document to update
             if(window.submitCloudOrder) {
                 window.submitCloudOrder(receipt, orderId);
             }
 
             const btn = document.getElementById("pay-btn");
-            btn.innerText = "⏳ Connecting to Secure Gateway...";
+            btn.innerHTML = "⏳ Connecting to Gateway...";
             btn.disabled = true;
 
             try {
-                // 3. 🔗 YOUR REAL SNIPPE FIREBASE LINK
                 const functionUrl = "https://europe-west1-ujenzismart-878af.cloudfunctions.net/createSnippePayment";
                 
                 const response = await fetch(functionUrl, {
@@ -1174,43 +1236,34 @@
                         amount: totalAmount,
                         phoneNumber: phoneInput,
                         orderId: orderId,
-                        paymentType: payMethod 
+                        paymentType: 'mobile' 
                     })
                 });
 
                 const data = await response.json();
 
                 if (response.ok && data.success) {
-                    if (data.checkoutUrl) {
-                        // 💳 CARD / QR FLOW: Snippe returned a Hosted Page. REDIRECT THE USER.
-                        btn.innerText = "🔄 Redirecting to Bank...";
-                        window.location.href = data.checkoutUrl; 
-                    } else {
-                        // 📱 MOBILE FLOW: Snippe sent a direct USSD push to their phone.
-                        btn.innerText = "📱 Check phone for PIN prompt!";
-                        btn.classList.replace("bg-green-600", "bg-blue-600");
-                        
-                        // 4. REAL-TIME SECURITY LISTENER
-                        // We wait for the backend to update Firebase. We do NOT trust the frontend.
-                        if (window.listenForSnippeWebhook) {
-                            window.listenForSnippeWebhook(orderId, btn, payMethod);
-                        }
+                    btn.innerText = "📱 Check phone for PIN prompt!";
+                    btn.classList.replace("bg-green-600", "bg-blue-600");
+                    
+                    if (window.listenForSnippeWebhook) {
+                        window.listenForSnippeWebhook(orderId, btn, 'mobile');
                     }
                 } else {
                     alert("Checkout Error: " + (data.error || "Unknown error occurred."));
-                    btn.innerHTML = payMethod === 'mobile' ? '📱 Send Prompt to Phone' : '⚡ Continue to Secure Gateway';
+                    btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 1.5H8.25A2.25 2.25 0 006 3.75v16.5a2.25 2.25 0 002.25 2.25h7.5A2.25 2.25 0 0018 20.25V3.75a2.25 2.25 0 00-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3" /></svg> Send Prompt to Phone`;
                     btn.disabled = false;
                 }
 
             } catch (error) {
                 console.error("Network Error:", error);
                 alert("Could not reach the payment server. Please check your internet connection.");
-                btn.innerHTML = payMethod === 'mobile' ? '📱 Send Prompt to Phone' : '⚡ Continue to Secure Gateway';
+                btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 1.5H8.25A2.25 2.25 0 006 3.75v16.5a2.25 2.25 0 002.25 2.25h7.5A2.25 2.25 0 0018 20.25V3.75a2.25 2.25 0 00-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3" /></svg> Send Prompt to Phone`;
                 btn.disabled = false;
             }
         }
 
-        function checkoutWhatsApp() {
+        window.checkoutWhatsApp = function() {
             const u = JSON.parse(localStorage.getItem('ujenzi_user'));
             let sub = 0; 
             let m = `Habari UjenziSmart! I am ${u ? u.name : 'Guest'}.\nI want to order:\n\n`;
@@ -1253,9 +1306,12 @@
             navigateTo('history', false, true); 
         }
 
-        function renderHistory() {
+        window.renderHistory = function() {
             const history = window.appHistory;
             const spend = window.appSpend;
+            
+            const filterSelect = document.getElementById('history-filter');
+            const filterValue = filterSelect ? filterSelect.value : 'ALL';
             
             document.getElementById('history-total').textContent = `TZS ${spend.toLocaleString()}`;
 
@@ -1283,7 +1339,12 @@
 
             if(history.length === 0) {
                 activeArea.classList.add('hidden');
-                receiptFeed.innerHTML = `<div class="bg-gray-50 dark:bg-gray-800 p-6 rounded-3xl border dark:border-gray-700 text-center"><p class="text-3xl mb-2 opacity-50">🧾</p><p class="text-xs text-gray-400 font-bold">No secure transactions found.</p></div>`;
+                receiptFeed.innerHTML = `<div class="bg-gray-50 dark:bg-gray-800 p-6 rounded-3xl border dark:border-gray-700 text-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-12 h-12 mx-auto opacity-50 mb-2 text-gray-400">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+                    </svg>
+                    <p class="text-xs text-gray-400 font-bold">No secure transactions found.</p>
+                </div>`;
                 return;
             }
 
@@ -1292,12 +1353,17 @@
 
             history.forEach((r, i) => {
                 const status = (r.status || 'PENDING').toUpperCase();
-                // If it is Solved, Delivered, Cancelled, or Failed, it goes to Past Receipts
                 const isCompleted = status === 'SOLVED' || status === 'DELIVERED' || status === 'CANCELLED' || status === 'FAILED';
+                const isPaidStatus = status === 'PAID' || status === 'SUCCESS' || status === 'SOLVED' || status === 'PROCESSING' || status === 'DELIVERED';
+
+                let showItem = true;
+                if (filterValue === 'PAID' && !isPaidStatus) showItem = false;
+                if (filterValue === 'PENDING' && status !== 'PENDING') showItem = false;
+
+                if (!showItem) return;
 
                 if (!isCompleted && status !== 'PENDING') {
-                    // 🟢 THIS IS AN ACTIVE DELIVERY! Draw the Pipeline.
-                    let step = 1; // Default: Paid
+                    let step = 1; 
                     let progressW = '15%';
                     
                     if(status === 'PREPARING' || status === 'PROCESSING') { step = 2; progressW = '50%'; }
@@ -1317,7 +1383,9 @@
 
                     activeHtml += `
                     <div class="bg-white dark:bg-gray-800 p-5 rounded-[2rem] shadow-lg border-2 border-green-500/50 mb-2 relative overflow-hidden stagger-item">
-                        <div class="absolute top-0 right-0 p-4 opacity-5 dark:opacity-10 text-6xl pointer-events-none">🚚</div>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" class="absolute top-2 right-2 w-24 h-24 opacity-5 dark:opacity-10 text-gray-400 pointer-events-none">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 18.75a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 01-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.124a17.902 17.902 0 00-3.213-9.193 2.056 2.056 0 00-1.58-.86H14.25M16.5 18.75h-2.25m0-11.177v-.958c0-.568-.422-1.048-.987-1.106a48.554 48.554 0 00-10.026 0 1.106 1.106 0 00-.987 1.106v7.635m12-6.677v6.677m0 4.5v-4.5m0 0h-12" />
+                        </svg>
                         <div class="relative z-10">
                             <div class="flex justify-between items-start mb-2">
                                 <div>
@@ -1347,15 +1415,18 @@
                             ${step === 3 ? `
                             <div class="mt-6 bg-blue-50 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-800 p-3 rounded-2xl flex items-center justify-between">
                                 <div class="flex items-center gap-3">
-                                    <div class="w-10 h-10 bg-white dark:bg-gray-800 rounded-full flex items-center justify-center text-lg shadow-sm">👨🏾‍✈️</div>
+                                    <div class="w-10 h-10 bg-white dark:bg-gray-800 rounded-full flex items-center justify-center text-gray-600 dark:text-gray-300 shadow-sm">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" /></svg>
+                                    </div>
                                     <div><p class="text-[9px] font-black text-blue-800 dark:text-blue-300 uppercase tracking-widest">Driver Assigned</p><p class="text-xs font-bold text-gray-900 dark:text-white">Call: 0754 *** ***</p></div>
                                 </div>
-                                <button class="w-10 h-10 bg-blue-600 hover:bg-blue-500 text-white rounded-full flex items-center justify-center text-sm shadow-md click-press">📞</button>
+                                <button class="w-10 h-10 bg-blue-600 hover:bg-blue-500 text-white rounded-full flex items-center justify-center text-sm shadow-md click-press">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-2.896-1.596-5.265-3.965-6.861-6.86l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z" /></svg>
+                                </button>
                             </div>` : ''}
                         </div>
                     </div>`;
                 } else {
-                    // 🧾 THIS IS A PAST RECEIPT
                     const badgeColor = isCompleted ? 'bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-300' : 'bg-amber-50 text-amber-600 dark:bg-amber-900/30 dark:text-amber-400';
                     const moneyColor = isCompleted ? 'text-gray-900 dark:text-white font-black' : 'text-gray-400 dark:text-gray-500 font-bold line-through';
                     
@@ -1377,21 +1448,24 @@
                 }
             });
 
-            if (activeHtml !== '') {
-                trackFeed.innerHTML = activeHtml;
-                activeArea.classList.remove('hidden');
+            if (filterValue === 'ALL' || filterValue === 'PENDING' || filterValue === 'PAID') {
+                if (activeHtml !== '') {
+                    trackFeed.innerHTML = activeHtml;
+                    activeArea.classList.remove('hidden');
+                } else {
+                    activeArea.classList.add('hidden');
+                }
             } else {
-                activeArea.classList.add('hidden');
+                 activeArea.classList.add('hidden');
             }
 
             if (pastHtml !== '') {
                 receiptFeed.innerHTML = pastHtml;
             } else {
-                receiptFeed.innerHTML = `<div class="bg-gray-50 dark:bg-gray-800 p-6 rounded-3xl border dark:border-gray-700 text-center text-gray-400 text-xs font-bold">No past receipts.</div>`;
+                receiptFeed.innerHTML = `<div class="bg-gray-50 dark:bg-gray-800 p-6 rounded-3xl border dark:border-gray-700 text-center text-gray-400 text-xs font-bold">No receipts match this filter.</div>`;
             }
         }
 
-        // 🟢 SOFT DELETE: Hides from user, keeps visible for Admin
         window.clearHistory = async function() {
             if(!confirm("Are you sure you want to clear your transaction history?")) return;
             
@@ -1399,9 +1473,8 @@
             if(historyToHide.length === 0) return alert("Your history is already empty.");
 
             try {
-                // Loop through all orders and mark them as hidden
                 for (const order of historyToHide) {
-                    await updateDoc(doc(db, "orders", order.id), { hiddenFromCustomer: true });
+                    await setDoc(doc(db, "orders", order.id), { hiddenFromCustomer: true }, { merge: true });
                 }
                 alert("✅ Transaction history cleared from your device.");
             } catch (error) {
@@ -1409,7 +1482,7 @@
             }
         }
 
-        function shareStatement() {
+        window.shareStatement = function() {
             const u = JSON.parse(localStorage.getItem('ujenzi_user'));
             const h = window.appHistory; 
             const spend = window.appSpend;
@@ -1423,7 +1496,7 @@
             window.open(`https://wa.me/?text=${encodeURIComponent(m)}`, '_blank');
         }
 
-        function downloadStatement() {
+        window.downloadStatement = function() {
             const h = window.appHistory;
             if(h.length === 0) return alert("No transactions to download yet.");
 
@@ -1459,7 +1532,7 @@
             doc.save("UjenziSmart_Financial_Statement.pdf");
         }
 
-        function saveToPhase() {
+        window.saveToPhase = function() {
             if(!currentModalProduct) return;
             const phase = document.getElementById('phase-selector').value;
             let list = JSON.parse(localStorage.getItem('ujenzi_wishlist') || '[]');
@@ -1468,35 +1541,35 @@
             alert(`Saved to Phase: ${phase}`);
             closeProduct();
             history.back();
-            if(document.getElementById('view-profile').classList.contains('hidden') === false) updateWishlistCounts();
+            if(document.getElementById('view-profile').classList.contains('hidden') === false) window.updateWishlistCounts();
         }
 
-        function removeFromPhase(phase, originalIndex) {
+        window.removeFromPhase = function(phase, originalIndex) {
             let list = JSON.parse(localStorage.getItem('ujenzi_wishlist') || '[]');
             list.splice(originalIndex, 1);
             localStorage.setItem('ujenzi_wishlist', JSON.stringify(list));
-            updateWishlistCounts();
-            renderWishlistPhase(phase); 
+            window.updateWishlistCounts();
+            window.renderWishlistPhase(phase); 
         }
 
-        function clearPhase(phase) {
+        window.clearPhase = function(phase) {
             if(confirm(`Are you sure you want to remove all items from ${phase}?`)) {
                 let list = JSON.parse(localStorage.getItem('ujenzi_wishlist') || '[]');
                 list = list.filter(x => x.phase !== phase); 
                 localStorage.setItem('ujenzi_wishlist', JSON.stringify(list));
-                updateWishlistCounts();
-                renderWishlistPhase(phase); 
+                window.updateWishlistCounts();
+                window.renderWishlistPhase(phase); 
             }
         }
 
-        function updateWishlistCounts() {
+        window.updateWishlistCounts = function() {
             const list = JSON.parse(localStorage.getItem('ujenzi_wishlist') || '[]');
             document.getElementById('count-foundation').textContent = `${list.filter(x => x.phase === 'Foundation').length} Items`;
             document.getElementById('count-roofing').textContent = `${list.filter(x => x.phase === 'Roofing').length} Items`;
             document.getElementById('count-finishing').textContent = `${list.filter(x => x.phase === 'Finishing').length} Items`;
         }
 
-        function renderWishlistPhase(phase) {
+        window.renderWishlistPhase = function(phase) {
             const list = JSON.parse(localStorage.getItem('ujenzi_wishlist') || '[]');
             const items = list.map((item, index) => ({...item, originalIndex: index})).filter(x => x.phase === phase);
             const container = document.getElementById('wishlist-render-area');
@@ -1523,7 +1596,9 @@
                 <div class="grid grid-cols-2 gap-4 mb-6">
                     ${items.map(p => `
                     <div class="bg-white dark:bg-gray-800 p-3 rounded-2xl shadow-sm border dark:border-gray-700 relative animate-slideUpFade group">
-                        <button onclick="removeFromPhase('${phase}', ${p.originalIndex})" class="absolute top-1 right-1 w-7 h-7 bg-red-50 dark:bg-red-900/40 text-red-500 rounded-full flex items-center justify-center text-xs font-bold shadow-sm z-10 click-press transition-colors hover:bg-red-100">✕</button>
+                        <button onclick="removeFromPhase('${phase}', ${p.originalIndex})" class="absolute top-1 right-1 w-7 h-7 bg-red-50 dark:bg-red-900/40 text-red-500 rounded-full flex items-center justify-center text-xs font-bold shadow-sm z-10 click-press transition-colors hover:bg-red-100">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="w-3 h-3"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+                        </button>
                         <img src="${p.img}" class="w-full h-20 object-cover rounded-xl mb-2">
                         <p class="text-[9px] font-bold h-6 overflow-hidden">${p.name}</p>
                         <p class="text-green-600 font-black text-[10px]">TZS ${p.price.toLocaleString()}</p>
@@ -1532,7 +1607,7 @@
             container.classList.remove('hidden');
         }
 
-        function switchAiTab(tab) {
+        window.switchAiTab = function(tab) {
             document.getElementById('ai-content-chat').classList.add('hidden'); 
             document.getElementById('ai-content-calc').classList.add('hidden');
             
@@ -1547,7 +1622,7 @@
             document.getElementById(`tab-${tab}`).classList.add('text-green-600', 'border-green-600');
         }
 
-        function runCalculation() {
+        window.runCalculation = function() {
             const type = document.getElementById('calc-type').value;
             const L = parseFloat(document.getElementById('calc-l').value);
             const W = parseFloat(document.getElementById('calc-w').value);
@@ -1560,18 +1635,18 @@
             res.innerHTML = r; res.classList.remove('hidden');
         }
 
-        function openAiHub() { 
+        window.openAiHub = function() { 
             history.pushState({ modal: 'ai-hub' }, '', '#ai-hub'); 
             document.getElementById('ai-hub-modal').classList.remove('hidden'); 
             setTimeout(() => document.getElementById('ai-hub-sheet').classList.add('open'), 10);
         };
         
-        function closeAiHub() { 
+        window.closeAiHub = function() { 
             document.getElementById('ai-hub-sheet').classList.remove('open');
             setTimeout(() => document.getElementById('ai-hub-modal').classList.add('hidden'), 300);
         }
 
-        async function sendMessage() {
+        window.sendMessage = async function() {
             const input = document.getElementById('chat-input');
             const chatBox = document.getElementById('chat-box');
             const txt = input.value.trim(); if(!txt) return;
@@ -1669,11 +1744,8 @@
                     let history = []; 
                     let approvedSpend = 0;
                     
-                    // Logic for the Expense Tracker
                     let categoryTotals = {};
                     
-                    // We need product data to match items to categories
-                    // Fetching once here for simplicity. For production, you might cache this.
                     let productMap = {};
                     try {
                         const prodSnap = await getDocs(collection(db, "products"));
@@ -1687,10 +1759,9 @@
                         const data = doc.data();
                         if (!data.hiddenFromCustomer) {
                             history.push({ id: doc.id, ...data });
-                            if(data.status === 'PAID' || data.status === 'SUCCESS' || data.status === 'SOLVED' || data.status === 'PROCESSING') {
+                            if(data.status === 'PAID' || data.status === 'SUCCESS' || data.status === 'SOLVED' || data.status === 'PROCESSING' || data.status === 'DELIVERED') {
                                 approvedSpend += Number(data.total || 0);
                                 
-                                // Categorize expenses for the chart
                                 Object.keys(productMap).forEach(prodName => {
                                     const escapedName = prodName.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
                                     const regex = new RegExp(`${escapedName}\\s*\\(x(\\d+)\\)`, 'i');
@@ -1722,7 +1793,6 @@
                     if(!document.getElementById('view-history').classList.contains('hidden')) window.renderHistory();
                     if(!document.getElementById('view-profile').classList.contains('hidden')) {
                         window.updateTrackerUI();
-                        // Trigger the chart render
                         document.getElementById('expense-total-display').textContent = `TZS ${approvedSpend.toLocaleString()}`;
                         renderPieChart(categoryTotals, approvedSpend);
                     }
@@ -1747,10 +1817,8 @@
 
             emptyMsg.style.display = 'none';
 
-            // UjenziSmart Brand Colors
             const colors = ['#3b82f6', '#10b981', '#f59e0b', '#8b5cf6', '#ec4899', '#64748b'];
 
-            // Build the Legend
             legendDiv.innerHTML = categories.map((cat, index) => {
                 const color = colors[index % colors.length];
                 const amount = categoryData[cat];
@@ -1769,7 +1837,6 @@
                 </div>`;
             }).join('');
 
-            // Draw the Doughnut Chart
             if (window.expenseChartInstance) window.expenseChartInstance.destroy();
             
             const isDark = document.documentElement.classList.contains('dark');
@@ -1817,14 +1884,13 @@
             } catch (error) { alert("Failed to sync secure order. Check connection."); }
         };
 
-        // 🟢 REAL-TIME WEBHOOK LISTENER FOR SNIPPE
         window.listenForSnippeWebhook = function(orderId, btnElement, payMethod) {
             const unsubscribe = onSnapshot(doc(db, "orders", orderId), (docSnap) => {
                 if (docSnap.exists()) {
                     const status = docSnap.data().status;
                     
                     if (status === "SUCCESS" || status === "PAID") {
-                        unsubscribe(); // Stop listening
+                        unsubscribe(); 
                         btnElement.innerText = "✅ Payment Received!";
                         btnElement.classList.replace("bg-blue-600", "bg-gray-900");
                         
@@ -1832,7 +1898,7 @@
                             cart = [];
                             updateBadge();
                             navigateTo('history', false, true); 
-                            btnElement.innerHTML = '📱 Send Prompt to Phone';
+                            btnElement.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 1.5H8.25A2.25 2.25 0 006 3.75v16.5a2.25 2.25 0 002.25 2.25h7.5A2.25 2.25 0 0018 20.25V3.75a2.25 2.25 0 00-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3" /></svg> Send Prompt to Phone`;
                             btnElement.disabled = false;
                             btnElement.classList.replace("bg-gray-900", "bg-green-600");
                         }, 2000);
@@ -1842,7 +1908,7 @@
                         btnElement.classList.replace("bg-blue-600", "bg-red-600");
                         
                         setTimeout(() => {
-                            btnElement.innerHTML = payMethod === 'mobile' ? '📱 Send Prompt to Phone' : '⚡ Continue to Secure Gateway';
+                            btnElement.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 1.5H8.25A2.25 2.25 0 006 3.75v16.5a2.25 2.25 0 002.25 2.25h7.5A2.25 2.25 0 0018 20.25V3.75a2.25 2.25 0 00-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3" /></svg> Send Prompt to Phone`;
                             btnElement.disabled = false;
                             btnElement.classList.replace("bg-red-600", "bg-green-600");
                         }, 3000);
@@ -1875,7 +1941,6 @@
                 localStorage.setItem('ujenzi_user', JSON.stringify({ name: user.displayName, email: user.email, photoURL: user.photoURL }));
                 document.getElementById('auth-screen').classList.add('hidden');
                 listenToUserOrders(user.uid);
-                // 🟢 NEW: Start listening to the customer's chat room!
                 if(window.initCustomerChat) window.initCustomerChat();
                 if(typeof window.checkAuth === "function") window.checkAuth();
             } else {
@@ -1891,7 +1956,6 @@
             if(auth.currentUser) { try { await updateProfile(auth.currentUser, { displayName: newName }); } catch (error) {} }
         };
 
-        // --- 💬 NATIVE CUSTOMER CHAT LOGIC ---
         let customerChatListener = null;
 
         window.initCustomerChat = async function() {
@@ -1901,18 +1965,15 @@
             const chatId = `chat_${user.uid}`;
             const chatArea = document.getElementById('customer-chat-area');
             
-            // 1. Create the master chat document if it doesn't exist
             await setDoc(doc(db, "chats", chatId), {
                 participants: [user.uid, 'admin'],
                 customerName: user.displayName || 'Builder',
                 updatedAt: serverTimestamp()
             }, { merge: true });
 
-            // 2. Listen to messages
             if(customerChatListener) customerChatListener();
             
             customerChatListener = onSnapshot(query(collection(db, `chats/${chatId}/messages`), orderBy("timestamp", "asc")), (snapshot) => {
-                // Keep the welcome message, clear the rest
                 chatArea.innerHTML = `
                     <div class="text-center text-[10px] text-gray-400 font-bold uppercase tracking-widest my-2">Secure Chat</div>
                     <div class="max-w-[85%] p-4 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 text-sm rounded-2xl rounded-tl-none shadow-sm border dark:border-gray-700 self-start font-medium leading-relaxed">
@@ -1943,14 +2004,12 @@
             input.value = '';
             const chatId = `chat_${user.uid}`;
             
-            // Push message to Firebase
             await addDoc(collection(db, `chats/${chatId}/messages`), {
                 senderId: user.uid,
                 text: text,
                 timestamp: serverTimestamp()
             });
             
-            // Update the master document so the Admin sees the latest message in the sidebar
             await updateDoc(doc(db, "chats", chatId), {
                 lastMessage: text,
                 updatedAt: serverTimestamp()
