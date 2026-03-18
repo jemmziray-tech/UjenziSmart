@@ -96,14 +96,13 @@
             <div class="flex items-center gap-3 w-full md:w-auto">
                 <div class="relative w-full md:w-64">
                     <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">🔍</span>
-                    <input type="text" id="global-search" onkeyup="handleSearch()" placeholder="Search..." class="w-full bg-gray-100 dark:bg-black/40 border border-gray-200 dark:border-white/10 rounded-xl pl-10 pr-4 py-2.5 text-sm font-bold outline-none focus:border-green-500 transition-colors dark:text-white placeholder-gray-400">
+                    <input type="text" id="search-input" onkeyup="filterAdminOrders()" placeholder="Search ID, Name, Status..." class="w-full bg-gray-100 dark:bg-black/40 border border-gray-200 dark:border-white/10 rounded-xl pl-10 pr-4 py-2.5 text-sm font-bold outline-none focus:border-green-500 transition-colors dark:text-white placeholder-gray-400">
                 </div>
-                <button onclick="exportToCSV()" class="shrink-0 bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-500/20 px-4 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest hover:bg-blue-100 dark:hover:bg-blue-500/20 transition-all click-press flex items-center gap-2">
+                <button onclick="openExportModal()" class="shrink-0 bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-500/20 px-4 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest hover:bg-blue-100 dark:hover:bg-blue-500/20 transition-all click-press flex items-center gap-2">
                     📥 <span class="hidden md:inline">Export</span>
                 </button>
             </div>
         </div>
-
         <div id="view-orders" class="view-section stagger-item">
             <div class="glass-panel rounded-[2.5rem] overflow-hidden">
                 <div class="overflow-x-auto overflow-y-auto max-h-[60vh]">
@@ -549,36 +548,77 @@
             catch(e) { alert("Error updating vendor."); }
         };
 
-        window.exportToCSV = () => {
-            const tab = window.appData.currentTab;
-            let data = []; let headers = [];
+        // --- 🔍 LIGHTNING FAST SEARCH FILTER ---
+        window.filterAdminOrders = function() {
+            const query = document.getElementById('search-input').value.toLowerCase();
+            // Grab all order rows currently displayed in the table
+            const rows = document.querySelectorAll('#admin-orders-feed tr');
+            
+            rows.forEach(row => {
+                // Get all text inside the row (ID, Name, Status, Email)
+                const text = row.innerText.toLowerCase();
+                // If the text contains the search query, show it. Otherwise, hide it.
+                row.style.display = text.includes(query) ? '' : 'none';
+            });
+        };
 
-            if (tab === 'orders') {
-                headers = ["Order ID", "Date", "Customer Name", "Customer Email", "Total Value (TZS)", "Status"];
-                data = window.appData.orders.map(o => {
-                    const d = (o.createdAt && typeof o.createdAt.toDate === 'function') ? o.createdAt.toDate().toLocaleDateString() : (o.dateString || 'N/A');
-                    return [o.orderId || 'N/A', d, o.userName || 'N/A', o.userEmail || 'N/A', o.total || 0, o.status];
-                });
-            } else if (tab === 'payouts') {
-                headers = ["Date Requested", "Date Processed", "Supplier", "Amount (TZS)", "Channel Details", "Status"];
-                data = window.appData.payouts.map(p => {
-                    const reqD = (p.createdAt && typeof p.createdAt.toDate === 'function') ? p.createdAt.toDate().toLocaleDateString() : 'N/A';
-                    let procD = 'N/A';
-                    if (p.processedAt && typeof p.processedAt.toDate === 'function') procD = p.processedAt.toDate().toLocaleDateString();
-                    
-                    return [reqD, procD, p.supplierName || 'N/A', p.amount || 0, p.accountDetails || 'N/A', p.status];
-                });
-            } else if (tab === 'vendors') {
-                headers = ["Email", "Status"];
-                data = window.appData.vendors.map(v => [v.email, v.status]);
+        // --- 📅 CUSTOM RANGE EXPORT LOGIC ---
+        window.openExportModal = () => document.getElementById('export-modal').classList.remove('hidden');
+        window.closeExportModal = () => document.getElementById('export-modal').classList.add('hidden');
+        
+        // Auto-fill dates for "7 Days" or "30 Days" buttons
+        window.setExportRange = (days) => {
+            const end = new Date();
+            const start = new Date();
+            start.setDate(end.getDate() - days);
+            document.getElementById('export-end').value = end.toISOString().split('T')[0];
+            document.getElementById('export-start').value = start.toISOString().split('T')[0];
+        };
+
+        // Execute the custom CSV download
+        window.executeCustomExport = () => {
+            const startVal = document.getElementById('export-start').value;
+            const endVal = document.getElementById('export-end').value;
+            
+            if(!startVal || !endVal) return alert("Please select a valid Start and End date.");
+            
+            const start = new Date(startVal);
+            const end = new Date(endVal);
+            end.setHours(23, 59, 59, 999); // Include the entire end day
+            
+            // Filter global orders array by date
+            const filteredOrders = window.appData.orders.filter(o => {
+                if(!o.createdAt) return false;
+                const orderDate = o.createdAt.toDate();
+                return orderDate >= start && orderDate <= end;
+            });
+            
+            if(filteredOrders.length === 0) {
+                alert("No transactions found in this specific date range.");
+                return;
             }
-
-            let csvContent = "data:text/csv;charset=utf-8," + headers.join(",") + "\n" + data.map(e => e.map(item => `"${item}"`).join(",")).join("\n");
+            
+            // Build CSV Data
+            const headers = ["Date", "Order ID", "Customer", "Items", "Total (TZS)", "Status"];
+            const data = filteredOrders.map(o => [
+                `"${o.createdAt.toDate().toLocaleString()}"`,
+                `"${o.orderId || o.id}"`,
+                `"${o.userName || 'Customer'}"`,
+                `"${o.items || ''}"`,
+                `"${o.total || 0}"`,
+                `"${o.status || 'PENDING'}"`
+            ]);
+            
+            let csvContent = "data:text/csv;charset=utf-8," + headers.join(",") + "\n" + data.map(row => row.join(",")).join("\n");
             const encodedUri = encodeURI(csvContent);
             const link = document.createElement("a");
             link.setAttribute("href", encodedUri);
-            link.setAttribute("download", `UjenziSmart_${tab}_Export.csv`);
-            document.body.appendChild(link); link.click(); document.body.removeChild(link);
+            link.setAttribute("download", `UjenziSmart_Financials_${startVal}_to_${endVal}.csv`);
+            document.body.appendChild(link); 
+            link.click(); 
+            document.body.removeChild(link);
+            
+            closeExportModal();
         };
 
         // --- 💬 ADMIN CHAT LOGIC ---
@@ -665,5 +705,34 @@
         };
 
     </script>
+<div id="export-modal" class="fixed inset-0 z-[200] hidden bg-black/60 flex items-center justify-center backdrop-blur-sm px-4">
+        <div class="bg-white dark:bg-gray-900 w-full max-w-md rounded-[2.5rem] p-8 shadow-2xl relative border border-transparent dark:border-gray-700 transition-colors">
+            <button onclick="closeExportModal()" class="absolute top-4 right-4 w-8 h-8 bg-gray-100 dark:bg-gray-800 text-gray-500 rounded-full font-bold click-press transition-colors hover:bg-gray-200 dark:hover:bg-gray-700">✕</button>
+            
+            <h3 class="text-xl font-black mb-1 text-center text-gray-900 dark:text-white">Export Financials</h3>
+            <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest text-center mb-6">Select Statement Date Range</p>
+            
+            <div class="grid grid-cols-2 gap-3 mb-6">
+                <button onclick="setExportRange(7)" class="py-3 bg-gray-50 dark:bg-gray-800 hover:bg-green-50 dark:hover:bg-green-900/20 text-gray-700 dark:text-gray-300 hover:text-green-600 rounded-xl font-bold text-xs click-press transition-colors border border-gray-200 dark:border-gray-700">Last 7 Days</button>
+                <button onclick="setExportRange(30)" class="py-3 bg-gray-50 dark:bg-gray-800 hover:bg-green-50 dark:hover:bg-green-900/20 text-gray-700 dark:text-gray-300 hover:text-green-600 rounded-xl font-bold text-xs click-press transition-colors border border-gray-200 dark:border-gray-700">This Month</button>
+            </div>
+
+            <div class="space-y-4 mb-6">
+                <div>
+                    <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Custom Start Date</label>
+                    <input type="date" id="export-start" class="w-full bg-gray-50 dark:bg-gray-800 p-4 rounded-xl outline-none font-bold text-sm text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 border border-gray-200 dark:border-gray-700 transition-colors">
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Custom End Date</label>
+                    <input type="date" id="export-end" class="w-full bg-gray-50 dark:bg-gray-800 p-4 rounded-xl outline-none font-bold text-sm text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 border border-gray-200 dark:border-gray-700 transition-colors">
+                </div>
+            </div>
+
+            <button onclick="executeCustomExport()" class="w-full py-4 bg-green-600 hover:bg-green-700 text-white rounded-2xl font-black click-press text-xs uppercase tracking-widest transition-colors flex justify-center items-center gap-2 shadow-lg">
+                📥 Download CSV Statement
+            </button>
+        </div>
+    </div>
+    
 </body>
 </html>
