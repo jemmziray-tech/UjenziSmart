@@ -24,13 +24,6 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap');
         body { font-family: 'Inter', sans-serif; transition: background-color 0.3s ease, color 0.3s ease; }
-        .bg-cyber { background: radial-gradient(circle at top right, #0f172a 0%, #020617 100%); }
-        
-        .glass-panel { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(20px); border: 1px solid rgba(0, 0, 0, 0.05); box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.1); }
-        .dark .glass-panel { background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.05); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); }
-        
-        .neon-border-green { border-left: 4px solid #10b981; box-shadow: -10px 0 20px -10px rgba(16, 185, 129, 0.3); }
-        .neon-border-amber { border-left: 4px solid #f59e0b; box-shadow: -10px 0 20px -10px rgba(245, 158, 11, 0.3); }
         
         .tab-active { color: #10b981; border-bottom: 3px solid #10b981; background: rgba(16, 185, 129, 0.05); }
         .sub-tab-active { background: #10b981; color: white; border-color: #10b981; box-shadow: 0 4px 14px 0 rgba(16, 185, 129, 0.39); }
@@ -48,23 +41,23 @@
         ::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
     </style>
 </head>
-<body class="p-4 md:p-8 min-h-screen bg-[#f4f6f9] text-gray-900 dark:bg-cyber dark:text-white relative">
+<body class="p-4 md:p-8 min-h-screen bg-[#f4f6f9] text-gray-900 dark:bg-[#020617] dark:text-white relative transition-colors">
 
-    <div id="admin-login-screen" class="fixed inset-0 z-[300] bg-[#f4f6f9] dark:bg-cyber flex flex-col justify-center items-center px-6 transition-opacity duration-300">
-        <div class="glass-panel p-10 rounded-[2.5rem] shadow-2xl max-w-md w-full border dark:border-gray-700 text-center relative overflow-hidden animate-stagger-in">
-            <div class="absolute top-0 right-0 w-32 h-32 bg-green-500/20 rounded-full blur-[40px] pointer-events-none"></div>
-            <img src="logo.png" alt="UjenziSmart" class="w-20 h-20 mx-auto mb-6 rounded-2xl object-cover shadow-lg border border-gray-100 dark:border-gray-700 relative z-10">
+    <button onclick="switchTheme()" class="absolute top-4 right-4 md:top-8 md:right-8 z-[500] w-12 h-12 bg-white dark:bg-slate-800 rounded-full flex items-center justify-center shadow-md border border-gray-200 dark:border-slate-700 transition-colors click-press">
+        <svg id="icon-sun" style="display:none;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-5 h-5 text-amber-500"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-2.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z" /></svg>
+        <svg id="icon-moon" style="display:none;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-5 h-5 text-blue-500 dark:text-blue-400"><path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998Z" /></svg>
+    </button>
+
+    <div id="admin-login-screen" class="fixed inset-0 z-[300] bg-[#f4f6f9] dark:bg-[#020617] flex flex-col justify-center items-center px-6 transition-opacity duration-300">
+        <div class="bg-white dark:bg-slate-900 p-10 rounded-[2.5rem] shadow-2xl max-w-md w-full border border-gray-200 dark:border-slate-800 text-center relative overflow-hidden animate-stagger-in">
+            <div class="absolute top-0 right-0 w-32 h-32 bg-green-500/10 rounded-full blur-[40px] pointer-events-none"></div>
+            <img src="logo.png" alt="UjenziSmart" class="w-20 h-20 mx-auto mb-6 rounded-2xl object-cover shadow-lg border border-gray-100 dark:border-slate-700 relative z-10">
             <h1 class="text-3xl font-black text-gray-900 dark:text-white mb-1 tracking-tighter relative z-10">Admin Portal</h1>
             <p class="text-gray-500 dark:text-gray-400 mb-8 text-[10px] font-bold uppercase tracking-widest relative z-10">Authorized Personnel Only</p>
 
-            <div class="space-y-4 mb-8 relative z-10">
-                <input type="email" id="admin-email" placeholder="Admin Email" class="w-full bg-white dark:bg-black/50 border border-gray-200 dark:border-white/10 rounded-xl px-5 py-4 text-sm font-bold outline-none focus:border-green-500 dark:text-white transition-colors shadow-inner">
-                <input type="password" id="admin-pass" placeholder="Password" class="w-full bg-white dark:bg-black/50 border border-gray-200 dark:border-white/10 rounded-xl px-5 py-4 text-sm font-bold outline-none focus:border-green-500 dark:text-white transition-colors shadow-inner" onkeypress="if(event.key === 'Enter') handleAdminLogin()">
-            </div>
-
-            <button id="admin-login-btn" onclick="handleAdminLogin()" class="w-full py-4 bg-green-600 hover:bg-green-500 text-white rounded-xl font-black uppercase tracking-widest text-xs click-press shadow-[0_10px_20px_rgba(16,185,129,0.3)] transition-all relative z-10 flex items-center justify-center gap-2">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" /></svg>
-                Authenticate
+            <button id="google-signin-btn" class="w-full py-4 bg-gray-50 hover:bg-gray-100 dark:bg-slate-800 dark:hover:bg-slate-700 text-gray-900 dark:text-white border border-gray-200 dark:border-slate-600 rounded-xl font-black uppercase tracking-widest text-xs click-press shadow-sm transition-all relative z-10 flex items-center justify-center gap-3">
+                <svg viewBox="0 0 24 24" width="18" height="18"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+                Secure Google Login
             </button>
         </div>
     </div>
@@ -76,35 +69,30 @@
                     Control Panel
                 </h1>
                 <div class="flex items-center gap-3 mt-2">
-                    <span class="px-3 py-1 bg-green-500/10 text-green-600 dark:text-green-500 text-[10px] font-black uppercase tracking-widest rounded-full border border-green-500/20 flex items-center gap-2">
+                    <span class="px-3 py-1 bg-green-500/10 text-green-600 dark:text-green-400 text-[10px] font-black uppercase tracking-widest rounded-full border border-green-500/20 flex items-center gap-2 shadow-sm">
                         <span class="w-1.5 h-1.5 bg-green-500 rounded-full pulse-dot"></span> System Live
                     </span>
-                    <span id="admin-email-tag" class="text-xs font-bold text-gray-500 uppercase tracking-tighter">Verified</span>
+                    <span id="admin-email-tag" class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-tighter">Verified</span>
                 </div>
             </div>
             
             <div class="flex items-center gap-6 w-full md:w-auto overflow-x-auto pb-2 md:pb-0">
                 <div class="grid grid-cols-2 md:grid-cols-3 gap-4 w-full md:w-auto">
-                    <div class="glass-panel p-4 rounded-2xl border-b-2 border-green-500/50 min-w-[140px]">
-                        <p class="text-[9px] font-bold text-gray-500 uppercase tracking-widest">Gross Revenue</p>
+                    <div class="bg-white dark:bg-slate-800 p-4 rounded-2xl border-b-2 border-green-500 shadow-sm min-w-[140px]">
+                        <p class="text-[9px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest">Gross Revenue</p>
                         <h2 id="total-revenue" class="text-xl font-black text-gray-900 dark:text-white mt-1">TZS 0</h2>
                     </div>
-                    <div class="glass-panel p-4 rounded-2xl border-b-2 border-blue-500/50 min-w-[120px]">
-                        <p class="text-[9px] font-bold text-gray-500 uppercase tracking-widest">Active Orders</p>
+                    <div class="bg-white dark:bg-slate-800 p-4 rounded-2xl border-b-2 border-blue-500 shadow-sm min-w-[120px]">
+                        <p class="text-[9px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest">Active Orders</p>
                         <h2 id="order-count" class="text-xl font-black text-gray-900 dark:text-white mt-1">0</h2>
                     </div>
-                    <div class="glass-panel p-4 rounded-2xl border-b-2 border-amber-500/50 hidden md:block min-w-[120px]">
-                        <p class="text-[9px] font-bold text-gray-500 uppercase tracking-widest">Payout Requests</p>
+                    <div class="bg-white dark:bg-slate-800 p-4 rounded-2xl border-b-2 border-amber-500 shadow-sm hidden md:block min-w-[120px]">
+                        <p class="text-[9px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest">Payout Requests</p>
                         <h2 id="payout-count" class="text-xl font-black text-amber-600 dark:text-amber-400 mt-1">0</h2>
                     </div>
                 </div>
 
-                <div class="flex items-center gap-2 shrink-0">
-                    <button onclick="switchTheme()" class="w-12 h-12 bg-white dark:bg-gray-900 rounded-full flex items-center justify-center shadow-md dark:shadow-inner border border-gray-200 dark:border-gray-700 transition-colors click-press">
-                        <svg id="icon-sun" style="display:none;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-5 h-5 text-amber-500"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-2.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z" /></svg>
-                        <svg id="icon-moon" style="display:none;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-5 h-5 text-blue-500 dark:text-blue-400"><path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998Z" /></svg>
-                    </button>
-                    
+                <div class="flex items-center gap-2 shrink-0 md:pr-14"> 
                     <button onclick="adminLogout()" class="w-12 h-12 bg-red-50 dark:bg-red-500/10 text-red-500 hover:bg-red-100 dark:hover:bg-red-500/20 rounded-full flex items-center justify-center shadow-md dark:shadow-none border border-red-200 dark:border-red-500/20 transition-colors click-press" title="Logout">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" /></svg>
                     </button>
@@ -112,21 +100,21 @@
             </div>
         </header>
 
-        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6 bg-white dark:bg-slate-900/50 p-3 rounded-2xl border border-gray-200 dark:border-white/5 shadow-sm transition-colors">
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6 bg-white dark:bg-slate-800 p-3 rounded-2xl border border-gray-200 dark:border-slate-700 shadow-sm transition-colors">
             <div class="flex gap-2 overflow-x-auto w-full md:w-auto pb-2 md:pb-0">
                 <button onclick="switchTab('orders')" id="btn-orders" class="px-6 py-3 text-xs font-black uppercase tracking-widest transition-all rounded-xl tab-active whitespace-nowrap flex items-center gap-2">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" /></svg>
                     Sales Flow
                 </button>
-                <button onclick="switchTab('payouts')" id="btn-payouts" class="px-6 py-3 text-xs font-black uppercase tracking-widest transition-all rounded-xl text-gray-500 hover:text-gray-900 dark:hover:text-white whitespace-nowrap flex items-center gap-2">
+                <button onclick="switchTab('payouts')" id="btn-payouts" class="px-6 py-3 text-xs font-black uppercase tracking-widest transition-all rounded-xl text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white whitespace-nowrap flex items-center gap-2">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18.75a60.07 60.07 0 0115.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 013 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 00-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 01-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 003 15h-.75M15 10.5a3 3 0 11-6 0 3 3 0 016 0zm3 0h.008v.008H18V10.5zm-12 0h.008v.008H6V10.5z" /></svg>
                     Payouts
                 </button>
-                <button onclick="switchTab('vendors')" id="btn-vendors" class="px-6 py-3 text-xs font-black uppercase tracking-widest transition-all rounded-xl text-gray-500 hover:text-gray-900 dark:hover:text-white whitespace-nowrap flex items-center gap-2">
+                <button onclick="switchTab('vendors')" id="btn-vendors" class="px-6 py-3 text-xs font-black uppercase tracking-widest transition-all rounded-xl text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white whitespace-nowrap flex items-center gap-2">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z" /></svg>
                     Vendors
                 </button>
-                <button onclick="switchTab('messages')" id="btn-messages" class="px-6 py-3 text-xs font-black uppercase tracking-widest transition-all rounded-xl text-gray-500 hover:text-gray-900 dark:hover:text-white whitespace-nowrap flex items-center gap-2">
+                <button onclick="switchTab('messages')" id="btn-messages" class="px-6 py-3 text-xs font-black uppercase tracking-widest transition-all rounded-xl text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white whitespace-nowrap flex items-center gap-2">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M8.625 12a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 01-2.555-.337A5.972 5.972 0 015.41 20.97a5.969 5.969 0 01-.474-.065 4.48 4.48 0 00.978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25z" /></svg>
                     Messages
                 </button>
@@ -137,7 +125,7 @@
                     <span class="absolute inset-y-0 left-0 flex items-center pl-3">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4 text-gray-400"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" /></svg>
                     </span>
-                    <input type="text" id="global-search" onkeyup="handleSearch()" placeholder="Search ID, Name, Status..." class="w-full bg-gray-100 dark:bg-black/40 border border-gray-200 dark:border-white/10 rounded-xl pl-10 pr-4 py-2.5 text-sm font-bold outline-none focus:border-green-500 transition-colors dark:text-white placeholder-gray-400">
+                    <input type="text" id="global-search" onkeyup="handleSearch()" placeholder="Search ID, Name, Status..." class="w-full bg-gray-100 dark:bg-slate-900 border border-gray-200 dark:border-slate-700 rounded-xl pl-10 pr-4 py-2.5 text-sm font-bold outline-none focus:border-green-500 transition-colors dark:text-white placeholder-gray-400">
                 </div>
                 <button onclick="openExportModal()" class="shrink-0 bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-500/20 px-4 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest hover:bg-blue-100 dark:hover:bg-blue-500/20 transition-all click-press flex items-center gap-2">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" /></svg>
@@ -147,19 +135,19 @@
         </div>
 
         <div id="view-orders" class="view-section stagger-item">
-            <div class="glass-panel rounded-[2.5rem] overflow-hidden">
+            <div class="bg-white dark:bg-slate-800 rounded-[2.5rem] overflow-hidden shadow-xl border border-gray-200 dark:border-slate-700">
                 <div class="overflow-x-auto overflow-y-auto max-h-[60vh]">
                     <table class="w-full text-left border-collapse">
-                        <thead class="sticky top-0 bg-gray-100 dark:bg-[#0f172a] z-10 transition-colors shadow-sm">
-                            <tr class="border-b border-gray-200 dark:border-white/5">
-                                <th class="p-6 text-[10px] font-black uppercase tracking-widest text-gray-500">Order & Status</th>
-                                <th class="p-6 text-[10px] font-black uppercase tracking-widest text-gray-500">Customer Intelligence</th>
-                                <th class="p-6 text-[10px] font-black uppercase tracking-widest text-gray-500">Inventory Logic</th>
-                                <th class="p-6 text-[10px] font-black uppercase tracking-widest text-gray-500">Net Value</th>
-                                <th class="p-6 text-[10px] font-black uppercase tracking-widest text-gray-500 text-center">Executive Action</th>
+                        <thead class="sticky top-0 bg-gray-100 dark:bg-slate-900 z-10 transition-colors shadow-sm">
+                            <tr class="border-b border-gray-200 dark:border-slate-700">
+                                <th class="p-6 text-[10px] font-black uppercase tracking-widest text-gray-500 dark:text-gray-400">Order & Status</th>
+                                <th class="p-6 text-[10px] font-black uppercase tracking-widest text-gray-500 dark:text-gray-400">Customer Intelligence</th>
+                                <th class="p-6 text-[10px] font-black uppercase tracking-widest text-gray-500 dark:text-gray-400">Inventory Logic</th>
+                                <th class="p-6 text-[10px] font-black uppercase tracking-widest text-gray-500 dark:text-gray-400">Net Value</th>
+                                <th class="p-6 text-[10px] font-black uppercase tracking-widest text-gray-500 dark:text-gray-400 text-center">Executive Action</th>
                             </tr>
                         </thead>
-                        <tbody id="admin-orders-feed" class="divide-y divide-gray-200 dark:divide-white/5 transition-colors">
+                        <tbody id="admin-orders-feed" class="divide-y divide-gray-200 dark:divide-slate-700 transition-colors">
                             <tr><td colspan="5" class="p-12 text-center text-gray-500 font-bold">Loading system data...</td></tr>
                         </tbody>
                     </table>
@@ -169,28 +157,28 @@
 
         <div id="view-payouts" class="hidden view-section stagger-item">
             <div class="flex gap-2 mb-6">
-                <button onclick="togglePayoutView('PENDING')" id="btn-payout-pending" class="px-6 py-2 text-[10px] font-black uppercase tracking-widest rounded-lg border dark:border-white/10 sub-tab-active transition-all click-press shadow-sm">
+                <button onclick="togglePayoutView('PENDING')" id="btn-payout-pending" class="px-6 py-2 text-[10px] font-black uppercase tracking-widest rounded-lg border dark:border-slate-700 sub-tab-active transition-all click-press shadow-sm">
                     Action Required (<span id="count-pending">0</span>)
                 </button>
-                <button onclick="togglePayoutView('PAID')" id="btn-payout-paid" class="px-6 py-2 text-[10px] font-black uppercase tracking-widest rounded-lg border border-gray-200 dark:border-white/10 text-gray-500 hover:text-gray-900 dark:hover:text-white transition-all click-press">
+                <button onclick="togglePayoutView('PAID')" id="btn-payout-paid" class="px-6 py-2 text-[10px] font-black uppercase tracking-widest rounded-lg border border-gray-200 dark:border-slate-700 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-all click-press">
                     Settlement History (<span id="count-paid">0</span>)
                 </button>
             </div>
 
             <div id="payout-pending-container" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
 
-            <div id="payout-paid-container" class="hidden glass-panel rounded-[2rem] overflow-hidden">
+            <div id="payout-paid-container" class="hidden bg-white dark:bg-slate-800 rounded-[2rem] overflow-hidden shadow-xl border border-gray-200 dark:border-slate-700">
                 <div class="overflow-x-auto max-h-[60vh]">
                     <table class="w-full text-left border-collapse">
-                        <thead class="sticky top-0 bg-gray-100 dark:bg-[#0f172a] z-10 shadow-sm transition-colors">
-                            <tr class="border-b border-gray-200 dark:border-white/5">
-                                <th class="p-5 text-[10px] font-black uppercase tracking-widest text-gray-500">Processed</th>
-                                <th class="p-5 text-[10px] font-black uppercase tracking-widest text-gray-500">Supplier</th>
-                                <th class="p-5 text-[10px] font-black uppercase tracking-widest text-gray-500">Amount Sent</th>
-                                <th class="p-5 text-[10px] font-black uppercase tracking-widest text-gray-500">Channel Details</th>
+                        <thead class="sticky top-0 bg-gray-100 dark:bg-slate-900 z-10 shadow-sm transition-colors">
+                            <tr class="border-b border-gray-200 dark:border-slate-700">
+                                <th class="p-5 text-[10px] font-black uppercase tracking-widest text-gray-500 dark:text-gray-400">Processed</th>
+                                <th class="p-5 text-[10px] font-black uppercase tracking-widest text-gray-500 dark:text-gray-400">Supplier</th>
+                                <th class="p-5 text-[10px] font-black uppercase tracking-widest text-gray-500 dark:text-gray-400">Amount Sent</th>
+                                <th class="p-5 text-[10px] font-black uppercase tracking-widest text-gray-500 dark:text-gray-400">Channel Details</th>
                             </tr>
                         </thead>
-                        <tbody id="payout-paid-feed" class="divide-y divide-gray-200 dark:divide-white/5 transition-colors"></tbody>
+                        <tbody id="payout-paid-feed" class="divide-y divide-gray-200 dark:divide-slate-700 transition-colors"></tbody>
                     </table>
                 </div>
             </div>
@@ -198,27 +186,27 @@
 
         <div id="view-vendors" class="hidden view-section stagger-item">
             <div class="flex flex-col md:flex-row gap-6">
-                <div class="w-full md:w-1/3 glass-panel p-6 rounded-[2rem] h-fit">
+                <div class="w-full md:w-1/3 bg-white dark:bg-slate-800 p-6 rounded-[2rem] h-fit shadow-xl border border-gray-200 dark:border-slate-700">
                     <h3 class="text-lg font-black text-gray-900 dark:text-white mb-1">Authorize Vendor</h3>
-                    <p class="text-[10px] text-gray-500 font-bold uppercase tracking-widest mb-6">Add an email to the whitelist</p>
-                    <input type="email" id="new-vendor-email" placeholder="supplier@email.com" class="w-full bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-white/10 rounded-xl px-4 py-3 text-sm font-bold outline-none focus:border-green-500 mb-4 dark:text-white transition-colors">
+                    <p class="text-[10px] text-gray-500 dark:text-gray-400 font-bold uppercase tracking-widest mb-6">Add an email to the whitelist</p>
+                    <input type="email" id="new-vendor-email" placeholder="supplier@email.com" class="w-full bg-gray-50 dark:bg-slate-900 border border-gray-200 dark:border-slate-700 rounded-xl px-4 py-3 text-sm font-bold outline-none focus:border-green-500 mb-4 dark:text-white transition-colors">
                     <button onclick="addVendor()" class="w-full py-3 bg-gray-900 dark:bg-green-600 hover:bg-black dark:hover:bg-green-500 text-white rounded-xl text-xs font-black uppercase tracking-widest click-press shadow-lg transition-all flex justify-center items-center gap-2">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zM4 19.235v-.11a6.375 6.375 0 0112.75 0v.109A12.318 12.318 0 0110.374 21c-2.331 0-4.512-.645-6.374-1.766z" /></svg>
                         Grant Access
                     </button>
                 </div>
 
-                <div class="w-full md:w-2/3 glass-panel rounded-[2rem] overflow-hidden">
+                <div class="w-full md:w-2/3 bg-white dark:bg-slate-800 rounded-[2rem] overflow-hidden shadow-xl border border-gray-200 dark:border-slate-700">
                     <div class="overflow-x-auto max-h-[60vh]">
                         <table class="w-full text-left border-collapse">
-                            <thead class="sticky top-0 bg-gray-100 dark:bg-[#0f172a] z-10 shadow-sm transition-colors">
-                                <tr class="border-b border-gray-200 dark:border-white/5">
-                                    <th class="p-5 text-[10px] font-black uppercase tracking-widest text-gray-500">Authorized Email</th>
-                                    <th class="p-5 text-[10px] font-black uppercase tracking-widest text-gray-500 text-center">System Status</th>
-                                    <th class="p-5 text-[10px] font-black uppercase tracking-widest text-gray-500 text-center">Access Control</th>
+                            <thead class="sticky top-0 bg-gray-100 dark:bg-slate-900 z-10 shadow-sm transition-colors">
+                                <tr class="border-b border-gray-200 dark:border-slate-700">
+                                    <th class="p-5 text-[10px] font-black uppercase tracking-widest text-gray-500 dark:text-gray-400">Authorized Email</th>
+                                    <th class="p-5 text-[10px] font-black uppercase tracking-widest text-gray-500 dark:text-gray-400 text-center">System Status</th>
+                                    <th class="p-5 text-[10px] font-black uppercase tracking-widest text-gray-500 dark:text-gray-400 text-center">Access Control</th>
                                 </tr>
                             </thead>
-                            <tbody id="admin-vendors-feed" class="divide-y divide-gray-200 dark:divide-white/5 transition-colors"></tbody>
+                            <tbody id="admin-vendors-feed" class="divide-y divide-gray-200 dark:divide-slate-700 transition-colors"></tbody>
                         </table>
                     </div>
                 </div>
@@ -226,9 +214,9 @@
         </div>
         
         <div id="view-messages" class="hidden view-section stagger-item h-[65vh]">
-            <div class="glass-panel rounded-[2rem] flex h-full overflow-hidden border border-gray-200 dark:border-white/10">
-                <div class="w-1/3 border-r border-gray-200 dark:border-white/10 flex flex-col bg-white/50 dark:bg-black/20">
-                    <div class="p-5 border-b border-gray-200 dark:border-white/10">
+            <div class="bg-white dark:bg-slate-800 rounded-[2rem] flex h-full overflow-hidden border border-gray-200 dark:border-slate-700 shadow-xl">
+                <div class="w-1/3 border-r border-gray-200 dark:border-slate-700 flex flex-col bg-gray-50 dark:bg-slate-900">
+                    <div class="p-5 border-b border-gray-200 dark:border-slate-700">
                         <h3 class="font-black text-gray-900 dark:text-white">Active Chats</h3>
                     </div>
                     <div id="admin-chat-list" class="flex-grow overflow-y-auto p-2 space-y-1">
@@ -236,13 +224,13 @@
                     </div>
                 </div>
 
-                <div class="w-2/3 flex flex-col bg-gray-50/50 dark:bg-black/40 relative">
+                <div class="w-2/3 flex flex-col relative">
                     <div id="chat-placeholder" class="absolute inset-0 flex flex-col items-center justify-center text-gray-400">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-16 h-16 mb-4 opacity-50"><path stroke-linecap="round" stroke-linejoin="round" d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.755-4.133a1.14 1.14 0 01.865-.501 48.172 48.172 0 003.423-.379c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z" /></svg>
                         <p class="font-bold text-sm uppercase tracking-widest">Select a conversation</p>
                     </div>
 
-                    <div id="active-chat-header" class="p-5 border-b border-gray-200 dark:border-white/10 flex justify-between items-center hidden bg-white/80 dark:bg-slate-900/80 backdrop-blur-md z-10">
+                    <div id="active-chat-header" class="p-5 border-b border-gray-200 dark:border-slate-700 flex justify-between items-center hidden z-10">
                         <div>
                             <h3 id="chat-user-name" class="font-black text-gray-900 dark:text-white">Customer Name</h3>
                             <p class="text-[10px] text-green-500 font-bold uppercase tracking-widest">Online</p>
@@ -251,9 +239,9 @@
                     
                     <div id="chat-messages-area" class="flex-grow overflow-y-auto p-6 flex flex-col gap-4 hidden"></div>
                     
-                    <div id="chat-input-area" class="p-4 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-t border-gray-200 dark:border-white/10 flex gap-2 hidden z-10">
-                        <input type="text" id="admin-chat-input" onkeypress="if(event.key === 'Enter') sendAdminMessage()" class="flex-grow bg-gray-100 dark:bg-black/50 rounded-xl px-5 py-3 text-sm font-bold outline-none border border-transparent focus:border-green-500 dark:text-white transition-colors" placeholder="Type a reply...">
-                        <button onclick="sendAdminMessage()" class="px-6 py-3 bg-green-600 hover:bg-green-500 text-white rounded-xl font-black uppercase tracking-widest text-[10px] click-press transition-colors shadow-lg shadow-green-500/20">Send</button>
+                    <div id="chat-input-area" class="p-4 border-t border-gray-200 dark:border-slate-700 flex gap-2 hidden z-10">
+                        <input type="text" id="admin-chat-input" onkeypress="if(event.key === 'Enter') sendAdminMessage()" class="flex-grow bg-gray-100 dark:bg-slate-900 rounded-xl px-5 py-3 text-sm font-bold outline-none border border-transparent focus:border-green-500 dark:text-white transition-colors" placeholder="Type a reply...">
+                        <button onclick="sendAdminMessage()" class="px-6 py-3 bg-green-600 hover:bg-green-500 text-white rounded-xl font-black uppercase tracking-widest text-[10px] click-press transition-colors shadow-md">Send</button>
                     </div>
                 </div>
             </div>
@@ -261,29 +249,31 @@
     </div>
 
     <div id="export-modal" class="fixed inset-0 z-[400] hidden bg-black/60 flex items-center justify-center backdrop-blur-sm px-4">
-        <div class="bg-white dark:bg-gray-900 w-full max-w-md rounded-[2.5rem] p-8 shadow-2xl relative border border-transparent dark:border-gray-700 transition-colors">
-            <button onclick="closeExportModal()" class="absolute top-4 right-4 w-8 h-8 bg-gray-100 dark:bg-gray-800 text-gray-500 rounded-full font-bold click-press transition-colors hover:bg-gray-200 dark:hover:bg-gray-700">✕</button>
+        <div class="bg-white dark:bg-slate-800 w-full max-w-md rounded-[2.5rem] p-8 shadow-2xl relative border border-gray-200 dark:border-slate-700 transition-colors">
+            <button onclick="closeExportModal()" class="absolute top-4 right-4 w-8 h-8 bg-gray-100 dark:bg-slate-700 text-gray-500 dark:text-gray-300 rounded-full font-bold click-press transition-colors hover:bg-gray-200 dark:hover:bg-slate-600 flex justify-center items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+            </button>
             
             <h3 class="text-xl font-black mb-1 text-center text-gray-900 dark:text-white">Export Financials</h3>
             <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest text-center mb-6">Select Statement Date Range</p>
             
             <div class="grid grid-cols-2 gap-3 mb-6">
-                <button onclick="setExportRange(7)" class="py-3 bg-gray-50 dark:bg-gray-800 hover:bg-green-50 dark:hover:bg-green-900/20 text-gray-700 dark:text-gray-300 hover:text-green-600 rounded-xl font-bold text-xs click-press transition-colors border border-gray-200 dark:border-gray-700">Last 7 Days</button>
-                <button onclick="setExportRange(30)" class="py-3 bg-gray-50 dark:bg-gray-800 hover:bg-green-50 dark:hover:bg-green-900/20 text-gray-700 dark:text-gray-300 hover:text-green-600 rounded-xl font-bold text-xs click-press transition-colors border border-gray-200 dark:border-gray-700">This Month</button>
+                <button onclick="setExportRange(7)" class="py-3 bg-gray-50 dark:bg-slate-900 hover:bg-green-50 dark:hover:bg-green-900/20 text-gray-700 dark:text-gray-300 hover:text-green-600 rounded-xl font-bold text-xs click-press transition-colors border border-gray-200 dark:border-slate-700">Last 7 Days</button>
+                <button onclick="setExportRange(30)" class="py-3 bg-gray-50 dark:bg-slate-900 hover:bg-green-50 dark:hover:bg-green-900/20 text-gray-700 dark:text-gray-300 hover:text-green-600 rounded-xl font-bold text-xs click-press transition-colors border border-gray-200 dark:border-slate-700">This Month</button>
             </div>
 
             <div class="space-y-4 mb-6">
                 <div>
-                    <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Custom Start Date</label>
-                    <input type="date" id="export-start" class="w-full bg-gray-50 dark:bg-gray-800 p-4 rounded-xl outline-none font-bold text-sm text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 border border-gray-200 dark:border-gray-700 transition-colors">
+                    <label class="block text-[10px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest mb-2">Custom Start Date</label>
+                    <input type="date" id="export-start" class="w-full bg-gray-50 dark:bg-slate-900 p-4 rounded-xl outline-none font-bold text-sm text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 border border-gray-200 dark:border-slate-700 transition-colors">
                 </div>
                 <div>
-                    <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Custom End Date</label>
-                    <input type="date" id="export-end" class="w-full bg-gray-50 dark:bg-gray-800 p-4 rounded-xl outline-none font-bold text-sm text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 border border-gray-200 dark:border-gray-700 transition-colors">
+                    <label class="block text-[10px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest mb-2">Custom End Date</label>
+                    <input type="date" id="export-end" class="w-full bg-gray-50 dark:bg-slate-900 p-4 rounded-xl outline-none font-bold text-sm text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 border border-gray-200 dark:border-slate-700 transition-colors">
                 </div>
             </div>
 
-            <button onclick="executeCustomExport()" class="w-full py-4 bg-green-600 hover:bg-green-700 text-white rounded-2xl font-black click-press text-xs uppercase tracking-widest transition-colors flex justify-center items-center gap-2 shadow-[0_10px_20px_rgba(16,185,129,0.3)]">
+            <button onclick="executeCustomExport()" class="w-full py-4 bg-green-600 hover:bg-green-500 text-white rounded-2xl font-black click-press text-xs uppercase tracking-widest transition-colors flex justify-center items-center gap-2 shadow-lg">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" /></svg>
                 Download CSV
             </button>
@@ -292,8 +282,8 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-        // 🟢 V2 UPDATE: Switched to secure Email/Password Auth
-        import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+        // 🟢 GoogleAuthProvider RESTORED for easier login
+        import { getAuth, onAuthStateChanged, signInWithPopup, GoogleAuthProvider, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
         import { getFirestore, collection, query, onSnapshot, doc, updateDoc, orderBy, serverTimestamp, setDoc, addDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
         const firebaseConfig = { 
@@ -308,18 +298,26 @@
 
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
+        const provider = new GoogleAuthProvider();
+        provider.setCustomParameters({ prompt: 'select_account' });
         const db = getFirestore(app);
 
         // 🟢 Master Admins Only
         const MASTER_ADMINS = ["jem.mziray@gmail.com", "venancechesco58@gmail.com"]; 
         window.appData = { orders: [], payouts: [], vendors: [], currentTab: 'orders', currentPayoutView: 'PENDING' };
 
-        // 🟢 V2 UPDATE: Secure Login Gateway
+        // 🟢 Secure Login Check
         onAuthStateChanged(auth, (user) => {
             if (user && MASTER_ADMINS.includes(user.email)) {
                 document.getElementById('admin-login-screen').classList.add('hidden');
                 document.getElementById('admin-dashboard').classList.remove('hidden');
                 document.getElementById('admin-email-tag').textContent = user.email;
+                
+                // Show the sun/moon icon based on current theme after login
+                const isDark = document.documentElement.classList.contains('dark');
+                document.getElementById('icon-sun').style.display = isDark ? 'block' : 'none';
+                document.getElementById('icon-moon').style.display = isDark ? 'none' : 'block';
+
                 startDataSync();
             } else {
                 document.getElementById('admin-login-screen').classList.remove('hidden');
@@ -331,28 +329,37 @@
             }
         });
 
-        window.handleAdminLogin = async () => {
-            const email = document.getElementById('admin-email').value.trim().toLowerCase();
-            const pass = document.getElementById('admin-pass').value;
-            const btn = document.getElementById('admin-login-btn');
-
-            if(!email || !pass) return alert("Please enter both email and password.");
-
-            btn.innerHTML = `<svg class="animate-spin -ml-1 mr-3 h-4 w-4 text-white inline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Authenticating...`;
-            btn.disabled = true;
-
-            try {
-                const userCredential = await signInWithEmailAndPassword(auth, email, pass);
-                if (!MASTER_ADMINS.includes(userCredential.user.email)) {
-                    await signOut(auth);
-                    alert("Access Denied: You are not a registered Master Admin.");
+        // 🟢 Login Function Restored to Google Popup
+        const googleBtn = document.getElementById('google-signin-btn');
+        if(googleBtn) {
+            googleBtn.onclick = async () => { 
+                const originalText = googleBtn.innerHTML; 
+                googleBtn.innerHTML = "Authenticating..."; 
+                try { 
+                    const result = await signInWithPopup(auth, provider); 
+                    if (!MASTER_ADMINS.includes(result.user.email)) {
+                        await signOut(auth);
+                        alert("Access Denied: You are not a registered Master Admin.");
+                    }
+                } catch (error) {
+                    if (error.code !== 'auth/popup-closed-by-user' && error.code !== 'auth/cancelled-popup-request') alert("Login failed: " + error.message);
+                    googleBtn.innerHTML = originalText;
                 }
-            } catch(e) {
-                alert("Login Failed. Check your email and password.");
-            } finally {
-                btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4 inline"><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" /></svg> Authenticate`;
-                btn.disabled = false;
-            }
+            };
+        }
+
+        window.switchTheme = function() {
+            const html = document.documentElement;
+            html.classList.toggle('dark');
+            const isDark = html.classList.contains('dark');
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+            
+            // Update icons
+            const sunIcons = document.querySelectorAll('#icon-sun');
+            const moonIcons = document.querySelectorAll('#icon-moon');
+            
+            sunIcons.forEach(icon => icon.style.display = isDark ? 'block' : 'none');
+            moonIcons.forEach(icon => icon.style.display = isDark ? 'none' : 'block');
         };
 
         window.adminLogout = async () => {
@@ -450,35 +457,35 @@
             orders.forEach(o => {
                 const safeDate = (o.createdAt && typeof o.createdAt.toDate === 'function') ? o.createdAt.toDate().toLocaleDateString() : (o.dateString || 'Just now');
                 
-                let statusColor = "bg-gray-100 text-gray-600";
+                let statusColor = "bg-gray-100 text-gray-600 dark:bg-slate-700 dark:text-gray-300";
                 let actionButton = "";
                 
                 if (o.status === 'PENDING') {
-                    statusColor = "bg-amber-100 text-amber-700 border-amber-200";
-                    actionButton = `<button disabled class="px-4 py-2 bg-gray-200 text-gray-400 rounded-xl text-[9px] font-black uppercase tracking-widest cursor-not-allowed">Awaiting Payment</button>`;
+                    statusColor = "bg-amber-100 text-amber-700 border-amber-200 dark:bg-amber-900/30 dark:text-amber-400 dark:border-amber-800";
+                    actionButton = `<button disabled class="px-4 py-2 bg-gray-200 dark:bg-slate-700 text-gray-400 dark:text-gray-500 rounded-xl text-[9px] font-black uppercase tracking-widest cursor-not-allowed">Awaiting Payment</button>`;
                 } 
                 else if (o.status === 'SUCCESS' || o.status === 'PAID') {
-                    statusColor = "bg-blue-100 text-blue-700 border-blue-200";
+                    statusColor = "bg-blue-100 text-blue-700 border-blue-200 dark:bg-blue-900/30 dark:text-blue-400 dark:border-blue-800";
                     actionButton = `<button onclick="updateStatus('orders', '${o.id}', 'PROCESSING')" class="px-4 py-2 bg-blue-600 text-white rounded-xl text-[9px] font-black uppercase tracking-widest shadow-lg hover:scale-105 transition-transform click-press">Verify Payment & Process</button>`;
                 }
                 else if (o.status === 'PROCESSING') {
-                    statusColor = "bg-purple-100 text-purple-700 border-purple-200";
+                    statusColor = "bg-purple-100 text-purple-700 border-purple-200 dark:bg-purple-900/30 dark:text-purple-400 dark:border-purple-800";
                     actionButton = `<button onclick="updateStatus('orders', '${o.id}', 'SOLVED')" class="px-4 py-2 bg-green-600 text-white rounded-xl text-[9px] font-black uppercase tracking-widest shadow-lg hover:scale-105 transition-transform click-press">Mark as Delivered</button>`;
                 }
                 else if (o.status === 'SOLVED') {
-                    statusColor = "bg-green-100 text-green-700 border-green-200";
-                    actionButton = `<button disabled class="px-4 py-2 bg-gray-100 dark:bg-white/5 text-green-500 rounded-xl text-[9px] font-black uppercase tracking-widest cursor-not-allowed">Order Closed</button>`;
+                    statusColor = "bg-green-100 text-green-700 border-green-200 dark:bg-green-900/30 dark:text-green-400 dark:border-green-800";
+                    actionButton = `<button disabled class="px-4 py-2 bg-gray-100 dark:bg-slate-700 text-green-500 rounded-xl text-[9px] font-black uppercase tracking-widest cursor-not-allowed">Order Closed</button>`;
                 }
 
-                const hiddenWarning = o.hiddenFromCustomer ? `<span class="text-[8px] bg-red-100 text-red-600 px-1.5 py-0.5 rounded ml-2">Hidden by User</span>` : "";
+                const hiddenWarning = o.hiddenFromCustomer ? `<span class="text-[8px] bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400 px-1.5 py-0.5 rounded ml-2">Hidden by User</span>` : "";
                 const safeTotal = Number(o.total || 0).toLocaleString();
                 const safeTransport = Number(o.transport || 0).toLocaleString();
 
                 html += `
-                <tr class="hover:bg-gray-50 dark:hover:bg-white/[0.02] transition-colors border-l-4 border-transparent hover:border-gray-300">
+                <tr class="hover:bg-gray-50 dark:hover:bg-slate-700/30 transition-colors border-l-4 border-transparent hover:border-gray-300 dark:hover:border-slate-500">
                     <td class="p-6">
                         <p class="font-black text-gray-900 dark:text-white tracking-widest text-sm">${o.orderId || 'UNNAMED'}</p>
-                        <p class="text-[10px] text-gray-500 font-bold mt-1">${safeDate}</p>
+                        <p class="text-[10px] text-gray-500 dark:text-gray-400 font-bold mt-1">${safeDate}</p>
                         <div class="mt-3 flex items-center">
                             <span class="${statusColor} px-2 py-1 rounded text-[9px] font-black border uppercase">${o.status || 'UNKNOWN'}</span>
                             ${hiddenWarning}
@@ -486,14 +493,14 @@
                     </td>
                     <td class="p-6">
                         <p class="font-bold text-sm text-gray-800 dark:text-gray-200">${o.userName || 'Anonymous'}</p>
-                        <p class="text-[10px] text-gray-500 mt-1">${o.userEmail || 'No Digital ID'}</p>
+                        <p class="text-[10px] text-gray-500 dark:text-gray-400 mt-1">${o.userEmail || 'No Digital ID'}</p>
                     </td>
                     <td class="p-6">
                         <p class="text-xs text-gray-500 dark:text-gray-400 leading-relaxed max-w-[200px] italic">"${o.items || 'No data'}"</p>
                     </td>
                     <td class="p-6">
                         <p class="font-black text-gray-900 dark:text-white text-base">TZS ${safeTotal}</p>
-                        <p class="text-[10px] text-gray-500 mt-1">Fee: TZS ${safeTransport}</p>
+                        <p class="text-[10px] text-gray-500 dark:text-gray-400 mt-1">Fee: TZS ${safeTransport}</p>
                     </td>
                     <td class="p-6 text-center">
                         ${actionButton}
@@ -511,7 +518,7 @@
             const paid = payouts.filter(p => p.status === 'PAID');
 
             if(pending.length === 0) {
-                pendingContainer.innerHTML = `<div class="col-span-full p-20 text-center text-gray-500 font-bold glass-panel rounded-[2.5rem]">Inbox Zero! No pending requests.</div>`;
+                pendingContainer.innerHTML = `<div class="col-span-full p-20 text-center text-gray-500 font-bold bg-white dark:bg-slate-800 rounded-[2.5rem] border border-gray-200 dark:border-slate-700 shadow-sm">No pending requests.</div>`;
             } else {
                 let pendingHtml = '';
                 pending.forEach(p => {
@@ -519,21 +526,21 @@
                     const safeAmount = Number(p.amount || 0).toLocaleString(); 
                     
                     pendingHtml += `
-                    <div class="glass-panel p-6 rounded-[2rem] flex flex-col justify-between border-l-4 border-amber-500 relative overflow-hidden">
+                    <div class="bg-white dark:bg-slate-800 p-6 rounded-[2rem] flex flex-col justify-between border-l-4 border-amber-500 shadow-xl border-y border-r border-gray-200 dark:border-slate-700 relative overflow-hidden">
                         <div class="absolute top-0 right-0 w-24 h-24 bg-amber-500/10 rounded-full blur-[30px] pointer-events-none"></div>
                         <div class="mb-4 relative z-10">
                             <div class="flex justify-between items-start mb-2">
                                 <h4 class="text-lg font-black text-gray-900 dark:text-white">${p.supplierName || 'Unknown'}</h4>
-                                <span class="text-[9px] font-black px-2 py-1 bg-gray-100 dark:bg-white/5 rounded border border-gray-200 dark:border-white/5 uppercase text-gray-500 dark:text-gray-400 tracking-tighter">ID: ${(p.supplierId || 'XXXXXX').slice(0,6)}</span>
+                                <span class="text-[9px] font-black px-2 py-1 bg-gray-100 dark:bg-slate-900 rounded border border-gray-200 dark:border-slate-700 uppercase text-gray-500 dark:text-gray-400 tracking-tighter">ID: ${(p.supplierId || 'XXXXXX').slice(0,6)}</span>
                             </div>
-                            <p class="text-xs text-gray-500 font-bold uppercase tracking-widest mb-4">Request: <span class="text-amber-600 dark:text-amber-500 text-sm font-black">TZS ${safeAmount}</span></p>
-                            <div class="bg-gray-50 dark:bg-black/40 p-4 rounded-2xl border border-gray-200 dark:border-white/5">
-                                <p class="text-[10px] text-gray-500 dark:text-gray-600 font-black uppercase mb-1">Send to Channel</p>
+                            <p class="text-xs text-gray-500 dark:text-gray-400 font-bold uppercase tracking-widest mb-4">Request: <span class="text-amber-600 dark:text-amber-500 text-sm font-black">TZS ${safeAmount}</span></p>
+                            <div class="bg-gray-50 dark:bg-slate-900 p-4 rounded-2xl border border-gray-200 dark:border-slate-700">
+                                <p class="text-[10px] text-gray-500 dark:text-gray-400 font-black uppercase mb-1">Send to Channel</p>
                                 <p class="text-sm font-mono text-blue-600 dark:text-blue-400 font-bold">${p.accountDetails || 'No details'}</p>
                             </div>
                         </div>
                         <div class="flex justify-between items-center relative z-10">
-                            <p class="text-[10px] text-gray-500 font-bold uppercase tracking-widest">${reqDate}</p>
+                            <p class="text-[10px] text-gray-500 dark:text-gray-400 font-bold uppercase tracking-widest">${reqDate}</p>
                             <button onclick="updateStatus('payouts', '${p.id}', 'PAID')" class="px-6 py-3 bg-amber-500 hover:bg-amber-400 text-black rounded-xl text-[10px] font-black uppercase tracking-widest shadow-lg shadow-amber-500/20 active:scale-95 transition-all click-press">Settle Now</button>
                         </div>
                     </div>`;
@@ -553,11 +560,11 @@
                     const safeAmount = Number(p.amount || 0).toLocaleString();
 
                     paidHtml += `
-                    <tr class="hover:bg-gray-50 dark:hover:bg-white/[0.02] transition-colors border-l-4 border-transparent hover:border-green-500">
-                        <td class="p-5 text-[10px] font-bold text-gray-500 uppercase tracking-widest">${procDate}</td>
+                    <tr class="hover:bg-gray-50 dark:hover:bg-slate-700/30 transition-colors border-l-4 border-transparent hover:border-green-500">
+                        <td class="p-5 text-[10px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest">${procDate}</td>
                         <td class="p-5 font-black text-xs text-gray-900 dark:text-white">${p.supplierName || 'Unknown'}</td>
                         <td class="p-5 font-black text-sm text-green-600 dark:text-green-500">TZS ${safeAmount}</td>
-                        <td class="p-5 text-[10px] text-gray-500 italic max-w-[200px] truncate">${p.accountDetails || ''}</td>
+                        <td class="p-5 text-[10px] text-gray-500 dark:text-gray-400 italic max-w-[200px] truncate">${p.accountDetails || ''}</td>
                     </tr>`;
                 });
                 paidContainer.innerHTML = paidHtml;
@@ -575,7 +582,7 @@
             vendors.forEach(v => {
                 const isActive = v.status === 'ACTIVE';
                 html += `
-                <tr class="hover:bg-gray-50 dark:hover:bg-white/[0.02] transition-colors">
+                <tr class="hover:bg-gray-50 dark:hover:bg-slate-700/30 transition-colors">
                     <td class="p-5 font-bold text-sm text-gray-800 dark:text-gray-200">${v.email}</td>
                     <td class="p-5 text-center">
                         <span class="${isActive ? 'bg-green-100 text-green-700 dark:bg-green-500/20 dark:text-green-500 border-green-200 dark:border-green-500/20' : 'bg-red-100 text-red-700 dark:bg-red-500/20 dark:text-red-500 border-red-200 dark:border-red-500/20'} px-3 py-1 rounded text-[9px] font-black uppercase tracking-widest border">
@@ -583,7 +590,7 @@
                         </span>
                     </td>
                     <td class="p-5 text-center">
-                        <button onclick="toggleVendorStatus('${v.id}', '${isActive ? 'SUSPENDED' : 'ACTIVE'}')" class="px-4 py-2 rounded-lg text-[9px] font-black uppercase click-press transition-all border border-gray-200 dark:border-white/10 hover:bg-gray-100 dark:hover:bg-white/5 ${isActive ? 'text-red-500' : 'text-green-500'}">
+                        <button onclick="toggleVendorStatus('${v.id}', '${isActive ? 'SUSPENDED' : 'ACTIVE'}')" class="px-4 py-2 rounded-lg text-[9px] font-black uppercase click-press transition-all border border-gray-200 dark:border-slate-700 hover:bg-gray-100 dark:hover:bg-slate-700 ${isActive ? 'text-red-500' : 'text-green-500'}">
                             ${isActive ? 'Suspend' : 'Activate'}
                         </button>
                     </td>
@@ -601,10 +608,10 @@
                 const btn = document.getElementById(`btn-${t}`);
                 if(t === tab) {
                     btn.classList.add('tab-active');
-                    btn.classList.remove('text-gray-500', 'dark:hover:text-white', 'hover:text-gray-900');
+                    btn.classList.remove('text-gray-500', 'dark:text-gray-400', 'dark:hover:text-white', 'hover:text-gray-900');
                 } else {
                     btn.classList.remove('tab-active');
-                    btn.classList.add('text-gray-500', 'dark:hover:text-white', 'hover:text-gray-900');
+                    btn.classList.add('text-gray-500', 'dark:text-gray-400', 'dark:hover:text-white', 'hover:text-gray-900');
                 }
             });
             
@@ -621,12 +628,12 @@
             const conPaid = document.getElementById('payout-paid-container');
 
             if(view === 'PENDING') {
-                btnPending.className = "px-6 py-2 text-[10px] font-black uppercase tracking-widest rounded-lg border dark:border-white/10 sub-tab-active transition-all click-press shadow-sm";
-                btnPaid.className = "px-6 py-2 text-[10px] font-black uppercase tracking-widest rounded-lg border border-gray-200 dark:border-white/10 text-gray-500 hover:text-gray-900 dark:hover:text-white transition-all click-press";
+                btnPending.className = "px-6 py-2 text-[10px] font-black uppercase tracking-widest rounded-lg border dark:border-slate-700 sub-tab-active transition-all click-press shadow-sm";
+                btnPaid.className = "px-6 py-2 text-[10px] font-black uppercase tracking-widest rounded-lg border border-gray-200 dark:border-slate-700 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-all click-press";
                 conPending.classList.remove('hidden'); conPaid.classList.add('hidden');
             } else {
-                btnPaid.className = "px-6 py-2 text-[10px] font-black uppercase tracking-widest rounded-lg border dark:border-white/10 sub-tab-active transition-all click-press shadow-sm";
-                btnPending.className = "px-6 py-2 text-[10px] font-black uppercase tracking-widest rounded-lg border border-gray-200 dark:border-white/10 text-gray-500 hover:text-gray-900 dark:hover:text-white transition-all click-press";
+                btnPaid.className = "px-6 py-2 text-[10px] font-black uppercase tracking-widest rounded-lg border dark:border-slate-700 sub-tab-active transition-all click-press shadow-sm";
+                btnPending.className = "px-6 py-2 text-[10px] font-black uppercase tracking-widest rounded-lg border border-gray-200 dark:border-slate-700 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-all click-press";
                 conPaid.classList.remove('hidden'); conPending.classList.add('hidden');
             }
         };
@@ -771,9 +778,9 @@
                         const isSelected = window.appData.activeChatId === docSnap.id;
                         
                         html += `
-                        <div onclick="openAdminChat('${docSnap.id}', '${chat.customerName}')" class="p-4 rounded-xl cursor-pointer transition-colors click-press border-l-4 ${isSelected ? 'bg-white dark:bg-white/5 border-green-500 shadow-sm' : 'border-transparent hover:bg-gray-100 dark:hover:bg-white/5'}">
+                        <div onclick="openAdminChat('${docSnap.id}', '${chat.customerName}')" class="p-4 rounded-xl cursor-pointer transition-colors click-press border-l-4 ${isSelected ? 'bg-white dark:bg-slate-800 border-green-500 shadow-sm' : 'border-transparent hover:bg-gray-100 dark:hover:bg-slate-800'}">
                             <h4 class="font-bold text-sm text-gray-900 dark:text-white">${chat.customerName || 'Customer'}</h4>
-                            <p class="text-xs text-gray-500 truncate mt-1">${chat.lastMessage || 'New conversation started...'}</p>
+                            <p class="text-xs text-gray-500 dark:text-gray-400 truncate mt-1">${chat.lastMessage || 'New conversation started...'}</p>
                         </div>`;
                     });
                     chatList.innerHTML = html;
@@ -800,7 +807,7 @@
                     const isAdmin = msg.senderId === 'admin';
                     
                     html += `
-                    <div class="max-w-[75%] p-3 rounded-2xl text-sm ${isAdmin ? 'bg-green-600 text-white self-end rounded-tr-none shadow-md' : 'bg-white dark:bg-gray-800 text-gray-900 dark:text-white self-start rounded-tl-none shadow-sm border border-gray-200 dark:border-white/5'}">
+                    <div class="max-w-[75%] p-3 rounded-2xl text-sm ${isAdmin ? 'bg-green-600 text-white self-end rounded-tr-none shadow-md' : 'bg-white dark:bg-slate-800 text-gray-900 dark:text-white self-start rounded-tl-none shadow-sm border border-gray-200 dark:border-slate-700'}">
                         ${msg.text}
                     </div>`;
                 });
