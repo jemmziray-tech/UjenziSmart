@@ -640,10 +640,10 @@
                         </button>
                     </td>
                     <td class="p-5 text-center">
-                        <button onclick="openVendorAudit('${v.id}', '${v.email}')" class="px-4 py-2 bg-blue-50 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400 rounded-lg text-[9px] font-black uppercase click-press transition-all hover:bg-blue-100 dark:hover:bg-blue-900/50">
-                            Audit Content
-                        </button>
-                    </td>
+        <a href="supplier.html?viewAs=${v.id}&vendorEmail=${v.email}" target="_blank" class="px-4 py-2 inline-block bg-purple-50 text-purple-600 dark:bg-purple-900/30 dark:text-purple-400 rounded-lg text-[9px] font-black uppercase click-press transition-all hover:bg-purple-100 dark:hover:bg-purple-900/50">
+            View Dashboard
+        </a>
+    </td>
                 </tr>`;
             });
             feed.innerHTML = html;
