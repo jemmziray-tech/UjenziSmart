@@ -6,6 +6,11 @@
     <title>UjenziSmart - Premium Builder</title>
     
     <link rel="icon" type="image/png" href="logo.png">
+    <meta property="og:title" content="UjenziSmart - Premium Builder">
+    <meta property="og:description" content="Instant delivery of high-quality building materials. Chat with our construction experts.">
+    <meta property="og:image" content="https://jemmziray-tech.github.io/UjenziSmart/logo.png">
+    <meta property="og:url" content="https://jemmziray-tech.github.io/UjenziSmart/">
+    <meta property="og:type" content="website">
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -71,12 +76,12 @@
 <body class="bg-[#f4f6f9] dark:bg-gray-900 text-gray-800 dark:text-gray-100 pb-24 transition-colors duration-300 relative min-h-screen">
 
     <div id="global-alert-bar" class="w-full bg-[#ea580c] text-white text-[10px] sm:text-xs font-bold text-center py-2.5 px-4 shadow-md z-[201] relative flex justify-center items-center gap-2 transition-all">
-    <span class="flex-grow">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4 inline-block mr-1 -mt-0.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
-        <strong>LIVE UPDATE:</strong> High-quality building materials are now available for instant delivery.
-    </span>
-    <button onclick="document.getElementById('global-alert-bar').style.display='none'" class="shrink-0 text-white hover:text-gray-200 text-xl leading-none px-2">&times;</button>
-</div>
+        <span class="flex-grow" id="live-news-text">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4 inline-block mr-1 -mt-0.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+            <strong>LIVE UPDATE:</strong> High-quality building materials are now available.
+        </span>
+        <button onclick="document.getElementById('global-alert-bar').style.display='none'" class="shrink-0 text-white hover:text-gray-200 text-xl leading-none px-2">&times;</button>
+    </div>
 
     <div id="auth-screen" class="fixed inset-0 z-[200] bg-[#f4f6f9] dark:bg-gray-900 flex flex-col justify-center px-6 transition-opacity duration-300">
         <div class="max-w-md mx-auto w-full bg-white dark:bg-gray-800 p-8 rounded-[2.5rem] shadow-2xl border dark:border-gray-700 text-center animate-stagger-in">
@@ -142,6 +147,14 @@
                 <h2 class="text-3xl font-black tracking-tighter">Market Watch</h2>
                 <span class="text-[10px] font-black text-red-500 uppercase tracking-widest mb-1 flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span> Live</span>
             </div>
+            
+            <div id="trend-news-bar" class="bg-blue-50 dark:bg-blue-900/20 border-l-4 border-blue-500 p-4 rounded-xl hidden transition-all mb-4">
+                <p class="text-xs font-bold text-blue-800 dark:text-blue-300 flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+                    <span id="trend-news-text">Market trends updating...</span>
+                </p>
+            </div>
+
             <div id="trending-feed" class="space-y-6"></div>
         </div>
 
@@ -210,8 +223,6 @@
                                 <div class="w-5 h-5 bg-green-500 rounded-full flex items-center justify-center text-white text-[10px] font-bold shadow-sm">✓</div>
                             </div>
                         </div>
-
-                        <input type="hidden" id="selected-payment-method" value="mobile">
 
                         <div id="phone-input-wrapper" class="relative z-10 transition-all duration-300">
                             <input type="tel" id="phone-number" placeholder="Enter Mobile Money Number (e.g. 0754...)" class="w-full bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-xl px-4 py-3.5 outline-none font-bold text-xs mb-4 focus:ring-2 focus:ring-green-500 transition-all shadow-inner">
@@ -519,13 +530,12 @@
                     <div class="flex text-amber-400 text-sm">★★★★★</div>
                     <span id="modal-rating-text" class="text-xs text-gray-500 font-bold"></span>
                 </div>
+                
                 <div class="mb-4">
                     <span id="modal-stock-badge" class="px-2 py-1 bg-green-50 text-green-600 dark:bg-green-900/30 dark:text-green-400 text-[10px] font-black rounded border border-green-100 dark:border-green-800 inline-block uppercase tracking-widest">Stock: Checking...</span>
                 </div>
 
                 <p id="modal-desc" class="text-gray-500 dark:text-gray-400 text-sm mb-5 leading-relaxed font-medium"></p>
-                <div class="bg-green-50 dark:bg-green-900/20 p-4 rounded-2xl mb-5 border border-green-100 dark:border-green-800 shadow-inner hidden">
-                    </div>
                 
                 <div id="fbt-section" class="mb-5 hidden">
                     <p class="text-[10px] text-gray-400 font-black uppercase tracking-widest mb-2">Frequently Bought Together</p>
@@ -588,6 +598,19 @@
                     <button onclick="document.getElementById('hidden-reviews').classList.toggle('hidden')" class="text-[10px] font-black text-green-600 dark:text-green-500 uppercase tracking-widest w-full text-center py-3 bg-green-50 dark:bg-green-900/20 rounded-xl hover:bg-green-100 transition-colors click-press">
                         See More Reviews ▼
                     </button>
+                    
+                    <div class="mt-4 pt-4 border-t border-gray-100 dark:border-gray-700">
+                        <h4 class="text-xs font-black mb-2 dark:text-white">Leave a Review</h4>
+                        <div class="flex gap-1 mb-2 text-gray-300 text-lg" id="star-rating-selector">
+                            <span onclick="window.setRating(1)" class="cursor-pointer text-amber-400">★</span>
+                            <span onclick="window.setRating(2)" class="cursor-pointer text-amber-400">★</span>
+                            <span onclick="window.setRating(3)" class="cursor-pointer text-amber-400">★</span>
+                            <span onclick="window.setRating(4)" class="cursor-pointer text-amber-400">★</span>
+                            <span onclick="window.setRating(5)" class="cursor-pointer text-amber-400">★</span>
+                        </div>
+                        <textarea id="review-text" rows="2" class="w-full bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl p-3 text-xs outline-none focus:border-green-500 dark:text-white transition-colors" placeholder="Write your feedback here..."></textarea>
+                        <button onclick="window.submitReview()" class="mt-2 w-full py-3 bg-gray-900 dark:bg-gray-700 text-white rounded-xl text-[10px] font-black uppercase tracking-widest click-press transition-colors hover:bg-black">Submit Review</button>
+                    </div>
                 </div>
 
             </div>
@@ -670,18 +693,6 @@
     </nav>
 
     <script>
-        const RENDER_URL = 'https://ujenzismart-backend.onrender.com';
-        const WHATSAPP_NUM = '255743924467'; 
-        let cart = [];
-        let currentModalProduct = null;
-        let fbtItem = null;
-        let viewHistory = ['home'];
-        
-        window.appHistory = [];
-        window.appSpend = 0;
-
-        window.productDatabase = {}; 
-
         function updateThemeIcon() {
             const isDark = document.documentElement.classList.contains('dark');
             const sun = document.getElementById('icon-sun');
@@ -817,7 +828,6 @@
             if(viewName === 'profile') { 
                 updateTrackerUI(); 
                 updateWishlistCounts(); 
-                // V3 UPDATE: Hidden chart element update is bypassed cleanly
                 document.getElementById('expense-total-display').textContent = `TZS ${(window.appSpend || 0).toLocaleString()}`;
             }
             
@@ -948,7 +958,6 @@
                 <div class="grid grid-cols-2 gap-4">${results.map((p, i) => generateProductCardHTML(p, i)).join('')}</div>`;
         }
 
-        // 🟢 V3 UPDATE: Added Stock to generateProductCardHTML
         function generateProductCardHTML(p, i) {
             if(!p) return '';
             const safeStock = p.stock || 0;
@@ -969,7 +978,6 @@
                 </div>`;
         }
 
-        // 🟢 V3 UPDATE: Infinite Scroll Home Screen
         window.renderHomeBase = function() {
             const container = document.getElementById('dynamic-home-content');
             let html = '';
@@ -987,7 +995,6 @@
                     </div>
                 </section>`;
 
-            // Flatten all products into one array for infinite scroll simulation
             let allProducts = [];
             for (let cat in window.productDatabase) {
                 if (window.productDatabase[cat] && window.productDatabase[cat].length > 0) {
@@ -1000,7 +1007,6 @@
             } else {
                 html += `<h2 class="text-lg font-black mb-4 px-1 mt-4">Recommended For You</h2>`;
                 html += `<div class="grid grid-cols-2 gap-4 pb-10">`;
-                // Render all products in one continuous grid
                 html += allProducts.map((p, i) => generateProductCardHTML(p, i)).join('');
                 html += `</div>`;
             }
@@ -1009,7 +1015,6 @@
             window.renderTrending(allProducts);
         }
 
-        // 🟢 V3 UPDATE: Dynamic Trending Generation
         window.renderTrending = function(allProducts) {
             const feed = document.getElementById('trending-feed');
             if(!allProducts || allProducts.length === 0) {
@@ -1017,12 +1022,11 @@
                 return;
             }
             
-            // Grab a subset of products to simulate "Trending"
             const trending = allProducts.slice(0, 4);
             let html = '';
             
             trending.forEach((p, i) => {
-                const percent = Math.floor(Math.random() * 5) + 1; // Fake trend % for UI feel
+                const percent = Math.floor(Math.random() * 5) + 1; 
                 html += `
                 <div onclick="window.openProduct('${p.name.replace(/'/g, "\\'")}', '${p.desc.replace(/'/g, "\\'")}', ${p.price}, ${p.wt}, '${p.img}', ${p.rating}, ${p.reviews}, '${p.reviewTxt.replace(/'/g, "\\'")}', ${p.stock || 0})" class="bg-white dark:bg-gray-800 rounded-[2.5rem] overflow-hidden shadow-sm border dark:border-gray-700 stagger-item click-press group" style="animation-delay: ${i*0.1}s">
                     <div class="relative h-48 overflow-hidden">
@@ -1086,7 +1090,6 @@
             }
         }
 
-        // 🟢 V3 UPDATE: Added stock to openProduct parameters
         window.openProduct = function(t, d, p, wt, i, rating, reviews, reviewTxt, stock) {
             currentModalProduct = { name: t, desc: d, price: p, wt: wt, img: i, stock: stock };
             document.getElementById('modal-img').src = i;
@@ -1213,7 +1216,6 @@
             window.calculateDelivery();
         }
 
-        // 🟢 V3 UPDATE: Require Delivery Phone
         window.processCheckout = async function() {
             const phoneInput = document.getElementById("phone-number").value.trim(); 
             const delPhone = document.getElementById('delivery-phone').value.trim();
@@ -1298,7 +1300,6 @@
             }
         }
 
-        // 🟢 V3 UPDATE: Require Delivery Phone on WhatsApp
         window.checkoutWhatsApp = function() {
             const u = JSON.parse(localStorage.getItem('ujenzi_user'));
             const delPhone = document.getElementById('delivery-phone').value.trim();
@@ -1746,7 +1747,26 @@
         const provider = new GoogleAuthProvider();
         provider.setCustomParameters({ prompt: 'select_account' });
 
-        // 🟢 V3 UPDATE: Aggregating all products for Infinite Scroll & Dynamic Watch
+        onSnapshot(doc(db, "settings", "system"), (docSnap) => {
+            if(docSnap.exists()) {
+                const data = docSnap.data();
+                
+                if(data.liveNews) {
+                    document.getElementById('live-news-text').innerHTML = `<strong>LIVE UPDATE:</strong> ${data.liveNews}`;
+                    document.getElementById('global-alert-bar').style.display = 'flex';
+                } else {
+                    document.getElementById('global-alert-bar').style.display = 'none';
+                }
+
+                if(data.trendNews) {
+                    document.getElementById('trend-news-text').textContent = data.trendNews;
+                    document.getElementById('trend-news-bar').classList.remove('hidden');
+                } else {
+                    document.getElementById('trend-news-bar').classList.add('hidden');
+                }
+            }
+        });
+
         onSnapshot(collection(db, "products"), (snapshot) => {
             window.productDatabase = {}; 
             let allProductsForHome = [];
@@ -1841,66 +1861,6 @@
                     }
                 });
             } catch (err) {}
-        }
-
-        // Expense tracker UI function kept for later, hidden in HTML
-        function renderPieChart(categoryData, grandTotal) {
-            const ctx = document.getElementById('expensePieChart').getContext('2d');
-            const legendDiv = document.getElementById('expense-legend');
-            const emptyMsg = document.getElementById('empty-chart-msg');
-
-            const categories = Object.keys(categoryData);
-            const amounts = Object.values(categoryData);
-
-            if(categories.length === 0 || grandTotal === 0) {
-                emptyMsg.style.display = 'flex';
-                legendDiv.innerHTML = `<p class="text-xs text-gray-400 font-bold text-center py-4">Start purchasing to see your breakdown.</p>`;
-                if(window.expenseChartInstance) window.expenseChartInstance.destroy();
-                return;
-            }
-
-            emptyMsg.style.display = 'none';
-
-            const colors = ['#3b82f6', '#10b981', '#f59e0b', '#8b5cf6', '#ec4899', '#64748b'];
-
-            legendDiv.innerHTML = categories.map((cat, index) => {
-                const color = colors[index % colors.length];
-                const amount = categoryData[cat];
-                const percentage = ((amount / grandTotal) * 100).toFixed(1);
-                
-                return `
-                <div class="flex justify-between items-center p-3 bg-gray-50 dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 transition-colors">
-                    <div class="flex items-center gap-3">
-                        <span class="w-3 h-3 rounded-full shadow-sm" style="background-color: ${color};"></span>
-                        <span class="text-[11px] font-bold text-gray-800 dark:text-gray-200">${cat}</span>
-                    </div>
-                    <div class="text-right">
-                        <p class="text-xs font-black text-gray-900 dark:text-white">TZS ${amount.toLocaleString()}</p>
-                        <p class="text-[9px] text-gray-500 font-bold uppercase">${percentage}%</p>
-                    </div>
-                </div>`;
-            }).join('');
-
-            if (window.expenseChartInstance) window.expenseChartInstance.destroy();
-            const isDark = document.documentElement.classList.contains('dark');
-
-            window.expenseChartInstance = new Chart(ctx, {
-                type: 'doughnut',
-                data: {
-                    labels: categories,
-                    datasets: [{
-                        data: amounts,
-                        backgroundColor: colors,
-                        borderWidth: 2,
-                        borderColor: isDark ? '#1f2937' : '#ffffff',
-                        hoverOffset: 4
-                    }]
-                },
-                options: {
-                    responsive: true, maintainAspectRatio: false, cutout: '75%',
-                    plugins: { legend: { display: false } }
-                }
-            });
         }
 
         window.submitCloudOrder = async function(receipt, customId = null) {
