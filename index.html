@@ -846,7 +846,14 @@
 
             if(viewName === 'home') { document.getElementById('search-input').value = ''; window.renderHomeBase(); }
             if(viewName === 'cart') renderCart();
-            if(viewName === 'profile') { updateTrackerUI(); updateWishlistCounts(); }
+            if(viewName === 'profile') { 
+                updateTrackerUI(); 
+                updateWishlistCounts(); 
+                document.getElementById('expense-total-display').textContent = `TZS ${(window.appSpend || 0).toLocaleString()}`;
+                if (window.appCategoryTotals) {
+                    renderPieChart(window.appCategoryTotals, window.appSpend);
+                }
+            }
             
             window.scrollTo(0,0);
         }
@@ -1788,6 +1795,7 @@
 
                     window.appHistory = history; 
                     window.appSpend = approvedSpend;
+                    window.appCategoryTotals = categoryTotals; 
                     window.localStorage.setItem('ujenzi_total_spend', approvedSpend.toString());
 
                     if(!document.getElementById('view-history').classList.contains('hidden')) window.renderHistory();
