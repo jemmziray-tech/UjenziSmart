@@ -571,33 +571,19 @@
                         Save
                     </button>
                 </div>
+                
                 <button id="add-to-cart-btn" class="w-full py-5 bg-green-600 text-white rounded-[2rem] font-black text-sm uppercase tracking-widest shadow-[0_10px_20px_rgba(22,163,74,0.3)] click-press mb-6">Add to Basket</button>
 
                 <div class="border-t dark:border-gray-700 pt-5">
                     <h4 class="font-black text-sm mb-3 dark:text-white">Customer Reviews</h4>
-                    <div class="bg-gray-50 dark:bg-gray-800 p-4 rounded-2xl mb-2 border border-gray-100 dark:border-gray-700">
-                        <p class="text-[10px] font-bold text-gray-500 mb-1 flex items-center gap-1">
-                            <span class="text-amber-400 text-xs">★★★★★</span> Verified Buyer
-                        </p>
-                        <p id="modal-review-text" class="text-xs font-medium text-gray-700 dark:text-gray-300 italic"></p>
-                    </div>
-                    <div id="hidden-reviews" class="hidden space-y-2 mb-2">
-                        <div class="bg-gray-50 dark:bg-gray-800 p-4 rounded-2xl border border-gray-100 dark:border-gray-700">
+                    <div id="dynamic-reviews-container">
+                        <div class="bg-gray-50 dark:bg-gray-800 p-4 rounded-2xl mb-2 border border-gray-100 dark:border-gray-700">
                             <p class="text-[10px] font-bold text-gray-500 mb-1 flex items-center gap-1">
-                                <span class="text-amber-400 text-xs">★★★★☆</span> Dar Builder Co.
+                                <span class="text-amber-400 text-xs">★★★★★</span> Verified Buyer
                             </p>
-                            <p class="text-xs font-medium text-gray-700 dark:text-gray-300 italic">"Delivered on time, good quality material."</p>
-                        </div>
-                        <div class="bg-gray-50 dark:bg-gray-800 p-4 rounded-2xl border border-gray-100 dark:border-gray-700">
-                            <p class="text-[10px] font-bold text-gray-500 mb-1 flex items-center gap-1">
-                                <span class="text-amber-400 text-xs">★★★★★</span> Local Contractor
-                            </p>
-                            <p class="text-xs font-medium text-gray-700 dark:text-gray-300 italic">"Exactly what I needed for my site. Highly recommend."</p>
+                            <p id="modal-review-text" class="text-xs font-medium text-gray-700 dark:text-gray-300 italic"></p>
                         </div>
                     </div>
-                    <button onclick="document.getElementById('hidden-reviews').classList.toggle('hidden')" class="text-[10px] font-black text-green-600 dark:text-green-500 uppercase tracking-widest w-full text-center py-3 bg-green-50 dark:bg-green-900/20 rounded-xl hover:bg-green-100 transition-colors click-press">
-                        See More Reviews ▼
-                    </button>
                     
                     <div class="mt-4 pt-4 border-t border-gray-100 dark:border-gray-700">
                         <h4 class="text-xs font-black mb-2 dark:text-white">Leave a Review</h4>
@@ -612,7 +598,6 @@
                         <button onclick="window.submitReview()" class="mt-2 w-full py-3 bg-gray-900 dark:bg-gray-700 text-white rounded-xl text-[10px] font-black uppercase tracking-widest click-press transition-colors hover:bg-black">Submit Review</button>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
@@ -691,7 +676,48 @@
             <span>Profile</span>
         </button>
     </nav>
+<script>
+        window.currentRating = 5;
+        window.setRating = function(stars) {
+            window.currentRating = stars;
+            const container = document.getElementById('star-rating-selector');
+            if(!container) return;
+            const starSpans = container.children;
+            for(let i=0; i<5; i++) {
+                starSpans[i].className = i < stars ? "cursor-pointer text-amber-400" : "cursor-pointer text-gray-300 hover:text-amber-400 transition-colors";
+            }
+        };
 
+        window.submitReview = function() {
+            const textInput = document.getElementById('review-text');
+            const txt = textInput.value.trim();
+            if(!txt) return alert("Please enter your feedback before submitting.");
+            
+            const user = JSON.parse(localStorage.getItem('ujenzi_user'));
+            const name = user ? user.name : "Guest Builder";
+            
+            let starsHtml = "";
+            for(let i=0; i<5; i++) {
+                starsHtml += i < window.currentRating ? "★" : "☆";
+            }
+            
+            const newReview = `
+            <div class="bg-gray-50 dark:bg-gray-800 p-4 rounded-2xl border border-green-200 dark:border-green-800 mt-2 animate-stagger-in">
+                <p class="text-[10px] font-bold text-gray-500 mb-1 flex items-center gap-1">
+                    <span class="text-amber-400 text-xs">${starsHtml}</span> ${name} <span class="text-[8px] text-green-500 ml-1">(Just now)</span>
+                </p>
+                <p class="text-xs font-medium text-gray-700 dark:text-gray-300 italic">"${txt}"</p>
+            </div>`;
+            
+            const hiddenReviews = document.getElementById('hidden-reviews');
+            hiddenReviews.insertAdjacentHTML('afterbegin', newReview);
+            hiddenReviews.classList.remove('hidden');
+            
+            textInput.value = '';
+            window.setRating(5);
+            alert("Review submitted successfully!");
+        };
+    </script>
     <script>
         function updateThemeIcon() {
             const isDark = document.documentElement.classList.contains('dark');
