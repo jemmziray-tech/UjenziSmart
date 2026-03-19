@@ -776,9 +776,14 @@
                     productStats[p.name] = { name: p.name, sold: 0, rev: 0, img: p.img, price: p.price }; 
                 });
 
-                querySnapshot.forEach((doc) => {
-                    const order = doc.data();
-                    if (order.status === "PROCESSING" || order.status === "SOLVED") {
+                window.appData = window.appData || {};
+        window.appData.orders = []; // Create an empty list for the export button
+
+        querySnapshot.forEach((doc) => {
+            const order = doc.data();
+            window.appData.orders.push(order); // Save every order into the list
+
+            if (order.status === "PROCESSING" || order.status === "SOLVED" || order.status === "PAID") {
                         let orderTotalForSupplier = 0;
                         supplierProducts.forEach(p => {
                             const escapedName = p.name.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
