@@ -224,6 +224,8 @@
                             </div>
                         </div>
 
+                        <input type="hidden" id="selected-payment-method" value="mobile">
+
                         <div id="phone-input-wrapper" class="relative z-10 transition-all duration-300">
                             <input type="tel" id="phone-number" placeholder="Enter Mobile Money Number (e.g. 0754...)" class="w-full bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-xl px-4 py-3.5 outline-none font-bold text-xs mb-4 focus:ring-2 focus:ring-green-500 transition-all shadow-inner">
                         </div>
@@ -572,7 +574,7 @@
                     </button>
                 </div>
                 
-                <button id="add-to-cart-btn" class="w-full py-5 bg-green-600 text-white rounded-[2rem] font-black text-sm uppercase tracking-widest shadow-[0_10px_20px_rgba(22,163,74,0.3)] click-press mb-6">Add to Basket</button>
+                <button onclick="window.addToBasketAction()" id="add-to-cart-btn" class="w-full py-5 bg-green-600 hover:bg-green-500 text-white rounded-[2rem] font-black text-sm uppercase tracking-widest shadow-[0_10px_20px_rgba(22,163,74,0.3)] click-press mb-6 transition-colors">Add to Basket</button>
 
                 <div class="border-t dark:border-gray-700 pt-5 mt-6">
                     <h4 class="font-black text-sm mb-3 dark:text-white">Customer Reviews</h4>
@@ -584,6 +586,26 @@
                             <p id="modal-review-text" class="text-xs font-medium text-gray-700 dark:text-gray-300 italic"></p>
                         </div>
                     </div>
+                    
+                    <div id="user-added-reviews"></div>
+                    
+                    <div id="hidden-reviews" class="hidden space-y-2 mb-2 mt-2">
+                        <div class="bg-gray-50 dark:bg-gray-800 p-4 rounded-2xl border border-gray-100 dark:border-gray-700">
+                            <p class="text-[10px] font-bold text-gray-500 mb-1 flex items-center gap-1">
+                                <span class="text-amber-400 text-xs">★★★★☆</span> Dar Builder Co.
+                            </p>
+                            <p class="text-xs font-medium text-gray-700 dark:text-gray-300 italic">"Delivered on time, good quality material."</p>
+                        </div>
+                        <div class="bg-gray-50 dark:bg-gray-800 p-4 rounded-2xl border border-gray-100 dark:border-gray-700">
+                            <p class="text-[10px] font-bold text-gray-500 mb-1 flex items-center gap-1">
+                                <span class="text-amber-400 text-xs">★★★★★</span> Local Contractor
+                            </p>
+                            <p class="text-xs font-medium text-gray-700 dark:text-gray-300 italic">"Exactly what I needed for my site. Highly recommend."</p>
+                        </div>
+                    </div>
+                    <button onclick="document.getElementById('hidden-reviews').classList.toggle('hidden')" class="text-[10px] font-black text-green-600 dark:text-green-500 uppercase tracking-widest w-full text-center py-3 bg-green-50 dark:bg-green-900/20 rounded-xl hover:bg-green-100 transition-colors click-press">
+                        See More Reviews ▼
+                    </button>
                     
                     <div class="mt-4 pt-4 border-t border-gray-100 dark:border-gray-700">
                         <h4 class="text-xs font-black mb-2 dark:text-white">Leave a Review</h4>
@@ -677,7 +699,7 @@
         </button>
     </nav>
 
-<script>
+    <script>
         // --- Theme Management ---
         function updateThemeIcon() {
             const isDark = document.documentElement.classList.contains('dark');
@@ -720,17 +742,17 @@
             const editModal = document.getElementById('edit-name-modal');
             
             let sheetClosed = false;
-            if (productSheet && productSheet.classList.contains('open')) { closeProduct(); sheetClosed = true; }
-            if (aiHubSheet && aiHubSheet.classList.contains('open')) { closeAiHub(); sheetClosed = true; }
-            if (editModal && !editModal.classList.contains('hidden')) { closeEditNameModal(); sheetClosed = true; }
+            if (productSheet && productSheet.classList.contains('open')) { window.closeProduct(); sheetClosed = true; }
+            if (aiHubSheet && aiHubSheet.classList.contains('open')) { window.closeAiHub(); sheetClosed = true; }
+            if (editModal && !editModal.classList.contains('hidden')) { window.closeEditNameModal(); sheetClosed = true; }
             
             if (sheetClosed) return;
 
             if (event.state) {
                 if (event.state.category) { window.openCategory(event.state.category, true); } 
-                else if (event.state.view) { navigateTo(event.state.view, true); } 
-                else { navigateTo('home', true); }
-            } else { navigateTo('home', true); }
+                else if (event.state.view) { window.navigateTo(event.state.view, true); } 
+                else { window.navigateTo('home', true); }
+            } else { window.navigateTo('home', true); }
         });
         
         if (!history.state) { history.replaceState({ view: 'home' }, '', '#home'); }
@@ -774,7 +796,7 @@
             const mainTabs = ['home', 'trending', 'cart', 'profile'];
             if (mainTabs.includes(viewName)) {
                 backBtn.classList.add('hidden');
-                if(viewName === 'home') setGreeting();
+                if(viewName === 'home') window.setGreeting();
                 if(viewName === 'trending') { headerTitle.textContent = "Market Watch"; headerSub.textContent = "Live Price Tracking"; }
                 if(viewName === 'cart') { headerTitle.textContent = "Your Cart"; headerSub.textContent = "Secure Checkout"; }
                 if(viewName === 'profile') { headerTitle.textContent = "Profile"; headerSub.textContent = "Manage your account"; }
@@ -782,7 +804,7 @@
                 backBtn.classList.remove('hidden');
                 if(viewName === 'cs') { headerTitle.textContent = "Support"; headerSub.textContent = "We are here to help"; }
                 if(viewName === 'legal') { headerTitle.textContent = "Legal"; headerSub.textContent = "Policies & Terms"; }
-                if(viewName === 'history') { headerTitle.textContent = "My Expenses"; headerSub.textContent = "Transaction History & Receipts"; if(typeof renderHistory === 'function') renderHistory(); }
+                if(viewName === 'history') { headerTitle.textContent = "My Expenses"; headerSub.textContent = "Transaction History & Receipts"; if(typeof window.renderHistory === 'function') window.renderHistory(); }
             }
 
             if(!isHistoryBack) history.pushState({ view: viewName }, '', '#' + viewName);
@@ -805,7 +827,7 @@
             const user = JSON.parse(localStorage.getItem('ujenzi_user'));
             if (user) {
                 document.getElementById('auth-screen').classList.add('hidden');
-                setGreeting(); document.getElementById('p-name').textContent = user.name; document.getElementById('p-email').textContent = user.email;
+                window.setGreeting(); document.getElementById('p-name').textContent = user.name; document.getElementById('p-email').textContent = user.email;
                 const photoSrc = user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=10b981&color=fff`;
                 document.getElementById('p-image').src = photoSrc;
                 document.getElementById('notif-toggle').checked = localStorage.getItem('ujenzi_notif') === 'true';
@@ -851,7 +873,7 @@
             let user = JSON.parse(localStorage.getItem('ujenzi_user'));
             if(user) {
                 user.name = newName; localStorage.setItem('ujenzi_user', JSON.stringify(user));
-                document.getElementById('p-name').textContent = newName; setGreeting(); closeEditNameModal(); history.back();
+                document.getElementById('p-name').textContent = newName; window.setGreeting(); window.closeEditNameModal(); history.back();
                 if(window.updateFirebaseName) window.updateFirebaseName(newName);
             }
         };
@@ -1419,18 +1441,21 @@
             const container = document.getElementById('wishlist-render-area');
             if(!container) return;
             if(items.length === 0) { 
-                container.innerHTML = `<div class="mb-4 flex items-center justify-between"><h4 class="font-bold text-sm uppercase text-green-600">${phase} Items</h4><button onclick="document.getElementById('wishlist-render-area').classList.add('hidden')" class="text-xs text-gray-400 font-bold">Close</button></div><p class="text-xs text-gray-400 italic mb-6">No items saved yet.</p>`; 
+                container.innerHTML = `<div class="mb-4 flex items-center justify-between"><h4 class="font-bold text-sm uppercase text-green-600">${phase} Items</h4><button onclick="document.getElementById('wishlist-render-area').classList.add('hidden')" class="text-xs text-gray-400 font-bold">Close</button></div><p class="text-xs text-gray-400 italic mb-6 text-center bg-gray-50 dark:bg-gray-800 p-4 rounded-[1.5rem] border dark:border-gray-700">No items saved in this phase yet.</p>`; 
                 container.classList.remove('hidden'); return; 
             }
             container.innerHTML = `
                 <div class="mb-4 flex items-center justify-between"><h4 class="font-bold text-sm uppercase text-green-600">${phase} Items</h4>
-                <div class="flex gap-4"><button onclick="window.clearPhase('${phase}')" class="text-xs text-red-500 font-bold">Clear All</button><button onclick="document.getElementById('wishlist-render-area').classList.add('hidden')" class="text-xs text-gray-400 font-bold">Close</button></div></div>
+                <div class="flex gap-4"><button onclick="window.clearPhase('${phase}')" class="text-xs text-red-500 font-bold uppercase tracking-widest bg-red-50 dark:bg-red-900/20 px-2 py-1 rounded-md">Clear All</button><button onclick="document.getElementById('wishlist-render-area').classList.add('hidden')" class="text-xs text-gray-400 font-bold click-press">Close</button></div></div>
                 <div class="grid grid-cols-2 gap-4 mb-6">
                     ${items.map(p => `
-                    <div class="bg-white dark:bg-gray-800 p-3 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 relative">
-                        <button onclick="window.removeFromPhase('${phase}', ${p.originalIndex})" class="absolute top-1 right-1 w-7 h-7 bg-red-50 text-red-500 rounded-full flex items-center justify-center text-xs font-bold">✕</button>
+                    <div class="bg-white dark:bg-gray-800 p-3 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 relative animate-slideUpFade group">
+                        <button onclick="window.removeFromPhase('${phase}', ${p.originalIndex})" class="absolute top-1 right-1 w-7 h-7 bg-red-50 dark:bg-red-900/40 text-red-500 rounded-full flex items-center justify-center text-xs font-bold shadow-sm z-10 click-press transition-colors hover:bg-red-100">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="w-3 h-3"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+                        </button>
                         <img src="${p.img}" class="w-full h-20 object-cover rounded-xl mb-2">
                         <p class="text-[9px] font-bold h-6 overflow-hidden">${p.name}</p>
+                        <p class="text-green-600 font-black text-[10px]">TZS ${p.price.toLocaleString()}</p>
                     </div>`).join('')}
                 </div>`;
             container.classList.remove('hidden');
@@ -1473,7 +1498,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
         import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithRedirect, getRedirectResult, signOut, onAuthStateChanged, updateProfile } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
-        import { getFirestore, collection, addDoc, doc, setDoc, query, where, onSnapshot, serverTimestamp, orderBy, getDocs } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, doc, setDoc, query, where, onSnapshot, serverTimestamp, orderBy, getDocs, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
         import { getMessaging, getToken, onMessage } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-messaging.js";
         import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-functions.js";
         
@@ -1491,7 +1516,6 @@
         const auth = getAuth(app);
         window.firebaseAuth = auth;
         const db = getFirestore(app);
-        
         const functions = getFunctions(app);
         window.firebaseHttpsCallable = httpsCallable;
         window.firebaseFunctions = functions;
@@ -1502,20 +1526,15 @@
         onSnapshot(doc(db, "settings", "system"), (docSnap) => {
             if(docSnap.exists()) {
                 const data = docSnap.data();
-                
                 if(data.liveNews) {
                     document.getElementById('live-news-text').innerHTML = `<strong>LIVE UPDATE:</strong> ${data.liveNews}`;
                     document.getElementById('global-alert-bar').style.display = 'flex';
-                } else {
-                    document.getElementById('global-alert-bar').style.display = 'none';
-                }
+                } else { document.getElementById('global-alert-bar').style.display = 'none'; }
 
                 if(data.trendNews) {
                     document.getElementById('trend-news-text').textContent = data.trendNews;
                     document.getElementById('trend-news-bar').classList.remove('hidden');
-                } else {
-                    document.getElementById('trend-news-bar').classList.add('hidden');
-                }
+                } else { document.getElementById('trend-news-bar').classList.add('hidden'); }
             }
         });
 
@@ -1529,27 +1548,21 @@
                     name: p.name, price: p.price, wt: p.weight, desc: p.desc, img: p.img, stock: p.stock || 0,
                     rating: p.rating || 5.0, reviews: p.reviews || 0, reviewTxt: p.reviewTxt || "Verified Product."
                 };
-                
                 if(!window.productDatabase[p.category]) window.productDatabase[p.category] = [];
                 window.productDatabase[p.category].push(formattedProduct);
                 allProductsForHome.push(formattedProduct);
             });
 
             if(!document.getElementById('view-home').classList.contains('hidden')) {
-                if(document.getElementById('search-input').value) {
-                    window.handleSearch();
-                } else if (document.getElementById('dynamic-home-content').innerHTML.includes('←')) {
+                if(document.getElementById('search-input').value) { window.handleSearch(); } 
+                else if (document.getElementById('dynamic-home-content').innerHTML.includes('←')) {
                     const currentCat = document.querySelector('h2.text-xl.font-bold').textContent;
                     window.openCategory(currentCat, true);
-                } else {
-                    window.renderHomeBase(true);
-                }
+                } else { window.renderHomeBase(true); }
             } else if (!document.getElementById('view-trending').classList.contains('hidden')){
                 window.renderTrending(allProductsForHome);
             }
         });
-
-        window.expenseChartInstance = null;
 
         let unsubscribeOrders = null;
         function listenToUserOrders(uid) {
@@ -1559,38 +1572,12 @@
                     let history = []; 
                     let approvedSpend = 0;
                     
-                    let categoryTotals = {};
-                    
-                    let productMap = {};
-                    try {
-                        const prodSnap = await getDocs(collection(db, "products"));
-                        prodSnap.forEach(doc => {
-                            const p = doc.data();
-                            productMap[p.name] = { category: p.category || 'Other', price: p.price || 0 };
-                        });
-                    } catch(e) { console.error("Could not load products for chart", e); }
-
                     snapshot.forEach((doc) => {
                         const data = doc.data();
                         if (!data.hiddenFromCustomer) {
                             history.push({ id: doc.id, ...data });
                             if(data.status === 'PAID' || data.status === 'SUCCESS' || data.status === 'SOLVED' || data.status === 'PROCESSING' || data.status === 'DELIVERED') {
                                 approvedSpend += Number(data.total || 0);
-                                
-                                Object.keys(productMap).forEach(prodName => {
-                                    const escapedName = prodName.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
-                                    const regex = new RegExp(`${escapedName}\\s*\\(x(\\d+)\\)`, 'i');
-                                    const match = (data.items || "").match(regex);
-                                    
-                                    if(match) {
-                                        const qty = parseInt(match[1]);
-                                        const cost = qty * productMap[prodName].price;
-                                        const cat = productMap[prodName].category;
-
-                                        if(!categoryTotals[cat]) categoryTotals[cat] = 0;
-                                        categoryTotals[cat] += cost;
-                                    }
-                                });
                             }
                         }
                     });
@@ -1603,7 +1590,6 @@
 
                     window.appHistory = history; 
                     window.appSpend = approvedSpend;
-                    window.appCategoryTotals = categoryTotals; 
                     window.localStorage.setItem('ujenzi_total_spend', approvedSpend.toString());
 
                     if(!document.getElementById('view-history').classList.contains('hidden')) window.renderHistory();
@@ -1620,11 +1606,8 @@
             if(!user) return alert("You must be signed in to place a secure order.");
             try {
                 const orderData = { ...receipt, userId: user.uid, userName: user.displayName || 'Customer', userEmail: user.email, createdAt: serverTimestamp() };
-                if(customId) {
-                    await setDoc(doc(db, "orders", customId), orderData, { merge: true });
-                } else {
-                    await addDoc(collection(db, "orders"), orderData);
-                }
+                if(customId) { await setDoc(doc(db, "orders", customId), orderData, { merge: true }); } 
+                else { await addDoc(collection(db, "orders"), orderData); }
             } catch (error) { alert("Failed to sync secure order. Check connection."); }
         };
 
@@ -1632,29 +1615,18 @@
             const unsubscribe = onSnapshot(doc(db, "orders", orderId), (docSnap) => {
                 if (docSnap.exists()) {
                     const status = docSnap.data().status;
-                    
                     if (status === "SUCCESS" || status === "PAID") {
                         unsubscribe(); 
-                        btnElement.innerText = "✅ Payment Received!";
-                        btnElement.classList.replace("bg-blue-600", "bg-gray-900");
-                        
+                        btnElement.innerText = "✅ Payment Received!"; btnElement.classList.replace("bg-blue-600", "bg-gray-900");
                         setTimeout(() => {
-                            cart = [];
-                            updateBadge();
-                            navigateTo('history', false, true); 
-                            btnElement.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 1.5H8.25A2.25 2.25 0 006 3.75v16.5a2.25 2.25 0 002.25 2.25h7.5A2.25 2.25 0 0018 20.25V3.75a2.25 2.25 0 00-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3" /></svg> Send Prompt to Phone`;
-                            btnElement.disabled = false;
-                            btnElement.classList.replace("bg-gray-900", "bg-green-600");
+                            window.cart = []; window.updateBadge(); window.navigateTo('history', false, true); 
+                            btnElement.innerHTML = `Send Prompt to Phone`; btnElement.disabled = false; btnElement.classList.replace("bg-gray-900", "bg-green-600");
                         }, 2000);
                     } else if (status === "FAILED" || status === "CANCELLED") {
                         unsubscribe();
-                        btnElement.innerText = "❌ Payment Failed/Cancelled";
-                        btnElement.classList.replace("bg-blue-600", "bg-red-600");
-                        
+                        btnElement.innerText = "❌ Payment Failed/Cancelled"; btnElement.classList.replace("bg-blue-600", "bg-red-600");
                         setTimeout(() => {
-                            btnElement.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 1.5H8.25A2.25 2.25 0 006 3.75v16.5a2.25 2.25 0 002.25 2.25h7.5A2.25 2.25 0 0018 20.25V3.75a2.25 2.25 0 00-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3" /></svg> Send Prompt to Phone`;
-                            btnElement.disabled = false;
-                            btnElement.classList.replace("bg-red-600", "bg-green-600");
+                            btnElement.innerHTML = `Send Prompt to Phone`; btnElement.disabled = false; btnElement.classList.replace("bg-red-600", "bg-green-600");
                         }, 3000);
                     }
                 }
@@ -1705,33 +1677,22 @@
         window.initCustomerChat = async function() {
             const user = auth.currentUser;
             if(!user) return; 
-            
             const chatId = `chat_${user.uid}`;
             const chatArea = document.getElementById('customer-chat-area');
-            
             await setDoc(doc(db, "chats", chatId), {
-                participants: [user.uid, 'admin'],
-                customerName: user.displayName || 'Builder',
-                updatedAt: serverTimestamp()
+                participants: [user.uid, 'admin'], customerName: user.displayName || 'Builder', updatedAt: serverTimestamp()
             }, { merge: true });
 
             if(customerChatListener) customerChatListener();
-            
             customerChatListener = onSnapshot(query(collection(db, `chats/${chatId}/messages`), orderBy("timestamp", "asc")), (snapshot) => {
-                chatArea.innerHTML = `
-                    <div class="text-center text-[10px] text-gray-400 font-bold uppercase tracking-widest my-2">Secure Chat</div>
+                chatArea.innerHTML = `<div class="text-center text-[10px] text-gray-400 font-bold uppercase tracking-widest my-2">Secure Chat</div>
                     <div class="max-w-[85%] p-4 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 text-sm rounded-2xl rounded-tl-none shadow-sm border dark:border-gray-700 self-start font-medium leading-relaxed">
                         Hello! I am your dedicated UjenziSmart project manager. How can I help you with your materials today?
                     </div>`;
-                    
                 snapshot.forEach(msgDoc => {
                     const msg = msgDoc.data();
                     const isMe = msg.senderId === user.uid;
-                    
-                    chatArea.innerHTML += `
-                    <div class="max-w-[85%] p-3 rounded-2xl text-sm font-medium ${isMe ? 'bg-green-600 text-white self-end rounded-tr-none shadow-md' : 'bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 self-start rounded-tl-none shadow-sm border dark:border-gray-700'}">
-                        ${msg.text}
-                    </div>`;
+                    chatArea.innerHTML += `<div class="max-w-[85%] p-3 rounded-2xl text-sm font-medium ${isMe ? 'bg-green-600 text-white self-end rounded-tr-none shadow-md' : 'bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 self-start rounded-tl-none shadow-sm border dark:border-gray-700'}">${msg.text}</div>`;
                 });
                 chatArea.scrollTop = chatArea.scrollHeight;
             });
@@ -1740,24 +1701,13 @@
         window.sendCustomerMessage = async () => {
             const user = auth.currentUser;
             if(!user) return alert("Please log in to chat.");
-            
             const input = document.getElementById('customer-chat-input');
             const text = input.value.trim();
             if(!text) return;
-            
             input.value = '';
             const chatId = `chat_${user.uid}`;
-            
-            await addDoc(collection(db, `chats/${chatId}/messages`), {
-                senderId: user.uid,
-                text: text,
-                timestamp: serverTimestamp()
-            });
-            
-            await updateDoc(doc(db, "chats", chatId), {
-                lastMessage: text,
-                updatedAt: serverTimestamp()
-            });
+            await addDoc(collection(db, `chats/${chatId}/messages`), { senderId: user.uid, text: text, timestamp: serverTimestamp() });
+            await updateDoc(doc(db, "chats", chatId), { lastMessage: text, updatedAt: serverTimestamp() });
         };
 
         let messaging = null;
