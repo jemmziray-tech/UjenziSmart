@@ -905,23 +905,25 @@
             
             if(auditUnsubscribe) auditUnsubscribe();
             
-            // 1. Fetch ALL products, then filter by the Vendor's Email/Name
             auditUnsubscribe = onSnapshot(collection(db, "products"), (snapshot) => {
                 const vendorProducts = [];
-                const emailPrefix = vendorEmail.split('@')[0].toLowerCase();
+                // Remove dots and special characters from email prefix (jem.mziray -> jemmziray)
+                const cleanPrefix = vendorEmail.split('@')[0].toLowerCase().replace(/[^a-z0-9]/g, '');
                 
                 snapshot.forEach(doc => {
                     const p = doc.data();
                     const sName = (p.supplierName || '').toLowerCase();
-                    // Match if the supplierName is the exact email, or contains the email prefix
-                    if (sName === vendorEmail.toLowerCase() || sName.includes(emailPrefix)) {
+                    // Remove spaces from their display name (jem mziray -> jemmziray)
+                    const cleanSupplierName = sName.replace(/[^a-z0-9]/g, ''); 
+                    
+                    // Now they will perfectly match!
+                    if (sName === vendorEmail.toLowerCase() || cleanSupplierName.includes(cleanPrefix)) {
                         vendorProducts.push({ id: doc.id, ...p });
                     }
                 });
                 
                 document.getElementById('audit-product-count').textContent = vendorProducts.length;
                 
-                // 2. Calculate Revenue based on the Admin's live Orders list
                 let vendorRevenue = 0;
                 if (window.appData && window.appData.orders) {
                     window.appData.orders.forEach(order => {
@@ -939,7 +941,6 @@
                 }
                 document.getElementById('audit-revenue').textContent = `TZS ${vendorRevenue.toLocaleString()}`;
                 
-                // 3. Render the Gallery
                 if(vendorProducts.length === 0) {
                     gallery.innerHTML = '<p class="text-xs text-gray-500 col-span-full py-10 text-center font-bold">No products found for this vendor.</p>';
                     return;
@@ -962,7 +963,6 @@
                 gallery.innerHTML = html;
             });
         };
-
         window.deleteOffendingProduct = async (docId) => {
             if(confirm("🚨 MODERATION ACTION 🚨\nAre you sure you want to permanently delete this product and its image from the live store?")) {
                 try {
