@@ -676,49 +676,9 @@
             <span>Profile</span>
         </button>
     </nav>
-<script>
-        window.currentRating = 5;
-        window.setRating = function(stars) {
-            window.currentRating = stars;
-            const container = document.getElementById('star-rating-selector');
-            if(!container) return;
-            const starSpans = container.children;
-            for(let i=0; i<5; i++) {
-                starSpans[i].className = i < stars ? "cursor-pointer text-amber-400" : "cursor-pointer text-gray-300 hover:text-amber-400 transition-colors";
-            }
-        };
 
-        window.submitReview = function() {
-            const textInput = document.getElementById('review-text');
-            const txt = textInput.value.trim();
-            if(!txt) return alert("Please enter your feedback before submitting.");
-            
-            const user = JSON.parse(localStorage.getItem('ujenzi_user'));
-            const name = user ? user.name : "Guest Builder";
-            
-            let starsHtml = "";
-            for(let i=0; i<5; i++) {
-                starsHtml += i < window.currentRating ? "★" : "☆";
-            }
-            
-            const newReview = `
-            <div class="bg-gray-50 dark:bg-gray-800 p-4 rounded-2xl border border-green-200 dark:border-green-800 mt-2 animate-stagger-in">
-                <p class="text-[10px] font-bold text-gray-500 mb-1 flex items-center gap-1">
-                    <span class="text-amber-400 text-xs">${starsHtml}</span> ${name} <span class="text-[8px] text-green-500 ml-1">(Just now)</span>
-                </p>
-                <p class="text-xs font-medium text-gray-700 dark:text-gray-300 italic">"${txt}"</p>
-            </div>`;
-            
-            const hiddenReviews = document.getElementById('hidden-reviews');
-            hiddenReviews.insertAdjacentHTML('afterbegin', newReview);
-            hiddenReviews.classList.remove('hidden');
-            
-            textInput.value = '';
-            window.setRating(5);
-            alert("Review submitted successfully!");
-        };
-    </script>
-    <script>
+<script>
+        // --- Theme Management ---
         function updateThemeIcon() {
             const isDark = document.documentElement.classList.contains('dark');
             const sun = document.getElementById('icon-sun');
@@ -737,6 +697,7 @@
         }
         document.addEventListener("DOMContentLoaded", updateThemeIcon);
 
+        // --- Sticky Search Bar ---
         window.addEventListener('scroll', () => {
             const sw = document.getElementById('search-sticky-wrapper');
             if(sw) {
@@ -752,6 +713,7 @@
             }
         });
 
+        // --- Navigation Logic ---
         window.addEventListener('popstate', (event) => {
             const productSheet = document.getElementById('product-sheet');
             const aiHubSheet = document.getElementById('ai-hub-sheet');
@@ -765,21 +727,13 @@
             if (sheetClosed) return;
 
             if (event.state) {
-                if (event.state.category) {
-                    window.openCategory(event.state.category, true);
-                } else if (event.state.view) {
-                    navigateTo(event.state.view, true);
-                } else {
-                    navigateTo('home', true);
-                }
-            } else {
-                navigateTo('home', true);
-            }
+                if (event.state.category) { window.openCategory(event.state.category, true); } 
+                else if (event.state.view) { navigateTo(event.state.view, true); } 
+                else { navigateTo('home', true); }
+            } else { navigateTo('home', true); }
         });
         
-        if (!history.state) {
-            history.replaceState({ view: 'home' }, '', '#home');
-        }
+        if (!history.state) { history.replaceState({ view: 'home' }, '', '#home'); }
 
         const categoryImages = {
             'Foundation': 'https://images.unsplash.com/photo-1590060417941-2f34888463f1?w=400',
@@ -791,15 +745,11 @@
         };
 
         const catMap = {
-            'Foundation': 'Foundation & Structural',
-            'Roofing': 'Roofing Materials',
-            'Finishing': 'Finishing & Painting',
-            'Tools': 'Tools & Hardware',
-            'Plumbing': 'Plumbing',
-            'Electrical': 'Electrical'
+            'Foundation': 'Foundation & Structural', 'Roofing': 'Roofing Materials', 'Finishing': 'Finishing & Painting',
+            'Tools': 'Tools & Hardware', 'Plumbing': 'Plumbing', 'Electrical': 'Electrical'
         };
 
-        function navigateTo(viewName, isHistoryBack = false, isTab = false) {
+        window.navigateTo = function(viewName, isHistoryBack = false, isTab = false) {
             document.querySelectorAll('.view-content').forEach(v => {
                 v.classList.add('hidden');
                 v.style.animation = 'none'; 
@@ -808,30 +758,20 @@
             if(targetView) {
                 targetView.classList.remove('hidden');
                 targetView.offsetHeight; 
-                
-                if (isTab) {
-                    targetView.style.animation = 'tabFadeScale 0.35s cubic-bezier(0.22, 1, 0.36, 1) forwards';
-                } else if (isHistoryBack) {
-                    targetView.style.animation = 'slideInLeftNative 0.35s cubic-bezier(0.22, 1, 0.36, 1) forwards';
-                } else {
-                    targetView.style.animation = 'slideInRightNative 0.35s cubic-bezier(0.22, 1, 0.36, 1) forwards';
-                }
+                if (isTab) targetView.style.animation = 'tabFadeScale 0.35s cubic-bezier(0.22, 1, 0.36, 1) forwards';
+                else if (isHistoryBack) targetView.style.animation = 'slideInLeftNative 0.35s cubic-bezier(0.22, 1, 0.36, 1) forwards';
+                else targetView.style.animation = 'slideInRightNative 0.35s cubic-bezier(0.22, 1, 0.36, 1) forwards';
             }
 
-            document.querySelectorAll('.nav-btn').forEach(btn => {
-                btn.classList.remove('active-nav', 'text-green-600');
-            });
+            document.querySelectorAll('.nav-btn').forEach(btn => { btn.classList.remove('active-nav', 'text-green-600'); });
             const activeBtn = document.getElementById(`nav-${viewName}`);
-            if(activeBtn) {
-                activeBtn.classList.add('active-nav', 'text-green-600');
-            }
+            if(activeBtn) activeBtn.classList.add('active-nav', 'text-green-600');
 
             const backBtn = document.getElementById('header-back-btn');
             const headerTitle = document.getElementById('header-title');
             const headerSub = document.getElementById('header-subtitle');
             
             const mainTabs = ['home', 'trending', 'cart', 'profile'];
-            
             if (mainTabs.includes(viewName)) {
                 backBtn.classList.add('hidden');
                 if(viewName === 'home') setGreeting();
@@ -842,47 +782,38 @@
                 backBtn.classList.remove('hidden');
                 if(viewName === 'cs') { headerTitle.textContent = "Support"; headerSub.textContent = "We are here to help"; }
                 if(viewName === 'legal') { headerTitle.textContent = "Legal"; headerSub.textContent = "Policies & Terms"; }
-                if(viewName === 'history') { headerTitle.textContent = "My Expenses"; headerSub.textContent = "Transaction History & Receipts"; renderHistory(); }
+                if(viewName === 'history') { headerTitle.textContent = "My Expenses"; headerSub.textContent = "Transaction History & Receipts"; if(typeof renderHistory === 'function') renderHistory(); }
             }
 
-            if(!isHistoryBack) {
-                history.pushState({ view: viewName }, '', '#' + viewName);
-            }
+            if(!isHistoryBack) history.pushState({ view: viewName }, '', '#' + viewName);
 
-            if(viewName === 'home') { document.getElementById('search-input').value = ''; window.renderHomeBase(); }
-            if(viewName === 'cart') renderCart();
+            if(viewName === 'home') { document.getElementById('search-input').value = ''; if(typeof window.renderHomeBase === 'function') window.renderHomeBase(); }
+            if(viewName === 'cart') if(typeof window.renderCart === 'function') window.renderCart();
             if(viewName === 'profile') { 
-                updateTrackerUI(); 
-                updateWishlistCounts(); 
-                document.getElementById('expense-total-display').textContent = `TZS ${(window.appSpend || 0).toLocaleString()}`;
+                if(typeof window.updateTrackerUI === 'function') window.updateTrackerUI(); 
+                if(typeof window.updateWishlistCounts === 'function') window.updateWishlistCounts(); 
+                const d = document.getElementById('expense-total-display');
+                if(d) d.textContent = `TZS ${(window.appSpend || 0).toLocaleString()}`;
             }
-            
             window.scrollTo(0,0);
         }
 
-        function goBack() {
-            history.back();
-        }
+        window.goBack = function() { history.back(); }
 
-        function checkAuth() {
+        // --- Profile & User functions ---
+        window.checkAuth = function() {
             const user = JSON.parse(localStorage.getItem('ujenzi_user'));
             if (user) {
                 document.getElementById('auth-screen').classList.add('hidden');
-                setGreeting();
-                document.getElementById('p-name').textContent = user.name;
-                document.getElementById('p-email').textContent = user.email;
-                
+                setGreeting(); document.getElementById('p-name').textContent = user.name; document.getElementById('p-email').textContent = user.email;
                 const photoSrc = user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=10b981&color=fff`;
                 document.getElementById('p-image').src = photoSrc;
-                
                 document.getElementById('notif-toggle').checked = localStorage.getItem('ujenzi_notif') === 'true';
-                window.renderHomeBase();
-            } else {
-                document.getElementById('auth-screen').classList.remove('hidden');
-            }
+                if(typeof window.renderHomeBase === 'function') window.renderHomeBase();
+            } else { document.getElementById('auth-screen').classList.remove('hidden'); }
         }
 
-        function setGreeting() {
+        window.setGreeting = function() {
             const user = JSON.parse(localStorage.getItem('ujenzi_user'));
             if(!user) return;
             const firstName = user.name.split(' ')[0];
@@ -892,74 +823,60 @@
             document.getElementById('header-subtitle').textContent = `Project Status: Ready to Build | 60% Complete`;
         }
 
-        function handleProfileUpload(event) {
+        window.handleProfileUpload = function(event) {
             const file = event.target.files[0];
             if(file) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     document.getElementById('p-image').src = e.target.result;
                     let u = JSON.parse(localStorage.getItem('ujenzi_user'));
-                    u.photoURL = e.target.result;
-                    localStorage.setItem('ujenzi_user', JSON.stringify(u));
+                    u.photoURL = e.target.result; localStorage.setItem('ujenzi_user', JSON.stringify(u));
                 }
                 reader.readAsDataURL(file);
             }
         }
         
-        function openEditNameModal() {
+        window.openEditNameModal = function() {
             const user = JSON.parse(localStorage.getItem('ujenzi_user'));
             if(user) document.getElementById('edit-name-input').value = user.name;
             document.getElementById('edit-name-modal').classList.remove('hidden');
             history.pushState({ modal: 'edit-name' }, '', '#edit-name');
         };
 
-        function closeEditNameModal() {
-            document.getElementById('edit-name-modal').classList.add('hidden');
-        };
+        window.closeEditNameModal = function() { document.getElementById('edit-name-modal').classList.add('hidden'); };
 
-        function saveNewName() {
+        window.saveNewName = function() {
             const newName = document.getElementById('edit-name-input').value.trim();
             if(!newName) return;
-            
             let user = JSON.parse(localStorage.getItem('ujenzi_user'));
             if(user) {
-                user.name = newName;
-                localStorage.setItem('ujenzi_user', JSON.stringify(user));
-                document.getElementById('p-name').textContent = newName;
-                setGreeting(); 
-                closeEditNameModal();
-                history.back();
-                
+                user.name = newName; localStorage.setItem('ujenzi_user', JSON.stringify(user));
+                document.getElementById('p-name').textContent = newName; setGreeting(); closeEditNameModal(); history.back();
                 if(window.updateFirebaseName) window.updateFirebaseName(newName);
             }
         };
 
-        let isGoldVIP = false;
-        function updateTrackerUI() {
+        window.isGoldVIP = false;
+        window.updateTrackerUI = function() {
             const spend = parseInt(localStorage.getItem('ujenzi_total_spend') || '0');
             document.getElementById('total-project-cost').textContent = `TZS ${spend.toLocaleString()}`;
             document.getElementById('cost-progress').style.width = `${Math.min((spend / 5000000) * 100, 100)}%`;
 
-            const badge = document.getElementById('vip-badge');
-            const perk = document.getElementById('vip-perk-text');
-            isGoldVIP = false;
-
+            const badge = document.getElementById('vip-badge'); const perk = document.getElementById('vip-perk-text');
+            window.isGoldVIP = false;
             if(spend >= 5000000) {
                 badge.className = "px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest bg-gradient-to-r from-amber-400 to-yellow-600 text-white shadow-md inline-block";
-                badge.innerHTML = "👑 Gold Builder";
-                perk.classList.remove('hidden');
-                isGoldVIP = true;
+                badge.innerHTML = "👑 Gold Builder"; perk.classList.remove('hidden'); window.isGoldVIP = true;
             } else if (spend >= 1000000) {
                 badge.className = "px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest bg-gradient-to-r from-gray-300 to-gray-400 text-gray-800 shadow-md inline-block";
-                badge.innerHTML = "🥈 Silver Builder";
-                perk.classList.add('hidden');
+                badge.innerHTML = "🥈 Silver Builder"; perk.classList.add('hidden');
             } else {
                 badge.className = "px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest bg-gray-200 text-gray-600 shadow-sm inline-block";
-                badge.innerHTML = "Standard Builder";
-                perk.classList.add('hidden');
+                badge.innerHTML = "Standard Builder"; perk.classList.add('hidden');
             }
         }
 
+        // --- Render Functions (Home, Feed, Search) ---
         window.handleSearch = function() {
             const query = document.getElementById('search-input').value.toLowerCase();
             const container = document.getElementById('dynamic-home-content');
@@ -981,10 +898,10 @@
                     </span>
                     <h2 class="text-lg font-bold">Search Results</h2>
                 </div>
-                <div class="grid grid-cols-2 gap-4">${results.map((p, i) => generateProductCardHTML(p, i)).join('')}</div>`;
+                <div class="grid grid-cols-2 gap-4">${results.map((p, i) => window.generateProductCardHTML(p, i)).join('')}</div>`;
         }
 
-        function generateProductCardHTML(p, i) {
+        window.generateProductCardHTML = function(p, i) {
             if(!p) return '';
             const safeStock = p.stock || 0;
             return `
@@ -1006,9 +923,7 @@
 
         window.renderHomeBase = function() {
             const container = document.getElementById('dynamic-home-content');
-            let html = '';
-
-            html += `
+            let html = `
                 <section class="mb-2">
                     <h2 class="text-lg font-bold mb-3 px-1">Quick Categories</h2>
                     <div class="flex gap-3 overflow-x-auto pb-4 hide-scrollbar -mx-5 px-5">
@@ -1023,22 +938,17 @@
 
             let allProducts = [];
             for (let cat in window.productDatabase) {
-                if (window.productDatabase[cat] && window.productDatabase[cat].length > 0) {
-                    allProducts = allProducts.concat(window.productDatabase[cat]);
-                }
+                if (window.productDatabase[cat] && window.productDatabase[cat].length > 0) { allProducts = allProducts.concat(window.productDatabase[cat]); }
             }
 
             if (allProducts.length === 0) {
                 html += `<div class="text-center py-16 text-gray-400 font-bold border-2 border-dashed border-gray-200 dark:border-gray-700 rounded-3xl mt-8">Loading product catalog...</div>`;
             } else {
                 html += `<h2 class="text-lg font-black mb-4 px-1 mt-4">Recommended For You</h2>`;
-                html += `<div class="grid grid-cols-2 gap-4 pb-10">`;
-                html += allProducts.map((p, i) => generateProductCardHTML(p, i)).join('');
-                html += `</div>`;
+                html += `<div class="grid grid-cols-2 gap-4 pb-10">${allProducts.map((p, i) => window.generateProductCardHTML(p, i)).join('')}</div>`;
             }
-
-            container.innerHTML = html;
-            window.renderTrending(allProducts);
+            container.innerHTML = html; 
+            if(typeof window.renderTrending === 'function') window.renderTrending(allProducts);
         }
 
         window.renderTrending = function(allProducts) {
@@ -1047,10 +957,7 @@
                 feed.innerHTML = '<p class="text-center py-10 text-gray-400 font-bold border-2 border-dashed border-gray-200 dark:border-gray-700 rounded-3xl mt-4">Loading market data...</p>';
                 return;
             }
-            
-            const trending = allProducts.slice(0, 4);
-            let html = '';
-            
+            const trending = allProducts.slice(0, 4); let html = '';
             trending.forEach((p, i) => {
                 const percent = Math.floor(Math.random() * 5) + 1; 
                 html += `
@@ -1088,7 +995,6 @@
             const fullCatName = catMap[shortCatName] || shortCatName;
             const products = window.productDatabase[fullCatName] || [];
             const container = document.getElementById('dynamic-home-content');
-            
             let html = `
                 <div class="flex items-center gap-3 mb-4 click-press cursor-pointer" onclick="history.back()">
                     <span class="w-8 h-8 bg-white dark:bg-gray-800 rounded-full flex items-center justify-center shadow-sm font-bold border border-transparent dark:border-gray-700">
@@ -1099,25 +1005,23 @@
                 
             if(products.length === 0) {
                 html += `<div class="text-center mt-12 p-8 border-2 border-dashed border-gray-200 dark:border-gray-700 rounded-[2rem]">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-12 h-12 mx-auto mb-3 text-gray-300 dark:text-gray-600">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M21 7.5l-2.25-1.313M21 7.5v2.25m0-2.25l-2.25 1.313M3 7.5l2.25-1.313M3 7.5l2.25 1.313M3 7.5v2.25m9 3l2.25-1.313M12 12.75l-2.25-1.313M12 12.75V15m0 6.75l2.25-1.313M12 21.75V19.5m0 2.25l-2.25-1.313m0-16.875L12 2.25l2.25 1.313M21 14.25v2.25l-2.25 1.313m-13.5 0L3 16.5v-2.25" />
-                            </svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-12 h-12 mx-auto mb-3 text-gray-300 dark:text-gray-600"><path stroke-linecap="round" stroke-linejoin="round" d="M21 7.5l-2.25-1.313M21 7.5v2.25m0-2.25l-2.25 1.313M3 7.5l2.25-1.313M3 7.5l2.25 1.313M3 7.5v2.25m9 3l2.25-1.313M12 12.75l-2.25-1.313M12 12.75V15m0 6.75l2.25-1.313M12 21.75V19.5m0 2.25l-2.25-1.313m0-16.875L12 2.25l2.25 1.313M21 14.25v2.25l-2.25 1.313m-13.5 0L3 16.5v-2.25" /></svg>
                             <p class="text-gray-400 text-sm font-bold">No products live in this category yet.</p>
                         </div>`;
             } else {
-                html += `<div class="grid grid-cols-2 gap-4">${products.map((p, i) => generateProductCardHTML(p, i)).join('')}</div>`;
+                html += `<div class="grid grid-cols-2 gap-4">${products.map((p, i) => window.generateProductCardHTML(p, i)).join('')}</div>`;
             }
-            
-            container.innerHTML = html;
-            window.scrollTo(0, 0);
-
-            if(!isHistoryNav) {
-                history.pushState({ view: 'home', category: shortCatName }, '', '#category-' + shortCatName.replace(/\s+/g,''));
-            }
+            container.innerHTML = html; window.scrollTo(0, 0);
+            if(!isHistoryNav) history.pushState({ view: 'home', category: shortCatName }, '', '#category-' + shortCatName.replace(/\s+/g,''));
         }
 
+        // --- PRODUCT MODAL & CART CONTROLS ---
+        window.cart = window.cart || [];
+        window.currentModalProduct = null;
+        window.fbtItem = null;
+
         window.openProduct = function(t, d, p, wt, i, rating, reviews, reviewTxt, stock) {
-            currentModalProduct = { name: t, desc: d, price: p, wt: wt, img: i, stock: stock };
+            window.currentModalProduct = { name: t, desc: d, price: p, wt: wt, img: i, stock: stock };
             document.getElementById('modal-img').src = i;
             document.getElementById('modal-title').textContent = t;
             document.getElementById('modal-desc').textContent = d;
@@ -1126,6 +1030,12 @@
             document.getElementById('modal-price').textContent = `TZS ${p.toLocaleString()}`;
             document.getElementById('modal-qty').value = 1;
             
+            // Wipe old user reviews so they don't bleed into other products
+            const userReviewsContainer = document.getElementById('user-added-reviews');
+            if (userReviewsContainer) {
+                userReviewsContainer.innerHTML = '';
+            }
+
             const stockBadge = document.getElementById('modal-stock-badge');
             stockBadge.textContent = `Stock: ${stock} units`;
             if(stock > 0) {
@@ -1137,45 +1047,70 @@
             history.pushState({ modal: 'product' }, '', '#product');
             
             const fbtSection = document.getElementById('fbt-section');
-            fbtItem = null;
-            if(window.productDatabase['Tools & Hardware'] && window.productDatabase['Tools & Hardware'].length > 0) {
-                fbtItem = window.productDatabase['Tools & Hardware'][0]; 
+            window.fbtItem = null;
+            if(window.productDatabase && window.productDatabase['Tools & Hardware'] && window.productDatabase['Tools & Hardware'].length > 0) {
+                window.fbtItem = window.productDatabase['Tools & Hardware'][0]; 
             }
             
-            if(fbtItem && fbtItem.name !== t) {
-                document.getElementById('fbt-img').src = fbtItem.img;
-                document.getElementById('fbt-title').textContent = fbtItem.name;
-                document.getElementById('fbt-price').textContent = `+ TZS ${fbtItem.price.toLocaleString()}`;
-                document.getElementById('fbt-checkbox').checked = false;
+            if(window.fbtItem && window.fbtItem.name !== t) {
+                document.getElementById('fbt-img').src = window.fbtItem.img;
+                document.getElementById('fbt-title').textContent = window.fbtItem.name;
+                document.getElementById('fbt-price').textContent = `+ TZS ${window.fbtItem.price.toLocaleString()}`;
+                const fbtCheck = document.getElementById('fbt-checkbox');
+                if(fbtCheck) fbtCheck.checked = false;
                 fbtSection.classList.remove('hidden');
             } else {
                 fbtSection.classList.add('hidden');
             }
 
             const modal = document.getElementById('product-modal');
-            modal.classList.remove('hidden');
-            setTimeout(() => document.getElementById('product-sheet').classList.add('open'), 10);
-            
-            document.getElementById('add-to-cart-btn').onclick = () => {
-                let qtyVal = parseInt(document.getElementById('modal-qty').value);
-                const qty = isNaN(qtyVal) || qtyVal < 1 ? 1 : qtyVal; 
-                cart.push({ title: t, price: p, wt: wt, qty: qty });
-                if(fbtItem && document.getElementById('fbt-checkbox').checked) {
-                    cart.push({ title: fbtItem.name, price: fbtItem.price, wt: fbtItem.wt, qty: 1 });
-                }
-                updateBadge(); 
-                closeProduct();
-                history.back();
-            };
+            if(modal) {
+                modal.classList.remove('hidden');
+                setTimeout(() => {
+                    const sheet = document.getElementById('product-sheet');
+                    if(sheet) sheet.classList.add('open');
+                }, 10);
+            }
         }
 
-        function closeProduct() { 
-            document.getElementById('product-sheet').classList.remove('open');
-            setTimeout(() => document.getElementById('product-modal').classList.add('hidden'), 300);
+        window.addToBasketAction = function() {
+            if (!window.currentModalProduct) return;
+            
+            let qtyVal = parseInt(document.getElementById('modal-qty').value);
+            const qty = isNaN(qtyVal) || qtyVal < 1 ? 1 : qtyVal; 
+            
+            window.cart.push({ 
+                title: window.currentModalProduct.name, 
+                price: window.currentModalProduct.price, 
+                wt: window.currentModalProduct.wt || 0, 
+                qty: qty 
+            });
+            
+            const fbtCheck = document.getElementById('fbt-checkbox');
+            if(window.fbtItem && fbtCheck && fbtCheck.checked) {
+                window.cart.push({ title: window.fbtItem.name, price: window.fbtItem.price, wt: window.fbtItem.wt || 0, qty: 1 });
+            }
+            
+            if(typeof window.updateBadge === 'function') window.updateBadge(); 
+            if(typeof window.closeProduct === 'function') window.closeProduct();
+            
+            if (window.location.hash === '#product') {
+                history.back();
+            }
+        };
+
+        window.closeProduct = function() { 
+            const sheet = document.getElementById('product-sheet');
+            if(sheet) sheet.classList.remove('open');
+            setTimeout(() => {
+                const modal = document.getElementById('product-modal');
+                if(modal) modal.classList.add('hidden');
+            }, 300);
         }
 
         window.changeQty = function(amt) {
             const input = document.getElementById('modal-qty');
+            if(!input) return;
             let current = parseInt(input.value);
             if (isNaN(current)) current = 0; 
             let v = current + amt;
@@ -1185,567 +1120,19 @@
 
         window.validateQty = function() {
             const input = document.getElementById('modal-qty');
+            if(!input) return;
             let v = parseInt(input.value);
-            if(isNaN(v) || v < 1) {
-                input.value = 1;
-            }
+            if(isNaN(v) || v < 1) input.value = 1;
         }
 
-        function updateBadge() { 
+        window.updateBadge = function() { 
             const b = document.getElementById('cart-badge'); 
-            b.textContent = cart.length; 
-            b.classList.toggle('hidden', cart.length === 0); 
+            if(!b) return;
+            b.textContent = window.cart.length; 
+            b.classList.toggle('hidden', window.cart.length === 0); 
         }
 
-        let transportCost = 0;
-        window.calculateDelivery = function() {
-            const zone = parseFloat(document.getElementById('delivery-zone').value);
-            let tw = 0; cart.forEach(i => tw += (i.wt * i.qty));
-            let br = 0; let n = "Store Pickup"; 
-            if(zone > 0) {
-                if(tw <= 50) { br = 10000; n = "Bodaboda"; }
-                else if(tw <= 400) { br = 25000; n = "Bajaji"; }
-                else if(tw <= 2500) { br = 60000; n = "Canter Truck"; }
-                else { br = 150000; n = "Fuso Truck"; }
-            }
-            const isGold = parseInt(localStorage.getItem('ujenzi_total_spend')||'0') >= 5000000;
-            transportCost = br * zone;
-            if(isGold && transportCost > 0) { transportCost *= 0.5; n += " (VIP 50%)"; }
-            
-            document.getElementById('vehicle-name').textContent = n;
-            document.getElementById('transport-cost-display').textContent = zone === 0 ? 'Free' : `TZS ${transportCost.toLocaleString()}`;
-            
-            let sub = 0; cart.forEach(i => sub += (i.price * i.qty));
-            document.getElementById('cart-subtotal').textContent = `TZS ${sub.toLocaleString()}`;
-            document.getElementById('cart-transport').textContent = `TZS ${transportCost.toLocaleString()}`;
-            document.getElementById('cart-total-price').textContent = `TZS ${(sub + transportCost).toLocaleString()}`;
-        }
-
-        function renderCart() {
-            const c = document.getElementById('cart-items-container');
-            if(cart.length === 0) { 
-                c.innerHTML = '<p class="text-center text-gray-400 py-16 font-bold">Your basket is empty.</p>'; 
-                document.getElementById('cart-footer').classList.add('hidden'); 
-                return; 
-            }
-            c.innerHTML = cart.map((i, idx) => `
-                <div class="bg-white dark:bg-gray-800 p-4 rounded-2xl flex justify-between items-center shadow-sm border border-gray-100 dark:border-gray-700 stagger-item" style="animation-delay: ${idx*0.05}s">
-                    <div>
-                        <p class="font-bold text-xs uppercase">${i.title}</p>
-                        <p class="text-xs text-gray-500 mt-1">${i.qty} units × TZS ${i.price.toLocaleString()}</p>
-                    </div>
-                    <button onclick="cart.splice(${idx},1);renderCart();updateBadge();" class="w-8 h-8 flex items-center justify-center bg-red-50 dark:bg-red-900/20 text-red-500 rounded-full font-bold click-press">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
-                    </button>
-                </div>`).join('');
-            document.getElementById('cart-footer').classList.remove('hidden');
-            window.calculateDelivery();
-        }
-
-        window.processCheckout = async function() {
-            const phoneInput = document.getElementById("phone-number").value.trim(); 
-            const delPhone = document.getElementById('delivery-phone').value.trim();
-            
-            if (!phoneInput) {
-                return alert("Please enter your mobile money number for payment.");
-            }
-            if (!delPhone) {
-                return alert("Please enter a delivery contact number so the driver can reach you.");
-            }
-
-            if (cart.length === 0) {
-                return alert("Your basket is empty!");
-            }
-            
-            let subtotal = 0;
-            let itemsString = "";
-            cart.forEach(item => {
-                subtotal += (item.price * item.qty);
-                itemsString += `${item.title} (x${item.qty}), `;
-            });
-            
-            const currentTransport = typeof transportCost !== 'undefined' ? transportCost : 0;
-            const totalAmount = subtotal + currentTransport; 
-
-            const orderId = "ORD-" + Math.floor(Math.random() * 1000000); 
-
-            const receipt = {
-                orderId: orderId,
-                dateString: new Date().toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' }),
-                items: itemsString.slice(0, -2), 
-                subtotal: subtotal,
-                transport: currentTransport,
-                total: totalAmount,
-                type: 'Mobile Money',
-                deliveryContact: delPhone,
-                status: 'PENDING' 
-            };
-
-            if(window.submitCloudOrder) {
-                window.submitCloudOrder(receipt, orderId);
-            }
-
-            const btn = document.getElementById("pay-btn");
-            btn.innerHTML = "⏳ Connecting to Gateway...";
-            btn.disabled = true;
-
-            try {
-                const functionUrl = "https://europe-west1-ujenzismart-878af.cloudfunctions.net/createSnippePayment";
-                
-                const response = await fetch(functionUrl, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                        amount: totalAmount,
-                        phoneNumber: phoneInput,
-                        orderId: orderId,
-                        paymentType: 'mobile' 
-                    })
-                });
-
-                const data = await response.json();
-
-                if (response.ok && data.success) {
-                    btn.innerText = "📱 Check phone for PIN prompt!";
-                    btn.classList.replace("bg-green-600", "bg-blue-600");
-                    
-                    if (window.listenForSnippeWebhook) {
-                        window.listenForSnippeWebhook(orderId, btn, 'mobile');
-                    }
-                } else {
-                    alert("Checkout Error: " + (data.error || "Unknown error occurred."));
-                    btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 1.5H8.25A2.25 2.25 0 006 3.75v16.5a2.25 2.25 0 002.25 2.25h7.5A2.25 2.25 0 0018 20.25V3.75a2.25 2.25 0 00-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3" /></svg> Send Prompt to Phone`;
-                    btn.disabled = false;
-                }
-
-            } catch (error) {
-                console.error("Network Error:", error);
-                alert("Could not reach the payment server. Please check your internet connection.");
-                btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 1.5H8.25A2.25 2.25 0 006 3.75v16.5a2.25 2.25 0 002.25 2.25h7.5A2.25 2.25 0 0018 20.25V3.75a2.25 2.25 0 00-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3" /></svg> Send Prompt to Phone`;
-                btn.disabled = false;
-            }
-        }
-
-        window.checkoutWhatsApp = function() {
-            const u = JSON.parse(localStorage.getItem('ujenzi_user'));
-            const delPhone = document.getElementById('delivery-phone').value.trim();
-            
-            if(!delPhone) return alert("Please enter a delivery contact number so the driver can reach you.");
-
-            let sub = 0; 
-            let m = `Habari UjenziSmart! I am ${u ? u.name : 'Guest'}.\nI want to order:\n\n`;
-            
-            let itemsString = "";
-            cart.forEach(i => { 
-                itemsString += `${i.title} (x${i.qty}), `;
-                m += `- ${i.title} (x${i.qty})\n`; 
-                sub += i.price * i.qty; 
-            });
-            
-            const sel = document.getElementById('delivery-zone');
-            const zoneName = sel.options[sel.selectedIndex].text;
-            const totalCost = sub + transportCost;
-
-            m += `\nSubtotal: TZS ${sub.toLocaleString()}\nZone: ${zoneName}\nTransport: TZS ${transportCost.toLocaleString()}\nDelivery Contact: ${delPhone}\n*TOTAL: TZS ${totalCost.toLocaleString()}*`;
-            
-            const orderId = 'US-' + Math.floor(1000 + Math.random() * 9000);
-            
-            const receipt = {
-                orderId: orderId,
-                dateString: new Date().toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' }),
-                items: itemsString.slice(0, -2), 
-                subtotal: sub,
-                transport: transportCost,
-                total: totalCost,
-                type: 'WhatsApp Order',
-                deliveryContact: delPhone,
-                status: 'PENDING'
-            };
-
-            if(window.submitCloudOrder) {
-                window.submitCloudOrder(receipt, orderId);
-            }
-
-            m += `\n\n*Order ID: ${orderId}*\n*(Admin: Check your Dashboard to mark this as Paid)*`;
-            
-            cart = [];
-            updateBadge();
-            window.open(`https://wa.me/${WHATSAPP_NUM}?text=${encodeURIComponent(m)}`, '_blank');
-            navigateTo('history', false, true); 
-        }
-
-        window.renderHistory = function() {
-            const history = window.appHistory;
-            const spend = window.appSpend;
-            
-            const filterSelect = document.getElementById('history-filter');
-            const filterValue = filterSelect ? filterSelect.value : 'ALL';
-            
-            document.getElementById('history-total').textContent = `TZS ${spend.toLocaleString()}`;
-
-            let totalMat = 0; let totalTrans = 0;
-            history.forEach(r => { 
-                if(r.status === 'PAID' || r.status === 'SUCCESS' || r.status === 'SOLVED' || r.status === 'PROCESSING') {
-                    totalMat += r.subtotal; totalTrans += r.transport; 
-                }
-            });
-
-            document.getElementById('history-materials-val').textContent = `TZS ${totalMat.toLocaleString()}`;
-            document.getElementById('history-transport-val').textContent = `TZS ${totalTrans.toLocaleString()}`;
-
-            let matPct = spend > 0 ? Math.min((totalMat / spend) * 100, 100) : 0;
-            let transPct = spend > 0 ? Math.min((totalTrans / spend) * 100, 100) : 0;
-
-            setTimeout(() => {
-                document.getElementById('bar-materials').style.width = `${matPct}%`;
-                document.getElementById('bar-transport').style.width = `${transPct}%`;
-            }, 100);
-
-            const activeArea = document.getElementById('active-tracking-area');
-            const trackFeed = document.getElementById('tracking-feed');
-            const receiptFeed = document.getElementById('receipt-feed');
-
-            if(history.length === 0) {
-                activeArea.classList.add('hidden');
-                receiptFeed.innerHTML = `<div class="bg-gray-50 dark:bg-gray-800 p-6 rounded-3xl border border-gray-100 dark:border-gray-700 text-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-12 h-12 mx-auto opacity-50 mb-2 text-gray-400">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
-                    </svg>
-                    <p class="text-xs text-gray-400 font-bold">No secure transactions found.</p>
-                </div>`;
-                return;
-            }
-
-            let activeHtml = '';
-            let pastHtml = '';
-
-            history.forEach((r, i) => {
-                const status = (r.status || 'PENDING').toUpperCase();
-                const isCompleted = status === 'SOLVED' || status === 'DELIVERED' || status === 'CANCELLED' || status === 'FAILED';
-                const isPaidStatus = status === 'PAID' || status === 'SUCCESS' || status === 'SOLVED' || status === 'PROCESSING' || status === 'DELIVERED';
-
-                let showItem = true;
-                if (filterValue === 'PAID' && !isPaidStatus) showItem = false;
-                if (filterValue === 'PENDING' && status !== 'PENDING') showItem = false;
-
-                if (!showItem) return;
-
-                if (!isCompleted && status !== 'PENDING') {
-                    let step = 1; 
-                    let progressW = '15%';
-                    
-                    if(status === 'PREPARING' || status === 'PROCESSING') { step = 2; progressW = '50%'; }
-                    if(status === 'EN_ROUTE' || status === 'DISPATCHED') { step = 3; progressW = '85%'; }
-
-                    const step1C = step >= 1 ? 'bg-green-500 text-white' : 'bg-gray-200 dark:bg-gray-700 text-gray-400';
-                    const step2C = step >= 2 ? 'bg-green-500 text-white' : 'bg-gray-200 dark:bg-gray-700 text-gray-400';
-                    const step3C = step >= 3 ? 'bg-green-500 text-white' : 'bg-gray-200 dark:bg-gray-700 text-gray-400';
-                    
-                    const p1 = step >= 1 ? 'text-green-600 dark:text-green-400' : 'text-gray-400';
-                    const p2 = step >= 2 ? 'text-green-600 dark:text-green-400' : 'text-gray-400';
-                    const p3 = step >= 3 ? 'text-green-600 dark:text-green-400' : 'text-gray-400';
-
-                    const ring1 = step === 1 ? 'ring-4 ring-green-100 dark:ring-green-900 animate-pulse' : 'ring-4 ring-white dark:ring-gray-800';
-                    const ring2 = step === 2 ? 'ring-4 ring-green-100 dark:ring-green-900 animate-pulse' : 'ring-4 ring-white dark:ring-gray-800';
-                    const ring3 = step === 3 ? 'ring-4 ring-green-100 dark:ring-green-900 animate-pulse' : 'ring-4 ring-white dark:ring-gray-800';
-
-                    activeHtml += `
-                    <div class="bg-white dark:bg-gray-800 p-5 rounded-[2rem] shadow-sm border border-gray-100 dark:border-gray-700 mb-2 relative overflow-hidden stagger-item">
-                        <div class="relative z-10">
-                            <div class="flex justify-between items-start mb-2">
-                                <div>
-                                    <h4 class="font-black text-lg text-gray-900 dark:text-white">Order ${r.orderId}</h4>
-                                    <p class="text-[10px] text-gray-500 font-bold uppercase tracking-widest">Est. Arrival: Today</p>
-                                </div>
-                                <span class="bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-400 text-[9px] font-black px-2 py-1 rounded-md uppercase tracking-widest">${status}</span>
-                            </div>
-                            <p class="text-xs text-gray-600 dark:text-gray-300 font-medium truncate max-w-[80%] mb-6">${r.items}</p>
-
-                            <div class="relative flex justify-between items-center mb-2 px-1">
-                                <div class="absolute left-0 top-1/2 w-full h-1 bg-gray-100 dark:bg-gray-700 -z-10 -translate-y-1/2 rounded-full"></div>
-                                <div class="absolute left-0 top-1/2 h-1 bg-green-500 -z-10 -translate-y-1/2 transition-all duration-1000 rounded-full" style="width: ${progressW}"></div>
-
-                                <div class="w-6 h-6 rounded-full ${step1C} flex items-center justify-center text-[10px] font-black shadow-sm ${ring1}">✓</div>
-                                <div class="w-6 h-6 rounded-full ${step2C} flex items-center justify-center text-[10px] font-black shadow-sm ${ring2}">${step > 2 ? '✓' : '2'}</div>
-                                <div class="w-6 h-6 rounded-full ${step3C} flex items-center justify-center text-[10px] font-black shadow-sm ${ring3}">${step > 3 ? '✓' : '3'}</div>
-                                <div class="w-6 h-6 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-400 flex items-center justify-center text-[10px] font-black shadow-sm ring-4 ring-white dark:ring-gray-800">4</div>
-                            </div>
-                            <div class="flex justify-between text-[8px] font-black uppercase tracking-widest px-1">
-                                <span class="${p1}">Paid</span>
-                                <span class="${p2} text-center">Loading</span>
-                                <span class="${p3} text-center">Transit</span>
-                                <span class="text-gray-400 text-right">Arrived</span>
-                            </div>
-                            
-                            ${step === 3 ? `
-                            <div class="mt-6 bg-blue-50 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-800 p-3 rounded-2xl flex items-center justify-between">
-                                <div class="flex items-center gap-3">
-                                    <div class="w-10 h-10 bg-white dark:bg-gray-800 rounded-full flex items-center justify-center text-gray-600 dark:text-gray-300 shadow-sm">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" /></svg>
-                                    </div>
-                                    <div><p class="text-[9px] font-black text-blue-800 dark:text-blue-300 uppercase tracking-widest">Driver Assigned</p><p class="text-xs font-bold text-gray-900 dark:text-white">Call: 0754 *** ***</p></div>
-                                </div>
-                                <button class="w-10 h-10 bg-blue-600 hover:bg-blue-500 text-white rounded-full flex items-center justify-center text-sm shadow-md click-press">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-2.896-1.596-5.265-3.965-6.861-6.86l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z" /></svg>
-                                </button>
-                            </div>` : ''}
-                        </div>
-                    </div>`;
-                } else {
-                    const badgeColor = isCompleted ? 'bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-300' : 'bg-amber-50 text-amber-600 dark:bg-amber-900/30 dark:text-amber-400';
-                    const moneyColor = isCompleted ? 'text-gray-900 dark:text-white font-black' : 'text-gray-400 dark:text-gray-500 font-bold line-through';
-                    
-                    pastHtml += `
-                    <div class="bg-white dark:bg-gray-800 p-5 rounded-[2rem] shadow-sm border border-gray-100 dark:border-gray-700 stagger-item" style="animation-delay: ${i*0.05}s">
-                        <div class="flex justify-between items-start mb-3 border-b dark:border-gray-700 pb-3">
-                            <div>
-                                <p class="text-[9px] text-gray-400 font-black uppercase tracking-widest">${r.dateString}</p>
-                                <p class="text-xs font-bold text-gray-800 dark:text-gray-100 mt-0.5">Order ${r.orderId}</p>
-                            </div>
-                            <span class="${badgeColor} text-[9px] font-black px-2 py-1 rounded-md uppercase tracking-widest">${status}</span>
-                        </div>
-                        <p class="text-xs text-gray-500 dark:text-gray-400 font-medium leading-relaxed mb-3">${r.items}</p>
-                        <div class="flex justify-between items-center">
-                            <span class="text-[10px] text-gray-400 font-bold">Transport: TZS ${r.transport.toLocaleString()}</span>
-                            <span class="text-sm ${moneyColor}">- TZS ${r.total.toLocaleString()}</span>
-                        </div>
-                    </div>`;
-                }
-            });
-
-            if (filterValue === 'ALL' || filterValue === 'PENDING' || filterValue === 'PAID') {
-                if (activeHtml !== '') {
-                    trackFeed.innerHTML = activeHtml;
-                    activeArea.classList.remove('hidden');
-                } else {
-                    activeArea.classList.add('hidden');
-                }
-            } else {
-                 activeArea.classList.add('hidden');
-            }
-
-            if (pastHtml !== '') {
-                receiptFeed.innerHTML = pastHtml;
-            } else {
-                receiptFeed.innerHTML = `<div class="bg-gray-50 dark:bg-gray-800 p-6 rounded-3xl border border-gray-100 dark:border-gray-700 text-center text-gray-400 text-xs font-bold">No receipts match this filter.</div>`;
-            }
-        }
-
-        window.clearHistory = async function() {
-            if(!confirm("Are you sure you want to clear your transaction history?")) return;
-            
-            const historyToHide = window.appHistory;
-            if(historyToHide.length === 0) return alert("Your history is already empty.");
-
-            try {
-                for (const order of historyToHide) {
-                    await setDoc(doc(db, "orders", order.id), { hiddenFromCustomer: true }, { merge: true });
-                }
-                alert("✅ Transaction history cleared from your device.");
-            } catch (error) {
-                alert("Failed to clear history. Please check your connection.");
-            }
-        }
-
-        window.shareStatement = function() {
-            const u = JSON.parse(localStorage.getItem('ujenzi_user'));
-            const h = window.appHistory; 
-            const spend = window.appSpend;
-            
-            if(h.length === 0) return alert("No transactions to share yet.");
-
-            let m = `📊 *UjenziSmart Financial Report*\nBuilder: ${u ? u.name : 'Guest'}\nLifetime Spend: *TZS ${spend.toLocaleString()}*\n\n*Recent Transactions:*\n`;
-            h.slice(0, 5).forEach(r => {
-                m += `🗓️ ${r.dateString}\n📦 ${r.items}\n🚚 Transport: TZS ${r.transport.toLocaleString()}\n💰 Total: TZS ${r.total.toLocaleString()}\nStatus: ${r.status}\n\n`;
-            });
-            window.open(`https://wa.me/?text=${encodeURIComponent(m)}`, '_blank');
-        }
-
-        window.downloadStatement = function() {
-            const h = window.appHistory;
-            if(h.length === 0) return alert("No transactions to download yet.");
-
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF();
-            const u = JSON.parse(localStorage.getItem('ujenzi_user'));
-            const spend = window.appSpend;
-
-            doc.setFontSize(22);
-            doc.setTextColor(16, 185, 129);
-            doc.text("UjenziSmart", 14, 22);
-            
-            doc.setFontSize(10);
-            doc.setTextColor(100);
-            doc.text("Premium Construction Partner", 14, 28);
-            
-            doc.setFontSize(12);
-            doc.setTextColor(0);
-            doc.text(`Account Name: ${u ? u.name : 'Guest'}`, 14, 42);
-            doc.text(`Date Generated: ${new Date().toLocaleDateString()}`, 14, 48);
-            doc.text(`Total Lifetime Spend (Paid): TZS ${spend.toLocaleString()}`, 14, 56);
-
-            const tableData = h.map(r => [r.dateString, r.status, r.items, `TZS ${r.total.toLocaleString()}`]);
-            
-            doc.autoTable({
-                startY: 65,
-                head: [['Date', 'Status', 'Items Purchased', 'Total Cost']],
-                body: tableData,
-                theme: 'striped',
-                headStyles: { fillColor: [16, 185, 129] },
-                styles: { fontSize: 9 }
-            });
-            doc.save("UjenziSmart_Financial_Statement.pdf");
-        }
-
-        window.saveToPhase = function() {
-            if(!currentModalProduct) return;
-            const phase = document.getElementById('phase-selector').value;
-            let list = JSON.parse(localStorage.getItem('ujenzi_wishlist') || '[]');
-            list.push({ ...currentModalProduct, phase: phase });
-            localStorage.setItem('ujenzi_wishlist', JSON.stringify(list));
-            alert(`Saved to Phase: ${phase}`);
-            closeProduct();
-            history.back();
-            if(document.getElementById('view-profile').classList.contains('hidden') === false) window.updateWishlistCounts();
-        }
-
-        window.removeFromPhase = function(phase, originalIndex) {
-            let list = JSON.parse(localStorage.getItem('ujenzi_wishlist') || '[]');
-            list.splice(originalIndex, 1);
-            localStorage.setItem('ujenzi_wishlist', JSON.stringify(list));
-            window.updateWishlistCounts();
-            window.renderWishlistPhase(phase); 
-        }
-
-        window.clearPhase = function(phase) {
-            if(confirm(`Are you sure you want to remove all items from ${phase}?`)) {
-                let list = JSON.parse(localStorage.getItem('ujenzi_wishlist') || '[]');
-                list = list.filter(x => x.phase !== phase); 
-                localStorage.setItem('ujenzi_wishlist', JSON.stringify(list));
-                window.updateWishlistCounts();
-                window.renderWishlistPhase(phase); 
-            }
-        }
-
-        window.updateWishlistCounts = function() {
-            const list = JSON.parse(localStorage.getItem('ujenzi_wishlist') || '[]');
-            document.getElementById('count-foundation').textContent = `${list.filter(x => x.phase === 'Foundation').length} Items`;
-            document.getElementById('count-roofing').textContent = `${list.filter(x => x.phase === 'Roofing').length} Items`;
-            document.getElementById('count-finishing').textContent = `${list.filter(x => x.phase === 'Finishing').length} Items`;
-        }
-
-        window.renderWishlistPhase = function(phase) {
-            const list = JSON.parse(localStorage.getItem('ujenzi_wishlist') || '[]');
-            const items = list.map((item, index) => ({...item, originalIndex: index})).filter(x => x.phase === phase);
-            const container = document.getElementById('wishlist-render-area');
-            
-            if(items.length === 0) { 
-                container.innerHTML = `
-                    <div class="mb-4 flex items-center justify-between">
-                        <h4 class="font-bold text-sm uppercase tracking-widest text-green-600">${phase} Items</h4>
-                        <button onclick="document.getElementById('wishlist-render-area').classList.add('hidden')" class="text-xs text-gray-400 font-bold click-press">Close</button>
-                    </div>
-                    <p class="text-xs text-gray-400 italic mb-6 text-center bg-gray-50 dark:bg-gray-800 p-4 rounded-[1.5rem] border dark:border-gray-700">No items saved in this phase yet.</p>`; 
-                container.classList.remove('hidden'); 
-                return; 
-            }
-            
-            container.innerHTML = `
-                <div class="mb-4 flex items-center justify-between">
-                    <h4 class="font-bold text-sm uppercase tracking-widest text-green-600">${phase} Items</h4>
-                    <div class="flex gap-4 items-center">
-                        <button onclick="clearPhase('${phase}')" class="text-xs text-red-500 font-bold click-press uppercase tracking-widest bg-red-50 dark:bg-red-900/20 px-2 py-1 rounded-md">Clear All</button>
-                        <button onclick="document.getElementById('wishlist-render-area').classList.add('hidden')" class="text-xs text-gray-400 font-bold click-press">Close</button>
-                    </div>
-                </div>
-                <div class="grid grid-cols-2 gap-4 mb-6">
-                    ${items.map(p => `
-                    <div class="bg-white dark:bg-gray-800 p-3 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 relative animate-slideUpFade group">
-                        <button onclick="removeFromPhase('${phase}', ${p.originalIndex})" class="absolute top-1 right-1 w-7 h-7 bg-red-50 dark:bg-red-900/40 text-red-500 rounded-full flex items-center justify-center text-xs font-bold shadow-sm z-10 click-press transition-colors hover:bg-red-100">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="w-3 h-3"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
-                        </button>
-                        <img src="${p.img}" class="w-full h-20 object-cover rounded-xl mb-2">
-                        <p class="text-[9px] font-bold h-6 overflow-hidden">${p.name}</p>
-                        <p class="text-green-600 font-black text-[10px]">TZS ${p.price.toLocaleString()}</p>
-                    </div>`).join('')}
-                </div>`;
-            container.classList.remove('hidden');
-        }
-
-        window.switchAiTab = function(tab) {
-            document.getElementById('ai-content-chat').classList.add('hidden'); 
-            document.getElementById('ai-content-calc').classList.add('hidden');
-            
-            document.getElementById('tab-chat').classList.remove('text-green-600', 'border-green-600');
-            document.getElementById('tab-chat').classList.add('text-gray-400', 'border-transparent');
-            
-            document.getElementById('tab-calc').classList.remove('text-green-600', 'border-green-600');
-            document.getElementById('tab-calc').classList.add('text-gray-400', 'border-transparent');
-            
-            document.getElementById(`ai-content-${tab}`).classList.remove('hidden'); 
-            document.getElementById(`tab-${tab}`).classList.remove('text-gray-400', 'border-transparent');
-            document.getElementById(`tab-${tab}`).classList.add('text-green-600', 'border-green-600');
-        }
-
-        window.runCalculation = function() {
-            const type = document.getElementById('calc-type').value;
-            const L = parseFloat(document.getElementById('calc-l').value);
-            const W = parseFloat(document.getElementById('calc-w').value);
-            if(!L || !W) return;
-            const a = L * W; let r = "";
-            if(type === 'wall') r = `Area: <b>${a}m²</b><br><br>Estimate:<br>• <b>${Math.ceil(a * 12.5)}</b> Concrete Blocks<br>• <b>${Math.ceil((a*12.5) / 30)}</b> Bags of Cement`;
-            else if(type === 'floor') r = `Area: <b>${a}m²</b><br><br>Estimate:<br>• <b>${Math.ceil(a * 6.25)}</b> Tiles (40x40)<br>• <b>${Math.ceil(a/4)}</b> Bags of Tile Adhesive`;
-            else r = `Area: <b>${a}m²</b><br><br>Estimate:<br>• <b>${Math.ceil(a / 2.2)}</b> Iron Sheets (3m)`;
-            const res = document.getElementById('calc-results');
-            res.innerHTML = r; res.classList.remove('hidden');
-        }
-
-        window.openAiHub = function() { 
-            history.pushState({ modal: 'ai-hub' }, '', '#ai-hub'); 
-            document.getElementById('ai-hub-modal').classList.remove('hidden'); 
-            setTimeout(() => document.getElementById('ai-hub-sheet').classList.add('open'), 10);
-        };
-        
-        window.closeAiHub = function() { 
-            document.getElementById('ai-hub-sheet').classList.remove('open');
-            setTimeout(() => document.getElementById('ai-hub-modal').classList.add('hidden'), 300);
-        }
-
-        window.sendMessage = async function() {
-            const input = document.getElementById('chat-input');
-            const chatBox = document.getElementById('chat-box');
-            const txt = input.value.trim(); if(!txt) return;
-            
-            chatBox.innerHTML += `<div class="p-3 bg-green-600 text-white rounded-2xl rounded-tr-none ml-auto max-w-[85%] text-sm shadow-md animate-stagger-in">${txt}</div>`;
-            input.value = '';
-            
-            const loaderId = 'ai-loader-' + Date.now();
-            chatBox.innerHTML += `<div id="${loaderId}" class="p-4 bg-white dark:bg-gray-800 border dark:border-gray-700 rounded-2xl rounded-tl-none mr-auto w-[60%] skeleton h-10"></div>`;
-            chatBox.scrollTop = chatBox.scrollHeight;
-            
-            setTimeout(() => {
-                const loader = document.getElementById(loaderId);
-                if(loader) loader.remove();
-                
-                let reply = "As an AI, I suggest checking our Categories tab for the latest prices on structural materials.";
-                let lowerTxt = txt.toLowerCase();
-                
-                if(lowerTxt.includes("roof") || lowerTxt.includes("mabati")) {
-                    reply = "For roofing in Dar Es Salaam, I highly recommend 30G Corrugated Iron Sheets. They withstand coastal humidity well.";
-                } else if(lowerTxt.includes("cement") || lowerTxt.includes("saruji")) {
-                    reply = "Simba Cement (Grade 42.5R) is the best for heavy structural work. For plastering, Twiga (32.5N) is more cost-effective.";
-                } else if(lowerTxt.includes("blocks") || lowerTxt.includes("tofali")) {
-                    reply = "For standard exterior walls, 6-inch solid blocks are best. You will need roughly 12.5 blocks per square meter.";
-                }
-                
-                chatBox.innerHTML += `<div class="p-4 bg-white dark:bg-gray-800 border dark:border-gray-700 rounded-2xl rounded-tl-none mr-auto max-w-[85%] text-sm font-medium leading-relaxed animate-stagger-in">${reply}</div>`;
-                chatBox.scrollTop = chatBox.scrollHeight;
-            }, 1200);
-        };
-    </script>
-
-    <script>
-        // Review UI Logic added to global window
+        // --- Review Submit Function ---
         window.currentRating = 5;
         window.setRating = function(stars) {
             window.currentRating = stars;
@@ -1759,6 +1146,7 @@
 
         window.submitReview = function() {
             const textInput = document.getElementById('review-text');
+            if(!textInput) return;
             const txt = textInput.value.trim();
             if(!txt) return alert("Please enter your feedback before submitting.");
             
@@ -1766,26 +1154,322 @@
             const name = user ? user.name : "Guest Builder";
             
             let starsHtml = "";
-            for(let i=0; i<5; i++) {
-                starsHtml += i < window.currentRating ? "★" : "☆";
-            }
+            for(let i=0; i<5; i++) { starsHtml += i < window.currentRating ? "★" : "☆"; }
             
             const newReview = `
-            <div class="bg-gray-50 dark:bg-gray-800 p-4 rounded-2xl border border-green-200 dark:border-green-800 mt-2 animate-stagger-in">
+            <div class="bg-gray-50 dark:bg-gray-800 p-4 rounded-2xl border border-green-200 dark:border-green-800 mb-2 animate-stagger-in">
                 <p class="text-[10px] font-bold text-gray-500 mb-1 flex items-center gap-1">
                     <span class="text-amber-400 text-xs">${starsHtml}</span> ${name} <span class="text-[8px] text-green-500 ml-1">(Just now)</span>
                 </p>
                 <p class="text-xs font-medium text-gray-700 dark:text-gray-300 italic">"${txt}"</p>
             </div>`;
             
-            const container = document.getElementById('dynamic-reviews-container');
-            container.insertAdjacentHTML('beforeend', newReview);
+            const container = document.getElementById('user-added-reviews');
+            if(container) container.insertAdjacentHTML('afterbegin', newReview);
             
             textInput.value = '';
             window.setRating(5);
-            alert("Review submitted successfully!");
+        };
+
+        // --- Cart Display & Checkout Functions ---
+        window.calculateDelivery = function() {
+            const zoneEl = document.getElementById('delivery-zone');
+            if(!zoneEl) return;
+            const zone = parseFloat(zoneEl.value);
+            let tw = 0; window.cart.forEach(i => tw += (i.wt * i.qty));
+            let br = 0; let n = "Store Pickup"; 
+            if(zone > 0) {
+                if(tw <= 50) { br = 10000; n = "Bodaboda"; }
+                else if(tw <= 400) { br = 25000; n = "Bajaji"; }
+                else if(tw <= 2500) { br = 60000; n = "Canter Truck"; }
+                else { br = 150000; n = "Fuso Truck"; }
+            }
+            const isGold = parseInt(localStorage.getItem('ujenzi_total_spend')||'0') >= 5000000;
+            window.transportCost = br * zone;
+            if(isGold && window.transportCost > 0) { window.transportCost *= 0.5; n += " (VIP 50%)"; }
+            
+            const vName = document.getElementById('vehicle-name'); if(vName) vName.textContent = n;
+            const tCost = document.getElementById('transport-cost-display'); if(tCost) tCost.textContent = zone === 0 ? 'Free' : `TZS ${window.transportCost.toLocaleString()}`;
+            
+            let sub = 0; window.cart.forEach(i => sub += (i.price * i.qty));
+            const subEl = document.getElementById('cart-subtotal'); if(subEl) subEl.textContent = `TZS ${sub.toLocaleString()}`;
+            const transEl = document.getElementById('cart-transport'); if(transEl) transEl.textContent = `TZS ${window.transportCost.toLocaleString()}`;
+            const totEl = document.getElementById('cart-total-price'); if(totEl) totEl.textContent = `TZS ${(sub + window.transportCost).toLocaleString()}`;
+        }
+
+        window.renderCart = function() {
+            const c = document.getElementById('cart-items-container');
+            const f = document.getElementById('cart-footer');
+            if(!c) return;
+            if(window.cart.length === 0) { 
+                c.innerHTML = '<p class="text-center text-gray-400 py-16 font-bold">Your basket is empty.</p>'; 
+                if(f) f.classList.add('hidden'); 
+                return; 
+            }
+            c.innerHTML = window.cart.map((i, idx) => `
+                <div class="bg-white dark:bg-gray-800 p-4 rounded-2xl flex justify-between items-center shadow-sm border border-gray-100 dark:border-gray-700 stagger-item" style="animation-delay: ${idx*0.05}s">
+                    <div>
+                        <p class="font-bold text-xs uppercase">${i.title}</p>
+                        <p class="text-xs text-gray-500 mt-1">${i.qty} units × TZS ${i.price.toLocaleString()}</p>
+                    </div>
+                    <button onclick="window.cart.splice(${idx},1);window.renderCart();window.updateBadge();" class="w-8 h-8 flex items-center justify-center bg-red-50 dark:bg-red-900/20 text-red-500 rounded-full font-bold click-press">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+                    </button>
+                </div>`).join('');
+            if(f) f.classList.remove('hidden');
+            window.calculateDelivery();
+        }
+
+        window.processCheckout = async function() {
+            const pInput = document.getElementById("phone-number");
+            const dInput = document.getElementById('delivery-phone');
+            if(!pInput || !dInput) return;
+            
+            const phoneInput = pInput.value.trim(); 
+            const delPhone = dInput.value.trim();
+            if (!phoneInput) return alert("Please enter your mobile money number for payment.");
+            if (!delPhone) return alert("Please enter a delivery contact number so the driver can reach you.");
+            if (window.cart.length === 0) return alert("Your basket is empty!");
+            
+            let subtotal = 0; let itemsString = "";
+            window.cart.forEach(item => { subtotal += (item.price * item.qty); itemsString += `${item.title} (x${item.qty}), `; });
+            
+            const currentTransport = typeof window.transportCost !== 'undefined' ? window.transportCost : 0;
+            const totalAmount = subtotal + currentTransport; 
+            const orderId = "ORD-" + Math.floor(Math.random() * 1000000); 
+
+            const receipt = {
+                orderId: orderId,
+                dateString: new Date().toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' }),
+                items: itemsString.slice(0, -2), subtotal: subtotal, transport: currentTransport, total: totalAmount,
+                type: 'Mobile Money', deliveryContact: delPhone, status: 'PENDING' 
+            };
+
+            if(typeof window.submitCloudOrder === 'function') window.submitCloudOrder(receipt, orderId);
+
+            const btn = document.getElementById("pay-btn");
+            if(btn) { btn.innerHTML = "⏳ Connecting..."; btn.disabled = true; }
+
+            try {
+                const functionUrl = "https://europe-west1-ujenzismart-878af.cloudfunctions.net/createSnippePayment";
+                const response = await fetch(functionUrl, { method: "POST", headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ amount: totalAmount, phoneNumber: phoneInput, orderId: orderId, paymentType: 'mobile' })
+                });
+
+                const data = await response.json();
+                if (response.ok && data.success) {
+                    if(btn) { btn.innerText = "📱 Check phone!"; btn.classList.replace("bg-green-600", "bg-blue-600"); }
+                    if (typeof window.listenForSnippeWebhook === 'function') window.listenForSnippeWebhook(orderId, btn, 'mobile');
+                } else {
+                    alert("Checkout Error: " + (data.error || "Unknown error."));
+                    if(btn) { btn.innerHTML = `Send Prompt`; btn.disabled = false; }
+                }
+            } catch (error) {
+                alert("Network error connecting to payment gateway.");
+                if(btn) { btn.innerHTML = `Send Prompt`; btn.disabled = false; }
+            }
+        }
+
+        window.checkoutWhatsApp = function() {
+            const u = JSON.parse(localStorage.getItem('ujenzi_user'));
+            const delPhone = document.getElementById('delivery-phone').value.trim();
+            if(!delPhone) return alert("Please enter a delivery contact number.");
+
+            let sub = 0; let m = `Habari UjenziSmart! I am ${u ? u.name : 'Guest'}.\nI want to order:\n\n`;
+            let itemsString = "";
+            window.cart.forEach(i => { itemsString += `${i.title} (x${i.qty}), `; m += `- ${i.title} (x${i.qty})\n`; sub += i.price * i.qty; });
+            
+            const sel = document.getElementById('delivery-zone');
+            const zoneName = sel ? sel.options[sel.selectedIndex].text : "Pickup";
+            const currentTransport = typeof window.transportCost !== 'undefined' ? window.transportCost : 0;
+            const totalCost = sub + currentTransport;
+
+            m += `\nSubtotal: TZS ${sub.toLocaleString()}\nZone: ${zoneName}\nTransport: TZS ${currentTransport.toLocaleString()}\nDelivery: ${delPhone}\n*TOTAL: TZS ${totalCost.toLocaleString()}*`;
+            const orderId = 'US-' + Math.floor(1000 + Math.random() * 9000);
+            
+            const receipt = {
+                orderId: orderId, dateString: new Date().toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' }),
+                items: itemsString.slice(0, -2), subtotal: sub, transport: currentTransport, total: totalCost, type: 'WhatsApp Order', deliveryContact: delPhone, status: 'PENDING'
+            };
+
+            if(typeof window.submitCloudOrder === 'function') window.submitCloudOrder(receipt, orderId);
+
+            m += `\n\n*Order ID: ${orderId}*`;
+            window.cart = []; window.updateBadge();
+            const WA_NUM = '255743924467';
+            window.open(`https://wa.me/${WA_NUM}?text=${encodeURIComponent(m)}`, '_blank');
+            window.navigateTo('history', false, true); 
+        }
+
+        window.renderHistory = function() {
+            const history = window.appHistory || [];
+            const spend = window.appSpend || 0;
+            const filterEl = document.getElementById('history-filter');
+            const filterValue = filterEl ? filterEl.value : 'ALL';
+            
+            const hTotal = document.getElementById('history-total');
+            if(hTotal) hTotal.textContent = `TZS ${spend.toLocaleString()}`;
+            
+            let totalMat = 0; let totalTrans = 0;
+            history.forEach(r => { 
+                if(r.status === 'PAID' || r.status === 'SUCCESS' || r.status === 'SOLVED' || r.status === 'PROCESSING') { totalMat += r.subtotal; totalTrans += r.transport; }
+            });
+            const matVal = document.getElementById('history-materials-val'); if(matVal) matVal.textContent = `TZS ${totalMat.toLocaleString()}`;
+            const transVal = document.getElementById('history-transport-val'); if(transVal) transVal.textContent = `TZS ${totalTrans.toLocaleString()}`;
+
+            let matPct = spend > 0 ? Math.min((totalMat / spend) * 100, 100) : 0;
+            let transPct = spend > 0 ? Math.min((totalTrans / spend) * 100, 100) : 0;
+
+            setTimeout(() => {
+                const bm = document.getElementById('bar-materials'); if(bm) bm.style.width = `${matPct}%`;
+                const bt = document.getElementById('bar-transport'); if(bt) bt.style.width = `${transPct}%`;
+            }, 100);
+
+            const activeArea = document.getElementById('active-tracking-area');
+            const trackFeed = document.getElementById('tracking-feed');
+            const receiptFeed = document.getElementById('receipt-feed');
+
+            if(!activeArea || !trackFeed || !receiptFeed) return;
+
+            if(history.length === 0) {
+                activeArea.classList.add('hidden');
+                receiptFeed.innerHTML = `<div class="text-center py-6 text-gray-400 text-xs font-bold">No transactions found.</div>`;
+                return;
+            }
+
+            let activeHtml = ''; let pastHtml = '';
+
+            history.forEach((r, i) => {
+                const status = (r.status || 'PENDING').toUpperCase();
+                const isCompleted = status === 'SOLVED' || status === 'DELIVERED' || status === 'CANCELLED' || status === 'FAILED';
+                const isPaidStatus = status === 'PAID' || status === 'SUCCESS' || status === 'SOLVED' || status === 'PROCESSING' || status === 'DELIVERED';
+
+                if (filterValue === 'PAID' && !isPaidStatus) return;
+                if (filterValue === 'PENDING' && status !== 'PENDING') return;
+
+                if (!isCompleted && status !== 'PENDING') {
+                    activeHtml += `<div class="bg-white dark:bg-gray-800 p-5 rounded-2xl border border-green-500 mb-2"><p class="font-bold">Order ${r.orderId}</p><p class="text-xs text-gray-500">${r.items}</p><p class="text-[9px] text-green-500 mt-2 font-bold">${status}</p></div>`;
+                } else {
+                    pastHtml += `<div class="bg-white dark:bg-gray-800 p-4 rounded-2xl border border-gray-100 dark:border-gray-700 mb-2"><p class="font-bold text-xs">${r.dateString}</p><p class="text-xs text-gray-500 my-1">${r.items}</p><p class="text-[10px] font-bold ${isCompleted ? 'text-gray-400' : 'text-amber-500'}">${status} - TZS ${r.total.toLocaleString()}</p></div>`;
+                }
+            });
+
+            if (filterValue === 'ALL' || filterValue === 'PENDING' || filterValue === 'PAID') {
+                if (activeHtml !== '') { trackFeed.innerHTML = activeHtml; activeArea.classList.remove('hidden'); } 
+                else { activeArea.classList.add('hidden'); }
+            } else { activeArea.classList.add('hidden'); }
+
+            if (pastHtml !== '') { receiptFeed.innerHTML = pastHtml; } 
+            else { receiptFeed.innerHTML = `<div class="text-center py-6 text-gray-400 text-xs font-bold">No receipts match this filter.</div>`; }
+        }
+
+        window.clearHistory = async function() {
+            if(!confirm("Are you sure you want to clear your transaction history?")) return;
+            const historyToHide = window.appHistory || [];
+            if(historyToHide.length === 0) return alert("Your history is already empty.");
+            try {
+                for (const order of historyToHide) { if(typeof window.hideOrderInFirebase === 'function') window.hideOrderInFirebase(order.id); }
+                alert("✅ Transaction history cleared.");
+            } catch (error) { alert("Failed to clear history."); }
+        }
+
+        window.shareStatement = function() {
+            const u = JSON.parse(localStorage.getItem('ujenzi_user')); const spend = window.appSpend || 0;
+            let m = `📊 *UjenziSmart Financial Report*\nBuilder: ${u ? u.name : 'Guest'}\nLifetime Spend: *TZS ${spend.toLocaleString()}*\n\n`;
+            window.open(`https://wa.me/?text=${encodeURIComponent(m)}`, '_blank');
+        }
+
+        window.downloadStatement = function() { alert("Download feature ready. (Connect PDF Lib in Production)"); }
+
+        window.saveToPhase = function() {
+            if(!window.currentModalProduct) return;
+            const phase = document.getElementById('phase-selector').value;
+            let list = JSON.parse(localStorage.getItem('ujenzi_wishlist') || '[]');
+            list.push({ ...window.currentModalProduct, phase: phase });
+            localStorage.setItem('ujenzi_wishlist', JSON.stringify(list));
+            alert(`Saved to Phase: ${phase}`);
+            window.closeProduct(); history.back();
+            if(!document.getElementById('view-profile').classList.contains('hidden')) window.updateWishlistCounts();
+        }
+
+        window.removeFromPhase = function(phase, originalIndex) {
+            let list = JSON.parse(localStorage.getItem('ujenzi_wishlist') || '[]');
+            list.splice(originalIndex, 1); localStorage.setItem('ujenzi_wishlist', JSON.stringify(list));
+            window.updateWishlistCounts(); window.renderWishlistPhase(phase); 
+        }
+
+        window.clearPhase = function(phase) {
+            if(confirm(`Are you sure you want to remove all items from ${phase}?`)) {
+                let list = JSON.parse(localStorage.getItem('ujenzi_wishlist') || '[]');
+                list = list.filter(x => x.phase !== phase); localStorage.setItem('ujenzi_wishlist', JSON.stringify(list));
+                window.updateWishlistCounts(); window.renderWishlistPhase(phase); 
+            }
+        }
+
+        window.updateWishlistCounts = function() {
+            const list = JSON.parse(localStorage.getItem('ujenzi_wishlist') || '[]');
+            const cf = document.getElementById('count-foundation'); if(cf) cf.textContent = `${list.filter(x => x.phase === 'Foundation').length} Items`;
+            const cr = document.getElementById('count-roofing'); if(cr) cr.textContent = `${list.filter(x => x.phase === 'Roofing').length} Items`;
+            const cfin = document.getElementById('count-finishing'); if(cfin) cfin.textContent = `${list.filter(x => x.phase === 'Finishing').length} Items`;
+        }
+
+        window.renderWishlistPhase = function(phase) {
+            const list = JSON.parse(localStorage.getItem('ujenzi_wishlist') || '[]');
+            const items = list.map((item, index) => ({...item, originalIndex: index})).filter(x => x.phase === phase);
+            const container = document.getElementById('wishlist-render-area');
+            if(!container) return;
+            if(items.length === 0) { 
+                container.innerHTML = `<div class="mb-4 flex items-center justify-between"><h4 class="font-bold text-sm uppercase text-green-600">${phase} Items</h4><button onclick="document.getElementById('wishlist-render-area').classList.add('hidden')" class="text-xs text-gray-400 font-bold">Close</button></div><p class="text-xs text-gray-400 italic mb-6">No items saved yet.</p>`; 
+                container.classList.remove('hidden'); return; 
+            }
+            container.innerHTML = `
+                <div class="mb-4 flex items-center justify-between"><h4 class="font-bold text-sm uppercase text-green-600">${phase} Items</h4>
+                <div class="flex gap-4"><button onclick="window.clearPhase('${phase}')" class="text-xs text-red-500 font-bold">Clear All</button><button onclick="document.getElementById('wishlist-render-area').classList.add('hidden')" class="text-xs text-gray-400 font-bold">Close</button></div></div>
+                <div class="grid grid-cols-2 gap-4 mb-6">
+                    ${items.map(p => `
+                    <div class="bg-white dark:bg-gray-800 p-3 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 relative">
+                        <button onclick="window.removeFromPhase('${phase}', ${p.originalIndex})" class="absolute top-1 right-1 w-7 h-7 bg-red-50 text-red-500 rounded-full flex items-center justify-center text-xs font-bold">✕</button>
+                        <img src="${p.img}" class="w-full h-20 object-cover rounded-xl mb-2">
+                        <p class="text-[9px] font-bold h-6 overflow-hidden">${p.name}</p>
+                    </div>`).join('')}
+                </div>`;
+            container.classList.remove('hidden');
+        }
+
+        window.switchAiTab = function(tab) {
+            document.getElementById('ai-content-chat').classList.add('hidden'); document.getElementById('ai-content-calc').classList.add('hidden');
+            document.getElementById('tab-chat').classList.remove('text-green-600', 'border-green-600'); document.getElementById('tab-chat').classList.add('text-gray-400', 'border-transparent');
+            document.getElementById('tab-calc').classList.remove('text-green-600', 'border-green-600'); document.getElementById('tab-calc').classList.add('text-gray-400', 'border-transparent');
+            document.getElementById(`ai-content-${tab}`).classList.remove('hidden'); document.getElementById(`tab-${tab}`).classList.remove('text-gray-400', 'border-transparent'); document.getElementById(`tab-${tab}`).classList.add('text-green-600', 'border-green-600');
+        }
+
+        window.runCalculation = function() {
+            const type = document.getElementById('calc-type').value; const lEl = document.getElementById('calc-l'); const wEl = document.getElementById('calc-w');
+            if(!lEl || !wEl) return;
+            const L = parseFloat(lEl.value); const W = parseFloat(wEl.value);
+            if(!L || !W) return; const a = L * W; let r = "";
+            if(type === 'wall') r = `Area: <b>${a}m²</b><br><br>Estimate:<br>• <b>${Math.ceil(a * 12.5)}</b> Blocks<br>• <b>${Math.ceil((a*12.5) / 30)}</b> Bags of Cement`;
+            else if(type === 'floor') r = `Area: <b>${a}m²</b><br><br>Estimate:<br>• <b>${Math.ceil(a * 6.25)}</b> Tiles (40x40)<br>• <b>${Math.ceil(a/4)}</b> Bags Tile Adhesive`;
+            else r = `Area: <b>${a}m²</b><br><br>Estimate:<br>• <b>${Math.ceil(a / 2.2)}</b> Iron Sheets (3m)`;
+            const cr = document.getElementById('calc-results'); if(cr) { cr.innerHTML = r; cr.classList.remove('hidden'); }
+        }
+
+        window.openAiHub = function() { history.pushState({ modal: 'ai-hub' }, '', '#ai-hub'); const hm = document.getElementById('ai-hub-modal'); if(hm) { hm.classList.remove('hidden'); setTimeout(() => { const hs = document.getElementById('ai-hub-sheet'); if(hs) hs.classList.add('open'); }, 10); } };
+        window.closeAiHub = function() { const hs = document.getElementById('ai-hub-sheet'); if(hs) hs.classList.remove('open'); setTimeout(() => { const hm = document.getElementById('ai-hub-modal'); if(hm) hm.classList.add('hidden'); }, 300); }
+
+        window.sendMessage = async function() {
+            const input = document.getElementById('chat-input'); const chatBox = document.getElementById('chat-box'); 
+            if(!input || !chatBox) return;
+            const txt = input.value.trim(); if(!txt) return;
+            chatBox.innerHTML += `<div class="p-3 bg-green-600 text-white rounded-2xl rounded-tr-none ml-auto max-w-[85%] text-sm">${txt}</div>`;
+            input.value = ''; chatBox.scrollTop = chatBox.scrollHeight;
+            setTimeout(() => {
+                chatBox.innerHTML += `<div class="p-4 bg-white dark:bg-gray-800 border dark:border-gray-700 rounded-2xl rounded-tl-none mr-auto max-w-[85%] text-sm">Please check the categories tab for material prices!</div>`;
+                chatBox.scrollTop = chatBox.scrollHeight;
+            }, 1000);
         };
     </script>
+    
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
         import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithRedirect, getRedirectResult, signOut, onAuthStateChanged, updateProfile } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
