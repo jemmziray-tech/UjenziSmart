@@ -516,9 +516,50 @@
         const storage = getStorage(app); 
         const provider = new GoogleAuthProvider();
 
+        // Check if the URL has the "viewAs" parameter
+        const urlParams = new URLSearchParams(window.location.search);
+        const viewAsId = urlParams.get('viewAs');
+        const viewAsEmail = urlParams.get('vendorEmail');
+        window.isAdminViewing = false; // Global flag for Read-Only mode
+
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 try {
+                    // --- 🛡️ ADMIN IMPERSONATION MODE ---
+                    if (viewAsId) {
+                        // 1. Verify this is the Admin 
+                        // IMPORTANT: Make sure your exact admin emails are in this list!
+                        const adminEmails = ['jem.mziray@gmail.com', 'venancechesco58@gmail.com'];
+                        if (!adminEmails.includes(user.email)) {
+                            alert("⛔ Unauthorized: Only Admins can view other dashboards.");
+                            window.location.href = 'supplier.html'; // Kick them back to normal login
+                            return;
+                        }
+
+                        window.isAdminViewing = true;
+                        document.getElementById('login-screen').classList.add('hidden'); 
+                        document.getElementById('dashboard-screen').classList.remove('hidden');
+                        
+                        // 2. Lock down the UI (Read-Only)
+                        document.getElementById('add-product-form').parentElement.style.display = 'none'; // Hide product upload
+                        const payoutBtn = document.querySelector('button[onclick="requestPayout()"]');
+                        if(payoutBtn) payoutBtn.style.display = 'none'; // Hide request payout button
+                        
+                        // 3. Update Header to show who you are viewing
+                        document.getElementById('header-avatar').src = `https://ui-avatars.com/api/?name=${encodeURIComponent(viewAsEmail)}&background=8b5cf6&color=fff`;
+                        document.getElementById('supplier-name').textContent = `👀 ADMIN VIEWING: ${viewAsEmail}`;
+                        document.getElementById('supplier-name').classList.add('text-purple-500');
+
+                        // 4. Load the VENDOR'S data, not the admin's
+                        listenToInventory(viewAsId); 
+                        listenToPayouts(viewAsId); 
+                        
+                        // Hide dispatch chat to prevent Admin from talking to themselves
+                        document.getElementById('view-dispatch').innerHTML = '<div class="p-10 flex items-center justify-center text-gray-500 font-bold h-full">Dispatch Chat disabled in Read-Only Admin View.</div>';
+                        return; // Stop here so it doesn't load the normal supplier code
+                    }
+
+                    // --- 👤 NORMAL SUPPLIER MODE ---
                     const vendorsQuery = query(collection(db, "vendors"), where("email", "==", user.email), where("status", "==", "ACTIVE"));
                     const vendorSnap = await getDocs(vendorsQuery);
                     
@@ -656,7 +697,7 @@
                             <p class="text-[10px] font-black uppercase tracking-widest mt-0.5 ${isLow ? 'text-red-500 animate-pulse' : 'text-gray-400'}">Stock: ${safeStock} units ${isLow ? '⚠️ LOW' : ''}</p>
                             <p class="text-green-600 dark:text-green-400 font-black text-sm mt-1">TZS ${p.price.toLocaleString()}</p>
                         </div>
-                        <div class="flex gap-1">
+                        <div class="flex gap-1 ${window.isAdminViewing ? 'hidden' : ''}">
                             <button onclick="openEditModal('${p.id}', '${p.name.replace(/'/g, "\\'")}', ${p.price}, ${safeWeight}, ${safeStock})" class="text-blue-500 hover:text-blue-700 hover:bg-blue-50 dark:text-blue-400 dark:hover:text-blue-300 dark:hover:bg-blue-900/30 p-2.5 rounded-xl transition-all click-press" title="Edit Product">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" /></svg>
                             </button>
