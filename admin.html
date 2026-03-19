@@ -279,7 +279,34 @@
             </button>
         </div>
     </div>
+<div id="vendor-audit-modal" class="fixed inset-0 z-[400] hidden bg-black/60 flex items-center justify-center backdrop-blur-sm px-4 py-10">
+        <div class="bg-white dark:bg-slate-800 w-full max-w-4xl max-h-full rounded-[2.5rem] p-6 md:p-8 shadow-2xl relative border border-gray-200 dark:border-slate-700 transition-colors flex flex-col">
+            <button onclick="closeVendorAudit()" class="absolute top-4 right-4 w-8 h-8 bg-gray-100 dark:bg-slate-700 text-gray-500 dark:text-gray-300 rounded-full font-bold click-press transition-colors hover:bg-gray-200 dark:hover:bg-slate-600 flex justify-center items-center z-10">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+            </button>
+            
+            <div class="mb-6 shrink-0">
+                <h3 class="text-2xl font-black text-gray-900 dark:text-white">Vendor Audit & Moderation</h3>
+                <p id="audit-vendor-email" class="text-xs font-bold text-gray-500 dark:text-gray-400 mt-1">supplier@email.com</p>
+            </div>
 
+            <div class="grid grid-cols-2 gap-4 mb-6 shrink-0">
+                <div class="bg-gray-50 dark:bg-slate-900 p-4 rounded-2xl border border-gray-200 dark:border-slate-700">
+                    <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Total Sales</p>
+                    <h4 id="audit-revenue" class="text-xl font-black text-green-600 dark:text-green-500">TZS 0</h4>
+                </div>
+                <div class="bg-gray-50 dark:bg-slate-900 p-4 rounded-2xl border border-gray-200 dark:border-slate-700">
+                    <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Live Products</p>
+                    <h4 id="audit-product-count" class="text-xl font-black text-blue-600 dark:text-blue-500">0</h4>
+                </div>
+            </div>
+
+            <h4 class="text-sm font-black mb-3 text-gray-900 dark:text-white shrink-0">Live Image Gallery</h4>
+            <div id="audit-gallery" class="flex-grow overflow-y-auto grid grid-cols-2 md:grid-cols-4 gap-4 pr-2 hide-scrollbar">
+                <p class="text-xs text-gray-500 col-span-full">Loading images...</p>
+            </div>
+        </div>
+    </div>
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
         import { getAuth, onAuthStateChanged, signInWithPopup, GoogleAuthProvider, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
@@ -592,7 +619,7 @@
         function renderVendors(vendors) {
             const feed = document.getElementById('admin-vendors-feed');
             if(vendors.length === 0) {
-                feed.innerHTML = `<tr><td colspan="3" class="p-8 text-center text-gray-500 font-bold">No registered vendors.</td></tr>`;
+                feed.innerHTML = `<tr><td colspan="4" class="p-8 text-center text-gray-500 font-bold">No registered vendors.</td></tr>`;
                 return;
             }
             
@@ -612,9 +639,20 @@
                             ${isActive ? 'Suspend' : 'Activate'}
                         </button>
                     </td>
+                    <td class="p-5 text-center">
+                        <button onclick="openVendorAudit('${v.id}', '${v.email}')" class="px-4 py-2 bg-blue-50 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400 rounded-lg text-[9px] font-black uppercase click-press transition-all hover:bg-blue-100 dark:hover:bg-blue-900/50">
+                            Audit Content
+                        </button>
+                    </td>
                 </tr>`;
             });
             feed.innerHTML = html;
+
+            // Also, update the table headers dynamically so they align
+            const tableHeader = document.querySelector('#view-vendors thead tr');
+            if(tableHeader && tableHeader.children.length === 3) {
+                tableHeader.innerHTML += '<th class="p-5 text-[10px] font-black uppercase tracking-widest text-gray-500 dark:text-gray-400 text-center">Moderation</th>';
+            }
         }
 
         window.switchTab = (tab) => {
@@ -853,6 +891,56 @@
                 lastMessage: text,
                 updatedAt: serverTimestamp()
             });
+        };
+        window.closeVendorAudit = () => document.getElementById('vendor-audit-modal').classList.add('hidden');
+        
+        let auditUnsubscribe = null;
+
+        window.openVendorAudit = async (vendorId, vendorEmail) => {
+            document.getElementById('vendor-audit-modal').classList.remove('hidden');
+            document.getElementById('audit-vendor-email').textContent = vendorEmail;
+            
+            // Fetch live products for this specific vendor
+            const gallery = document.getElementById('audit-gallery');
+            gallery.innerHTML = '<p class="text-xs text-gray-500 col-span-full py-10 text-center">Loading images...</p>';
+            
+            if(auditUnsubscribe) auditUnsubscribe();
+            
+            auditUnsubscribe = onSnapshot(query(collection(db, "products"), where("supplierId", "==", vendorId)), (snapshot) => {
+                document.getElementById('audit-product-count').textContent = snapshot.size;
+                
+                if(snapshot.empty) {
+                    gallery.innerHTML = '<p class="text-xs text-gray-500 col-span-full py-10 text-center font-bold">No products uploaded by this vendor yet.</p>';
+                    return;
+                }
+                
+                let html = '';
+                snapshot.forEach(doc => {
+                    const p = doc.data();
+                    html += `
+                    <div class="bg-gray-50 dark:bg-slate-900 rounded-2xl overflow-hidden border border-gray-200 dark:border-slate-700 relative group shadow-sm transition-transform hover:-translate-y-1">
+                        <img src="${p.img}" class="w-full h-32 object-cover">
+                        <div class="p-3">
+                            <p class="font-bold text-[10px] text-gray-900 dark:text-white truncate">${p.name}</p>
+                            <p class="text-[9px] text-gray-500 mt-1">TZS ${p.price.toLocaleString()}</p>
+                        </div>
+                        <button onclick="deleteOffendingProduct('${doc.id}')" class="absolute top-2 right-2 bg-red-600 text-white w-8 h-8 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shadow-lg click-press hover:bg-red-700" title="Delete Image & Product">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" /></svg>
+                        </button>
+                    </div>`;
+                });
+                gallery.innerHTML = html;
+            });
+        };
+
+        window.deleteOffendingProduct = async (docId) => {
+            if(confirm("🚨 MODERATION ACTION 🚨\nAre you sure you want to permanently delete this product and its image from the live store?")) {
+                try {
+                    await deleteDoc(doc(db, "products", docId));
+                } catch(e) {
+                    alert("Error deleting product.");
+                }
+            }
         };
 
     </script>
