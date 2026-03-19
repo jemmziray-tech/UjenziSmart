@@ -900,31 +900,61 @@
             document.getElementById('vendor-audit-modal').classList.remove('hidden');
             document.getElementById('audit-vendor-email').textContent = vendorEmail;
             
-            // Fetch live products for this specific vendor
             const gallery = document.getElementById('audit-gallery');
             gallery.innerHTML = '<p class="text-xs text-gray-500 col-span-full py-10 text-center">Loading images...</p>';
             
             if(auditUnsubscribe) auditUnsubscribe();
             
-            auditUnsubscribe = onSnapshot(query(collection(db, "products"), where("supplierId", "==", vendorId)), (snapshot) => {
-                document.getElementById('audit-product-count').textContent = snapshot.size;
+            // 1. Fetch ALL products, then filter by the Vendor's Email/Name
+            auditUnsubscribe = onSnapshot(collection(db, "products"), (snapshot) => {
+                const vendorProducts = [];
+                const emailPrefix = vendorEmail.split('@')[0].toLowerCase();
                 
-                if(snapshot.empty) {
-                    gallery.innerHTML = '<p class="text-xs text-gray-500 col-span-full py-10 text-center font-bold">No products uploaded by this vendor yet.</p>';
+                snapshot.forEach(doc => {
+                    const p = doc.data();
+                    const sName = (p.supplierName || '').toLowerCase();
+                    // Match if the supplierName is the exact email, or contains the email prefix
+                    if (sName === vendorEmail.toLowerCase() || sName.includes(emailPrefix)) {
+                        vendorProducts.push({ id: doc.id, ...p });
+                    }
+                });
+                
+                document.getElementById('audit-product-count').textContent = vendorProducts.length;
+                
+                // 2. Calculate Revenue based on the Admin's live Orders list
+                let vendorRevenue = 0;
+                if (window.appData && window.appData.orders) {
+                    window.appData.orders.forEach(order => {
+                        if (order.status === "PROCESSING" || order.status === "SOLVED" || order.status === "PAID") {
+                            vendorProducts.forEach(p => {
+                                const escapedName = p.name.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
+                                const regex = new RegExp(`${escapedName}\\s*\\(x(\\d+)\\)`, 'i');
+                                const match = (order.items || "").match(regex);
+                                if(match) {
+                                    vendorRevenue += (parseInt(match[1]) * p.price);
+                                }
+                            });
+                        }
+                    });
+                }
+                document.getElementById('audit-revenue').textContent = `TZS ${vendorRevenue.toLocaleString()}`;
+                
+                // 3. Render the Gallery
+                if(vendorProducts.length === 0) {
+                    gallery.innerHTML = '<p class="text-xs text-gray-500 col-span-full py-10 text-center font-bold">No products found for this vendor.</p>';
                     return;
                 }
                 
                 let html = '';
-                snapshot.forEach(doc => {
-                    const p = doc.data();
+                vendorProducts.forEach(p => {
                     html += `
                     <div class="bg-gray-50 dark:bg-slate-900 rounded-2xl overflow-hidden border border-gray-200 dark:border-slate-700 relative group shadow-sm transition-transform hover:-translate-y-1">
                         <img src="${p.img}" class="w-full h-32 object-cover">
                         <div class="p-3">
                             <p class="font-bold text-[10px] text-gray-900 dark:text-white truncate">${p.name}</p>
-                            <p class="text-[9px] text-gray-500 mt-1">TZS ${p.price.toLocaleString()}</p>
+                            <p class="text-[9px] text-gray-500 mt-1">TZS ${(p.price || 0).toLocaleString()}</p>
                         </div>
-                        <button onclick="deleteOffendingProduct('${doc.id}')" class="absolute top-2 right-2 bg-red-600 text-white w-8 h-8 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shadow-lg click-press hover:bg-red-700" title="Delete Image & Product">
+                        <button onclick="deleteOffendingProduct('${p.id}')" class="absolute top-2 right-2 bg-red-600 text-white w-8 h-8 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shadow-lg click-press hover:bg-red-700" title="Delete Image & Product">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" /></svg>
                         </button>
                     </div>`;
