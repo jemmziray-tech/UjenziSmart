@@ -40,20 +40,42 @@
             let fileName = "";
 
             if(filterType === 'ORDERS') {
-                headers = ["Date", "Items", "Revenue (TZS)", "Status"];
-                // This maps your current live order data
-                rows = (window.appData.orders || []).map(o => [
-                    o.createdAt ? o.createdAt.toDate().toLocaleDateString() : 'N/A', 
-                    `"${o.items}"`, 
-                    o.total, 
-                    o.status
-                ]);
-                fileName = "Sales_Report";
+                // Better, cleaner columns for the supplier
+                headers = ["Date", "Product Sold", "Qty", "Revenue (TZS)", "Status"];
+                
+                const myProducts = window.currentSupplierProducts || [];
+                
+                (window.appData.orders || []).forEach(o => {
+                    // Only count valid orders
+                    if (o.status === "PROCESSING" || o.status === "SOLVED" || o.status === "PAID") {
+                        myProducts.forEach(p => {
+                            // Search the order's cart string for THIS supplier's specific product
+                            const escapedName = p.name.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
+                            const regex = new RegExp(`${escapedName}\\s*\\(x(\\d+)\\)`, 'i');
+                            const match = (o.items || "").match(regex);
+                            
+                            if(match) {
+                                const qty = parseInt(match[1]);
+                                const rev = qty * p.price;
+                                const dateStr = o.createdAt ? o.createdAt.toDate().toLocaleDateString() : 'N/A';
+                                
+                                // Push ONLY this supplier's data to the row
+                                rows.push([
+                                    dateStr, 
+                                    `"${p.name}"`, 
+                                    qty, 
+                                    rev, 
+                                    o.status
+                                ]);
+                            }
+                        });
+                    }
+                });
+                fileName = "My_Sales_Report";
             } else {
                 headers = ["Request Date", "Amount (TZS)", "Destination", "Status"];
-                // This maps your current payout data
                 rows = (window.appData.payouts || []).map(p => [
-                    p.createdAt?.toDate().toLocaleDateString(), 
+                    p.createdAt ? p.createdAt.toDate().toLocaleDateString() : 'N/A', 
                     p.amount, 
                     `"${p.accountDetails}"`, 
                     p.status
@@ -61,11 +83,12 @@
                 fileName = "Payout_Report";
             }
 
-            if(rows.length === 0) return alert("No data available to export for this category.");
+            if(rows.length === 0) return alert("No data found to export.");
 
             let csvContent = "data:text/csv;charset=utf-8," + headers.join(",") + "\n" + rows.map(r => r.join(",")).join("\n");
+            const encodedUri = encodeURI(csvContent);
             const link = document.createElement("a");
-            link.setAttribute("href", encodeURI(csvContent));
+            link.setAttribute("href", encodedUri);
             link.setAttribute("download", `UjenziSmart_${fileName}.csv`);
             document.body.appendChild(link);
             link.click();
