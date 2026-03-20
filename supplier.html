@@ -734,19 +734,32 @@
             }
         };
 
-        // 2. The Listening Function (BULLETPROOF VERSION)
+        // 2. The Listening Function (SILENT ERROR BYPASS)
         window.listenToDispatchOrders = function() {
-            const q = query(collection(db, "orders"), where("status", "in", ["PROCESSING", "PAID"]));
+            console.log("📡 Dispatch Listener Started!"); // Proof it's running
+            
+            // We removed the 'where' clause so Firebase doesn't block it
+            const q = query(collection(db, "orders")); 
+            
             onSnapshot(q, (snapshot) => {
+                console.log("📦 Orders received from Firebase!");
                 window.appData = window.appData || {};
-                window.appData.dispatchOrders = []; // Save the raw orders
+                window.appData.dispatchOrders = []; 
                 
                 snapshot.forEach(doc => {
-                    window.appData.dispatchOrders.push({ id: doc.id, data: doc.data() });
+                    const order = doc.data();
+                    // We manually filter for PROCESSING or PAID here in plain JavaScript
+                    if (order.status === "PROCESSING" || order.status === "PAID") {
+                        window.appData.dispatchOrders.push({ id: doc.id, data: order });
+                    }
                 });
                 
-                // Draw the board as soon as orders change
+                // Draw the board
                 if(window.renderDispatchBoard) window.renderDispatchBoard(); 
+                
+            }, (error) => {
+                // If Firebase ever fails again, it will scream in the console!
+                console.error("🚨 Firebase Dispatch Error:", error); 
             });
         };
         window.acknowledgeOrder = async function(docId, displayOrderId) {
