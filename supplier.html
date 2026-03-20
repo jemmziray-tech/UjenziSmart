@@ -553,24 +553,35 @@
                         // 4. Load the VENDOR'S data using their REAL Auth UID
                         let realUid = viewAsId; // Fallback
                         
-                        // Find their actual UID by checking their uploaded products
-                        const productsSnap = await getDocs(collection(db, "products"));
-                        const emailPrefix = viewAsEmail.split('@')[0].toLowerCase().replace(/[^a-z0-9]/g, '');
-                        
-                        productsSnap.forEach(productDoc => {
-                            const p = productDoc.data();
-                            const sName = (p.supplierName || '').toLowerCase();
-                            const cleanSupplierName = sName.replace(/[^a-z0-9]/g, '');
+                        try {
+                            const productsSnap = await getDocs(collection(db, "products"));
+                            const rawEmail = viewAsEmail.toLowerCase();
+                            const cleanEmail = rawEmail.replace(/[^a-z0-9]/g, ''); // e.g., jemmziraygmailcom
+                            const emailPrefix = rawEmail.split('@')[0].replace(/[^a-z0-9]/g, ''); // e.g., jemmziray
                             
-                            // If we find a product belonging to them, grab the real Firebase UID
-                            if (sName === viewAsEmail.toLowerCase() || cleanSupplierName.includes(emailPrefix)) {
-                                if (p.supplierId) realUid = p.supplierId;
-                            }
-                        });
+                            productsSnap.forEach(productDoc => {
+                                const p = productDoc.data();
+                                if(!p.supplierId) return; // Skip if broken data
+                                
+                                const sNameRaw = (p.supplierName || '').toLowerCase();
+                                const sNameClean = sNameRaw.replace(/[^a-z0-9]/g, ''); // e.g., mziray
+                                
+                                // Super Matcher: Check all possible variations of their name vs email
+                                if (
+                                    sNameRaw === rawEmail || 
+                                    (sNameClean.length > 2 && cleanEmail.includes(sNameClean)) || 
+                                    (emailPrefix.length > 2 && sNameClean.includes(emailPrefix))
+                                ) {
+                                    realUid = p.supplierId; // We found the real Vendor UID!
+                                }
+                            });
+                        } catch (e) {
+                            console.error("Error finding real UID:", e);
+                        }
 
-                        // Now load the charts and inventory with the correct UID!
+                        // Now load the charts and inventory with the CORRECT matched UID!
                         listenToInventory(realUid); 
-                        listenToPayouts(realUid); 
+                        listenToPayouts(realUid);
                         
                         // Hide dispatch chat to prevent Admin from talking to themselves
                         document.getElementById('view-dispatch').innerHTML = '<div class="p-10 flex items-center justify-center text-gray-500 font-bold h-full">Dispatch Chat disabled in Read-Only Admin View.</div>';
