@@ -550,9 +550,27 @@
                         document.getElementById('supplier-name').textContent = `👀 ADMIN VIEWING: ${viewAsEmail}`;
                         document.getElementById('supplier-name').classList.add('text-purple-500');
 
-                        // 4. Load the VENDOR'S data, not the admin's
-                        listenToInventory(viewAsId); 
-                        listenToPayouts(viewAsId); 
+                        // 4. Load the VENDOR'S data using their REAL Auth UID
+                        let realUid = viewAsId; // Fallback
+                        
+                        // Find their actual UID by checking their uploaded products
+                        const productsSnap = await getDocs(collection(db, "products"));
+                        const emailPrefix = viewAsEmail.split('@')[0].toLowerCase().replace(/[^a-z0-9]/g, '');
+                        
+                        productsSnap.forEach(productDoc => {
+                            const p = productDoc.data();
+                            const sName = (p.supplierName || '').toLowerCase();
+                            const cleanSupplierName = sName.replace(/[^a-z0-9]/g, '');
+                            
+                            // If we find a product belonging to them, grab the real Firebase UID
+                            if (sName === viewAsEmail.toLowerCase() || cleanSupplierName.includes(emailPrefix)) {
+                                if (p.supplierId) realUid = p.supplierId;
+                            }
+                        });
+
+                        // Now load the charts and inventory with the correct UID!
+                        listenToInventory(realUid); 
+                        listenToPayouts(realUid); 
                         
                         // Hide dispatch chat to prevent Admin from talking to themselves
                         document.getElementById('view-dispatch').innerHTML = '<div class="p-10 flex items-center justify-center text-gray-500 font-bold h-full">Dispatch Chat disabled in Read-Only Admin View.</div>';
