@@ -667,33 +667,66 @@
         }
 
         // --- 🚚 ACTIVE DISPATCH FEED ---
-        function listenToDispatchOrders() {
-            const q = query(collection(db, "orders"), where("status", "==", "PROCESSING"));
+        window.listenToDispatchOrders = function() {
+            const dispatchFeed = document.getElementById('dispatch-feed');
+            
+            // Listen for orders that need processing
+            const q = query(collection(db, "orders"), where("status", "in", ["PROCESSING", "PAID"]));
+            
             onSnapshot(q, (snapshot) => {
-                const list = document.getElementById('dispatch-orders-feed');
                 let html = '';
-                
-                snapshot.forEach(docSnap => {
-                    const order = docSnap.data();
-                    if(order.supplierAcknowledged) return; 
-                    
-                    html += `
-                    <div class="bg-white dark:bg-gray-800 p-5 rounded-[1.5rem] border border-gray-200 dark:border-gray-700 mb-4 shadow-sm flex flex-col md:flex-row justify-between items-start md:items-center gap-4 animate-stagger-in transition-colors">
-                        <div>
-                            <p class="text-[10px] text-purple-500 font-black uppercase tracking-widest mb-1">Order ${order.orderId || docSnap.id}</p>
-                            <p class="text-sm font-bold text-gray-900 dark:text-white">${order.items}</p>
-                            <p class="text-[10px] text-gray-500 font-bold mt-1">Customer: ${order.userName || 'Customer'}</p>
-                        </div>
-                        <button onclick="acknowledgeOrder('${docSnap.id}', '${order.orderId || docSnap.id}')" class="shrink-0 w-full md:w-auto px-6 py-4 bg-purple-600 hover:bg-purple-700 text-white rounded-xl font-black text-[10px] uppercase tracking-widest click-press shadow-md transition-colors flex items-center justify-center gap-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
-                            Acknowledge & Prepare
-                        </button>
-                    </div>`;
+                const myProducts = window.currentSupplierProducts || [];
+                let myActiveOrdersCount = 0;
+
+                snapshot.forEach(doc => {
+                    const order = doc.data();
+                    let hasMyProduct = false;
+                    let myItemsInThisOrder = [];
+
+                    // 1. Check if this order contains ANY of this supplier's products
+                    myProducts.forEach(p => {
+                        const escapedName = p.name.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
+                        const regex = new RegExp(`${escapedName}\\s*\\(x(\\d+)\\)`, 'i');
+                        const match = (order.items || "").match(regex);
+                        
+                        if(match) {
+                            hasMyProduct = true;
+                            // Extract just THEIR items, not the whole cart
+                            myItemsInThisOrder.push(`${p.name} (x${match[1]})`); 
+                        }
+                    });
+
+                    // 2. Only render the card if the supplier owns a product in it
+                    if (hasMyProduct) {
+                        myActiveOrdersCount++;
+                        html += `
+                        <div class="bg-gray-800/50 p-4 rounded-xl border border-gray-700/50 flex flex-col md:flex-row md:items-center justify-between gap-4 transition-all hover:bg-gray-800">
+                            <div>
+                                <p class="text-[10px] text-purple-400 font-black uppercase tracking-widest mb-1">Order ${doc.id}</p>
+                                <h4 class="font-bold text-white text-sm">${myItemsInThisOrder.join(", ")}</h4>
+                                <p class="text-xs text-gray-400 mt-1">Customer: ${order.customerName || 'Pending'}</p>
+                            </div>
+                            <button onclick="acknowledgeOrder('${doc.id}')" class="w-full md:w-auto px-6 py-3 bg-purple-600 hover:bg-purple-500 text-white text-xs font-black uppercase tracking-widest rounded-lg transition-colors click-press flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(147,51,234,0.3)] hover:shadow-[0_0_25px_rgba(147,51,234,0.5)]">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+                                Acknowledge & Prepare
+                            </button>
+                        </div>`;
+                    }
                 });
-                
-                list.innerHTML = html || `<div class="text-center py-8 bg-white dark:bg-gray-800 border border-dashed border-gray-200 dark:border-gray-700 rounded-[1.5rem] transition-colors"><p class="text-xs text-gray-400 font-bold">No new dispatch requests from Admin.</p></div>`;
+
+                if(myActiveOrdersCount === 0) {
+                    dispatchFeed.innerHTML = `
+                    <div class="text-center py-8">
+                        <div class="w-12 h-12 bg-gray-800 rounded-full flex items-center justify-center mx-auto mb-3">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-gray-500"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                        </div>
+                        <p class="text-gray-400 text-sm font-bold">You have no active dispatch requests.</p>
+                    </div>`;
+                } else {
+                    dispatchFeed.innerHTML = html;
+                }
             });
-        }
+        };
 
         window.acknowledgeOrder = async function(docId, displayOrderId) {
             try {
