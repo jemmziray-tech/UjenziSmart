@@ -38,18 +38,19 @@
             let headers = [];
             let rows = [];
             let fileName = "";
+            
+            // Safety check: Make sure appData exists
+            const safeAppData = window.appData || {};
 
             if(filterType === 'ORDERS') {
-                // Better, cleaner columns for the supplier
                 headers = ["Date", "Product Sold", "Qty", "Revenue (TZS)", "Status"];
                 
                 const myProducts = window.currentSupplierProducts || [];
+                const allOrders = safeAppData.orders || [];
                 
-                (window.appData.orders || []).forEach(o => {
-                    // Only count valid orders
+                allOrders.forEach(o => {
                     if (o.status === "PROCESSING" || o.status === "SOLVED" || o.status === "PAID") {
                         myProducts.forEach(p => {
-                            // Search the order's cart string for THIS supplier's specific product
                             const escapedName = p.name.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
                             const regex = new RegExp(`${escapedName}\\s*\\(x(\\d+)\\)`, 'i');
                             const match = (o.items || "").match(regex);
@@ -59,22 +60,18 @@
                                 const rev = qty * p.price;
                                 const dateStr = o.createdAt ? o.createdAt.toDate().toLocaleDateString() : 'N/A';
                                 
-                                // Push ONLY this supplier's data to the row
-                                rows.push([
-                                    dateStr, 
-                                    `"${p.name}"`, 
-                                    qty, 
-                                    rev, 
-                                    o.status
-                                ]);
+                                rows.push([dateStr, `"${p.name}"`, qty, rev, o.status]);
                             }
                         });
                     }
                 });
                 fileName = "My_Sales_Report";
+                
             } else {
                 headers = ["Request Date", "Amount (TZS)", "Destination", "Status"];
-                rows = (window.appData.payouts || []).map(p => [
+                const allPayouts = safeAppData.payouts || [];
+                
+                rows = allPayouts.map(p => [
                     p.createdAt ? p.createdAt.toDate().toLocaleDateString() : 'N/A', 
                     p.amount, 
                     `"${p.accountDetails}"`, 
@@ -723,6 +720,7 @@
                 const list = document.getElementById('inventory-list');
                 let items = [];
                 snapshot.forEach((doc) => { items.push({ id: doc.id, ...doc.data() }); });
+                window.currentSupplierProducts = items; // Connects to CSV Export
                 
                 document.getElementById('stat-active').textContent = items.length;
                 fetchAndCalculateStats(items);
@@ -802,6 +800,8 @@
                     const timeB = b.createdAt?.seconds || 0; 
                     return timeB - timeA; 
                 });
+                window.appData = window.appData || {};
+                window.appData.payouts = payoutsArray; // Connects to CSV Export
                 
                 document.getElementById('payout-history-list').innerHTML = payoutsArray.map(p => `
                     <div class="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-900/50 rounded-xl border border-gray-100 dark:border-gray-700 transition-colors">
