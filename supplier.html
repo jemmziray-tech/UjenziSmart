@@ -667,64 +667,75 @@
         }
 
         // --- 🚚 ACTIVE DISPATCH FEED ---
-        window.listenToDispatchOrders = function() {
+        // 1. The Drawing Function
+        window.renderDispatchBoard = function() {
             const dispatchFeed = document.getElementById('dispatch-feed');
-            
-            // Listen for orders that need processing
-            const q = query(collection(db, "orders"), where("status", "in", ["PROCESSING", "PAID"]));
-            
-            onSnapshot(q, (snapshot) => {
-                let html = '';
-                const myProducts = window.currentSupplierProducts || [];
-                let myActiveOrdersCount = 0;
+            if(!dispatchFeed) return;
 
-                snapshot.forEach(doc => {
-                    const order = doc.data();
-                    let hasMyProduct = false;
-                    let myItemsInThisOrder = [];
+            const myProducts = window.currentSupplierProducts || [];
+            const activeOrders = window.appData?.dispatchOrders || [];
+            let html = '';
+            let myActiveOrdersCount = 0;
 
-                    // 1. Check if this order contains ANY of this supplier's products
-                    myProducts.forEach(p => {
-                        const escapedName = p.name.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
-                        const regex = new RegExp(`${escapedName}\\s*\\(x(\\d+)\\)`, 'i');
-                        const match = (order.items || "").match(regex);
-                        
-                        if(match) {
-                            hasMyProduct = true;
-                            // Extract just THEIR items, not the whole cart
-                            myItemsInThisOrder.push(`${p.name} (x${match[1]})`); 
-                        }
-                    });
+            activeOrders.forEach(orderDoc => {
+                const order = orderDoc.data;
+                const docId = orderDoc.id;
+                let hasMyProduct = false;
+                let myItemsInThisOrder = [];
 
-                    // 2. Only render the card if the supplier owns a product in it
-                    if (hasMyProduct) {
-                        myActiveOrdersCount++;
-                        html += `
-                        <div class="bg-gray-800/50 p-4 rounded-xl border border-gray-700/50 flex flex-col md:flex-row md:items-center justify-between gap-4 transition-all hover:bg-gray-800">
-                            <div>
-                                <p class="text-[10px] text-purple-400 font-black uppercase tracking-widest mb-1">Order ${doc.id}</p>
-                                <h4 class="font-bold text-white text-sm">${myItemsInThisOrder.join(", ")}</h4>
-                                <p class="text-xs text-gray-400 mt-1">Customer: ${order.customerName || 'Pending'}</p>
-                            </div>
-                            <button onclick="acknowledgeOrder('${doc.id}')" class="w-full md:w-auto px-6 py-3 bg-purple-600 hover:bg-purple-500 text-white text-xs font-black uppercase tracking-widest rounded-lg transition-colors click-press flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(147,51,234,0.3)] hover:shadow-[0_0_25px_rgba(147,51,234,0.5)]">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
-                                Acknowledge & Prepare
-                            </button>
-                        </div>`;
+                myProducts.forEach(p => {
+                    const escapedName = p.name.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
+                    const regex = new RegExp(`${escapedName}\\s*\\(x(\\d+)\\)`, 'i');
+                    const match = (order.items || "").match(regex);
+                    
+                    if(match) {
+                        hasMyProduct = true;
+                        myItemsInThisOrder.push(`${p.name} (x${match[1]})`); 
                     }
                 });
 
-                if(myActiveOrdersCount === 0) {
-                    dispatchFeed.innerHTML = `
-                    <div class="text-center py-8">
-                        <div class="w-12 h-12 bg-gray-800 rounded-full flex items-center justify-center mx-auto mb-3">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-gray-500"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                if (hasMyProduct) {
+                    myActiveOrdersCount++;
+                    html += `
+                    <div class="bg-gray-800/50 p-4 rounded-xl border border-gray-700/50 flex flex-col md:flex-row md:items-center justify-between gap-4 transition-all hover:bg-gray-800">
+                        <div>
+                            <p class="text-[10px] text-purple-400 font-black uppercase tracking-widest mb-1">Order ${docId}</p>
+                            <h4 class="font-bold text-white text-sm">${myItemsInThisOrder.join(", ")}</h4>
+                            <p class="text-xs text-gray-400 mt-1">Customer: ${order.customerName || 'Pending'}</p>
                         </div>
-                        <p class="text-gray-400 text-sm font-bold">You have no active dispatch requests.</p>
+                        <button onclick="acknowledgeOrder('${docId}')" class="w-full md:w-auto px-6 py-3 bg-purple-600 hover:bg-purple-500 text-white text-xs font-black uppercase tracking-widest rounded-lg transition-colors click-press flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(147,51,234,0.3)] hover:shadow-[0_0_25px_rgba(147,51,234,0.5)]">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+                            Acknowledge & Prepare
+                        </button>
                     </div>`;
-                } else {
-                    dispatchFeed.innerHTML = html;
                 }
+            });
+
+            if(myActiveOrdersCount === 0) {
+                dispatchFeed.innerHTML = `
+                <div class="text-center py-8">
+                    <div class="w-12 h-12 bg-gray-800 rounded-full flex items-center justify-center mx-auto mb-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-gray-500"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                    </div>
+                    <p class="text-gray-400 text-sm font-bold">You have no active dispatch requests.</p>
+                </div>`;
+            } else {
+                dispatchFeed.innerHTML = html;
+            }
+        };
+
+        // 2. The Listening Function
+        window.listenToDispatchOrders = function() {
+            const q = query(collection(db, "orders"), where("status", "in", ["PROCESSING", "PAID"]));
+            onSnapshot(q, (snapshot) => {
+                window.appData = window.appData || {};
+                window.appData.dispatchOrders = []; // Save the raw orders
+                snapshot.forEach(doc => {
+                    window.appData.dispatchOrders.push({ id: doc.id, data: doc.data() });
+                });
+                
+                // Draw the board as soon as orders change
+                if(window.renderDispatchBoard) window.renderDispatchBoard(); 
             });
         };
 
@@ -753,7 +764,9 @@
                 const list = document.getElementById('inventory-list');
                 let items = [];
                 snapshot.forEach((doc) => { items.push({ id: doc.id, ...doc.data() }); });
+                
                 window.currentSupplierProducts = items; // Connects to CSV Export
+                if(window.renderDispatchBoard) window.renderDispatchBoard(); // Fixes the Race Condition!
                 
                 document.getElementById('stat-active').textContent = items.length;
                 fetchAndCalculateStats(items);
