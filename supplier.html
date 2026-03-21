@@ -930,60 +930,7 @@
             }
         }
 
-        // 🟢 V2 UPDATE: 30-Day Trend & Top Product Logic
-        async function fetchAndCalculateStats(supplierProducts) {
-            try {
-                const querySnapshot = await getDocs(collection(db, "orders"));
-                let totalRevenue = 0; 
-                let totalUnits = 0; 
-                let productStats = {}; 
-                let dailyStats = {};
-                
-                // Initialize 30 days
-                for(let i = 29; i >= 0; i--) { 
-                    const d = new Date(); d.setDate(d.getDate() - i); 
-                    const dateString = `${d.getDate()}/${d.getMonth()+1}`;
-                    dailyStats[dateString] = 0; 
-                }
-                
-                supplierProducts.forEach(p => { 
-                    productStats[p.name] = { name: p.name, sold: 0, rev: 0, img: p.img, price: p.price }; 
-                });
-
-                window.appData = window.appData || {};
-        window.appData.orders = []; // Create an empty list for the export button
-
-        querySnapshot.forEach((doc) => {
-            const order = doc.data();
-            window.appData.orders.push(order); // Save every order into the list
-
-            if (order.status === "PROCESSING" || order.status === "SOLVED" || order.status === "PAID") {
-                        let orderTotalForSupplier = 0;
-                        supplierProducts.forEach(p => {
-                            const escapedName = p.name.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
-                            const regex = new RegExp(`${escapedName}\\s*\\(x(\\d+)\\)`, 'i');
-                            const match = (order.items || "").match(regex);
-                            
-                            if (match) { 
-                                const qty = parseInt(match[1]); 
-                                const rev = (qty * p.price); 
-                                productStats[p.name].sold += qty; 
-                                productStats[p.name].rev += rev; 
-                                totalUnits += qty; 
-                                totalRevenue += rev; 
-                                orderTotalForSupplier += rev; 
-                            }
-                        });
-                        
-                        if(orderTotalForSupplier > 0 && order.createdAt) { 
-                            const orderDate = order.createdAt.toDate();
-                            const dateString = `${orderDate.getDate()}/${orderDate.getMonth()+1}`; 
-                            if(dailyStats[dateString] !== undefined) {
-                                dailyStats[dateString] += orderTotalForSupplier; 
-                            }
-                        }
-                    }
-                });
+        
 
                 window.totalGrossRevenue = totalRevenue; 
                 const availableBalance = totalRevenue - (window.totalPaidOut || 0);
