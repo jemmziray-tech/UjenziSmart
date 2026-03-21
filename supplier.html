@@ -331,10 +331,21 @@
                     </div>
 
                     <div>
-                        <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Product Image</label>
-                        <div class="w-full bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-600 border-dashed rounded-2xl p-4 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
-                            <input type="file" id="prod-image" accept="image/*" required class="w-full text-sm text-gray-500 file:mr-4 file:py-3 file:px-6 file:rounded-xl file:border-0 file:text-xs file:font-black file:uppercase file:tracking-widest file:bg-green-100 dark:file:bg-green-900/30 file:text-green-700 dark:file:text-green-400 hover:file:bg-green-200 cursor-pointer transition-colors">
+                        <div class="flex justify-between items-end mb-2">
+                            <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest">Product Images (Gallery)</label>
+                            <span class="text-[9px] font-bold text-green-500 bg-green-500/10 px-2 py-1 rounded">Up to 5 images</span>
                         </div>
+                        
+                        <div id="drop-zone" class="w-full bg-gray-50 dark:bg-gray-900 border-2 border-gray-200 dark:border-gray-600 border-dashed rounded-2xl p-8 text-center hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors cursor-pointer relative click-press group flex flex-col items-center justify-center">
+                            <div class="w-12 h-12 bg-white dark:bg-gray-800 rounded-full flex items-center justify-center shadow-sm mb-3 group-hover:scale-110 transition-transform">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-green-500"><path stroke-linecap="round" stroke-linejoin="round" d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5a4.5 4.5 0 01-1.41-8.775 5.25 5.25 0 0110.233-2.33 3 3 0 013.758 3.848A3.752 3.752 0 0118 19.5H6.75z" /></svg>
+                            </div>
+                            <p class="text-sm font-bold text-gray-700 dark:text-gray-300">Tap to upload or drag files here</p>
+                            <p class="text-xs text-gray-400 mt-1">First image becomes the main thumbnail</p>
+                            <input type="file" id="prod-images" accept="image/*" multiple required class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10">
+                        </div>
+
+                        <div id="image-preview-container" class="grid grid-cols-3 md:grid-cols-5 gap-3 mt-4 hidden"></div>
                     </div>
 
                     <button type="submit" id="submit-btn" class="w-full py-5 mt-2 bg-gray-900 dark:bg-green-600 hover:bg-black dark:hover:bg-green-700 text-white rounded-2xl font-black shadow-xl click-press uppercase tracking-widest text-sm transition-colors flex items-center justify-center gap-2">
@@ -1172,34 +1183,77 @@
         }
 
         // --- 📤 UPLOAD PRODUCT FORM ---
+        // --- 📸 MULTI-IMAGE PREVIEW LOGIC ---
+        let selectedFiles = []; // Array to hold images before uploading
+        const fileInput = document.getElementById('prod-images');
+        const previewContainer = document.getElementById('image-preview-container');
+
+        fileInput.addEventListener('change', (e) => {
+            const files = Array.from(e.target.files);
+            // Limit to 5 images max
+            if (selectedFiles.length + files.length > 5) {
+                alert("You can only upload a maximum of 5 images per product.");
+                return;
+            }
+            selectedFiles = selectedFiles.concat(files);
+            renderImagePreviews();
+        });
+
+        function renderImagePreviews() {
+            if(selectedFiles.length > 0) previewContainer.classList.remove('hidden');
+            else previewContainer.classList.add('hidden');
+
+            previewContainer.innerHTML = selectedFiles.map((file, index) => `
+                <div class="relative w-full aspect-square rounded-xl overflow-hidden shadow-sm border border-gray-200 dark:border-gray-700 group">
+                    <img src="${URL.createObjectURL(file)}" class="w-full h-full object-cover">
+                    ${index === 0 ? '<div class="absolute bottom-0 left-0 right-0 bg-green-500 text-white text-[8px] font-black text-center py-1 uppercase">Main Cover</div>' : ''}
+                    <button type="button" onclick="removeSelectedImage(${index})" class="absolute top-1 right-1 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-[10px] font-bold opacity-0 group-hover:opacity-100 transition-opacity">✕</button>
+                </div>
+            `).join('');
+        }
+
+        window.removeSelectedImage = function(index) {
+            selectedFiles.splice(index, 1);
+            // Quick hack to reset HTML validation if they remove all images
+            if(selectedFiles.length === 0) fileInput.value = ""; 
+            renderImagePreviews();
+        };
+
+
+        // --- 📤 MULTI-IMAGE UPLOAD TO FIREBASE ---
         document.getElementById('add-product-form').onsubmit = async (e) => {
             e.preventDefault(); 
             const user = auth.currentUser; 
             if(!user) return alert("Please sign in first."); 
             
-            const file = document.getElementById('prod-image').files[0]; 
-            if(!file) return alert("Please select an image.");
+            if(selectedFiles.length === 0) return alert("Please select at least one image.");
             
             const btn = document.getElementById('submit-btn'); 
-            btn.innerHTML = "⏳ Uploading Image..."; 
+            btn.innerHTML = "⏳ Uploading Gallery..."; 
             btn.disabled = true;
             
             try { 
-                const storageRef = ref(storage, 'products/' + user.uid + '_' + Date.now() + '_' + file.name); 
-                await uploadBytes(storageRef, file); 
-                
-                btn.innerHTML = "⏳ Generating Link...";
-                const downloadURL = await getDownloadURL(storageRef); 
+                let uploadedURLs = [];
+
+                // Loop through all selected files and upload them to Firebase Storage
+                for (let i = 0; i < selectedFiles.length; i++) {
+                    const file = selectedFiles[i];
+                    const storageRef = ref(storage, 'products/' + user.uid + '_' + Date.now() + '_' + file.name); 
+                    await uploadBytes(storageRef, file); 
+                    const downloadURL = await getDownloadURL(storageRef);
+                    uploadedURLs.push(downloadURL);
+                }
                 
                 btn.innerHTML = "⏳ Saving to Database...";
                 const unitType = document.getElementById('prod-unit-type').value;
-                    let measurementValue = "";
+                let measurementValue = "";
                     
-                    if(unitType === 'dims') {
-                        measurementValue = `${document.getElementById('prod-len').value}x${document.getElementById('prod-wid').value}`;
-                    } else {
-                        measurementValue = document.getElementById('prod-weight').value;
-                    }
+                if(unitType === 'dims') {
+                    measurementValue = `${document.getElementById('prod-len').value}x${document.getElementById('prod-wid').value}`;
+                } else {
+                    measurementValue = document.getElementById('prod-weight').value;
+                }
+
                 await addDoc(collection(db, "products"), { 
                     supplierId: user.uid, 
                     supplierName: user.displayName || user.email, 
@@ -1207,25 +1261,114 @@
                     category: document.getElementById('prod-category').value, 
                     price: Number(document.getElementById('prod-price').value), 
                     weight: measurementValue,
-                        unit: unitType, 
+                    unit: unitType, 
                     stock: Number(document.getElementById('prod-stock').value), 
                     desc: document.getElementById('prod-desc').value, 
-                    img: downloadURL, 
+                    img: uploadedURLs[0], // Keep [0] as main for compatibility
+                    gallery: uploadedURLs, // 🛑 NEW: The full array for the Customer App
                     rating: 5.0, 
                     reviews: 0, 
                     reviewTxt: "Verified product from authorized vendor.", 
                     createdAt: serverTimestamp() 
                 }); 
                 
-                alert("✅ Product published successfully!"); 
+                alert("✅ Product published with gallery successfully!"); 
                 document.getElementById('add-product-form').reset(); 
+                selectedFiles = []; // Clear array
+                renderImagePreviews(); // Clear previews
+
             } catch (error) { 
+                console.error("Upload Error:", error);
                 alert("Failed to upload. Check console."); 
             } finally { 
                 btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5a4.5 4.5 0 01-1.41-8.775 5.25 5.25 0 0110.233-2.33 3 3 0 013.758 3.848A3.752 3.752 0 0118 19.5H6.75z" /></svg> Publish to Live Store`; 
                 btn.disabled = false; 
             }
         };
+
+
+        // --- 🟢 V2 UPDATE: THE 5% COMMISSION MATH ---
+        async function fetchAndCalculateStats(supplierProducts) {
+            try {
+                const querySnapshot = await getDocs(collection(db, "orders"));
+                let totalGrossRevenue = 0; // Total money paid by customers
+                let totalUnits = 0; 
+                let productStats = {}; 
+                let dailyStats = {};
+                
+                // Initialize 30 days
+                for(let i = 29; i >= 0; i--) { 
+                    const d = new Date(); d.setDate(d.getDate() - i); 
+                    const dateString = `${d.getDate()}/${d.getMonth()+1}`;
+                    dailyStats[dateString] = 0; 
+                }
+                
+                supplierProducts.forEach(p => { 
+                    productStats[p.name] = { name: p.name, sold: 0, rev: 0, img: p.img, price: p.price }; 
+                });
+
+                window.appData = window.appData || {};
+                window.appData.orders = []; 
+
+                querySnapshot.forEach((doc) => {
+                    const order = doc.data();
+                    window.appData.orders.push(order); 
+
+                    if (order.status === "PROCESSING" || order.status === "SOLVED" || order.status === "PAID") {
+                        let orderGrossForSupplier = 0;
+                        supplierProducts.forEach(p => {
+                            const escapedName = p.name.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
+                            const regex = new RegExp(`${escapedName}\\s*\\(x(\\d+)\\)`, 'i');
+                            const match = (order.items || "").match(regex);
+                            
+                            if (match) { 
+                                const qty = parseInt(match[1]); 
+                                const rev = (qty * p.price); 
+                                productStats[p.name].sold += qty; 
+                                productStats[p.name].rev += rev; 
+                                totalUnits += qty; 
+                                totalGrossRevenue += rev; 
+                                orderGrossForSupplier += rev; 
+                            }
+                        });
+                        
+                        if(orderGrossForSupplier > 0 && order.createdAt) { 
+                            const orderDate = order.createdAt.toDate();
+                            const dateString = `${orderDate.getDate()}/${orderDate.getMonth()+1}`; 
+                            if(dailyStats[dateString] !== undefined) {
+                                // 🛑 NEW: Charts show Net Revenue (95%)
+                                dailyStats[dateString] += (orderGrossForSupplier * 0.95); 
+                            }
+                        }
+                    }
+                });
+
+                // 🛑 NEW: THE 5% CUT LOGIC
+                window.totalGrossRevenue = totalGrossRevenue; 
+                const vendorNetRevenue = totalGrossRevenue * 0.95; // The Supplier keeps 95%
+                const availableBalance = vendorNetRevenue - (window.totalPaidOut || 0);
+
+                // Update DOM: Show Gross on the Stat Card, but Available Net Balance in the Wallet
+                document.getElementById('stat-revenue').textContent = `TZS ${totalGrossRevenue.toLocaleString()}`; 
+                document.getElementById('wallet-balance').textContent = `TZS ${availableBalance.toLocaleString()}`; 
+                document.getElementById('stat-units').textContent = totalUnits;
+                
+                const chartDataArray = Object.keys(dailyStats).map(key => ({ date: key, amount: dailyStats[key] }));
+                renderChart(chartDataArray);
+                
+                // Top Product Logic
+                let topProd = { name: "-", sold: 0 }; 
+                for (let key in productStats) { 
+                    if(productStats[key].sold > topProd.sold) {
+                        topProd = productStats[key]; 
+                    }
+                } 
+                document.getElementById('stat-top-product').textContent = topProd.sold > 0 ? topProd.name : "No sales yet";
+                
+            } catch (error) {
+                console.error("Analytics Error", error);
+            }
+        }
     </script>
 </body>
 </html>
