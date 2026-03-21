@@ -568,8 +568,13 @@
                 }
 
                 const hiddenWarning = o.hiddenFromCustomer ? `<span class="text-[8px] bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400 px-1.5 py-0.5 rounded ml-2">Hidden by User</span>` : "";
-                const safeTotal = Number(o.total || 0).toLocaleString();
-                const safeTransport = Number(o.transport || 0).toLocaleString();
+                const rawTotal = Number(o.total || 0);
+                const rawTransport = Number(o.transport || 0);
+                const rawSubtotal = Number(o.subtotal || (rawTotal - rawTransport) || 0);
+                
+                const safeSubtotal = rawSubtotal.toLocaleString();
+                const safeTransport = rawTransport.toLocaleString();
+                const safeTotal = rawTotal.toLocaleString();
 
                 const contactInfo = o.deliveryContact ? 
                     `<div class="mt-2 bg-gray-50 dark:bg-slate-900 p-2 rounded-lg border border-gray-200 dark:border-slate-700">
@@ -600,8 +605,9 @@
                         <p class="text-xs text-gray-500 dark:text-gray-400 leading-relaxed max-w-[200px] italic">"${o.items || 'No data'}"</p>
                     </td>
                     <td class="p-6">
-                        <p class="font-black text-gray-900 dark:text-white text-base">TZS ${safeTotal}</p>
-                        <p class="text-[10px] text-gray-500 dark:text-gray-400 mt-1">Fee: TZS ${safeTransport}</p>
+                        <p class="font-black text-gray-900 dark:text-white text-base">TZS ${safeSubtotal}</p>
+                        <p class="text-[10px] text-gray-500 dark:text-gray-400 mt-1">+ Transport: TZS ${safeTransport}</p>
+                        <p class="text-[9px] text-gray-400 dark:text-gray-500 font-bold mt-2 border-t border-gray-200 dark:border-gray-700 pt-2 inline-block">Total Paid: TZS ${safeTotal}</p>
                     </td>
                     <td class="p-6 text-center">
                         ${actionButton}
@@ -610,7 +616,7 @@
             });
             feed.innerHTML = html;
         }
-
+        
         // 🟢 NEW: DEEP DIVE ORDER RENDERER
         function renderOrderDetails(orders) {
             const feed = document.getElementById('admin-details-feed');
