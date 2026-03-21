@@ -106,6 +106,10 @@
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" /></svg>
                     Sales Flow
                 </button>
+                <button onclick="switchTab('details')" id="btn-details" class="px-6 py-3 text-xs font-black uppercase tracking-widest transition-all rounded-xl text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white whitespace-nowrap flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9" /></svg>
+                    Orders
+                </button>
                 <button onclick="switchTab('payouts')" id="btn-payouts" class="px-6 py-3 text-xs font-black uppercase tracking-widest transition-all rounded-xl text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white whitespace-nowrap flex items-center gap-2">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18.75a60.07 60.07 0 0115.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 013 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 00-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 01-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 003 15h-.75M15 10.5a3 3 0 11-6 0 3 3 0 016 0zm3 0h.008v.008H18V10.5zm-12 0h.008v.008H6V10.5z" /></svg>
                     Payouts
@@ -149,6 +153,25 @@
                         </thead>
                         <tbody id="admin-orders-feed" class="divide-y divide-gray-200 dark:divide-slate-700 transition-colors">
                             <tr><td colspan="5" class="p-12 text-center text-gray-500 font-bold">Loading system data...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div id="view-details" class="hidden view-section stagger-item">
+            <div class="bg-white dark:bg-slate-800 rounded-[2.5rem] overflow-hidden shadow-xl border border-gray-200 dark:border-slate-700">
+                <div class="overflow-x-auto overflow-y-auto max-h-[60vh]">
+                    <table class="w-full text-left border-collapse">
+                        <thead class="sticky top-0 bg-gray-100 dark:bg-slate-900 z-10 shadow-sm transition-colors">
+                            <tr class="border-b border-gray-200 dark:border-slate-700">
+                                <th class="p-6 text-[10px] font-black uppercase tracking-widest text-gray-500">Order Ref & Customer</th>
+                                <th class="p-6 text-[10px] font-black uppercase tracking-widest text-gray-500">Product & Supplier</th>
+                                <th class="p-6 text-[10px] font-black uppercase tracking-widest text-gray-500">Logistics & Payment</th>
+                            </tr>
+                        </thead>
+                        <tbody id="admin-details-feed" class="divide-y divide-gray-200 dark:divide-slate-700 transition-colors">
+                            <tr><td colspan="3" class="p-12 text-center text-gray-500 font-bold">Loading deep-dive data...</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -204,6 +227,7 @@
                                     <th class="p-5 text-[10px] font-black uppercase tracking-widest text-gray-500 dark:text-gray-400">Authorized Email</th>
                                     <th class="p-5 text-[10px] font-black uppercase tracking-widest text-gray-500 dark:text-gray-400 text-center">System Status</th>
                                     <th class="p-5 text-[10px] font-black uppercase tracking-widest text-gray-500 dark:text-gray-400 text-center">Access Control</th>
+                                    <th class="p-5 text-[10px] font-black uppercase tracking-widest text-gray-500 dark:text-gray-400 text-center">Moderation</th>
                                 </tr>
                             </thead>
                             <tbody id="admin-vendors-feed" class="divide-y divide-gray-200 dark:divide-slate-700 transition-colors"></tbody>
@@ -279,7 +303,7 @@
             </button>
         </div>
     </div>
-<div id="vendor-audit-modal" class="fixed inset-0 z-[400] hidden bg-black/60 flex items-center justify-center backdrop-blur-sm px-4 py-10">
+    <div id="vendor-audit-modal" class="fixed inset-0 z-[400] hidden bg-black/60 flex items-center justify-center backdrop-blur-sm px-4 py-10">
         <div class="bg-white dark:bg-slate-800 w-full max-w-4xl max-h-full rounded-[2.5rem] p-6 md:p-8 shadow-2xl relative border border-gray-200 dark:border-slate-700 transition-colors flex flex-col">
             <button onclick="closeVendorAudit()" class="absolute top-4 right-4 w-8 h-8 bg-gray-100 dark:bg-slate-700 text-gray-500 dark:text-gray-300 rounded-full font-bold click-press transition-colors hover:bg-gray-200 dark:hover:bg-slate-600 flex justify-center items-center z-10">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
@@ -307,6 +331,7 @@
             </div>
         </div>
     </div>
+    
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
         import { getAuth, onAuthStateChanged, signInWithPopup, GoogleAuthProvider, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
@@ -328,11 +353,9 @@
         provider.setCustomParameters({ prompt: 'select_account' });
         const db = getFirestore(app);
 
-        // Master Admins Only
         const MASTER_ADMINS = ["jem.mziray@gmail.com", "venancechesco58@gmail.com"]; 
-        window.appData = { orders: [], payouts: [], vendors: [], currentTab: 'orders', currentPayoutView: 'PENDING' };
+        window.appData = { orders: [], payouts: [], vendors: [], products: [], currentTab: 'orders', currentPayoutView: 'PENDING' };
 
-        // Secure Login Check
         onAuthStateChanged(auth, (user) => {
             if (user && MASTER_ADMINS.includes(user.email)) {
                 document.getElementById('admin-login-screen').classList.add('hidden');
@@ -354,7 +377,6 @@
             }
         });
 
-        // Login Function 
         const googleBtn = document.getElementById('google-signin-btn');
         if(googleBtn) {
             googleBtn.onclick = async () => { 
@@ -397,6 +419,13 @@
         }
 
         function startDataSync() {
+            // 🟢 NEW: Fetching Products to cross-reference images and suppliers
+            onSnapshot(collection(db, "products"), (snapshot) => {
+                window.appData.products = [];
+                snapshot.forEach(doc => window.appData.products.push({id: doc.id, ...doc.data()}));
+                if(window.appData.currentTab === 'details') handleSearch();
+            });
+
             onSnapshot(query(collection(db, "orders"), orderBy("createdAt", "desc")), (snapshot) => {
                 window.appData.orders = [];
                 let revenue = 0;
@@ -413,7 +442,7 @@
 
                 document.getElementById('total-revenue').textContent = `TZS ${revenue.toLocaleString()}`;
                 document.getElementById('order-count').textContent = window.appData.orders.length;
-                if(window.appData.currentTab === 'orders') handleSearch();
+                if(window.appData.currentTab === 'orders' || window.appData.currentTab === 'details') handleSearch();
             });
 
             onSnapshot(query(collection(db, "payouts"), orderBy("createdAt", "desc")), (snapshot) => {
@@ -453,6 +482,16 @@
                 );
                 renderOrders(filtered);
             } 
+            // 🟢 NEW: Search logic for Deep-Dive Orders tab
+            else if (window.appData.currentTab === 'details') {
+                const filtered = window.appData.orders.filter(o => 
+                    String(o.orderId || '').toLowerCase().includes(term) || 
+                    String(o.userName || '').toLowerCase().includes(term) || 
+                    String(o.deliveryContact || '').toLowerCase().includes(term) ||
+                    String(o.items || '').toLowerCase().includes(term) 
+                );
+                renderOrderDetails(filtered);
+            }
             else if (window.appData.currentTab === 'payouts') {
                 const filtered = window.appData.payouts.filter(p => 
                     String(p.supplierName || '').toLowerCase().includes(term) || 
@@ -514,7 +553,6 @@
                 const safeTotal = Number(o.total || 0).toLocaleString();
                 const safeTransport = Number(o.transport || 0).toLocaleString();
 
-                // 🟢 Delivery Contact and Location injected here
                 const contactInfo = o.deliveryContact ? 
                     `<div class="mt-2 bg-gray-50 dark:bg-slate-900 p-2 rounded-lg border border-gray-200 dark:border-slate-700">
                         <p class="text-[9px] font-black uppercase tracking-widest text-green-600 dark:text-green-500 mb-1 flex items-center gap-1">
@@ -549,6 +587,95 @@
                     </td>
                     <td class="p-6 text-center">
                         ${actionButton}
+                    </td>
+                </tr>`;
+            });
+            feed.innerHTML = html;
+        }
+
+        // 🟢 NEW: DEEP DIVE ORDER RENDERER
+        function renderOrderDetails(orders) {
+            const feed = document.getElementById('admin-details-feed');
+            if(orders.length === 0) {
+                feed.innerHTML = `<tr><td colspan="3" class="p-12 text-center text-gray-500 font-bold">No records found.</td></tr>`;
+                return;
+            }
+
+            let html = '';
+            orders.forEach(o => {
+                const safeDate = (o.createdAt && typeof o.createdAt.toDate === 'function') ? o.createdAt.toDate().toLocaleString() : 'Just now';
+                
+                // Cross-reference logic to pull images and supplier names
+                let productListHtml = '';
+                let mainSupplier = 'Supplier Pending';
+                let mainImage = 'https://ui-avatars.com/api/?name=P&background=f1f5f9&color=94a3b8'; // default placeholder
+
+                if (o.items && window.appData.products) {
+                    const itemNames = o.items.split(',').map(i => i.trim());
+                    itemNames.forEach((itemStr, index) => {
+                        // Extract name before the (xQty) e.g. "Simba Cement (x2)"
+                        const nameMatch = itemStr.match(/(.*?)\s*\(x\d+\)/);
+                        const cleanName = nameMatch ? nameMatch[1].trim() : itemStr;
+                        
+                        const matchedProd = window.appData.products.find(p => p.name === cleanName);
+                        
+                        if (matchedProd) {
+                            if (index === 0) {
+                                mainImage = matchedProd.img || matchedProd.gallery?.[0] || mainImage;
+                                mainSupplier = matchedProd.supplierName || 'Unknown Supplier';
+                            }
+                            productListHtml += `<p class="text-xs font-bold text-gray-800 dark:text-gray-200 flex items-center gap-2 mt-1">
+                                <span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span> ${itemStr}
+                            </p>`;
+                        } else {
+                            productListHtml += `<p class="text-xs font-bold text-gray-800 dark:text-gray-200 mt-1">${itemStr}</p>`;
+                        }
+                    });
+                }
+
+                const paymentRef = o.paymentRef || o.paymentMethod || o.type || 'N/A';
+                const location = o.location || o.address || 'Location pending or pickup';
+
+                html += `
+                <tr class="hover:bg-gray-50 dark:hover:bg-slate-700/30 transition-colors">
+                    <td class="p-6 align-top border-r border-gray-100 dark:border-slate-700/50">
+                        <p class="font-black text-gray-900 dark:text-white tracking-widest text-sm">${o.orderId || o.id.slice(0,8)}</p>
+                        <p class="text-[10px] text-gray-500 dark:text-gray-400 font-bold mb-3 uppercase tracking-widest">${safeDate}</p>
+                        
+                        <div class="bg-gray-50 dark:bg-slate-900 p-3 rounded-xl border border-gray-200 dark:border-slate-700">
+                            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Customer</p>
+                            <p class="font-bold text-sm text-gray-800 dark:text-gray-200">${o.userName || 'Anonymous'}</p>
+                            <p class="text-[10px] text-green-600 dark:text-green-500 font-bold mt-1">${o.deliveryContact || 'No Phone on file'}</p>
+                        </div>
+                    </td>
+                    
+                    <td class="p-6 align-top border-r border-gray-100 dark:border-slate-700/50">
+                        <div class="flex items-start gap-4">
+                            <img src="${mainImage}" class="w-16 h-16 rounded-xl object-cover shadow-sm border border-gray-200 dark:border-slate-600">
+                            <div>
+                                <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Supplier</p>
+                                <p class="font-black text-sm text-purple-600 dark:text-purple-400 mb-2">${mainSupplier}</p>
+                                <div class="bg-gray-50 dark:bg-slate-900 p-2 rounded-lg border border-gray-100 dark:border-slate-800 inline-block">
+                                    ${productListHtml || `<p class="text-xs text-gray-500 italic">"${o.items}"</p>`}
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                    
+                    <td class="p-6 align-top">
+                        <div class="space-y-3">
+                            <div>
+                                <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Delivery Location</p>
+                                <p class="text-xs font-bold text-gray-800 dark:text-gray-200 flex items-start gap-1">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4 text-red-500 shrink-0"><path fill-rule="evenodd" d="M11.54 22.351l.07.04.028.016a.76.76 0 00.723 0l.028-.015.071-.041a16.975 16.975 0 001.144-.742 19.58 19.58 0 002.683-2.282c1.944-1.99 3.963-4.98 3.963-8.827a8.25 8.25 0 00-16.5 0c0 3.846 2.02 6.837 3.963 8.827a19.58 19.58 0 002.682 2.282 16.975 16.975 0 001.145.742zM12 13.5a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd" /></svg>
+                                    ${location}
+                                </p>
+                            </div>
+                            <div class="bg-blue-50 dark:bg-blue-900/20 p-3 rounded-xl border border-blue-100 dark:border-blue-800/30">
+                                <p class="text-[10px] font-bold text-blue-500 dark:text-blue-400 uppercase tracking-widest mb-1">Payment Reference</p>
+                                <p class="text-xs font-mono font-black text-gray-900 dark:text-white uppercase">${paymentRef}</p>
+                            </div>
+                        </div>
                     </td>
                 </tr>`;
             });
@@ -648,7 +775,6 @@
             });
             feed.innerHTML = html;
 
-            // Also, update the table headers dynamically so they align
             const tableHeader = document.querySelector('#view-vendors thead tr');
             if(tableHeader && tableHeader.children.length === 3) {
                 tableHeader.innerHTML += '<th class="p-5 text-[10px] font-black uppercase tracking-widest text-gray-500 dark:text-gray-400 text-center">Moderation</th>';
@@ -660,14 +786,16 @@
             document.querySelectorAll('.view-section').forEach(el => el.classList.add('hidden'));
             document.getElementById(`view-${tab}`).classList.remove('hidden');
             
-            ['orders', 'payouts', 'vendors', 'messages'].forEach(t => {
+            ['orders', 'details', 'payouts', 'vendors', 'messages'].forEach(t => {
                 const btn = document.getElementById(`btn-${t}`);
-                if(t === tab) {
-                    btn.classList.add('tab-active');
-                    btn.classList.remove('text-gray-500', 'dark:text-gray-400', 'dark:hover:text-white', 'hover:text-gray-900');
-                } else {
-                    btn.classList.remove('tab-active');
-                    btn.classList.add('text-gray-500', 'dark:text-gray-400', 'dark:hover:text-white', 'hover:text-gray-900');
+                if(btn) {
+                    if(t === tab) {
+                        btn.classList.add('tab-active');
+                        btn.classList.remove('text-gray-500', 'dark:text-gray-400', 'dark:hover:text-white', 'hover:text-gray-900');
+                    } else {
+                        btn.classList.remove('tab-active');
+                        btn.classList.add('text-gray-500', 'dark:text-gray-400', 'dark:hover:text-white', 'hover:text-gray-900');
+                    }
                 }
             });
             
@@ -747,7 +875,7 @@
             let data = [];
             let filtered = [];
 
-            if (tab === 'orders') {
+            if (tab === 'orders' || tab === 'details') {
                 filtered = window.appData.orders.filter(o => {
                     if(!o.createdAt) return false;
                     const orderDate = o.createdAt.toDate();
@@ -907,16 +1035,13 @@
             
             auditUnsubscribe = onSnapshot(collection(db, "products"), (snapshot) => {
                 const vendorProducts = [];
-                // Remove dots and special characters from email prefix (jem.mziray -> jemmziray)
                 const cleanPrefix = vendorEmail.split('@')[0].toLowerCase().replace(/[^a-z0-9]/g, '');
                 
                 snapshot.forEach(doc => {
                     const p = doc.data();
                     const sName = (p.supplierName || '').toLowerCase();
-                    // Remove spaces from their display name (jem mziray -> jemmziray)
                     const cleanSupplierName = sName.replace(/[^a-z0-9]/g, ''); 
                     
-                    // Now they will perfectly match!
                     if (sName === vendorEmail.toLowerCase() || cleanSupplierName.includes(cleanPrefix)) {
                         vendorProducts.push({ id: doc.id, ...p });
                     }
