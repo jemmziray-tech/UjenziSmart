@@ -422,34 +422,36 @@
             return (timestampObj && timestampObj.seconds) ? timestampObj.seconds : 0;
         }
 
-        function startDataSync() {
-            // 🟢 NEW: Fetching Products to cross-reference images and suppliers
-            onSnapshot(collection(db, "products"), (snapshot) => {
-                window.appData.products = [];
-                snapshot.forEach(doc => window.appData.products.push({id: doc.id, ...doc.data()}));
-                if(window.appData.currentTab === 'details') handleSearch();
-            });
-
-            onSnapshot(query(collection(db, "orders"), orderBy("createdAt", "desc")), (snapshot) => {
+        onSnapshot(query(collection(db, "orders"), orderBy("createdAt", "desc")), (snapshot) => {
                 window.appData.orders = [];
-                let revenue = 0;
+                let materialRevenue = 0; // Changed to track ONLY material costs
+                
                 snapshot.forEach(doc => {
                     const data = doc.data();
                     window.appData.orders.push({id: doc.id, ...data});
                     
                     if(data.status === 'PAID' || data.status === 'SUCCESS' || data.status === 'PROCESSING' || data.status === 'SOLVED') {
-                        revenue += Number(data.total || 0);
+                        // 🛑 FIX: Extract ONLY the subtotal (materials). Ignore the driver's transport fee.
+                        let subtotal = Number(data.subtotal || 0);
+                        
+                        // Safety fallback for any older test orders that might not have a subtotal field
+                        if (subtotal === 0 && Number(data.total || 0) > 0) {
+                            subtotal = Number(data.total || 0) - Number(data.transport || 0);
+                        }
+                        
+                        materialRevenue += subtotal;
                     }
                 });
                 
                 window.appData.orders.sort((a,b) => safeTime(b.createdAt) - safeTime(a.createdAt));
 
-                // 🛑 NEW: Calculate 5% Profit
-                let platformProfit = revenue * 0.05;
+                // 🛑 FIX: Calculate 5% Platform Profit ONLY on the material revenue
+                let platformProfit = materialRevenue * 0.05;
 
-                document.getElementById('total-revenue').textContent = `TZS ${revenue.toLocaleString()}`;
-                document.getElementById('platform-profit').textContent = `TZS ${platformProfit.toLocaleString()}`; // Updates the new card!
+                document.getElementById('total-revenue').textContent = `TZS ${materialRevenue.toLocaleString()}`;
+                document.getElementById('platform-profit').textContent = `TZS ${platformProfit.toLocaleString()}`; 
                 document.getElementById('order-count').textContent = window.appData.orders.length;
+                
                 if(window.appData.currentTab === 'orders' || window.appData.currentTab === 'details') handleSearch();
             });
 
