@@ -1303,7 +1303,8 @@
                 type: 'Mobile Money', deliveryContact: delPhone, status: 'PENDING' 
             };
 
-            if(typeof window.submitCloudOrder === 'function') window.submitCloudOrder(receipt, orderId);
+            // 🛑 FIX: Pass the exact cart items to deduct stock
+            if(typeof window.submitCloudOrder === 'function') window.submitCloudOrder(receipt, orderId, [...window.cart]);
 
             const btn = document.getElementById("pay-btn");
             if(btn) { btn.innerHTML = "⏳ Connecting..."; btn.disabled = true; }
@@ -1327,7 +1328,7 @@
                 if(btn) { btn.innerHTML = `Send Prompt`; btn.disabled = false; }
             }
         }
-
+        
         window.checkoutWhatsApp = function() {
             const u = JSON.parse(localStorage.getItem('ujenzi_user'));
             const delPhone = document.getElementById('delivery-phone').value.trim();
@@ -1350,7 +1351,8 @@
                 items: itemsString.slice(0, -2), subtotal: sub, transport: currentTransport, total: totalCost, type: 'WhatsApp Order', deliveryContact: delPhone, status: 'PENDING'
             };
 
-            if(typeof window.submitCloudOrder === 'function') window.submitCloudOrder(receipt, orderId);
+            // 🛑 FIX: Pass the exact cart items to deduct stock
+            if(typeof window.submitCloudOrder === 'function') window.submitCloudOrder(receipt, orderId, [...window.cart]);
 
             m += `\n\n*Order ID: ${orderId}*`;
             window.cart = []; window.updateBadge();
@@ -1646,14 +1648,34 @@
             } catch (err) {}
         }
 
-        window.submitCloudOrder = async function(receipt, customId = null) {
+        window.submitCloudOrder = async function(receipt, customId = null, itemsToDeduct = []) {
             const user = auth.currentUser;
             if(!user) return alert("You must be signed in to place a secure order.");
             try {
                 const orderData = { ...receipt, userId: user.uid, userName: user.displayName || 'Customer', userEmail: user.email, createdAt: serverTimestamp() };
                 if(customId) { await setDoc(doc(db, "orders", customId), orderData, { merge: true }); } 
                 else { await addDoc(collection(db, "orders"), orderData); }
-            } catch (error) { alert("Failed to sync secure order. Check connection."); }
+
+                // 🟢 AUTOMATIC INVENTORY DEDUCTION ENGINE
+                if (itemsToDeduct && itemsToDeduct.length > 0) {
+                    for (let i = 0; i < itemsToDeduct.length; i++) {
+                        const cartItem = itemsToDeduct[i];
+                        // Scan the database for the exact product name
+                        const q = query(collection(db, "products"), where("name", "==", cartItem.title));
+                        const querySnapshot = await getDocs(q);
+                        
+                        querySnapshot.forEach(async (productDoc) => {
+                            const currentStock = productDoc.data().stock || 0;
+                            // Mathematically deduct the cart quantity
+                            const newStock = Math.max(0, currentStock - cartItem.qty);
+                            await updateDoc(doc(db, "products", productDoc.id), { stock: newStock });
+                        });
+                    }
+                }
+            } catch (error) { 
+                console.error("Sync Error:", error); 
+                alert("Failed to sync secure order. Check connection."); 
+            }
         };
 
         window.listenForSnippeWebhook = function(orderId, btnElement, payMethod) {
