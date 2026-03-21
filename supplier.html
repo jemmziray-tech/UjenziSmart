@@ -1291,12 +1291,12 @@
         async function fetchAndCalculateStats(supplierProducts) {
             try {
                 const querySnapshot = await getDocs(collection(db, "orders"));
-                let totalGrossRevenue = 0; // Total money paid by customers
+                let totalGrossRevenue = 0; 
                 let totalUnits = 0; 
                 let productStats = {}; 
                 let dailyStats = {};
                 
-                // Initialize 30 days
+                // Initialize 30 days for the chart
                 for(let i = 29; i >= 0; i--) { 
                     const d = new Date(); d.setDate(d.getDate() - i); 
                     const dateString = `${d.getDate()}/${d.getMonth()+1}`;
@@ -1337,19 +1337,19 @@
                             const orderDate = order.createdAt.toDate();
                             const dateString = `${orderDate.getDate()}/${orderDate.getMonth()+1}`; 
                             if(dailyStats[dateString] !== undefined) {
-                                // 🛑 NEW: Charts show Net Revenue (95%)
+                                // Charts show Net Revenue (95%)
                                 dailyStats[dateString] += (orderGrossForSupplier * 0.95); 
                             }
                         }
                     }
                 });
 
-                // 🛑 NEW: THE 5% CUT LOGIC
+                // THE 5% CUT LOGIC
                 window.totalGrossRevenue = totalGrossRevenue; 
                 const vendorNetRevenue = totalGrossRevenue * 0.95; // The Supplier keeps 95%
                 const availableBalance = vendorNetRevenue - (window.totalPaidOut || 0);
 
-                // Update DOM: Show Gross on the Stat Card, but Available Net Balance in the Wallet
+                // Update the Dashboard Text
                 document.getElementById('stat-revenue').textContent = `TZS ${totalGrossRevenue.toLocaleString()}`; 
                 document.getElementById('wallet-balance').textContent = `TZS ${availableBalance.toLocaleString()}`; 
                 document.getElementById('stat-units').textContent = totalUnits;
@@ -1357,7 +1357,6 @@
                 const chartDataArray = Object.keys(dailyStats).map(key => ({ date: key, amount: dailyStats[key] }));
                 renderChart(chartDataArray);
                 
-                // Top Product Logic
                 let topProd = { name: "-", sold: 0 }; 
                 for (let key in productStats) { 
                     if(productStats[key].sold > topProd.sold) {
