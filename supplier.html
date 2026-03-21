@@ -547,23 +547,20 @@
         const storage = getStorage(app); 
         const provider = new GoogleAuthProvider();
 
-        // Check if the URL has the "viewAs" parameter
         const urlParams = new URLSearchParams(window.location.search);
         const viewAsId = urlParams.get('viewAs');
         const viewAsEmail = urlParams.get('vendorEmail');
-        window.isAdminViewing = false; // Global flag for Read-Only mode
+        window.isAdminViewing = false; 
 
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 try {
                     // --- 🛡️ ADMIN IMPERSONATION MODE ---
                     if (viewAsId) {
-                        // 1. Verify this is the Admin 
-                        // IMPORTANT: Make sure your exact admin emails are in this list!
                         const adminEmails = ['jem.mziray@gmail.com', 'venancechesco58@gmail.com'];
                         if (!adminEmails.includes(user.email)) {
                             alert("⛔ Unauthorized: Only Admins can view other dashboards.");
-                            window.location.href = 'supplier.html'; // Kick them back to normal login
+                            window.location.href = 'supplier.html'; 
                             return;
                         }
 
@@ -571,52 +568,46 @@
                         document.getElementById('login-screen').classList.add('hidden'); 
                         document.getElementById('dashboard-screen').classList.remove('hidden');
                         
-                        // 2. Lock down the UI (Read-Only)
-                        document.getElementById('add-product-form').parentElement.style.display = 'none'; // Hide product upload
+                        document.getElementById('add-product-form').parentElement.style.display = 'none'; 
                         const payoutBtn = document.querySelector('button[onclick="requestPayout()"]');
-                        if(payoutBtn) payoutBtn.style.display = 'none'; // Hide request payout button
+                        if(payoutBtn) payoutBtn.style.display = 'none'; 
                         
-                        // 3. Update Header to show who you are viewing
                         document.getElementById('header-avatar').src = `https://ui-avatars.com/api/?name=${encodeURIComponent(viewAsEmail)}&background=8b5cf6&color=fff`;
                         document.getElementById('supplier-name').textContent = `👀 ADMIN VIEWING: ${viewAsEmail}`;
                         document.getElementById('supplier-name').classList.add('text-purple-500');
 
-                        // 4. Load the VENDOR'S data using their REAL Auth UID
-                        let realUid = viewAsId; // Fallback
+                        let realUid = viewAsId; 
                         
                         try {
                             const productsSnap = await getDocs(collection(db, "products"));
                             const rawEmail = viewAsEmail.toLowerCase();
-                            const cleanEmail = rawEmail.replace(/[^a-z0-9]/g, ''); // e.g., jemmziraygmailcom
-                            const emailPrefix = rawEmail.split('@')[0].replace(/[^a-z0-9]/g, ''); // e.g., jemmziray
+                            const cleanEmail = rawEmail.replace(/[^a-z0-9]/g, ''); 
+                            const emailPrefix = rawEmail.split('@')[0].replace(/[^a-z0-9]/g, ''); 
                             
                             productsSnap.forEach(productDoc => {
                                 const p = productDoc.data();
-                                if(!p.supplierId) return; // Skip if broken data
+                                if(!p.supplierId) return; 
                                 
                                 const sNameRaw = (p.supplierName || '').toLowerCase();
-                                const sNameClean = sNameRaw.replace(/[^a-z0-9]/g, ''); // e.g., mziray
+                                const sNameClean = sNameRaw.replace(/[^a-z0-9]/g, ''); 
                                 
-                                // Super Matcher: Check all possible variations of their name vs email
                                 if (
                                     sNameRaw === rawEmail || 
                                     (sNameClean.length > 2 && cleanEmail.includes(sNameClean)) || 
                                     (emailPrefix.length > 2 && sNameClean.includes(emailPrefix))
                                 ) {
-                                    realUid = p.supplierId; // We found the real Vendor UID!
+                                    realUid = p.supplierId; 
                                 }
                             });
                         } catch (e) {
                             console.error("Error finding real UID:", e);
                         }
 
-                        // Now load the charts and inventory with the CORRECT matched UID!
                         listenToInventory(realUid); 
                         listenToPayouts(realUid);
                         
-                        // Hide dispatch chat to prevent Admin from talking to themselves
                         document.getElementById('view-dispatch').innerHTML = '<div class="p-10 flex items-center justify-center text-gray-500 font-bold h-full">Dispatch Chat disabled in Read-Only Admin View.</div>';
-                        return; // Stop here so it doesn't load the normal supplier code
+                        return; 
                     }
 
                     // --- 👤 NORMAL SUPPLIER MODE ---
@@ -678,10 +669,7 @@
         }
 
         // --- 🚚 ACTIVE DISPATCH FEED ---
-        
-        // 1. The Drawing Function (This actually updates the screen!)
         window.renderDispatchBoard = function() {
-            console.log("🎨 Drawing the dispatch board...");
             const dispatchFeed = document.getElementById('dispatch-orders-feed'); 
             if(!dispatchFeed) return;
 
@@ -696,7 +684,6 @@
                     const order = orderDoc.data;
                     const docId = orderDoc.id;
 
-                    // 🛑 NEW FIX 1: If the order is already acknowledged, skip it so it wipes out!
                     if (order.supplierAcknowledged) return; 
 
                     let hasMyProduct = false;
@@ -704,7 +691,7 @@
 
                     myProducts.forEach(p => {
                         const pName = p.name || ""; 
-                        if (!pName) return; // Skip broken products quietly
+                        if (!pName) return; 
 
                         const escapedName = pName.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
                         const regex = new RegExp(`${escapedName}\\s*\\(x(\\d+)\\)`, 'i');
@@ -749,26 +736,18 @@
             }
         };
 
-        // 2. The Listening Function (SILENT ERROR BYPASS)
         window.listenToDispatchOrders = function() {
-            console.log("📡 Dispatch Listener Started!"); 
-            
             const q = query(collection(db, "orders")); 
-            
             onSnapshot(q, (snapshot) => {
-                console.log("📦 Orders received from Firebase!");
                 window.appData = window.appData || {};
                 window.appData.dispatchOrders = []; 
-                
                 snapshot.forEach(doc => {
                     const order = doc.data();
                     if (order.status === "PROCESSING" || order.status === "PAID") {
                         window.appData.dispatchOrders.push({ id: doc.id, data: order });
                     }
                 });
-                
                 if(window.renderDispatchBoard) window.renderDispatchBoard(); 
-                
             }, (error) => {
                 console.error("🚨 Firebase Dispatch Error:", error); 
             });
@@ -777,14 +756,11 @@
         window.acknowledgeOrder = async function(docId, displayOrderId) {
             try {
                 await updateDoc(doc(db, "orders", docId), { supplierAcknowledged: true });
-                
                 const user = auth.currentUser;
                 const chatId = `supplier_chat_${user.uid}`;
                 const autoMessage = `✅ I have acknowledged Order ${displayOrderId} and am preparing it for delivery.`;
-                
                 await addDoc(collection(db, `chats/${chatId}/messages`), { senderId: user.uid, text: autoMessage, timestamp: serverTimestamp() });
                 await updateDoc(doc(db, "chats", chatId), { lastMessage: autoMessage, updatedAt: serverTimestamp() });
-                
                 showNotification("Order Acknowledged", "Admin has been notified in Dispatch HQ.");
             } catch(e) { 
                 alert("Error acknowledging order."); 
@@ -794,14 +770,13 @@
         // --- 📦 INVENTORY LOGIC ---
         function listenToInventory(uid) {
             const q = query(collection(db, "products"), where("supplierId", "==", uid));
-            
             onSnapshot(q, (snapshot) => {
                 const list = document.getElementById('inventory-list');
                 let items = [];
                 snapshot.forEach((doc) => { items.push({ id: doc.id, ...doc.data() }); });
                 
-                window.currentSupplierProducts = items; // Connects to CSV Export
-                if(window.renderDispatchBoard) window.renderDispatchBoard(); // Fixes the Race Condition!
+                window.currentSupplierProducts = items; 
+                if(window.renderDispatchBoard) window.renderDispatchBoard(); 
                 
                 document.getElementById('stat-active').textContent = items.length;
                 fetchAndCalculateStats(items);
@@ -882,7 +857,7 @@
                     return timeB - timeA; 
                 });
                 window.appData = window.appData || {};
-                window.appData.payouts = payoutsArray; // Connects to CSV Export
+                window.appData.payouts = payoutsArray; 
                 
                 document.getElementById('payout-history-list').innerHTML = payoutsArray.map(p => `
                     <div class="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-900/50 rounded-xl border border-gray-100 dark:border-gray-700 transition-colors">
@@ -897,7 +872,8 @@
                 
                 window.totalPaidOut = paidTotal;
                 if(window.totalGrossRevenue !== undefined) {
-                    document.getElementById('wallet-balance').textContent = `TZS ${(window.totalGrossRevenue - window.totalPaidOut).toLocaleString()}`;
+                    const availableBalance = (window.totalGrossRevenue * 0.95) - window.totalPaidOut;
+                    document.getElementById('wallet-balance').textContent = `TZS ${availableBalance.toLocaleString()}`;
                 }
             });
         }
@@ -928,89 +904,6 @@
             } catch(e) { 
                 alert("Failed to request payout. Try again later."); 
             }
-        }
-
-        
-
-                window.totalGrossRevenue = totalRevenue; 
-                const availableBalance = totalRevenue - (window.totalPaidOut || 0);
-
-                document.getElementById('stat-revenue').textContent = `TZS ${totalRevenue.toLocaleString()}`; 
-                document.getElementById('wallet-balance').textContent = `TZS ${availableBalance.toLocaleString()}`; 
-                document.getElementById('stat-units').textContent = totalUnits;
-                
-                const chartDataArray = Object.keys(dailyStats).map(key => ({ date: key, amount: dailyStats[key] }));
-                renderChart(chartDataArray);
-                
-                // Top Product Logic
-                let topProd = { name: "-", sold: 0 }; 
-                for (let key in productStats) { 
-                    if(productStats[key].sold > topProd.sold) {
-                        topProd = productStats[key]; 
-                    }
-                } 
-                document.getElementById('stat-top-product').textContent = topProd.sold > 0 ? topProd.name : "No sales yet";
-                
-            } catch (error) {
-                console.error("Analytics Error", error);
-            }
-        }
-
-        window.revenueChartInstance = null;
-        function renderChart(dailyData) {
-            const ctx = document.getElementById('revenueChart').getContext('2d'); 
-            const isDark = document.documentElement.classList.contains('dark');
-            
-            if (window.revenueChartInstance) window.revenueChartInstance.destroy();
-            
-            const gradient = ctx.createLinearGradient(0, 0, 0, 400); 
-            gradient.addColorStop(0, 'rgba(16, 185, 129, 0.5)'); 
-            gradient.addColorStop(1, 'rgba(16, 185, 129, 0.0)');
-            
-            window.revenueChartInstance = new Chart(ctx, { 
-                type: 'line', 
-                data: { 
-                    labels: dailyData.map(d => d.date), 
-                    datasets: [{ 
-                        label: 'Revenue (TZS)', 
-                        data: dailyData.map(d => d.amount), 
-                        borderColor: '#10b981', 
-                        backgroundColor: gradient, 
-                        borderWidth: 2, 
-                        pointBackgroundColor: '#10b981', 
-                        pointBorderColor: isDark ? '#1f2937' : '#fff', 
-                        pointBorderWidth: 1, 
-                        pointRadius: 2, 
-                        fill: true, 
-                        tension: 0.4 
-                    }] 
-                }, 
-                options: { 
-                    responsive: true, 
-                    maintainAspectRatio: false, 
-                    plugins: { legend: { display: false } }, 
-                    scales: { 
-                        x: { 
-                            grid: { display: false, color: isDark ? '#374151' : '#f3f4f6' }, 
-                            ticks: { 
-                                color: isDark ? '#9ca3af' : '#6b7280', 
-                                font: { family: 'Inter', size: 9 },
-                                maxTicksLimit: 7 
-                            } 
-                        }, 
-                        y: { 
-                            beginAtZero: true, // 🟢 V2 UPDATE: Locks chart minimum to 0
-                            border: { display: false }, 
-                            grid: { color: isDark ? '#374151' : '#f3f4f6' }, 
-                            ticks: { 
-                                color: isDark ? '#9ca3af' : '#6b7280', 
-                                font: { family: 'Inter', size: 9 }, 
-                                callback: function(value) { return value >= 1000 ? (value/1000) + 'k' : value; } 
-                            } 
-                        } 
-                    } 
-                } 
-            });
         }
 
         // --- 💬 DISPATCH CHAT ---
@@ -1129,22 +1022,22 @@
             }
         }
 
-        // --- 📤 UPLOAD PRODUCT FORM ---
-        // --- 📸 MULTI-IMAGE PREVIEW LOGIC ---
-        let selectedFiles = []; // Array to hold images before uploading
+        // --- 📸 MULTI-IMAGE PREVIEW & UPLOAD LOGIC ---
+        let selectedFiles = []; 
         const fileInput = document.getElementById('prod-images');
         const previewContainer = document.getElementById('image-preview-container');
 
-        fileInput.addEventListener('change', (e) => {
-            const files = Array.from(e.target.files);
-            // Limit to 5 images max
-            if (selectedFiles.length + files.length > 5) {
-                alert("You can only upload a maximum of 5 images per product.");
-                return;
-            }
-            selectedFiles = selectedFiles.concat(files);
-            renderImagePreviews();
-        });
+        if(fileInput) {
+            fileInput.addEventListener('change', (e) => {
+                const files = Array.from(e.target.files);
+                if (selectedFiles.length + files.length > 5) {
+                    alert("You can only upload a maximum of 5 images per product.");
+                    return;
+                }
+                selectedFiles = selectedFiles.concat(files);
+                renderImagePreviews();
+            });
+        }
 
         function renderImagePreviews() {
             if(selectedFiles.length > 0) previewContainer.classList.remove('hidden');
@@ -1161,80 +1054,77 @@
 
         window.removeSelectedImage = function(index) {
             selectedFiles.splice(index, 1);
-            // Quick hack to reset HTML validation if they remove all images
             if(selectedFiles.length === 0) fileInput.value = ""; 
             renderImagePreviews();
         };
 
-
-        // --- 📤 MULTI-IMAGE UPLOAD TO FIREBASE ---
-        document.getElementById('add-product-form').onsubmit = async (e) => {
-            e.preventDefault(); 
-            const user = auth.currentUser; 
-            if(!user) return alert("Please sign in first."); 
-            
-            if(selectedFiles.length === 0) return alert("Please select at least one image.");
-            
-            const btn = document.getElementById('submit-btn'); 
-            btn.innerHTML = "⏳ Uploading Gallery..."; 
-            btn.disabled = true;
-            
-            try { 
-                let uploadedURLs = [];
-
-                // Loop through all selected files and upload them to Firebase Storage
-                for (let i = 0; i < selectedFiles.length; i++) {
-                    const file = selectedFiles[i];
-                    const storageRef = ref(storage, 'products/' + user.uid + '_' + Date.now() + '_' + file.name); 
-                    await uploadBytes(storageRef, file); 
-                    const downloadURL = await getDownloadURL(storageRef);
-                    uploadedURLs.push(downloadURL);
-                }
+        const uploadForm = document.getElementById('add-product-form');
+        if(uploadForm) {
+            uploadForm.onsubmit = async (e) => {
+                e.preventDefault(); 
+                const user = auth.currentUser; 
+                if(!user) return alert("Please sign in first."); 
                 
-                btn.innerHTML = "⏳ Saving to Database...";
-                const unitType = document.getElementById('prod-unit-type').value;
-                let measurementValue = "";
+                if(selectedFiles.length === 0) return alert("Please select at least one image.");
+                
+                const btn = document.getElementById('submit-btn'); 
+                btn.innerHTML = "⏳ Uploading Gallery..."; 
+                btn.disabled = true;
+                
+                try { 
+                    let uploadedURLs = [];
+                    for (let i = 0; i < selectedFiles.length; i++) {
+                        const file = selectedFiles[i];
+                        const storageRef = ref(storage, 'products/' + user.uid + '_' + Date.now() + '_' + file.name); 
+                        await uploadBytes(storageRef, file); 
+                        const downloadURL = await getDownloadURL(storageRef);
+                        uploadedURLs.push(downloadURL);
+                    }
                     
-                if(unitType === 'dims') {
-                    measurementValue = `${document.getElementById('prod-len').value}x${document.getElementById('prod-wid').value}`;
-                } else {
-                    measurementValue = document.getElementById('prod-weight').value;
+                    btn.innerHTML = "⏳ Saving to Database...";
+                    const unitType = document.getElementById('prod-unit-type').value;
+                    let measurementValue = "";
+                        
+                    if(unitType === 'dims') {
+                        measurementValue = `${document.getElementById('prod-len').value}x${document.getElementById('prod-wid').value}`;
+                    } else {
+                        measurementValue = document.getElementById('prod-weight').value;
+                    }
+
+                    await addDoc(collection(db, "products"), { 
+                        supplierId: user.uid, 
+                        supplierName: user.displayName || user.email, 
+                        name: document.getElementById('prod-name').value, 
+                        category: document.getElementById('prod-category').value, 
+                        price: Number(document.getElementById('prod-price').value), 
+                        weight: measurementValue,
+                        unit: unitType, 
+                        stock: Number(document.getElementById('prod-stock').value), 
+                        desc: document.getElementById('prod-desc').value, 
+                        img: uploadedURLs[0], 
+                        gallery: uploadedURLs, 
+                        rating: 5.0, 
+                        reviews: 0, 
+                        reviewTxt: "Verified product from authorized vendor.", 
+                        createdAt: serverTimestamp() 
+                    }); 
+                    
+                    alert("✅ Product published with gallery successfully!"); 
+                    document.getElementById('add-product-form').reset(); 
+                    selectedFiles = []; 
+                    renderImagePreviews(); 
+
+                } catch (error) { 
+                    console.error("Upload Error:", error);
+                    alert("Failed to upload. Check console."); 
+                } finally { 
+                    btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5a4.5 4.5 0 01-1.41-8.775 5.25 5.25 0 0110.233-2.33 3 3 0 013.758 3.848A3.752 3.752 0 0118 19.5H6.75z" /></svg> Publish to Live Store`; 
+                    btn.disabled = false; 
                 }
+            };
+        }
 
-                await addDoc(collection(db, "products"), { 
-                    supplierId: user.uid, 
-                    supplierName: user.displayName || user.email, 
-                    name: document.getElementById('prod-name').value, 
-                    category: document.getElementById('prod-category').value, 
-                    price: Number(document.getElementById('prod-price').value), 
-                    weight: measurementValue,
-                    unit: unitType, 
-                    stock: Number(document.getElementById('prod-stock').value), 
-                    desc: document.getElementById('prod-desc').value, 
-                    img: uploadedURLs[0], // Keep [0] as main for compatibility
-                    gallery: uploadedURLs, // 🛑 NEW: The full array for the Customer App
-                    rating: 5.0, 
-                    reviews: 0, 
-                    reviewTxt: "Verified product from authorized vendor.", 
-                    createdAt: serverTimestamp() 
-                }); 
-                
-                alert("✅ Product published with gallery successfully!"); 
-                document.getElementById('add-product-form').reset(); 
-                selectedFiles = []; // Clear array
-                renderImagePreviews(); // Clear previews
-
-            } catch (error) { 
-                console.error("Upload Error:", error);
-                alert("Failed to upload. Check console."); 
-            } finally { 
-                btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5a4.5 4.5 0 01-1.41-8.775 5.25 5.25 0 0110.233-2.33 3 3 0 013.758 3.848A3.752 3.752 0 0118 19.5H6.75z" /></svg> Publish to Live Store`; 
-                btn.disabled = false; 
-            }
-        };
-
-
-        // --- 🟢 V2 UPDATE: THE 5% COMMISSION MATH ---
+        // --- 🟢 THE SINGLE 5% COMMISSION & STATS LOGIC ---
         async function fetchAndCalculateStats(supplierProducts) {
             try {
                 const querySnapshot = await getDocs(collection(db, "orders"));
@@ -1243,7 +1133,6 @@
                 let productStats = {}; 
                 let dailyStats = {};
                 
-                // Initialize 30 days for the chart
                 for(let i = 29; i >= 0; i--) { 
                     const d = new Date(); d.setDate(d.getDate() - i); 
                     const dateString = `${d.getDate()}/${d.getMonth()+1}`;
@@ -1264,7 +1153,7 @@
                     if (order.status === "PROCESSING" || order.status === "SOLVED" || order.status === "PAID") {
                         let orderGrossForSupplier = 0;
                         supplierProducts.forEach(p => {
-                            if (!p.name) return; // 🛑 SAFETY GUARD: Skips broken products
+                            if (!p.name) return; // Safety Guard
                             const escapedName = p.name.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
                             const regex = new RegExp(`${escapedName}\\s*\\(x(\\d+)\\)`, 'i');
                             const match = (order.items || "").match(regex);
@@ -1284,19 +1173,16 @@
                             const orderDate = order.createdAt.toDate();
                             const dateString = `${orderDate.getDate()}/${orderDate.getMonth()+1}`; 
                             if(dailyStats[dateString] !== undefined) {
-                                // Charts show Net Revenue (95%)
                                 dailyStats[dateString] += (orderGrossForSupplier * 0.95); 
                             }
                         }
                     }
                 });
 
-                // THE 5% CUT LOGIC
                 window.totalGrossRevenue = totalGrossRevenue; 
-                const vendorNetRevenue = totalGrossRevenue * 0.95; // The Supplier keeps 95%
+                const vendorNetRevenue = totalGrossRevenue * 0.95; 
                 const availableBalance = vendorNetRevenue - (window.totalPaidOut || 0);
 
-                // Update the Dashboard Text
                 document.getElementById('stat-revenue').textContent = `TZS ${totalGrossRevenue.toLocaleString()}`; 
                 document.getElementById('wallet-balance').textContent = `TZS ${availableBalance.toLocaleString()}`; 
                 document.getElementById('stat-units').textContent = totalUnits;
@@ -1315,6 +1201,63 @@
             } catch (error) {
                 console.error("Analytics Error", error);
             }
+        }
+
+        window.revenueChartInstance = null;
+        function renderChart(dailyData) {
+            const ctx = document.getElementById('revenueChart').getContext('2d'); 
+            const isDark = document.documentElement.classList.contains('dark');
+            
+            if (window.revenueChartInstance) window.revenueChartInstance.destroy();
+            
+            const gradient = ctx.createLinearGradient(0, 0, 0, 400); 
+            gradient.addColorStop(0, 'rgba(16, 185, 129, 0.5)'); 
+            gradient.addColorStop(1, 'rgba(16, 185, 129, 0.0)');
+            
+            window.revenueChartInstance = new Chart(ctx, { 
+                type: 'line', 
+                data: { 
+                    labels: dailyData.map(d => d.date), 
+                    datasets: [{ 
+                        label: 'Revenue (TZS)', 
+                        data: dailyData.map(d => d.amount), 
+                        borderColor: '#10b981', 
+                        backgroundColor: gradient, 
+                        borderWidth: 2, 
+                        pointBackgroundColor: '#10b981', 
+                        pointBorderColor: isDark ? '#1f2937' : '#fff', 
+                        pointBorderWidth: 1, 
+                        pointRadius: 2, 
+                        fill: true, 
+                        tension: 0.4 
+                    }] 
+                }, 
+                options: { 
+                    responsive: true, 
+                    maintainAspectRatio: false, 
+                    plugins: { legend: { display: false } }, 
+                    scales: { 
+                        x: { 
+                            grid: { display: false, color: isDark ? '#374151' : '#f3f4f6' }, 
+                            ticks: { 
+                                color: isDark ? '#9ca3af' : '#6b7280', 
+                                font: { family: 'Inter', size: 9 },
+                                maxTicksLimit: 7 
+                            } 
+                        }, 
+                        y: { 
+                            beginAtZero: true, 
+                            border: { display: false }, 
+                            grid: { color: isDark ? '#374151' : '#f3f4f6' }, 
+                            ticks: { 
+                                color: isDark ? '#9ca3af' : '#6b7280', 
+                                font: { family: 'Inter', size: 9 }, 
+                                callback: function(value) { return value >= 1000 ? (value/1000) + 'k' : value; } 
+                            } 
+                        } 
+                    } 
+                } 
+            });
         }
     </script>
 </body>
