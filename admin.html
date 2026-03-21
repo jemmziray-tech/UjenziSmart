@@ -422,30 +422,35 @@
             return (timestampObj && timestampObj.seconds) ? timestampObj.seconds : 0;
         }
 
-        onSnapshot(query(collection(db, "orders"), orderBy("createdAt", "desc")), (snapshot) => {
+        // 🛑 FIX: Restored the missing startDataSync function declaration!
+        function startDataSync() {
+            
+            // 🛑 FIX: Restored the products fetch so your Deep-Dive Order tab gets images!
+            onSnapshot(collection(db, "products"), (snapshot) => {
+                window.appData.products = [];
+                snapshot.forEach(doc => window.appData.products.push({id: doc.id, ...doc.data()}));
+                if(window.appData.currentTab === 'details') handleSearch();
+            });
+
+            onSnapshot(query(collection(db, "orders"), orderBy("createdAt", "desc")), (snapshot) => {
                 window.appData.orders = [];
-                let materialRevenue = 0; // Changed to track ONLY material costs
+                let materialRevenue = 0; 
                 
                 snapshot.forEach(doc => {
                     const data = doc.data();
                     window.appData.orders.push({id: doc.id, ...data});
                     
                     if(data.status === 'PAID' || data.status === 'SUCCESS' || data.status === 'PROCESSING' || data.status === 'SOLVED') {
-                        // 🛑 FIX: Extract ONLY the subtotal (materials). Ignore the driver's transport fee.
                         let subtotal = Number(data.subtotal || 0);
-                        
-                        // Safety fallback for any older test orders that might not have a subtotal field
                         if (subtotal === 0 && Number(data.total || 0) > 0) {
                             subtotal = Number(data.total || 0) - Number(data.transport || 0);
                         }
-                        
                         materialRevenue += subtotal;
                     }
                 });
                 
                 window.appData.orders.sort((a,b) => safeTime(b.createdAt) - safeTime(a.createdAt));
 
-                // 🛑 FIX: Calculate 5% Platform Profit ONLY on the material revenue
                 let platformProfit = materialRevenue * 0.05;
 
                 document.getElementById('total-revenue').textContent = `TZS ${materialRevenue.toLocaleString()}`;
@@ -478,7 +483,7 @@
                 if(window.appData.currentTab === 'vendors') handleSearch();
             });
         }
-
+        
         window.handleSearch = () => {
             const el = document.getElementById('global-search');
             const term = (el ? el.value : '').toLowerCase();
