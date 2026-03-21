@@ -1317,6 +1317,7 @@
                     if (order.status === "PROCESSING" || order.status === "SOLVED" || order.status === "PAID") {
                         let orderGrossForSupplier = 0;
                         supplierProducts.forEach(p => {
+                            if (!p.name) return; // 🛑 SAFETY GUARD: Skips broken products
                             const escapedName = p.name.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
                             const regex = new RegExp(`${escapedName}\\s*\\(x(\\d+)\\)`, 'i');
                             const match = (order.items || "").match(regex);
