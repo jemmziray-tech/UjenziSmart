@@ -1150,6 +1150,7 @@
         }
 
         // --- 🟢 THE SINGLE 5% COMMISSION & STATS LOGIC ---
+        // 🟢 V2 UPDATE: THE 5% COMMISSION MATH
         async function fetchAndCalculateStats(supplierProducts) {
             try {
                 const querySnapshot = await getDocs(collection(db, "orders"));
@@ -1187,7 +1188,8 @@
                                 const qty = parseInt(match[1]); 
                                 const rev = (qty * p.price); 
                                 productStats[p.name].sold += qty; 
-                                productStats[p.name].rev += rev; 
+                                // 🛑 FIX: Product stats now show Net (95%)
+                                productStats[p.name].rev += (rev * 0.95); 
                                 totalUnits += qty; 
                                 totalGrossRevenue += rev; 
                                 orderGrossForSupplier += rev; 
@@ -1198,17 +1200,20 @@
                             const orderDate = order.createdAt.toDate();
                             const dateString = `${orderDate.getDate()}/${orderDate.getMonth()+1}`; 
                             if(dailyStats[dateString] !== undefined) {
+                                // Charts show Net Revenue (95%)
                                 dailyStats[dateString] += (orderGrossForSupplier * 0.95); 
                             }
                         }
                     }
                 });
 
+                // THE 5% CUT LOGIC
                 window.totalGrossRevenue = totalGrossRevenue; 
-                const vendorNetRevenue = totalGrossRevenue * 0.95; 
+                const vendorNetRevenue = totalGrossRevenue * 0.95; // The Supplier keeps 95%
                 const availableBalance = vendorNetRevenue - (window.totalPaidOut || 0);
 
-                document.getElementById('stat-revenue').textContent = `TZS ${totalGrossRevenue.toLocaleString()}`; 
+                // 🛑 FIX: The Total Revenue stat card now shows the Net (95%) amount!
+                document.getElementById('stat-revenue').textContent = `TZS ${vendorNetRevenue.toLocaleString()}`; 
                 document.getElementById('wallet-balance').textContent = `TZS ${availableBalance.toLocaleString()}`; 
                 document.getElementById('stat-units').textContent = totalUnits;
                 
@@ -1227,7 +1232,7 @@
                 console.error("Analytics Error", error);
             }
         }
-
+        
         window.revenueChartInstance = null;
         function renderChart(dailyData) {
             const ctx = document.getElementById('revenueChart').getContext('2d'); 
