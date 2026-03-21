@@ -474,6 +474,7 @@
             const term = (el ? el.value : '').toLowerCase();
             
             if (window.appData.currentTab === 'orders') {
+                // Sales Flow Tab: Shows EVERYTHING (including pending)
                 const filtered = window.appData.orders.filter(o => 
                     String(o.orderId || '').toLowerCase().includes(term) || 
                     String(o.userName || '').toLowerCase().includes(term) || 
@@ -485,10 +486,12 @@
             // 🟢 NEW: Search logic for Deep-Dive Orders tab
             else if (window.appData.currentTab === 'details') {
                 const filtered = window.appData.orders.filter(o => 
-                    String(o.orderId || '').toLowerCase().includes(term) || 
+                    // 🛑 FIX: Only show PAID, PROCESSING, or SOLVED orders. Hide PENDING.
+                    (o.status === 'PAID' || o.status === 'SUCCESS' || o.status === 'PROCESSING' || o.status === 'SOLVED') &&
+                    (String(o.orderId || '').toLowerCase().includes(term) || 
                     String(o.userName || '').toLowerCase().includes(term) || 
                     String(o.deliveryContact || '').toLowerCase().includes(term) ||
-                    String(o.items || '').toLowerCase().includes(term) 
+                    String(o.items || '').toLowerCase().includes(term)) 
                 );
                 renderOrderDetails(filtered);
             }
