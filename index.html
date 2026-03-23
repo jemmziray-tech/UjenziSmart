@@ -1312,7 +1312,7 @@
             try {
                 const functionUrl = "https://europe-west1-ujenzismart-878af.cloudfunctions.net/createSnippePayment";
                 const response = await fetch(functionUrl, { method: "POST", headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ amount: totalAmount, phoneNumber: phoneInput, orderId: orderId, paymentType: 'mobile' })
+                    body: JSON.stringify({ data: { amount: totalAmount, phoneNumber: phoneInput, orderId: orderId, paymentType: 'mobile' } })
                 });
 
                 const data = await response.json();
