@@ -294,7 +294,23 @@
                             </select>
                         </div>
                     </div>
-                    
+                    </select>
+    </div>
+</div>
+
+<div class="grid grid-cols-1 md:grid-cols-2 gap-5 mt-5">
+    <div>
+        <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Brand (Optional)</label>
+        <input type="text" id="prod-brand" class="w-full bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-600 rounded-2xl px-5 py-4 text-sm font-bold outline-none focus:ring-2 focus:ring-green-500 text-gray-900 dark:text-white" placeholder="e.g. Bosch, Simba">
+    </div>
+    <div>
+        <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Model (Optional)</label>
+        <input type="text" id="prod-model" class="w-full bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-600 rounded-2xl px-5 py-4 text-sm font-bold outline-none focus:ring-2 focus:ring-green-500 text-gray-900 dark:text-white" placeholder="e.g. GSB 18V-50">
+    </div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+    <div>
+        <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Price (TZS)</label>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
                         <div>
                             <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Price (TZS)</label>
@@ -907,11 +923,23 @@
             const user = auth.currentUser; 
             if(!user) return;
             
+            // 🛑 THE BOUNCER: Block zero or negative balances
             const currentBalText = document.getElementById('wallet-balance').textContent.replace(/[^0-9]/g, '');
-            if(parseInt(currentBalText) === 0) return alert("Your wallet balance is currently zero.");
+            const currentBalance = parseInt(currentBalText);
             
-            const amount = prompt("Enter amount to withdraw (TZS):"); 
-            if(!amount || isNaN(amount) || amount <= 0) return;
+            if (isNaN(currentBalance) || currentBalance <= 0) {
+                alert("Insufficient amount. Your wallet balance must be greater than 0 TZS to request a withdrawal.");
+                return; // Stop the function completely
+            }
+            
+            const amount = prompt(`Enter amount to withdraw (Max available: TZS ${currentBalance.toLocaleString()}):`); 
+            const reqAmount = parseInt(amount);
+            if(!reqAmount || isNaN(reqAmount) || reqAmount <= 0) return;
+            
+            if(reqAmount > currentBalance) {
+                alert(`Insufficient amount. You cannot request more than your available balance of TZS ${currentBalance.toLocaleString()}.`);
+                return; // Stop the function completely
+            }
             
             const details = prompt("Enter your Mobile Money Number or Bank Account for the transfer:"); 
             if(!details) return;
@@ -920,7 +948,7 @@
                 await addDoc(collection(db, "payouts"), { 
                     supplierId: user.uid, 
                     supplierName: user.displayName || user.email, 
-                    amount: Number(amount), 
+                    amount: reqAmount, 
                     accountDetails: details, 
                     status: "PENDING", 
                     createdAt: serverTimestamp() 
@@ -930,7 +958,7 @@
                 alert("Failed to request payout. Try again later."); 
             }
         }
-
+        
         // --- 💬 DISPATCH CHAT ---
         let supplierChatListener = null;
         window.initSupplierChat = async function() {
@@ -1119,7 +1147,9 @@
                     await addDoc(collection(db, "products"), { 
                         supplierId: user.uid, 
                         supplierName: user.displayName || user.email, 
-                        name: document.getElementById('prod-name').value, 
+                        name: document.getElementById('prod-name').value,
+                        brand: document.getElementById('prod-brand').value,
+                        model: document.getElementById('prod-model').value,
                         category: document.getElementById('prod-category').value, 
                         price: Number(document.getElementById('prod-price').value), 
                         weight: measurementValue,
