@@ -534,6 +534,11 @@
             </div>
 
             <span id="fs-modal-price" class="text-3xl font-black text-green-600 dark:text-green-400 block mb-6"></span>
+            <div id="fs-variation-container" class="mb-6 hidden bg-gray-50 dark:bg-gray-800 p-4 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-sm">
+                <label class="block text-[10px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest mb-2">Select Option</label>
+                <select id="fs-variation-select" onchange="window.handleVariationChange()" class="w-full bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-3 outline-none font-bold text-sm text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 transition-colors cursor-pointer">
+                </select>
+            </div>
 
             <h4 class="font-black text-sm mb-2 dark:text-white">Product Description</h4>
             <p id="fs-modal-desc" class="text-gray-500 dark:text-gray-400 text-sm mb-8 leading-relaxed font-medium"></p>
@@ -1105,30 +1110,55 @@
             document.getElementById('fs-modal-desc').textContent = p.desc;
             document.getElementById('fs-modal-rating-text').textContent = `${p.rating} (${p.reviews} verified)`;
             document.getElementById('fs-modal-review-text').textContent = `"${p.reviewTxt}"`;
-            document.getElementById('fs-modal-price').textContent = `TZS ${p.price.toLocaleString()}`;
-            document.getElementById('fs-modal-qty').value = 1;
-            
-            const userReviewsContainer = document.getElementById('fs-user-added-reviews');
-            if (userReviewsContainer) userReviewsContainer.innerHTML = '';
+            // Keep these existing lines running
+        document.getElementById('fs-modal-qty').value = 1;
+        const userReviewsContainer = document.getElementById('fs-user-added-reviews');
+        if (userReviewsContainer) userReviewsContainer.innerHTML = '';
 
+        // 🟢 NEW: Variation Handling Logic (Replaces old Price & Stock)
+        window.currentSelectedVariation = null;
+        const varContainer = document.getElementById('fs-variation-container');
+        const varSelect = document.getElementById('fs-variation-select');
+        
+        if (p.variations && p.variations.length > 0) {
+            // If it has variations, build the dropdown menu
+            varSelect.innerHTML = p.variations.map((v, i) => 
+                `<option value="${i}" ${v.stock <= 0 ? 'disabled' : ''}>${v.name} - TZS ${v.price.toLocaleString()} ${v.stock <= 0 ? '(Out of Stock)' : ''}</option>`
+            ).join('');
+            varContainer.classList.remove('hidden');
+            
+            // Automatically select the first option to update the price/stock on screen
+            window.handleVariationChange(); 
+        } else {
+            // If no variations, hide the dropdown and show standard price/stock
+            varContainer.classList.add('hidden');
+            varSelect.innerHTML = '';
+            document.getElementById('fs-modal-price').textContent = `TZS ${p.price.toLocaleString()}`;
+            
             const stockBadge = document.getElementById('fs-modal-stock-badge');
             stockBadge.textContent = `Stock: ${p.stock} units`;
-            if(p.stock > 0) {
-                stockBadge.className = "px-3 py-1 bg-green-50 text-green-600 dark:bg-green-900/30 dark:text-green-400 text-[10px] font-black rounded border border-green-100 dark:border-green-800 inline-block uppercase tracking-widest";
-            } else {
-                stockBadge.className = "px-3 py-1 bg-red-50 text-red-600 dark:bg-red-900/30 dark:text-red-400 text-[10px] font-black rounded border border-red-100 dark:border-red-800 inline-block uppercase tracking-widest";
-            }
+            stockBadge.className = p.stock > 0 ? "px-3 py-1 bg-green-50 text-green-600 dark:bg-green-900/30 dark:text-green-400 text-[10px] font-black rounded border border-green-100 dark:border-green-800 inline-block uppercase tracking-widest" : "px-3 py-1 bg-red-50 text-red-600 dark:bg-red-900/30 dark:text-red-400 text-[10px] font-black rounded border border-red-100 dark:border-red-800 inline-block uppercase tracking-widest";
+        }
             
             history.pushState({ modal: 'fs-product' }, '', '#product');
             
+            // --- 🟢 UPDATED: DYNAMIC FREQUENTLY BOUGHT TOGETHER ---
             const fbtSection = document.getElementById('fs-fbt-section');
             window.fbtItem = null;
-            if(window.productDatabase && window.productDatabase['Tools & Hardware'] && window.productDatabase['Tools & Hardware'].length > 0) {
-                window.fbtItem = window.productDatabase['Tools & Hardware'][0]; 
-            }
             
-            if(window.fbtItem && window.fbtItem.name !== p.name) {
-                document.getElementById('fs-fbt-img').src = window.fbtItem.img;
+            // 1. Flatten all categories into one massive list of products
+            let allProducts = Object.values(window.productDatabase || {}).flat();
+            
+            // 2. Filter out the product we are currently looking at
+            let otherProducts = allProducts.filter(item => item.id !== p.id);
+            
+            // 3. Pick a random product from the remaining list!
+            if (otherProducts.length > 0) {
+                window.fbtItem = otherProducts[Math.floor(Math.random() * otherProducts.length)];
+            }
+
+            if(window.fbtItem) {
+                document.getElementById('fs-fbt-img').src = window.fbtItem.img || 'https://ui-avatars.com/api/?name=Item';
                 document.getElementById('fs-fbt-title').textContent = window.fbtItem.name;
                 document.getElementById('fs-fbt-price').textContent = `+ TZS ${window.fbtItem.price.toLocaleString()}`;
                 const fbtCheck = document.getElementById('fs-fbt-checkbox');
@@ -1146,6 +1176,24 @@
             }
         }
 
+        // 🟢 PASTE PART B RIGHT HERE (Line 1169)
+        window.handleVariationChange = function() {
+            if(!window.currentModalProduct || !window.currentModalProduct.variations) return;
+            const select = document.getElementById('fs-variation-select');
+            const selectedVar = window.currentModalProduct.variations[select.value];
+            if(!selectedVar) return;
+            
+            window.currentSelectedVariation = selectedVar;
+            
+            // Update the main big Price
+            document.getElementById('fs-modal-price').textContent = `TZS ${selectedVar.price.toLocaleString()}`;
+            
+            // Update the Stock Badge
+            const stockBadge = document.getElementById('fs-modal-stock-badge');
+            stockBadge.textContent = `Stock: ${selectedVar.stock} units`;
+            stockBadge.className = selectedVar.stock > 0 ? "px-3 py-1 bg-green-50 text-green-600 dark:bg-green-900/30 dark:text-green-400 text-[10px] font-black rounded border border-green-100 dark:border-green-800 inline-block uppercase tracking-widest" : "px-3 py-1 bg-red-50 text-red-600 dark:bg-red-900/30 dark:text-red-400 text-[10px] font-black rounded border border-red-100 dark:border-red-800 inline-block uppercase tracking-widest";
+        };
+
         window.closeProductFullScreen = function() {
             const modal = document.getElementById('fs-product-view');
             if(modal) {
@@ -1156,36 +1204,68 @@
             }
         };
 
+        // 🟢 UPDATED: Add To Basket (Now supports Variations!)
         window.addToBasketAction = function() {
             if (!window.currentModalProduct) return;
             
-            // 🛑 THE BOUNCER: Block out of stock items
-            if (window.currentModalProduct.stock <= 0) {
-                alert("Out of stock!");
+            // 1. Determine the final title, price, and stock based on variation choice
+            let finalTitle = window.currentModalProduct.name;
+            let finalPrice = window.currentModalProduct.price;
+            let currentStock = window.currentModalProduct.stock;
+            
+            if (window.currentSelectedVariation) {
+                finalTitle = `${window.currentModalProduct.name} (${window.currentSelectedVariation.name})`;
+                finalPrice = window.currentSelectedVariation.price;
+                currentStock = window.currentSelectedVariation.stock;
+            }
+
+            // 2. THE BOUNCER: Block out of stock items
+            if (currentStock <= 0) {
+                alert("Sorry, this specific option is currently out of stock!");
                 return; // Stop the function completely
             }
             
+            // 3. Get the quantity
             let qtyVal = parseInt(document.getElementById('fs-modal-qty').value);
             const qty = isNaN(qtyVal) || qtyVal < 1 ? 1 : qtyVal; 
             
+            // 4. Add to the cart array
             window.cart.push({ 
-                title: window.currentModalProduct.name, 
-                price: window.currentModalProduct.price, 
-                wt: window.currentModalProduct.wt || 0, 
-                qty: qty 
+                id: window.currentModalProduct.id,
+                title: finalTitle, 
+                price: finalPrice, 
+                wt: window.currentModalProduct.weight || window.currentModalProduct.wt || 0, 
+                qty: qty,
+                img: window.currentModalProduct.img
             });
             
+            // 5. Check for 'Frequently Bought Together' item
             const fbtCheck = document.getElementById('fs-fbt-checkbox');
             if(window.fbtItem && fbtCheck && fbtCheck.checked) {
                 window.cart.push({ title: window.fbtItem.name, price: window.fbtItem.price, wt: window.fbtItem.wt || 0, qty: 1 });
             }
+
+            // 6. Save, update UI, and close modal
+            if(typeof window.updateBadge === 'function') window.updateBadge();
+            if(typeof window.saveCart === 'function') window.saveCart();
+            if(typeof window.updateCartUI === 'function') window.updateCartUI();
             
-            if(typeof window.updateBadge === 'function') window.updateBadge(); 
             window.closeProductFullScreen();
-            
             if (window.location.hash === '#product') {
                 history.back();
             }
+            
+            // 7. Show a slick success toast
+            const toast = document.createElement('div');
+            toast.className = "fixed bottom-5 left-1/2 -translate-x-1/2 bg-gray-900 text-white px-6 py-3 rounded-full text-[10px] uppercase tracking-widest font-black shadow-2xl z-[600] animate-stagger-in flex items-center gap-2 border border-gray-700";
+            toast.innerHTML = `<span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span> Added to Cart`;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transition = 'opacity 0.5s ease';
+                setTimeout(() => toast.remove(), 500);
+            }, 2500);
         };
 
         window.changeQty = function(amt) {
