@@ -516,25 +516,21 @@
             });
         }
         
-        window.handleSearch = () => {
+window.handleSearch = () => {
             const el = document.getElementById('global-search');
             const term = (el ? el.value : '').toLowerCase();
             
             if (window.appData.currentTab === 'orders') {
-                // Sales Flow Tab: Shows EVERYTHING (including pending)
-                // 🟢 NEW: Search logic for Master Inventory
-            else if (window.appData.currentTab === 'inventory') {
-                const filtered = window.appData.products.filter(p => 
-                    String(p.name || '').toLowerCase().includes(term) || 
-                    String(p.supplierName || '').toLowerCase().includes(term) ||
-                    String(p.category || '').toLowerCase().includes(term)
+                const filtered = window.appData.orders.filter(o => 
+                    String(o.orderId || '').toLowerCase().includes(term) || 
+                    String(o.userName || '').toLowerCase().includes(term) || 
+                    String(o.userEmail || '').toLowerCase().includes(term) ||
+                    String(o.status || '').toLowerCase().includes(term) 
                 );
-                renderAdminInventory(filtered);
+                renderOrders(filtered);
             } 
-            // 🟢 NEW: Search logic for Deep-Dive Orders tab
             else if (window.appData.currentTab === 'details') {
                 const filtered = window.appData.orders.filter(o => 
-                    // 🛑 FIX: Only show PAID, PROCESSING, or SOLVED orders. Hide PENDING.
                     (o.status === 'PAID' || o.status === 'SUCCESS' || o.status === 'PROCESSING' || o.status === 'SOLVED') &&
                     (String(o.orderId || '').toLowerCase().includes(term) || 
                     String(o.userName || '').toLowerCase().includes(term) || 
@@ -558,8 +554,17 @@
                 );
                 renderVendors(filtered);
             }
+            else if (window.appData.currentTab === 'inventory') {
+                const filtered = window.appData.products.filter(p => 
+                    String(p.name || '').toLowerCase().includes(term) || 
+                    String(p.supplierName || '').toLowerCase().includes(term) ||
+                    String(p.category || '').toLowerCase().includes(term)
+                );
+                if (typeof renderAdminInventory === 'function') {
+                    renderAdminInventory(filtered);
+                }
+            }
         };
-
         function renderAdminInventory(products) {
             const feed = document.getElementById('admin-inventory-feed');
             if(products.length === 0) {
