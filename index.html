@@ -1229,15 +1229,23 @@
             let qtyVal = parseInt(document.getElementById('fs-modal-qty').value);
             const qty = isNaN(qtyVal) || qtyVal < 1 ? 1 : qtyVal; 
             
-            // 4. Add to the cart array
-            window.cart.push({ 
-                id: window.currentModalProduct.id,
-                title: finalTitle, 
-                price: finalPrice, 
-                wt: window.currentModalProduct.weight || window.currentModalProduct.wt || 0, 
-                qty: qty,
-                img: window.currentModalProduct.img
-            });
+            // 4. SMART GROUPING: Check if this exact variation is already in the cart
+            const existingItem = window.cart.find(item => item.title === finalTitle);
+
+            if (existingItem) {
+                // If it exists, just bump the quantity
+                existingItem.qty += qty;
+            } else {
+                // If it's new, push it to the array
+                window.cart.push({ 
+                    id: window.currentModalProduct.id,
+                    title: finalTitle, 
+                    price: finalPrice, 
+                    wt: window.currentModalProduct.weight || window.currentModalProduct.wt || 0, 
+                    qty: qty,
+                    img: window.currentModalProduct.img
+                });
+            }
             
             // 5. Check for 'Frequently Bought Together' item
             const fbtCheck = document.getElementById('fs-fbt-checkbox');
