@@ -267,7 +267,7 @@
                     <span class="text-[10px] font-black uppercase tracking-widest text-gray-500">WhatsApp Help</span>
                 </a>
             </div>
-        </div> <div id="view-inventory" class="supplier-view hidden space-y-8 stagger-item">
+        <div id="view-inventory" class="supplier-view hidden space-y-8 stagger-item">
             
             <div class="bg-white dark:bg-gray-800 p-8 rounded-[2.5rem] shadow-sm border border-gray-100 dark:border-gray-700 relative overflow-hidden transition-colors">
                 <div class="absolute top-0 right-0 w-32 h-32 bg-green-50 dark:bg-green-900/10 rounded-full blur-[40px] pointer-events-none"></div>
@@ -341,30 +341,26 @@
                         <input type="text" id="prod-desc" required class="w-full bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-600 rounded-2xl px-5 py-4 text-sm font-bold outline-none focus:ring-2 focus:ring-green-500 text-gray-900 dark:text-white" placeholder="Grade 42.5R high-strength cement.">
                     </div>
 
-        <div class="bg-gray-100 dark:bg-gray-800/50 p-5 rounded-2xl border border-gray-200 dark:border-gray-700 mt-5">
-            <div class="flex justify-between items-center mb-3">
-                <label class="block text-[10px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest">Product Variations (Optional)</label>
-                <span class="text-[9px] font-bold text-blue-500 bg-blue-50 dark:bg-blue-900/30 px-2 py-1 rounded">Colors, Sizes, etc.</span>
-            </div>
-            <p class="text-xs text-gray-500 mb-4">If this product comes in different sizes, colors, or models, add them below. Leave blank for standard products.</p>
-            
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-3">
-                <input type="text" id="var-name" class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-3 text-xs font-bold outline-none focus:ring-2 focus:ring-blue-500 dark:text-white" placeholder="Option (e.g. Red, 20mm)">
-                <input type="number" id="var-price" class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-3 text-xs font-bold outline-none focus:ring-2 focus:ring-blue-500 dark:text-white" placeholder="Price (TZS)">
-                <div class="flex gap-2">
-                    <input type="number" id="var-stock" class="w-full bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-3 text-xs font-bold outline-none focus:ring-2 focus:ring-blue-500 dark:text-white" placeholder="Stock Qty">
-                    <button type="button" onclick="addVariation()" class="bg-blue-600 hover:bg-blue-500 text-white rounded-xl px-4 font-black text-lg click-press shadow-sm transition-colors">+</button>
-                </div>
-            </div>
-            
-            <div id="variations-list" class="space-y-2 empty:hidden"></div>
-        </div>
-        <div>
-            <div class="flex justify-between items-end mb-2">
+                    <div class="bg-gray-100 dark:bg-gray-800/50 p-5 rounded-2xl border border-gray-200 dark:border-gray-700 mt-5">
+                        <div class="flex justify-between items-center mb-3">
+                            <label class="block text-[10px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest">Product Variations (Optional)</label>
+                            <span class="text-[9px] font-bold text-blue-500 bg-blue-50 dark:bg-blue-900/30 px-2 py-1 rounded">Colors, Sizes, etc.</span>
+                        </div>
+                        <p class="text-xs text-gray-500 mb-4">If this product comes in different sizes, colors, or models, add them below. Leave blank for standard products.</p>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-3">
+                            <input type="text" id="var-name" class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-3 text-xs font-bold outline-none focus:ring-2 focus:ring-blue-500 dark:text-white" placeholder="Option (e.g. Red, 20mm)">
+                            <input type="number" id="var-price" class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-3 text-xs font-bold outline-none focus:ring-2 focus:ring-blue-500 dark:text-white" placeholder="Price (TZS)">
+                            <div class="flex gap-2">
+                                <input type="number" id="var-stock" class="w-full bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-3 text-xs font-bold outline-none focus:ring-2 focus:ring-blue-500 dark:text-white" placeholder="Stock Qty">
+                                <button type="button" onclick="addVariation()" class="bg-blue-600 hover:bg-blue-500 text-white rounded-xl px-4 font-black text-lg click-press shadow-sm transition-colors">+</button>
+                            </div>
+                        </div>
+                        <div id="variations-list" class="space-y-2 empty:hidden"></div>
+                    </div>
 
                     <div>
                         <div class="flex justify-between items-end mb-2">
-                            
                             <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest">Product Images (Gallery)</label>
                             <span class="text-[9px] font-bold text-green-500 bg-green-500/10 px-2 py-1 rounded">Up to 5 images</span>
                         </div>
