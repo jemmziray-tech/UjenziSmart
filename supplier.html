@@ -232,13 +232,14 @@
                         <h3 id="stat-active" class="text-2xl font-black text-gray-900 dark:text-white">0</h3>
                     </div>
                     <div class="bg-white dark:bg-gray-800 p-5 rounded-[2rem] shadow-sm border border-gray-100 dark:border-gray-700 flex flex-col justify-center relative overflow-hidden group">
+                        <div class="bg-white dark:bg-gray-800 p-5 rounded-[2rem] shadow-sm border border-gray-100 dark:border-gray-700 flex flex-col justify-center relative overflow-hidden group">
                         <p class="text-[9px] text-gray-400 font-bold uppercase tracking-widest mb-1">Top Product</p>
                         <h3 id="stat-top-product" class="text-xs font-black text-gray-900 dark:text-white truncate">-</h3>
                     </div>
                 </div>
             </div>
 
-        <div class="bg-white dark:bg-gray-800 p-8 rounded-[2.5rem] shadow-sm border border-gray-100 dark:border-gray-700 mt-8 transition-colors stagger-item">
+            <div class="bg-white dark:bg-gray-800 p-8 rounded-[2.5rem] shadow-sm border border-gray-100 dark:border-gray-700 mt-8 transition-colors stagger-item">
                 <h3 class="text-lg font-black mb-4 dark:text-white">Financial Intelligence</h3>
                 <div class="flex flex-col md:flex-row gap-4">
                     <select id="export-filter-type" class="flex-grow bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3 text-xs font-bold outline-none dark:text-white">
@@ -653,7 +654,8 @@
                     
                     document.getElementById('login-screen').classList.add('hidden'); 
                     document.getElementById('dashboard-screen').classList.remove('hidden');
-                    
+
+                    window.triggerWelcomeAutomation(user);
                     updateHeaderUI(user);
                     listenToInventory(user.uid); 
                     listenToPayouts(user.uid); 
@@ -1392,7 +1394,7 @@
 window.triggerWelcomeAutomation = function(user) {
     const hasSeenWelcome = localStorage.getItem('u_smart_welcome_' + user.uid);
     
-    if (!hasSeenWelcome) {
+    if (true) { // 🟢 FORCED ON FOR TESTING
         // 1. Create the overlay with fade-in classes
         const welcomeOverlay = document.createElement('div');
         welcomeOverlay.id = "supplier-welcome-overlay";
