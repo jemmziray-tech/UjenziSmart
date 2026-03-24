@@ -1411,8 +1411,9 @@
                 type: 'Mobile Money', deliveryContact: delPhone, status: 'PENDING' 
             };
 
-            // 🛑 FIX: Pass the exact cart items to deduct stock
-            if(typeof window.submitCloudOrder === 'function') window.submitCloudOrder(receipt, orderId, [...window.cart]);
+            // 🛑 FIX: Save a snapshot of the cart, but pass an EMPTY array to submitCloudOrder so it WAITS to deduct stock!
+            const cartSnapshot = [...window.cart];
+            if(typeof window.submitCloudOrder === 'function') window.submitCloudOrder(receipt, orderId, []);
 
             const btn = document.getElementById("pay-btn");
             if(btn) { btn.innerHTML = "⏳ Connecting..."; btn.disabled = true; }
@@ -1426,7 +1427,8 @@
                 const data = await response.json();
                 if (response.ok && data.success) {
                     if(btn) { btn.innerText = "📱 Check phone!"; btn.classList.replace("bg-green-600", "bg-blue-600"); }
-                    if (typeof window.listenForSnippeWebhook === 'function') window.listenForSnippeWebhook(orderId, btn, 'mobile');
+                    // 🟢 Pass the cartSnapshot to the Webhook Listener!
+                    if (typeof window.listenForSnippeWebhook === 'function') window.listenForSnippeWebhook(orderId, btn, 'mobile', cartSnapshot);
                 } else {
                     alert("Checkout Error: " + (data.error || "Unknown error."));
                     if(btn) { btn.innerHTML = `Send Prompt`; btn.disabled = false; }
@@ -1695,12 +1697,13 @@
                 const formattedProduct = {
                     id: doc.id,
                     name: p.name, price: p.price, wt: p.weight, desc: p.desc, img: p.img, stock: p.stock || 0,
-                    brand: p.brand || '', // 🟢 NEW: Grabbing Brand
-                    model: p.model || '', // 🟢 NEW: Grabbing Model
+                    brand: p.brand || '', 
+                    model: p.model || '', 
                     rating: p.rating || 5.0, reviews: p.reviews || 0, reviewTxt: p.reviewTxt || "Verified Product.",
                     gallery: p.gallery || [p.img],
                     isBoosted: p.isBoosted || false,
-                    featuredUntil: p.featuredUntil || null
+                    featuredUntil: p.featuredUntil || null,
+                    variations: p.variations || [] // 🟢 FIX: This line was missing! Now it reads the variations!
                 };
                 
                 window.allProductsMap[doc.id] = formattedProduct;
@@ -1766,21 +1769,9 @@
                 if(customId) { await setDoc(doc(db, "orders", customId), orderData, { merge: true }); } 
                 else { await addDoc(collection(db, "orders"), orderData); }
 
-                // 🟢 AUTOMATIC INVENTORY DEDUCTION ENGINE
+                // 🟢 ONLY deduct immediately if items are passed (WhatsApp). Mobile Money passes [] to wait for payment.
                 if (itemsToDeduct && itemsToDeduct.length > 0) {
-                    for (let i = 0; i < itemsToDeduct.length; i++) {
-                        const cartItem = itemsToDeduct[i];
-                        // Scan the database for the exact product name
-                        const q = query(collection(db, "products"), where("name", "==", cartItem.title));
-                        const querySnapshot = await getDocs(q);
-                        
-                        querySnapshot.forEach(async (productDoc) => {
-                            const currentStock = productDoc.data().stock || 0;
-                            // Mathematically deduct the cart quantity
-                            const newStock = Math.max(0, currentStock - cartItem.qty);
-                            await updateDoc(doc(db, "products", productDoc.id), { stock: newStock });
-                        });
-                    }
+                    window.executeStockDeduction(itemsToDeduct);
                 }
             } catch (error) { 
                 console.error("Sync Error:", error); 
@@ -1788,13 +1779,55 @@
             }
         };
 
-        window.listenForSnippeWebhook = function(orderId, btnElement, payMethod) {
+        // 🟢 NEW: Dedicated stock engine that accurately handles Variations!
+        window.executeStockDeduction = async function(cartItems) {
+            for (let i = 0; i < cartItems.length; i++) {
+                const item = cartItems[i];
+                try {
+                    const product = window.allProductsMap[item.id];
+                    if (!product) continue;
+
+                    let updatedVariations = product.variations || [];
+                    let newMainStock = product.stock;
+                    let isVariation = false;
+
+                    if (updatedVariations.length > 0) {
+                        updatedVariations = updatedVariations.map(v => {
+                            // If cart title contains variation name, deduct from this specific option!
+                            if (item.title.includes(`(${v.name})`)) {
+                                isVariation = true;
+                                return { ...v, stock: Math.max(0, v.stock - item.qty) };
+                            }
+                            return v;
+                        });
+                    }
+
+                    if (!isVariation) {
+                        newMainStock = Math.max(0, product.stock - item.qty);
+                    }
+
+                    const updateData = {};
+                    if (!isVariation) updateData.stock = newMainStock;
+                    if (updatedVariations.length > 0) updateData.variations = updatedVariations;
+
+                    await updateDoc(doc(db, "products", item.id), updateData);
+                } catch(e) { console.error("Stock error:", e); }
+            }
+        };
+
+        window.listenForSnippeWebhook = function(orderId, btnElement, payMethod, cartSnapshot) {
             const unsubscribe = onSnapshot(doc(db, "orders", orderId), (docSnap) => {
                 if (docSnap.exists()) {
                     const status = docSnap.data().status;
                     if (status === "SUCCESS" || status === "PAID") {
                         unsubscribe(); 
                         btnElement.innerText = "✅ Payment Received!"; btnElement.classList.replace("bg-blue-600", "bg-gray-900");
+                        
+                        // 🟢 DEDUCT STOCK ONLY AFTER PAYMENT IS SUCCESSFUL!
+                        if (cartSnapshot && cartSnapshot.length > 0) {
+                            window.executeStockDeduction(cartSnapshot);
+                        }
+
                         setTimeout(() => {
                             window.cart = []; window.updateBadge(); window.navigateTo('history', false, true); 
                             btnElement.innerHTML = `Send Prompt to Phone`; btnElement.disabled = false; btnElement.classList.replace("bg-gray-900", "bg-green-600");
@@ -1809,7 +1842,6 @@
                 }
             });
         };
-
         getRedirectResult(auth).then((result) => {
             if (result) {
                 localStorage.setItem('ujenzi_user', JSON.stringify({ name: result.user.displayName, email: result.user.email, photoURL: result.user.photoURL }));
