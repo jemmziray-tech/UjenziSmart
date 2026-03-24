@@ -267,7 +267,7 @@
                     <span class="text-[10px] font-black uppercase tracking-widest text-gray-500">WhatsApp Help</span>
                 </a>
             </div>
-        <div id="view-inventory" class="supplier-view hidden space-y-8 stagger-item">
+        </div> <div id="view-inventory" class="supplier-view hidden space-y-8 stagger-item">
             
             <div class="bg-white dark:bg-gray-800 p-8 rounded-[2.5rem] shadow-sm border border-gray-100 dark:border-gray-700 relative overflow-hidden transition-colors">
                 <div class="absolute top-0 right-0 w-32 h-32 bg-green-50 dark:bg-green-900/10 rounded-full blur-[40px] pointer-events-none"></div>
@@ -1386,11 +1386,15 @@
                 } 
             });
         }
+        
         // 🟢 AUTOMATIC WELCOME OVERLAY
 window.triggerWelcomeAutomation = function(user) {
+    // 🟢 FORCES BROWSER TO FORGET SO IT SHOWS THE POPUP TODAY
+    localStorage.removeItem('u_smart_welcome_' + user.uid); 
+    
     const hasSeenWelcome = localStorage.getItem('u_smart_welcome_' + user.uid);
     
-    if (true) { // 🟢 FORCED ON FOR TESTING
+    if (!hasSeenWelcome) { 
         // 1. Create the overlay with fade-in classes
         const welcomeOverlay = document.createElement('div');
         welcomeOverlay.id = "supplier-welcome-overlay";
