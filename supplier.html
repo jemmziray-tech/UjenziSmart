@@ -237,7 +237,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+
         <div class="bg-white dark:bg-gray-800 p-8 rounded-[2.5rem] shadow-sm border border-gray-100 dark:border-gray-700 mt-8 transition-colors stagger-item">
                 <h3 class="text-lg font-black mb-4 dark:text-white">Financial Intelligence</h3>
                 <div class="flex flex-col md:flex-row gap-4">
@@ -1388,6 +1388,96 @@
                 } 
             });
         }
+        // 🟢 AUTOMATIC WELCOME OVERLAY
+window.triggerWelcomeAutomation = function(user) {
+    const hasSeenWelcome = localStorage.getItem('u_smart_welcome_' + user.uid);
+    
+    if (!hasSeenWelcome) {
+        // 1. Create the overlay with fade-in classes
+        const welcomeOverlay = document.createElement('div');
+        welcomeOverlay.id = "supplier-welcome-overlay";
+        welcomeOverlay.className = "fixed inset-0 z-[1000] bg-black/80 backdrop-blur-md flex items-center justify-center p-6 opacity-0 transition-opacity duration-300";
+        
+        welcomeOverlay.innerHTML = `
+            <div id="welcome-modal-box" class="bg-white dark:bg-gray-900 rounded-3xl max-w-lg w-full p-8 text-center shadow-2xl border border-gray-100 dark:border-gray-800 transform scale-95 transition-transform duration-300">
+                <div class="w-20 h-20 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center mx-auto mb-6 shadow-inner">
+                    <span class="text-4xl">🏗️</span>
+                </div>
+                <h2 class="text-2xl font-black mb-2 text-gray-900 dark:text-white">Welcome to the Founding 5!</h2>
+                <p class="text-gray-500 dark:text-gray-400 text-sm mb-8">Your command center is ready. We've prepared a "Success Kit" to help you start selling today.</p>
+                
+                <div class="space-y-3">
+                    <button onclick="window.downloadManual()" class="w-full bg-green-600 hover:bg-green-500 text-white font-black py-4 rounded-2xl transition-colors flex items-center justify-center gap-3 shadow-lg click-press">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
+                        DOWNLOAD SUCCESS KIT
+                    </button>
+                    <button onclick="window.closeWelcomeOverlay()" class="w-full py-4 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 text-[10px] font-bold uppercase tracking-widest transition-colors">Maybe Later</button>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(welcomeOverlay);
+        
+        // 2. Trigger the smooth fade-in animation
+        requestAnimationFrame(() => {
+            welcomeOverlay.classList.remove('opacity-0');
+            document.getElementById('welcome-modal-box').classList.remove('scale-95');
+        });
+        
+        // 3. Mark as seen
+        localStorage.setItem('u_smart_welcome_' + user.uid, 'true');
+    }
+};
+
+// 🟢 SAFE CLOSE LOGIC
+window.closeWelcomeOverlay = function() {
+    const overlay = document.getElementById('supplier-welcome-overlay');
+    const modalBox = document.getElementById('welcome-modal-box');
+    if (overlay && modalBox) {
+        // Fade out smoothly before removing
+        overlay.classList.add('opacity-0');
+        modalBox.classList.add('scale-95');
+        setTimeout(() => overlay.remove(), 300);
+    }
+};
+
+// 🟢 THE PREMIUM DOWNLOAD LOGIC
+window.downloadManual = function() {
+    // Formatted to look like a clean, professional document
+    const manualText = `
+=========================================
+      UJENZISMART SUPPLIER SUCCESS KIT
+=========================================
+
+Welcome to the Founding 5! 
+Here is your quick-start guide to mastering the platform:
+
+1. UPLOAD STRATEGY
+   - Always use high-quality images.
+   - Use the "Product Variations" builder for different sizes, colors, and gauges.
+
+2. PAYMENT TRANSPARENCY
+   - Our platform takes a flat 5% commission. You keep the rest.
+   - Funds securely move to your "Available" balance once the customer confirms delivery.
+
+3. SUPPORT
+   - Need help? Click the "WhatsApp Help" button in your Command Center to reach your dedicated account manager.
+
+Let's build Tanzania, together.
+- The UjenziSmart Team
+=========================================
+    `;
+    
+    const blob = new Blob([manualText], { type: 'text/plain' });
+    const anchor = document.createElement('a');
+    anchor.download = 'UjenziSmart_Supplier_Manual.txt';
+    anchor.href = (window.webkitURL || window.URL).createObjectURL(blob);
+    anchor.click();
+    
+    // Automatically close the overlay after they click download
+    window.closeWelcomeOverlay();
+};
+
+        
     </script>
 </body>
 </html>
