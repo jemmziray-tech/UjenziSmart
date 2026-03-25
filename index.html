@@ -907,14 +907,18 @@
                 <div class="grid grid-cols-2 gap-2 md:gap-4">${results.map((p, i) => window.generateInstaCardHTML(p, i)).join('')}</div>`;
         }
 
-        // 🟢 NEW: V3 INSTAGRAM-STYLE ENDLESS FEED CARDS
+        // 🟢 UPGRADED: V3 INSTAGRAM-STYLE ENDLESS FEED CARDS
         window.generateInstaCardHTML = function(p, i) {
             if(!p) return '';
             
-            // 🟢 NEW: Format the Brand and Model text
-            let brandModelStr = '';
-            if(p.brand || p.model) {
-                brandModelStr = `<p class="text-[9px] font-black text-blue-500 uppercase tracking-wider mt-1 truncate">${p.brand} ${p.model}</p>`;
+            // Stack the Brand and Model neatly
+            let brandHtml = p.brand ? `<p class="text-[10px] font-black text-blue-500 uppercase tracking-wider truncate">${p.brand}</p>` : '';
+            let modelHtml = p.model ? `<p class="text-[8px] font-bold text-gray-500 uppercase tracking-wider truncate">${p.model}</p>` : '';
+            
+            // Create a sleek badge for the Weight/Measurement
+            let unitBadge = '';
+            if (p.wt) {
+                unitBadge = `<span class="text-[8px] font-black text-gray-500 bg-gray-100 dark:bg-gray-700 dark:text-gray-300 px-1.5 py-0.5 rounded shadow-sm">${p.wt} ${p.unit || ''}</span>`;
             }
 
             return `
@@ -926,8 +930,15 @@
                     <div class="p-2.5 flex flex-col justify-between flex-grow">
                         <div>
                             <p class="text-[11px] font-bold leading-tight mb-1 h-8 overflow-hidden dark:text-gray-200">${p.name}</p>
-                            ${brandModelStr} </div>
-                        <p class="text-green-600 dark:text-green-400 font-black text-xs md:text-sm mt-2">TZS ${p.price.toLocaleString()}</p>
+                            <div class="flex flex-col gap-0.5 mt-1">
+                                ${brandHtml}
+                                ${modelHtml}
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-end mt-2">
+                            <p class="text-green-600 dark:text-green-400 font-black text-xs md:text-sm">TZS ${p.price.toLocaleString()}</p>
+                            ${unitBadge}
+                        </div>
                     </div>
                 </div>`;
         }
@@ -1106,7 +1117,13 @@
 
             document.getElementById('fs-modal-title').textContent = p.name;
             // 🟢 NEW: Set Brand and Model in the modal
-            document.getElementById('fs-modal-brand-model').textContent = (p.brand || p.model) ? `${p.brand} ${p.model}` : '';
+            // 🟢 UPGRADED: Stack Brand, Model, and Unit in the modal
+            let detailsHtml = '';
+            if (p.brand) detailsHtml += `<span class="block text-blue-500">Brand: ${p.brand}</span>`;
+            if (p.model) detailsHtml += `<span class="block text-gray-500 dark:text-gray-400 mt-0.5 text-[9px]">Model: ${p.model}</span>`;
+            if (p.wt) detailsHtml += `<span class="block text-gray-400 dark:text-gray-500 mt-0.5 text-[9px]">Measurement: ${p.wt} ${p.unit || ''}</span>`;
+            
+            document.getElementById('fs-modal-brand-model').innerHTML = detailsHtml;
             document.getElementById('fs-modal-desc').textContent = p.desc;
             document.getElementById('fs-modal-rating-text').textContent = `${p.rating} (${p.reviews} verified)`;
             document.getElementById('fs-modal-review-text').textContent = `"${p.reviewTxt}"`;
@@ -1747,7 +1764,8 @@
                     gallery: p.gallery || [p.img],
                     isBoosted: p.isBoosted || false,
                     featuredUntil: p.featuredUntil || null,
-                    variations: p.variations || [] // 🟢 FIX: This line was missing! Now it reads the variations!
+                    variations: p.variations || [],
+                    unit: p.unit || '' // 🟢 NEW: Grab the measurement unit (kg, L, m, etc)
                 };
                 
                 window.allProductsMap[doc.id] = formattedProduct;
