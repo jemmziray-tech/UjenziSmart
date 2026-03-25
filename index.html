@@ -1491,7 +1491,9 @@
                     // 🟢 Pass the cartSnapshot to the Webhook Listener!
                     if (typeof window.listenForSnippeWebhook === 'function') window.listenForSnippeWebhook(orderId, btn, 'mobile', cartSnapshot);
                 } else {
-                    alert("Checkout Error: " + (data.error || "Unknown error."));
+                    // This will tell us the ACTUAL error from the server instead of [object Object]
+                    console.error("Full Server Error:", data);
+                    alert("Checkout Error: " + (typeof data.error === 'object' ? JSON.stringify(data.error) : data.error));
                     if(btn) { btn.innerHTML = `Send Prompt`; btn.disabled = false; }
                 }
             } catch (error) {
