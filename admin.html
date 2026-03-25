@@ -234,6 +234,20 @@
                         Grant Access
                     </button>
                 </div>
+                    <div class="w-full bg-white dark:bg-slate-800 p-6 rounded-[2rem] shadow-xl border border-gray-200 dark:border-slate-700 mt-6">
+                    <h3 class="text-lg font-black text-gray-900 dark:text-white mb-1 flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-blue-500"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m.75 12l3 3m0 0l3-3m-3 3v-6m-1.5-9H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" /></svg>
+                        Supplier Guide PDF
+                    </h3>
+                    <p class="text-[10px] text-gray-500 dark:text-gray-400 font-bold uppercase tracking-widest mb-6">Update the manual seen by vendors</p>
+                    
+                    <input type="file" id="admin-manual-upload" accept="application/pdf" class="w-full bg-gray-50 dark:bg-slate-900 border border-gray-200 dark:border-slate-700 rounded-xl px-4 py-3 text-xs font-bold outline-none focus:border-blue-500 mb-4 dark:text-white transition-colors cursor-pointer file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-[10px] file:font-black file:uppercase file:tracking-widest file:bg-blue-50 file:text-blue-600 hover:file:bg-blue-100 dark:file:bg-blue-900/30 dark:file:text-blue-400">
+                    
+                    <button onclick="uploadSupplierManual()" id="upload-manual-btn" class="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-black uppercase tracking-widest click-press shadow-lg transition-all flex justify-center items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5a4.5 4.5 0 01-1.41-8.775 5.25 5.25 0 0110.233-2.33 3 3 0 013.758 3.848A3.752 3.752 0 0118 19.5H6.75z" /></svg>
+                        Upload & Sync
+                    </button>
+                </div>
 
                 <div class="w-full md:w-2/3 bg-white dark:bg-slate-800 rounded-[2rem] overflow-hidden shadow-xl border border-gray-200 dark:border-slate-700">
                     <div class="overflow-x-auto max-h-[60vh]">
@@ -932,6 +946,44 @@ window.handleSearch = () => {
             try {
                 await updateDoc(doc(db, collectionName, docId), { status: newStatus, processedAt: serverTimestamp() });
             } catch(e) { console.error(e); alert("Permission error. Check Firebase Rules."); }
+        };
+
+        // 🟢 UPLOAD SUPPLIER MANUAL LOGIC
+        window.uploadSupplierManual = async function() {
+            const fileInput = document.getElementById('admin-manual-upload');
+            const file = fileInput.files[0];
+            const btn = document.getElementById('upload-manual-btn');
+
+            if (!file) return alert("Please select a PDF file first.");
+            if (file.type !== "application/pdf") return alert("Please upload a valid PDF document.");
+
+            btn.innerHTML = "⏳ Uploading...";
+            btn.disabled = true;
+
+            try {
+                // Dynamically import Storage methods if they aren't at the top of your script
+                const { getStorage, ref, uploadBytes, getDownloadURL } = await import("https://www.gstatic.com/firebasejs/10.8.1/firebase-storage.js");
+                const storage = getStorage(app); // Get storage instance
+                
+                // 1. Upload the PDF to Firebase Storage (Will overwrite the old one!)
+                const storageRef = ref(storage, 'manuals/official_supplier_guide.pdf'); 
+                await uploadBytes(storageRef, file);
+                const downloadURL = await getDownloadURL(storageRef);
+
+                // 2. Save the URL to the global System Settings in Firestore
+                await setDoc(doc(db, "settings", "system"), {
+                    supplierManualUrl: downloadURL
+                }, { merge: true });
+
+                alert("✅ Supplier Manual updated successfully! Suppliers will instantly see this new version.");
+                fileInput.value = ""; // Clear the input field
+            } catch (error) {
+                console.error("Upload error:", error);
+                alert("Failed to upload manual. Check your internet connection or Firebase Storage rules.");
+            } finally {
+                btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5a4.5 4.5 0 01-1.41-8.775 5.25 5.25 0 0110.233-2.33 3 3 0 013.758 3.848A3.752 3.752 0 0118 19.5H6.75z" /></svg> Upload & Sync`;
+                btn.disabled = false;
+            }
         };
 
         window.addVendor = async () => {
