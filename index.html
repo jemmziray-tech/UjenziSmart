@@ -1755,6 +1755,8 @@
             
             snapshot.forEach(doc => {
                 const p = doc.data();
+                // 🟢 NEW: Ignore any product the supplier has soft-deleted!
+                if (p.isDeleted) return;
                 const formattedProduct = {
                     id: doc.id,
                     name: p.name, price: p.price, wt: p.weight, desc: p.desc, img: p.img, stock: p.stock || 0,
