@@ -580,7 +580,8 @@
         
         window.downloadOfficialManual = async function() {
             try {
-                const { getDoc } = await import("https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js");
+                // 🟢 FIX: Added 'doc' to the import list here!
+                const { getDoc, doc } = await import("https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js");
                 const docRef = doc(window.db, "settings", "system"); // Using global db
                 const docSnap = await getDoc(docRef);
 
@@ -594,6 +595,7 @@
                 alert("Could not connect to the document server.");
             }
         };
+        
     </script>
 
     <script type="module">
