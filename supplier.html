@@ -846,16 +846,31 @@
             const q = query(collection(db, "products"), where("supplierId", "==", uid));
             onSnapshot(q, (snapshot) => {
                 const list = document.getElementById('inventory-list');
-                let items = [];
-                snapshot.forEach((doc) => { items.push({ id: doc.id, ...doc.data() }); });
+                let allHistoricalItems = [];
+                let liveItems = [];
+
+                snapshot.forEach((doc) => { 
+                    const data = doc.data();
+                    // 1. Save EVERY product (even deleted ones) for accurate financial math
+                    allHistoricalItems.push({ id: doc.id, ...data }); 
+                    
+                    // 2. Only save active products for the visual inventory list
+                    if (!data.isDeleted) {
+                        liveItems.push({ id: doc.id, ...data });
+                    }
+                });
                 
-                window.currentSupplierProducts = items; 
+                // Keep deleted items in the main array so pending dispatch orders don't disappear!
+                window.currentSupplierProducts = allHistoricalItems; 
                 if(window.renderDispatchBoard) window.renderDispatchBoard(); 
                 
-                document.getElementById('stat-active').textContent = items.length;
-                fetchAndCalculateStats(items);
+                // Only show the count of LIVE products
+                document.getElementById('stat-active').textContent = liveItems.length;
+                
+                // Calculate money using EVERYTHING ever sold
+                fetchAndCalculateStats(allHistoricalItems);
 
-                if(items.length === 0) { 
+                if(liveItems.length === 0) { 
                     list.innerHTML = `
                     <div class="text-center py-10 bg-gray-50 dark:bg-gray-900 rounded-2xl border border-dashed border-gray-200 dark:border-gray-700 transition-colors">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-12 h-12 mx-auto mb-3 text-gray-300 dark:text-gray-600"><path stroke-linecap="round" stroke-linejoin="round" d="M21 7.5l-2.25-1.313M21 7.5v2.25m0-2.25l-2.25 1.313M3 7.5l2.25-1.313M3 7.5l2.25 1.313M3 7.5v2.25m9 3l2.25-1.313M12 12.75l-2.25-1.313M12 12.75V15m0 6.75l2.25-1.313M12 21.75V19.5m0 2.25l-2.25-1.313m0-16.875L12 2.25l2.25 1.313M21 14.25v2.25l-2.25 1.313m-13.5 0L3 16.5v-2.25" /></svg>
@@ -864,7 +879,8 @@
                     return; 
                 }
 
-                list.innerHTML = items.map(p => {
+                // Render the visual list using ONLY liveItems
+                list.innerHTML = liveItems.map(p => {
                     const isLow = (p.stock || 0) < 10; 
                     const safeWeight = p.weight || 0; 
                     const safeStock = p.stock || 0;
@@ -894,11 +910,17 @@
                 }).join('');
             });
         }
-
+        
         window.deleteProduct = async function(docId) {
-            if(confirm("Are you sure you want to remove this product from the live store?")) {
-                try { await deleteDoc(doc(db, "products", docId)); } 
-                catch(e) { alert("Failed to delete."); }
+            if(confirm("Are you sure you want to remove this product? It will be removed from the live store, but your sales history will be securely retained.")) {
+                try { 
+                    // 🟢 UPGRADE: Soft Delete! We archive it instead of destroying the history.
+                    await updateDoc(doc(db, "products", docId), { 
+                        isDeleted: true,
+                        stock: 0 // Zero out stock so it can't be ordered anymore
+                    }); 
+                } 
+                catch(e) { alert("Failed to remove product."); }
             }
         };
 
