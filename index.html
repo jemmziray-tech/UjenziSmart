@@ -534,10 +534,10 @@
             </div>
 
             <span id="fs-modal-price" class="text-3xl font-black text-green-600 dark:text-green-400 block mb-6"></span>
-            <div id="fs-variation-container" class="mb-6 hidden bg-gray-50 dark:bg-gray-800 p-4 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-sm">
-                <label class="block text-[10px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest mb-2">Select Option</label>
-                <select id="fs-variation-select" onchange="window.handleVariationChange()" class="w-full bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-3 outline-none font-bold text-sm text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 transition-colors cursor-pointer">
-                </select>
+            <div id="fs-variation-container" class="mb-6 hidden">
+                <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-3">Available Options</label>
+                <div id="fs-variation-pills" class="flex flex-wrap gap-2">
+                    </div>
             </div>
 
             <h4 class="font-black text-sm mb-2 dark:text-white">Product Description</h4>
@@ -1115,24 +1115,46 @@
         const userReviewsContainer = document.getElementById('fs-user-added-reviews');
         if (userReviewsContainer) userReviewsContainer.innerHTML = '';
 
-        // 🟢 NEW: Variation Handling Logic (Replaces old Price & Stock)
+        // 🟢 UPGRADED: Variation Pill Engine
         window.currentSelectedVariation = null;
         const varContainer = document.getElementById('fs-variation-container');
-        const varSelect = document.getElementById('fs-variation-select');
+        const varPillsContainer = document.getElementById('fs-variation-pills');
         
         if (p.variations && p.variations.length > 0) {
-            // If it has variations, build the dropdown menu
-            varSelect.innerHTML = p.variations.map((v, i) => 
-                `<option value="${i}" ${v.stock <= 0 ? 'disabled' : ''}>${v.name} - TZS ${v.price.toLocaleString()} ${v.stock <= 0 ? '(Out of Stock)' : ''}</option>`
-            ).join('');
             varContainer.classList.remove('hidden');
             
-            // Automatically select the first option to update the price/stock on screen
-            window.handleVariationChange(); 
+            // Build the clickable pills
+            varPillsContainer.innerHTML = p.variations.map((v, i) => {
+                const isOutOfStock = v.stock <= 0;
+                const baseClass = "px-4 py-3 rounded-xl border text-xs font-black uppercase tracking-widest transition-all click-press cursor-pointer flex flex-col items-start gap-1";
+                const stockClass = isOutOfStock 
+                    ? "border-gray-200 dark:border-gray-700 bg-gray-100 dark:bg-gray-800 text-gray-400 opacity-50 cursor-not-allowed" 
+                    : "border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-300 hover:border-green-500 var-pill-active";
+                
+                return `
+                <button type="button" 
+                        id="pill-var-${i}" 
+                        ${isOutOfStock ? 'disabled' : `onclick="window.selectVariation(${i})"`}
+                        class="${baseClass} ${stockClass} w-[calc(50%-0.25rem)]">
+                    <span>${v.name}</span>
+                    <span class="${isOutOfStock ? 'text-gray-400 line-through' : 'text-green-600 dark:text-green-500'}">TZS ${v.price.toLocaleString()}</span>
+                </button>`;
+            }).join('');
+
+            // Automatically select the first IN-STOCK variation
+            const firstAvailableIndex = p.variations.findIndex(v => v.stock > 0);
+            if (firstAvailableIndex !== -1) {
+                window.selectVariation(firstAvailableIndex);
+            } else {
+                // If EVERYTHING is out of stock
+                document.getElementById('fs-modal-price').textContent = "Out of Stock";
+                document.getElementById('fs-modal-stock-badge').textContent = "Stock: 0 units";
+                document.getElementById('fs-modal-stock-badge').className = "px-3 py-1 bg-red-50 text-red-600 dark:bg-red-900/30 dark:text-red-400 text-[10px] font-black rounded border border-red-100 dark:border-red-800 inline-block uppercase tracking-widest";
+            }
         } else {
-            // If no variations, hide the dropdown and show standard price/stock
+            // Standard Product (No variations)
             varContainer.classList.add('hidden');
-            varSelect.innerHTML = '';
+            varPillsContainer.innerHTML = '';
             document.getElementById('fs-modal-price').textContent = `TZS ${p.price.toLocaleString()}`;
             
             const stockBadge = document.getElementById('fs-modal-stock-badge');
@@ -1176,22 +1198,34 @@
             }
         }
 
-        // 🟢 PASTE PART B RIGHT HERE (Line 1169)
-        window.handleVariationChange = function() {
+        // 🟢 NEW: Handles the Pill Clicks!
+        window.selectVariation = function(index) {
             if(!window.currentModalProduct || !window.currentModalProduct.variations) return;
-            const select = document.getElementById('fs-variation-select');
-            const selectedVar = window.currentModalProduct.variations[select.value];
-            if(!selectedVar) return;
+            
+            const selectedVar = window.currentModalProduct.variations[index];
+            if(!selectedVar || selectedVar.stock <= 0) return;
             
             window.currentSelectedVariation = selectedVar;
             
-            // Update the main big Price
+            // UI Update: Remove active state from all pills
+            document.querySelectorAll('.var-pill-active').forEach(pill => {
+                pill.classList.remove('border-green-500', 'ring-2', 'ring-green-500/20');
+                pill.classList.add('border-gray-200', 'dark:border-gray-700');
+            });
+            
+            // UI Update: Add active state to clicked pill
+            const activePill = document.getElementById(`pill-var-${index}`);
+            if(activePill) {
+                activePill.classList.remove('border-gray-200', 'dark:border-gray-700');
+                activePill.classList.add('border-green-500', 'ring-2', 'ring-green-500/20');
+            }
+            
+            // Update the main big Price & Stock Badge
             document.getElementById('fs-modal-price').textContent = `TZS ${selectedVar.price.toLocaleString()}`;
             
-            // Update the Stock Badge
             const stockBadge = document.getElementById('fs-modal-stock-badge');
             stockBadge.textContent = `Stock: ${selectedVar.stock} units`;
-            stockBadge.className = selectedVar.stock > 0 ? "px-3 py-1 bg-green-50 text-green-600 dark:bg-green-900/30 dark:text-green-400 text-[10px] font-black rounded border border-green-100 dark:border-green-800 inline-block uppercase tracking-widest" : "px-3 py-1 bg-red-50 text-red-600 dark:bg-red-900/30 dark:text-red-400 text-[10px] font-black rounded border border-red-100 dark:border-red-800 inline-block uppercase tracking-widest";
+            stockBadge.className = "px-3 py-1 bg-green-50 text-green-600 dark:bg-green-900/30 dark:text-green-400 text-[10px] font-black rounded border border-green-100 dark:border-green-800 inline-block uppercase tracking-widest";
         };
 
         window.closeProductFullScreen = function() {
