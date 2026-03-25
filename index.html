@@ -1238,46 +1238,56 @@
             }
         };
 
-        // 🟢 UPDATED: Add To Basket (Now supports Variations!)
+        // 🟢 UPGRADED: Smart Add To Basket (Understands Variations)
         window.addToBasketAction = function() {
-            if (!window.currentModalProduct) return;
-            
+            const p = window.currentModalProduct;
+            if (!p) return;
+
             // 1. Determine the final title, price, and stock based on variation choice
-            let finalTitle = window.currentModalProduct.name;
-            let finalPrice = window.currentModalProduct.price;
-            let currentStock = window.currentModalProduct.stock;
-            
-            if (window.currentSelectedVariation) {
-                finalTitle = `${window.currentModalProduct.name} (${window.currentSelectedVariation.name})`;
+            let finalTitle = p.name;
+            let finalPrice = p.price;
+            let finalStock = p.stock;
+
+            if (p.variations && p.variations.length > 0) {
+                if (!window.currentSelectedVariation) {
+                    return alert("Please select an option before adding to cart.");
+                }
+                // Overrides base product with the selected pill's data
+                finalTitle = `${p.name} (${window.currentSelectedVariation.name})`;
                 finalPrice = window.currentSelectedVariation.price;
-                currentStock = window.currentSelectedVariation.stock;
+                finalStock = window.currentSelectedVariation.stock;
             }
 
             // 2. THE BOUNCER: Block out of stock items
-            if (currentStock <= 0) {
-                alert("Sorry, this specific option is currently out of stock!");
-                return; // Stop the function completely
+            if (finalStock <= 0) {
+                return alert("Sorry, this specific option is currently out of stock!");
             }
-            
+
             // 3. Get the quantity
             let qtyVal = parseInt(document.getElementById('fs-modal-qty').value);
             const qty = isNaN(qtyVal) || qtyVal < 1 ? 1 : qtyVal; 
-            
+
+            if (qty > finalStock) {
+                return alert(`Sorry, we only have ${finalStock} units of this specific item left.`);
+            }
+
             // 4. SMART GROUPING: Check if this exact variation is already in the cart
-            const existingItem = window.cart.find(item => item.title === finalTitle);
+            window.cart = window.cart || [];
+            const existingItem = window.cart.find(item => item.id === p.id && item.title === finalTitle);
 
             if (existingItem) {
-                // If it exists, just bump the quantity
+                if (existingItem.qty + qty > finalStock) {
+                    return alert(`You can't add more. Only ${finalStock} units available.`);
+                }
                 existingItem.qty += qty;
             } else {
-                // If it's new, push it to the array
                 window.cart.push({ 
-                    id: window.currentModalProduct.id,
+                    id: p.id,
                     title: finalTitle, 
                     price: finalPrice, 
-                    wt: window.currentModalProduct.weight || window.currentModalProduct.wt || 0, 
+                    wt: p.weight || p.wt || 0, 
                     qty: qty,
-                    img: window.currentModalProduct.img
+                    img: p.img
                 });
             }
             
@@ -1290,7 +1300,7 @@
             // 6. Save, update UI, and close modal
             if(typeof window.updateBadge === 'function') window.updateBadge();
             if(typeof window.saveCart === 'function') window.saveCart();
-            if(typeof window.updateCartUI === 'function') window.updateCartUI();
+            if(typeof window.renderCart === 'function') window.renderCart();
             
             window.closeProductFullScreen();
             if (window.location.hash === '#product') {
