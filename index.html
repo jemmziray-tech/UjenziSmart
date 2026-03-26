@@ -944,8 +944,20 @@
         }
 
         // 🟢 NEW: V3 MODERN HOME LAYOUT
+        // 🟢 UPGRADED: V3 MODERN HOME LAYOUT (With 6 Specific Departments + SVGs)
         window.renderHomeBase = function() {
             const container = document.getElementById('dynamic-home-content');
+            
+            // The exact 6 departments, paired with professional SVG icons
+            const myDepts = [
+                { id: 'Foundation', name: 'Foundation', icon: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 21v-4.875c0-.621.504-1.125 1.125-1.125h3.375c.621 0 1.125.504 1.125 1.125V21m0 0h4.5V3.545M12.75 21h7.5V10.75M2.25 21h1.5m18 0h-18M2.25 9l4.5-1.636M18.75 3l-1.5.545m0 6.205l3 1m1.5.5l-1.5-.5m-7.25-4.5l3-1m-1.5.5l-1.5-.5m-7.25 4.5l3-1m-1.5.5l-1.5-.5" /></svg>' },
+                { id: 'Roofing', name: 'Roofing', icon: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 21h19.5m-18-18v18m10.5-18v18m6-13.5V21M6.75 6.75C6.75 5.645 7.645 4.75 8.75 4.75h6.5c1.105 0 2 .895 2 2v13.5" /></svg>' },
+                { id: 'Plumbing', name: 'Plumbing', icon: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 2.25c-5.385 5.385-8.25 9.42-8.25 13.5a8.25 8.25 0 1016.5 0c0-4.08-2.865-8.115-8.25-13.5z" /></svg>' },
+                { id: 'Electrical', name: 'Electrical', icon: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" /></svg>' },
+                { id: 'Finishing', name: 'Finishing', icon: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9.53 16.122a3 3 0 00-3.03 3.03m3.03-3.03l3.667 3.667a1.5 1.5 0 01-2.122 2.122l-1.545-1.545zM9.53 16.122a3 3 0 013.03-3.03m-3.03 3.03L6.14 12.7a3 3 0 011.05-5.118L12.7 6.14a3 3 0 015.118 1.05l1.44 3.36a3 3 0 01-1.05 5.118l-3.36 1.44a3 3 0 01-5.118-1.05z" /></svg>' },
+                { id: 'Tools', name: 'Tools', icon: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M11.42 15.17L17.25 21A2.652 2.652 0 0021 17.25l-5.83-5.83m-4.75 4.75l1.25-1.25m-1.25 1.25l-1.25 1.25m4.75-4.75l-1.25 1.25m1.25-1.25l1.25-1.25m-1.25 1.25l1.25 1.25" /></svg>' }
+            ];
+
             let html = `
                 <section class="mb-4">
                     <h2 class="text-lg font-bold mb-3 px-1">Quick Links</h2>
@@ -961,39 +973,17 @@
 
                 <section class="mb-8">
                     <h2 class="text-lg font-black mb-3 px-1">Explore Departments</h2>
-                    <div class="grid grid-cols-2 gap-3">
-                        <div onclick="window.openCategory('Foundation')" class="relative h-28 md:h-32 rounded-[1.5rem] overflow-hidden group click-press shadow-sm stagger-item" style="animation-delay: 0.1s">
-                            <img src="${categoryImages['Foundation']}" class="absolute inset-0 w-full h-full object-cover transition-transform group-hover:scale-110">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-black/10"></div>
-                            <div class="absolute bottom-3 left-4 text-white">
-                                <p class="font-black text-sm">Foundation</p>
-                                <p class="text-[9px] font-bold text-gray-300">Cement & Blocks</p>
+                    <div class="grid grid-cols-3 gap-3">
+                        ${myDepts.map((dept, i) => `
+                            <div onclick="window.openCategory('${dept.id}')" 
+                                 class="group stagger-item rounded-2xl bg-white dark:bg-gray-800 p-4 click-press border border-gray-100 dark:border-gray-700 hover:border-green-500 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all flex flex-col items-center justify-center text-center shadow-sm" 
+                                 style="animation-delay: ${i*0.05}s">
+                                <div class="w-8 h-8 text-green-500 dark:text-green-400 mb-2 transition-transform group-hover:scale-110 flex items-center justify-center">
+                                    ${dept.icon}
+                                </div>
+                                <p class="text-[9px] font-black uppercase tracking-widest leading-tight dark:text-gray-300 group-hover:text-green-600 transition-colors h-6 flex items-center justify-center">${dept.name}</p>
                             </div>
-                        </div>
-                        <div onclick="window.openCategory('Roofing')" class="relative h-28 md:h-32 rounded-[1.5rem] overflow-hidden group click-press shadow-sm stagger-item" style="animation-delay: 0.15s">
-                            <img src="${categoryImages['Roofing']}" class="absolute inset-0 w-full h-full object-cover transition-transform group-hover:scale-110">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-black/10"></div>
-                            <div class="absolute bottom-3 left-4 text-white">
-                                <p class="font-black text-sm">Roofing</p>
-                                <p class="text-[9px] font-bold text-gray-300">Iron Sheets & Nails</p>
-                            </div>
-                        </div>
-                        <div onclick="window.openCategory('Finishing')" class="relative h-28 md:h-32 rounded-[1.5rem] overflow-hidden group click-press shadow-sm stagger-item" style="animation-delay: 0.2s">
-                            <img src="${categoryImages['Finishing']}" class="absolute inset-0 w-full h-full object-cover transition-transform group-hover:scale-110">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-black/10"></div>
-                            <div class="absolute bottom-3 left-4 text-white">
-                                <p class="font-black text-sm">Finishing</p>
-                                <p class="text-[9px] font-bold text-gray-300">Paints & Tiles</p>
-                            </div>
-                        </div>
-                        <div onclick="window.openCategory('Tools')" class="relative h-28 md:h-32 rounded-[1.5rem] overflow-hidden group click-press shadow-sm stagger-item" style="animation-delay: 0.25s">
-                            <img src="${categoryImages['Tools']}" class="absolute inset-0 w-full h-full object-cover transition-transform group-hover:scale-110">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-black/10"></div>
-                            <div class="absolute bottom-3 left-4 text-white">
-                                <p class="font-black text-sm">Hardware</p>
-                                <p class="text-[9px] font-bold text-gray-300">Drills & Tools</p>
-                            </div>
-                        </div>
+                        `).join('')}
                     </div>
                 </section>`;
 
@@ -1010,7 +1000,7 @@
             }
             container.innerHTML = html; 
             if(typeof window.renderTrending === 'function') window.renderTrending(allProducts);
-        }
+        };
 
         window.renderTrending = function(allProducts) {
             const feed = document.getElementById('trending-feed');
