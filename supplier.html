@@ -49,16 +49,18 @@
                 
                 allOrders.forEach(o => {
                     if (o.status === "PROCESSING" || o.status === "SOLVED" || o.status === "PAID") {
+                        let remainingItems = o.items || ""; // 🟢 FIX
                         myProducts.forEach(p => {
                             const escapedName = p.name.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
-                            const regex = new RegExp(`${escapedName}\\s*\\(x(\\d+)\\)`, 'i');
-                            const match = (o.items || "").match(regex);
+                            const regex = new RegExp(`${escapedName}(?:\\s*\\(.*?\\))?\\s*\\(x(\\d+)\\)`, 'i');
+                            const match = remainingItems.match(regex);
                             
                             if(match) {
                                 const qty = parseInt(match[1]);
                                 const rev = qty * p.price;
                                 const dateStr = o.createdAt ? o.createdAt.toDate().toLocaleDateString() : 'N/A';
-                                rows.push([dateStr, `"${p.name}"`, qty, rev, o.status]);
+                                rows.push([dateStr, `"${match[0].trim()}"`, qty, rev, o.status]);
+                                remainingItems = remainingItems.replace(match[0], ""); // 🟢 FIX
                             }
                         });
                     }
@@ -87,6 +89,7 @@
             link.click();
             document.body.removeChild(link);
         };
+        
     </script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800;900&display=swap');
@@ -817,18 +820,24 @@
 
                     let hasMyProduct = false;
                     let myItemsInThisOrder = [];
+                    // 🟢 FIX: Keep track of remaining items to prevent double/triple counting old deleted products
+                    let remainingItems = order.items || ""; 
 
                     myProducts.forEach(p => {
                         const pName = p.name || ""; 
                         if (!pName) return; 
 
                         const escapedName = pName.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
-                        const regex = new RegExp(`${escapedName}\\s*\\(x(\\d+)\\)`, 'i');
-                        const match = (order.items || "").match(regex);
+                        // 🟢 FIX: Upgraded Regex to flawlessly read sub-products/variations too!
+                        const regex = new RegExp(`${escapedName}(?:\\s*\\(.*?\\))?\\s*\\(x(\\d+)\\)`, 'i');
+                        const match = remainingItems.match(regex);
                         
                         if(match) {
                             hasMyProduct = true;
-                            myItemsInThisOrder.push(`${pName} (x${match[1]})`); 
+                            // Match[0] grabs the exact cart text (e.g. "Vena (Blue) (x2)")
+                            myItemsInThisOrder.push(match[0].trim()); 
+                            // 🟢 FIX: Erase it from remaining string so duplicate historical items don't count it again
+                            remainingItems = remainingItems.replace(match[0], ""); 
                         }
                     });
 
@@ -1399,11 +1408,13 @@
 
                     if (order.status === "PROCESSING" || order.status === "SOLVED" || order.status === "PAID") {
                         let orderGrossForSupplier = 0;
+                        let remainingItems = order.items || ""; // 🟢 FIX: Track string
+
                         supplierProducts.forEach(p => {
                             if (!p.name) return; 
                             const escapedName = p.name.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
-                            const regex = new RegExp(`${escapedName}\\s*\\(x(\\d+)\\)`, 'i');
-                            const match = (order.items || "").match(regex);
+                            const regex = new RegExp(`${escapedName}(?:\\s*\\(.*?\\))?\\s*\\(x(\\d+)\\)`, 'i');
+                            const match = remainingItems.match(regex);
                             
                             if (match) { 
                                 const qty = parseInt(match[1]); 
@@ -1413,6 +1424,8 @@
                                 totalUnits += qty; 
                                 totalGrossRevenue += rev; 
                                 orderGrossForSupplier += rev; 
+                                
+                                remainingItems = remainingItems.replace(match[0], ""); // 🟢 FIX: Erase after counting
                             }
                         });
                         
