@@ -1406,27 +1406,46 @@
                     const order = doc.data();
                     window.appData.orders.push(order); 
 
-                    if (order.status === "PROCESSING" || order.status === "SOLVED" || order.status === "PAID") {
+                    // Only count money for successful/paid orders
+                    if (order.status === "PROCESSING" || order.status === "SOLVED" || order.status === "PAID" || order.status === "CONFIRMED" || order.status === "DELIVERED") {
+                        
                         let orderGrossForSupplier = 0;
-                        let remainingItems = order.items || ""; // 🟢 FIX: Track string
+                        // 🟢 STEP 1: Split the items string into an actual array so we can track them individually
+                        // Example string: "Vena (Blue) (x2), Cement (x1)"
+                        let orderItemsArray = (order.items || "").split(',').map(item => item.trim());
 
-                        supplierProducts.forEach(p => {
-                            if (!p.name) return; 
-                            const escapedName = p.name.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
-                            const regex = new RegExp(`${escapedName}(?:\\s*\\(.*?\\))?\\s*\\(x(\\d+)\\)`, 'i');
-                            const match = remainingItems.match(regex);
-                            
-                            if (match) { 
-                                const qty = parseInt(match[1]); 
-                                const rev = (qty * p.price); 
-                                productStats[p.name].sold += qty; 
-                                productStats[p.name].rev += (rev * 0.95); 
-                                totalUnits += qty; 
-                                totalGrossRevenue += rev; 
-                                orderGrossForSupplier += rev; 
+                        // 🟢 STEP 2: Loop through the actual items found in the order, NOT the products
+                        orderItemsArray.forEach(itemString => {
+                            if (!itemString) return;
+
+                            // Loop through supplier products to find a match for THIS specific item string
+                            supplierProducts.forEach(p => {
+                                const escapedName = p.name.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
+                                // This regex checks if the item string starts with the product name
+                                const regex = new RegExp(`^${escapedName}`, 'i');
                                 
-                                remainingItems = remainingItems.replace(match[0], ""); // 🟢 FIX: Erase after counting
-                            }
+                                if (regex.test(itemString)) {
+                                    // Extract the quantity (x2) -> 2
+                                    const qtyMatch = itemString.match(/\(x(\d+)\)/);
+                                    const qty = qtyMatch ? parseInt(qtyMatch[1]) : 0;
+                                    
+                                    if (qty > 0) {
+                                        const rev = (qty * p.price);
+                                        // Update stats
+                                        if (productStats[p.name]) {
+                                            productStats[p.name].sold += qty;
+                                            productStats[p.name].rev += (rev * 0.95);
+                                        }
+                                        totalUnits += qty;
+                                        totalGrossRevenue += rev;
+                                        orderGrossForSupplier += rev;
+                                        
+                                        // 🟢 CRITICAL: We stop looking for this item once matched
+                                        // This prevents duplicate product entries from double-counting
+                                        itemString = ""; 
+                                    }
+                                }
+                            });
                         });
                         
                         if(orderGrossForSupplier > 0 && order.createdAt) { 
